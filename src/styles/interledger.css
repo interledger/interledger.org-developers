@@ -1,0 +1,175 @@
+@font-face {
+  font-family: "Titillium Web";
+  src: url("/fonts/titilliumweb-regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Titillium Web";
+  src: url("/fonts/titilliumweb-bold.woff2") format("woff2");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Titillium Web";
+  src: url("/fonts/titilliumweb-italic.woff2") format("woff2");
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  --sl-font: "Titillium Web";
+
+  /* Text size and line height */
+  --step--2: clamp(0.72rem, calc(0.95rem + -0.26vw), 0.89rem);
+  --step--1: clamp(0.9rem, calc(1.03rem + -0.15vw), 1rem);
+  --step-0: clamp(1.13rem, calc(1.13rem + 0vw), 1.13rem);
+  --step-1: clamp(1.27rem, calc(1.22rem + 0.22vw), 1.41rem);
+  --step-2: clamp(1.42rem, calc(1.31rem + 0.51vw), 1.76rem);
+  --step-3: clamp(1.6rem, calc(1.4rem + 0.92vw), 2.2rem);
+  --step-4: clamp(1.8rem, calc(1.47rem + 1.45vw), 2.75rem);
+  --step-5: clamp(2.03rem, calc(1.54rem + 2.16vw), 3.43rem);
+  --space-3xs: clamp(0.31rem, calc(0.31rem + 0vw), 0.31rem);
+  --space-2xs: clamp(0.56rem, calc(0.56rem + 0vw), 0.56rem);
+  --space-xs: clamp(0.88rem, calc(0.88rem + 0vw), 0.88rem);
+  --space-s: clamp(1.13rem, calc(1.13rem + 0vw), 1.13rem);
+  --space-m: clamp(1.69rem, calc(1.69rem + 0vw), 1.69rem);
+  --space-l: clamp(2.25rem, calc(2.25rem + 0vw), 2.25rem);
+  --space-xl: clamp(3.38rem, calc(3.38rem + 0vw), 3.38rem);
+  --space-2xl: clamp(4.5rem, calc(4.5rem + 0vw), 4.5rem);
+  --space-3xl: clamp(6.75rem, calc(6.75rem + 0vw), 6.75rem);
+
+  --sl-text-xs: var(--step--1);
+  --sl-text-sm: var(--step--1);
+
+  --sl-nav-height: 5rem;
+}
+
+/* Background swirl */
+body::before {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  background-image: url(/img/bg-swirl.svg);
+  background-repeat: repeat;
+  background-size: 150%;
+  filter: blur(150px) opacity(0.1);
+  transform: translate3d(0, 0, 0);
+  content: "";
+}
+
+[data-theme="light"] body::before {
+  filter: blur(150px) opacity(0.25);
+}
+
+/* Site header overrides */
+header.header {
+  background-color: var(--sl-color-black);
+  border-bottom: 0;
+}
+
+[data-theme="dark"] .logo-text {
+  fill: white;
+}
+
+/* Landing page card styles */
+.card-grid > div {
+  background-color: var(--sl-color-black);
+}
+
+/* Github pulled spec content */
+astro-island > h1 {
+  display: none;
+}
+
+.sl-container .content astro-island > h1 + h2,
+.sl-container .content astro-island > h1 + p,
+.sl-container .content astro-island > h1 + blockquote {
+  margin-top: 0;
+}
+
+/* Navigation sidebar font issue */
+.sidebar-content .sidebar ul {
+  font-family: var(--sl-font-system);
+}
+
+.right-sidebar .right-sidebar-panel {
+  font-family: var(--sl-font-system);
+}
+
+.content > blockquote,
+.content astro-island > h1 + blockquote {
+  border-inline-start: 2px solid var(--sl-color-text-accent);
+  font-size: var(--step-1);
+  font-style: italic;
+}
+
+/* Markdown content layout styles */
+div.overview-item.overview-item p {
+  margin-top: var(--space-2xs);
+}
+
+div.overview-item.overview-item div {
+  margin-top: 0;
+}
+
+@media screen and (max-width: 599px),
+  screen and (min-width: 800px) and (max-width: 999px) {
+  div.overview-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-s);
+  }
+}
+
+@media screen and (min-width: 600px) and (max-width: 799px),
+  screen and (min-width: 1000px) {
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--space-s);
+  }
+
+  div.overview-item.overview-item.overview-item {
+    margin-top: 0;
+    text-align: center;
+  }
+
+  div.overview-item.overview-item p {
+    margin-top: var(--space-3xs);
+  }
+
+  div.overview-item img {
+    display: inline;
+    background-color: var(--sl-color-black);
+  }
+}
+
+div.community.community p {
+  margin-top: var(--space-2xs);
+}
+
+@media screen and (min-width: 600px) {
+  .community {
+    display: flex;
+    align-items: center;
+    gap: var(--space-s);
+  }
+
+  div.community.community div {
+    margin-top: 0;
+  }
+}
+
+/* Misc tweaks */
+.content img {
+  background-color: white;
+}

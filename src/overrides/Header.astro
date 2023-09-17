@@ -1,0 +1,51 @@
+---
+import ThemeSelect from "@astrojs/starlight/components/ThemeSelect.astro";
+import SocialIcons from "@astrojs/starlight/components/SocialIcons.astro";
+import FoundationLogo from "../components/Spec/FoundationLogo.astro";
+
+const { locale } = Astro.props;
+---
+<div class="header sl-flex">
+  <a href="/" class="site-title">
+    <FoundationLogo />
+  </a>
+  <div class="secondary-wrap">
+    <SocialIcons />
+    <div class="sl-hidden md:sl-flex">
+      <ThemeSelect {locale} />
+    </div>
+  </div>
+</div>
+
+<style>
+  .header { 
+    gap: var(--sl-nav-gap);
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  .site-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+
+  .site-title svg {
+    width: 9.5em;
+    flex: none;
+  }
+
+  .secondary-wrap {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: var(--sl-nav-gap);
+  }
+
+  @media screen and (max-width: 799px) {
+    .secondary-wrap :global(.divider) {
+      border-inline-end-color: transparent;
+    }
+  }  
+</style>
