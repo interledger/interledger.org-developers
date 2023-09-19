@@ -10,7 +10,11 @@ export default defineConfig({
     overrideIntegration(),
     starlight({
       title: "Interledger Protocol (ILP)",
-      customCss: ["./src/styles/ilf-docs.css", "./src/styles/interledger.css"],
+      customCss: [
+        "./node_modules/@interledger/docs-design-system/src/styles/green-theme.css",
+        "./node_modules/@interledger/docs-design-system/src/styles/ilf-docs.css",
+        "./src/styles/interledger.css",
+      ],
       social: {
         github: "https://github.com/interledger",
       },
