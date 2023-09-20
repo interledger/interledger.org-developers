@@ -6,6 +6,8 @@ import overrideIntegration from "./src/overrideIntegration.mjs";
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://interledger.github.io",
+  base: "/interledger.org-developers",
   integrations: [
     overrideIntegration(),
     starlight({
