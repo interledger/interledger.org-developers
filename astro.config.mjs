@@ -6,6 +6,7 @@ import overrideIntegration from "./src/overrideIntegration.mjs";
 
 // https://astro.build/config
 export default defineConfig({
+  base: "/developers",
   integrations: [
     overrideIntegration(),
     starlight({
