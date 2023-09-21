@@ -10,21 +10,21 @@ Interledger Protocol (ILP) is an open protocol suite for sending payments across
 
 <div class="overview-grid">
   <div class="overview-item">
-    <img src="/img/code.svg" alt="">
+    <img src="/developers/img/code.svg" alt="">
     <div>
       <p><strong>Code with Money</strong></p>
       <p>Add payments without being tied to a single currency or payment provider.</p>
     </div>
   </div>
   <div class="overview-item">
-    <img src="/img/routing.svg" alt="">
+    <img src="/developers/img/routing.svg" alt="">
     <div>
       <p><strong>Multi-Hop Routing</strong></p>
       <p>Send payments to other ledgers, even if they are multiple hops away.</p>
     </div>
   </div>
   <div class="overview-item">
-    <img src="/img/protocol.svg" alt="">
+    <img src="/developers/img/protocol.svg" alt="">
     <div>
       <p><strong>Simple Protocol</strong></p>
       <p>Inspired by TCP/IP, Interledger is easy to implement and use.</p>
