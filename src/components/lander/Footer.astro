@@ -1,0 +1,52 @@
+---
+const currentYear = new Date().getFullYear();
+---
+<footer>
+  <ul>
+    <li><a href="https://interledger.social/@Interledger"><img src="img/lander/icon-fediverse.svg" alt="Mastadon" /></a></li>
+    <li><a href="https://twitter.com/interledger"><img src="img/lander/icon-twitter.svg" alt="Twitter" /></a></li>
+    <li><a href="https://communityinviter.com/apps/interledger/interledger-working-groups-slack"><img src="img/lander/icon-slack.svg" alt="Slack" /></a></li>
+    <li><a href="https://github.com/interledger"><img src="img/lander/icon-github.svg" alt="Github" /></a></li>
+    <li><a href="https://www.linkedin.com/company/interledger-foundation/"><img src="img/lander/icon-linkedin.svg" alt="Linkedin" /></a></li>
+  </ul>
+  <p>&copy; 2019 - {currentYear}, Interledger Foundation</p>
+</footer>
+
+<style>
+  footer {
+    text-align: center;
+    padding: var(--space-2xs) var(--space-xs);
+    font-size: var(--step--1);
+    background-color: hsla(0, 0%, 0%, 15%);
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    justify-content: center;
+    align-items: center;
+  }
+
+  ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5em;
+    justify-content: center;
+    padding: 0;
+    margin-top: var(--space-2xs);
+  }
+
+  @media screen and (min-width: 480px) {
+    footer {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    ul {
+      margin-top: 0;
+    }
+  }
+
+  img {
+    width: 1.5em;
+    height: 1.5em;
+  }
+</style>
