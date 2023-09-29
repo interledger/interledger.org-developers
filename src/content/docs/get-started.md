@@ -46,7 +46,7 @@ Interledger is a network of computers that enables the sending of value across i
 - Router – Applies currency exchange and forwards packets of value. This is an intermediary node between the sender and the receiver.
 - Receiver – Receives the value.
 
-![ILP nodes](/img/ilp-nodes-2.png)
+![ILP nodes](/developers/img/ilp-nodes-2.png)
 
 **Note:** The terms *Router* and *Connector* are used interchangeably throughout the documentation.
 
@@ -54,7 +54,7 @@ Interledger is a network of computers that enables the sending of value across i
 
 At the core of Interledger is the [Interledger Protocol (ILPv4)](https://interledger.org/rfcs/0027-interledger-protocol-4/), which is a set of rules that define how nodes should send value over the Interledger network. ILPv4 is a *request/response* protocol, where requests and responses are ILPv4 packets. Typically, a single aggregate payment from source to destination is split into multiple ILP packets. Each ILP packet contains transaction information, which is private to the nodes participating in the transaction. ILPv4 has three packet types - *Prepare*, *Fulfill*, and *Reject*.
 
-![ILP Packets](/img/ilp-packets.png)
+![ILP Packets](/developers/img/ilp-packets.png)
 
 The sender constructs and sends a Prepare packet as a request to the connecting router. The routers forward the packet until it reaches the receiver. The receiver then accepts or rejects the packet by sending a Fulfill packet or a Reject packet as the response. The routers relay the response from the receiver back to the sender. When the sender receives a Fulfill packet, it knows that the packet was successfully delivered to the receiver. The sender then continues to send the remaining Prepare packets until the value is fully transferred.
 
