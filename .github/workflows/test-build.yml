@@ -5,6 +5,12 @@ on:
     branches:
       - main
 
+# Allow this job to clone the repo and create a page deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   test-deploy:
     name: Test deployment
