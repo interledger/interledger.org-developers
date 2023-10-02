@@ -5,15 +5,14 @@ on:
     branches:
       - main
 
-# Allow this job to clone the repo and create a page deployment
 permissions:
   contents: read
   pages: write
   id-token: write
 
 jobs:
-  test-deploy:
-    name: Test deployment
+  build:
+    name: Test build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout your repository using git
@@ -22,22 +21,8 @@ jobs:
         with:
           node-version: 18
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::${{ secrets.ACCOUNT_ID }}:role/GitHubAction-AssumeRoleWithAction
-          role-session-name: GitHub_to_AWS_via_FederatedOIDC
-          aws-region: ${{ vars.AWS_REGION }}
-
       - uses: oven-sh/setup-bun@v1
       - name: Install dependencies
         run: bun install
       - name: Test build website
         run: bun run build
-
-      - name: Deploy to S3
-        run: aws s3 sync ./dist/ s3://${{ secrets.BUCKET_ID }}
-
-      - name: Invalidate CloudFront cache
-        run: |
-          aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/developers/*"
