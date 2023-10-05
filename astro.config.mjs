@@ -12,10 +12,28 @@ export default defineConfig({
     overrideIntegration(),
     starlight({
       title: "Interledger Protocol (ILP)",
+      description: "Enable seamless exchange of value across payment networks.",
       customCss: [
         "./node_modules/@interledger/docs-design-system/src/styles/green-theme.css",
         "./node_modules/@interledger/docs-design-system/src/styles/ilf-docs.css",
         "./src/styles/interledger.css",
+        "./src/styles/atom-one-light.min.css",
+      ],
+      head: [
+        {
+          tag: "script",
+          attrs: {
+            src: "/developers/scripts/highlight.min.js",
+            defer: true,
+          },
+        },
+        {
+          tag: "script",
+          attrs: {
+            src: "/developers/scripts/init.js",
+            defer: true,
+          },
+        },
       ],
       social: {
         github: "https://github.com/interledger",
