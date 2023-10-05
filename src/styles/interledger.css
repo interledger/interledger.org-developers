@@ -86,14 +86,17 @@ header.header {
 }
 
 /* Github pulled spec content */
-astro-island > h1 {
+.content h1 {
   display: none;
 }
 
-.sl-container .content astro-island > h1 + h2,
 .sl-container .content astro-island > h1 + p,
 .sl-container .content astro-island > h1 + blockquote {
   margin-top: 0;
+}
+
+.content-panel + .content-panel {
+  padding-top: 0;
 }
 
 /* Navigation sidebar font issue */
@@ -106,10 +109,14 @@ astro-island > h1 {
 }
 
 .content > blockquote,
-.content astro-island > h1 + blockquote {
+.content > h1 + blockquote {
   border-inline-start: 2px solid var(--sl-color-text-accent);
   font-size: var(--step-1);
   font-style: italic;
+}
+
+.content > :first-child {
+  margin-top: var(--space-s);
 }
 
 /* Markdown content layout styles */
@@ -167,6 +174,16 @@ div.community.community p {
   div.community.community div {
     margin-top: 0;
   }
+}
+
+/* Code block styles */
+.content pre {
+  background-color: var(--astro-code-color-background);
+  overflow-x: auto;
+}
+
+.content.content pre {
+  padding: 0;
 }
 
 /* Misc tweaks */
