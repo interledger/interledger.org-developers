@@ -38,7 +38,7 @@ jobs:
         run: bun run build
 
       - name: Deploy to S3
-        run: aws s3 sync ./dist/ s3://${{ secrets.BUCKET_ID }}
+        run: aws s3 sync ./dist/ s3://${{ secrets.BUCKET_ID }}/developers
 
       - name: Invalidate CloudFront cache
         run: |
