@@ -1,18 +1,18 @@
 ---
-import ThemeSelect from "@astrojs/starlight/components/ThemeSelect.astro";
+import type { Props } from '@astrojs/starlight/props';
 import SocialIcons from "@astrojs/starlight/components/SocialIcons.astro";
+import ThemeSelect from "@astrojs/starlight/components/ThemeSelect.astro";
 import FoundationLogo from "../components/FoundationLogo.astro";
-
-const { locale } = Astro.props;
 ---
+
 <div class="header sl-flex">
   <a href="/" class="site-title">
     <FoundationLogo />
   </a>
   <div class="secondary-wrap">
-    <SocialIcons />
+    <SocialIcons {...Astro.props} />
     <div class="sl-hidden md:sl-flex">
-      <ThemeSelect {locale} />
+      <ThemeSelect {...Astro.props} />
     </div>
   </div>
 </div>
