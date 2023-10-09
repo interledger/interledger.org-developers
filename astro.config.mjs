@@ -2,14 +2,12 @@ import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 
 import react from "@astrojs/react";
-import overrideIntegration from "./src/overrideIntegration.mjs";
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://interledger.org",
   base: "/developers",
   integrations: [
-    overrideIntegration(),
     starlight({
       title: "Interledger Protocol (ILP)",
       description: "Enable seamless exchange of value across payment networks.",
@@ -35,6 +33,9 @@ export default defineConfig({
           },
         },
       ],
+      components: {
+        Header: "./src/components/Header.astro",
+      },
       social: {
         github: "https://github.com/interledger",
       },
@@ -120,12 +121,6 @@ export default defineConfig({
     "/rfcs/0035-ilp-over-http/": "/developers/rfcs/ilp-over-http/",
     "/rfcs/0036-spsp-pull-payments/": "/developers/rfcs/spsp-pull-payments/",
     "/rfcs/0039-stream-receipts/": "/developers/rfcs/stream-receipts/",
-  },
-  // Process images with sharp: https://docs.astro.build/en/guides/assets/#using-sharp
-  image: {
-    service: {
-      entrypoint: "astro/assets/services/sharp",
-    },
   },
   server: {
     port: 1103,
