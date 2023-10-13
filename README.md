@@ -14,7 +14,8 @@ Inside this project, you'll see the following folders and files:
 │   ├── content/
 │   │   ├── docs/
 │   │   └── config.ts
-│   ├── overrides/
+│   ├── layouts/
+│   ├── pages/
 │   ├── styles/
 │   └── env.d.ts
 ├── astro.config.mjs
@@ -24,11 +25,13 @@ Inside this project, you'll see the following folders and files:
 
 Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
 
-Static assets, like favicons or images, can be placed in the `public/` directory.
+Static assets, like favicons or images, can be placed in the `public/` directory. When referencing these assets in your markdown, you do not have to include `public/` in the file path, so an image would have a path like:
 
-The key component for this site is the `Spec` component (found in the `components/` directory), which is how we pull the specification content directly from https://github.com/interledger/rfcs.
+```md
+![A lovely description of your beautiful image](/img/YOUR_BEAUTIFUL_IMAGE.png)
+```
 
-Overrides are done using a custom plugin (source: https://gist.github.com/giuseppelt/7f918a3ac02a011d76811ae472f8bf09) until the Starlight maintainers are able to get to https://github.com/withastro/starlight/issues/415. We are currently overriding the default Starlight header to match the main site header.
+For more information about the way our documentation projects are set up, please refer to our [documentation style guide](https://interledger.tech/#docs-site-building).
 
 ## Local Development
 

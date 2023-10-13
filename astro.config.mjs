@@ -1,8 +1,6 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 
-import react from "@astrojs/react";
-
 // https://astro.build/config
 export default defineConfig({
   site: "https://interledger.org",
@@ -103,7 +101,6 @@ export default defineConfig({
         },
       ],
     }),
-    react(),
   ],
   redirects: {
     "/rfcs/0027-interledger-protocol-4/":
