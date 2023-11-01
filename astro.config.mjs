@@ -50,6 +50,10 @@ export default defineConfig({
               link: "/rfcs/interledger-protocol",
             },
             {
+              label: "Interledger Architecture",
+              link: "/rfcs/interledger-architecture",
+            },
+            {
               label: "Interledger Addresses",
               link: "/rfcs/ilp-addresses",
             },
@@ -88,6 +92,10 @@ export default defineConfig({
             {
               label: "STREAM Receipts",
               link: "/rfcs/stream-receipts",
+            },
+            {
+              label: "Hashed-Timelock Agreements",
+              link: "/rfcs/hashed-timelock-agreements",
             },
           ],
         },
