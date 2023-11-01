@@ -1,0 +1,109 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Section from '../components/lander/Section.astro';
+import AnimatedSummitLogo from '../components/lander/AnimatedSummitLogo.astro';
+---
+
+<Layout title="Interledger Summit Hackthon 2023">
+	<main>
+		<Section class="padding--large hero align--center">
+			<header>
+				<div class="summit-logo">
+					<AnimatedSummitLogo class="summit-logo__animate" />
+					<img src="/developers/img/lander/summit-text.svg" alt="Interledger Summit" class="summit-logo__text" />
+				</div>
+				<h1>Hackathon resources</h1>
+			</header>
+		</Section>
+
+		<Section>
+			<h2>Interledger Testnet wallet links</h2>
+			<img src="/developers/img/lander/testnet.svg" alt="Interledger testnet wallet" class="testnet-logo" />
+			<h3>What is Interledger Testnet?</h3>
+			<p>Testnet is an open-source test application for Rafiki. In other words, a Rafiki Playground. It uses all of the functionalities of Rafiki and puts the advantages of it to the real test.</p>
+			<p>The main testnet wallet app is of course <a href="https://rafiki.money">https://rafiki.money</a> (if needed, instructions for local setup are in the README file), but for the hackathon we are using separate instances.</p>
+			<p>Hackathon participants will be organized into groups and notified beforehand which to use. Participants will register with one of the links below for an Interledger Testnet wallet:</p>
+			<ul>
+				<li><a href="https://one.rafikilabs.com">https://one.rafikilabs.com</a></li>
+				<li><a href="https://two.rafikilabs.com">https://two.rafikilabs.com</a></li>
+				<li><a href="https://three.rafikilabs.com">https://three.rafikilabs.com</a></li>
+				<li><a href="https://four.rafikilabs.com">https://four.rafikilabs.com</a></li>
+				<li><a href="https://five.rafikilabs.com">https://five.rafikilabs.com</a></li>
+			</ul>
+			<p>All Rafiki Labs instances will have the latest version of Rafiki integrated, and Interledger payment pointers are available for USD currency.</p>
+			<p>These Interledger Testnet instances are peered with each other so you can make payments to and from each other.</p>
+		</Section>
+
+		<Section>
+      <h2>Open Payments</h2>
+			<img src="/developers/img/lander/opp-logo.svg" alt="Open Payments" class="opp-logo" />
+			<h3>What is Open Payments?</h3>
+      <p>Open Payments (OP) is an API standard that can be implemented by any account servicing entity (ASE).</p>
+			<p>Application developers, for example, can then build payments functionality into their feature sets. App users with OP-enabled payment accounts can send funds to other OP-enabled accounts, regardless of whether the recipient uses the same application or ASE.</p>
+			<p>For more information: <a href="https://openpayments.guide">https://openpayments.guide</a></p>
+		</Section>
+
+		<Section>
+      <h2>VSCode Open Payments SDK Snippets</h2>
+			<img src="/developers/img/lander/opp-snippets.svg" alt="Open Payments SDK Snippets" class="opp-snippets" />
+      <h3>What are VSCode Open Payments SDK Snippets?</h3>
+			<p>Our VSCode extension offers a collection of snippets for the Open Payments Node SDK for you to use when developing Open Payments features.</p>
+			<p>The extension can be installed from: <a href="https://marketplace.visualstudio.com/items?itemName=InterledgerFoundation.open-payments-snippets-vscode">https://marketplace.visualstudio.com/items?itemName=InterledgerFoundation.open-payments-snippets-vscode</a>.</p>
+			<p>Installation and usage are all explained in the above link.</p>
+		</Section>
+	</main>
+</Layout>
+
+<style>
+	.summit-logo {
+		display: flex;
+		gap: 1em;
+		justify-content: center;
+		margin-bottom: var(--space-m)
+	}
+
+	.summit-logo__animate {
+		flex: none;
+		max-width: 5em;
+	}
+
+	.summit-logo__text {
+		max-width: 10em;
+	}
+
+	h1 {
+		line-height: 1.1;
+	}
+
+	.testnet-logo {
+		max-width: 10em;
+		margin-bottom: var(--space-s);
+	}
+
+	.opp-snippets {
+		max-width: 15em;
+		margin-bottom: var(--space-s);
+	}
+
+	.opp-logo {
+		max-width: 18em;
+		margin-bottom: var(--space-s);
+	}
+
+	.padding--large {
+		padding-top: var(--space-3xl);
+		padding-bottom: var(--space-3xl);
+	}
+
+	.align--center {
+		text-align: center;
+	}
+
+	h2, h3 {
+		margin-bottom: var(--space-s);
+	}
+	
+	p, ul {
+		margin-bottom: var(--space-xs);
+	}
+</style>
