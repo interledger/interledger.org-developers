@@ -102,23 +102,6 @@ export default defineConfig({
       ],
     }),
   ],
-  redirects: {
-    "/rfcs/0027-interledger-protocol-4/":
-      "/developers/rfcs/interledger-protocol",
-    "/rfcs/0015-ilp-addresses/": "/developers/rfcs/ilp-addresses/",
-    "/rfcs/0029-stream/": "/developers/rfcs/stream-protocol/",
-    "/rfcs/0009-simple-payment-setup-protocol/":
-      "/developers/rfcs/simple-payment-setup-protocol/",
-    "/rfcs/0030-notes-on-oer-encoding/": "/developers/rfcs/oer-encoding/",
-    "/rfcs/0031-dynamic-configuration-protocol/":
-      "/developers/rfcs/dynamic-configuration-protocol/",
-    "/rfcs/0032-peering-clearing-settlement/":
-      "/developers/rfcs/peering-clearing-settling/",
-    "/rfcs/0038-settlement-engines/": "/developers/rfcs/settlement-engines/",
-    "/rfcs/0035-ilp-over-http/": "/developers/rfcs/ilp-over-http/",
-    "/rfcs/0036-spsp-pull-payments/": "/developers/rfcs/spsp-pull-payments/",
-    "/rfcs/0039-stream-receipts/": "/developers/rfcs/stream-receipts/",
-  },
   server: {
     port: 1103,
   },
