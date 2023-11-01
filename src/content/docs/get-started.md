@@ -52,7 +52,7 @@ Interledger is a network of computers that enables the sending of value across i
 
 ## How does Interledger work?
 
-At the core of Interledger is the [Interledger Protocol (ILPv4)](https://interledger.org/rfcs/0027-interledger-protocol-4/), which is a set of rules that define how nodes should send value over the Interledger network. ILPv4 is a *request/response* protocol, where requests and responses are ILPv4 packets. Typically, a single aggregate payment from source to destination is split into multiple ILP packets. Each ILP packet contains transaction information, which is private to the nodes participating in the transaction. ILPv4 has three packet types - *Prepare*, *Fulfill*, and *Reject*.
+At the core of Interledger is the [Interledger Protocol (ILPv4)](https://interledger.org/developers/rfcs/interledger-protocol/), which is a set of rules that define how nodes should send value over the Interledger network. ILPv4 is a *request/response* protocol, where requests and responses are ILPv4 packets. Typically, a single aggregate payment from source to destination is split into multiple ILP packets. Each ILP packet contains transaction information, which is private to the nodes participating in the transaction. ILPv4 has three packet types - *Prepare*, *Fulfill*, and *Reject*.
 
 ![ILP Packets](/developers/img/ilp-packets.png)
 
@@ -60,7 +60,7 @@ The sender constructs and sends a Prepare packet as a request to the connecting 
 
 Interledger does not rely on any single payment network for processing value transactions. You can connect with an ILPv4 router at any time to join the network. Furthermore, Interledger sends value as tiny data packets, which makes transactions fast, secure, and inexpensive.
 
-**Tip:** For a deeper dive into how ILPv4 works, see [ILPv4 Flow](https://interledger.org/rfcs/0027-interledger-protocol-4/#prerequisites).
+**Tip:** For a deeper dive into how ILPv4 works, see [ILPv4 Flow](https://interledger.org/developers/rfcs/interledger-protocol#prerequisites).
 
 ## Building on Interledger
 
@@ -68,7 +68,7 @@ Build payments into your apps or other protocols without tying yourself to a spe
 
 ## Interledger architecture
 
-Interledger enables payments across many different types of ledgers. The Interledger Protocol Suite is comprised of four layers: the Application, Transport, Interledger, and Link protocols. To learn more, see the Interledger [Architecture Overview](https://interledger.org/rfcs/0001-interledger-architecture/).
+Interledger enables payments across many different types of ledgers. The Interledger Protocol Suite is comprised of four layers: the Application, Transport, Interledger, and Link protocols. To learn more, see the Interledger [Architecture Overview](https://interledger.org/developers/rfcs/interledger-architecture).
 
 ## Protocol specs and APIs
 
@@ -76,4 +76,4 @@ To dive into the technical specs, see the [Interledger RFCs](https://github.com
 
 ## Security
 
-Interledger enables secure, multi-hop payments using [Hashed Timelock Agreements](https://interledger.org/rfcs/0022-hashed-timelock-agreements/). As of Interledger version 4, these conditions are not enforced by the ledger, as it would be too costly and slow. Instead, participants in the network use these hashlocks to perform accounting with their peers. This accounting is used to determine in-flight balances, which are periodically settled with on-ledger transfers or payment channel claims. For a detailed description of how this works, read the [Peering, Clearing, and Settlement](https://interledger.org/rfcs/0032-peering-clearing-settlement/) documentation.
+Interledger enables secure, multi-hop payments using [Hashed Timelock Agreements](https://interledger.org/developers/rfcs/hashed-timelock-agreements). As of Interledger version 4, these conditions are not enforced by the ledger, as it would be too costly and slow. Instead, participants in the network use these hashlocks to perform accounting with their peers. This accounting is used to determine in-flight balances, which are periodically settled with on-ledger transfers or payment channel claims. For a detailed description of how this works, read the [Peering, Clearing, and Settlement](https://interledger.org/developers/rfcs/peering-clearing-settling/) documentation.
