@@ -66,14 +66,6 @@ export default defineConfig({
               link: "/rfcs/simple-payment-setup-protocol",
             },
             {
-              label: "Notes on OER Encoding",
-              link: "/rfcs/oer-encoding",
-            },
-            {
-              label: "Dynamic Configuration Protocol (ILDCP)",
-              link: "/rfcs/dynamic-configuration-protocol",
-            },
-            {
               label: "Peering, Clearing and Settling",
               link: "/rfcs/peering-clearing-settling",
             },
@@ -86,8 +78,8 @@ export default defineConfig({
               link: "/rfcs/ilp-over-http",
             },
             {
-              label: "SPSP Pull Payments",
-              link: "/rfcs/spsp-pull-payments",
+              label: "Bilateral Transfer Protocol",
+              link: "/rfcs/bilateral-transfer-protocol",
             },
             {
               label: "STREAM Receipts",
@@ -96,6 +88,15 @@ export default defineConfig({
             {
               label: "Hashed-Timelock Agreements",
               link: "/rfcs/hashed-timelock-agreements",
+            },
+            {
+              label: "Payment Pointers",
+              link: "https://paymentpointers.org",
+              attrs: {
+                target: "_blank",
+                class: "external-link",
+                rel: "noopener noreferrer",
+              },
             },
           ],
         },
