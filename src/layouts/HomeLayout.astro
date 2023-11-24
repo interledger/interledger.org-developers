@@ -1,7 +1,7 @@
 ---
-import TopBanner from '../components/lander/TopBanner.astro';
-import Footer from '../components/lander/Footer.astro';
-import '../styles/lander.css';
+import FoundationHeader from '../components/pages/FoundationHeader.astro';
+import FoundationFooter from '../components/pages/FoundationFooter.astro';
+import '../styles/pages.css';
 
 interface Props {
 	title: string;
@@ -9,25 +9,25 @@ interface Props {
 	gradient?: string;
 }
 
-const { title, description, gradient = "option1" } = Astro.props;
+const { title, description } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="author" content="Interledger Foundation" />
 		<meta name="description" content={description ? description : 'Making payments as easy as sending an email'}>
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>{title ? `${title} | Interledger` : 'Interledger'}</title>
+		<title>{title ? `${title} | Interledger Foundation` : 'Interledger Foundation'}</title>
 		<link rel="icon" type="image/svg+xml" href="/developers/favicon.svg" />
 	</head>
 	
-	<body style=`--gradient:var(--${gradient})`>
-		<TopBanner />
+	<body>
+		<FoundationHeader />
 		<slot />
-		<Footer />
+		<FoundationFooter />
 	</body>
 </html>
 
@@ -43,16 +43,31 @@ const { title, description, gradient = "option1" } = Astro.props;
 		min-height: 100%;
 		min-width: 360px;
 		color: var(--color-text);
-		font-size: var(--step-0);
 		font-family: "Titillium", Arial, sans-serif;
 		background-image: var(--gradient);
 		background-repeat: no-repeat;
 		background-attachment: fixed;
 	}
 
+	/* Background swirl */
+	body::before {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		z-index: -1;
+		background-image: url(/developers/img/bg-swirl.svg);
+		background-repeat: repeat;
+		background-size: 150%;
+		filter: blur(150px) opacity(0.25);
+		transform: translate3d(0, 0, 0);
+		content: "";
+	}
+
 	main {
 		flex: 1;
-		font-size: var(--step-1);
+		font-size: var(--step-0);
 	}
 
 	section {
@@ -62,7 +77,7 @@ const { title, description, gradient = "option1" } = Astro.props;
 	}
 
 	.content-wrapper {
-		max-width: var(--max-container-width);
+		max-width: var(--max-content-width);
 		min-width: 360px;
 		margin: auto;
 		padding-left: var(--space-s);
@@ -72,7 +87,6 @@ const { title, description, gradient = "option1" } = Astro.props;
 	.heading--1,
 	h1 {
 		font-size: var(--step-5);
-		color: var(--color-primary);
 	}
 
 	.heading--2,
@@ -103,7 +117,7 @@ const { title, description, gradient = "option1" } = Astro.props;
 	}
 
 	a:hover {
-		color: hsla(26, 100%, 76%, 1);
+		color: var(--color-primary);
 	}
 
 	.visually-hidden {

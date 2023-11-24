@@ -1,9 +1,9 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Section from '../components/lander/Section.astro';
+import LanderLayout from '../layouts/LanderLayout.astro';
+import Section from '../components/pages/Section.astro';
 ---
 
-<Layout title="Hacktoberfest 2023">
+<LanderLayout title="Hacktoberfest 2023">
 	<main>
 		<Section class="padding--large hero align--center">
 			<header>
@@ -91,7 +91,7 @@ import Section from '../components/lander/Section.astro';
 			</div>
 		</Section>
 	</main>
-</Layout>
+</LanderLayout>
 
 <style>
 	.logo--hacktober {
@@ -102,7 +102,6 @@ import Section from '../components/lander/Section.astro';
 
 	.vision {
 		max-width: 38em;
-		/* text-align: left; */
 		margin-left: auto;
 		margin-right: auto;
 	}
@@ -166,8 +165,8 @@ import Section from '../components/lander/Section.astro';
 	}
 
 	.padding--large {
-		padding-top: var(--space-3xl);
-		padding-bottom: var(--space-3xl);
+		padding-top: var(--space-xl);
+		padding-bottom: var(--space-xl);
 	}
 
 	.align--center {

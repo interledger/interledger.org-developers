@@ -1,0 +1,38 @@
+---
+import FoundationLogo from "../FoundationLogo.astro";
+---
+<header>
+  <div class="header">
+    <a href="/" class="site-title">
+      <FoundationLogo />
+    </a>
+  </div>
+</header>
+
+<style>
+  header { 
+    background-color: var(--color-bg);
+    padding: var(--space-xs) var(--space-m);
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  :global(.logo-text) {
+    fill: var(--color-text);
+  }
+
+  .site-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+
+  .site-title svg {
+    width: 10em;
+    flex: none;
+  }
+</style>

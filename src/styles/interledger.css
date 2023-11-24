@@ -50,26 +50,6 @@
   --sl-nav-height: 5rem;
 }
 
-/* Background swirl */
-body::before {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: 0;
-  background-image: url(/developers/img/bg-swirl.svg);
-  background-repeat: repeat;
-  background-size: 150%;
-  filter: blur(150px) opacity(0.1);
-  transform: translate3d(0, 0, 0);
-  content: "";
-}
-
-[data-theme="light"] body::before {
-  filter: blur(150px) opacity(0.25);
-}
-
 /* Site header overrides */
 header.header {
   background-color: var(--sl-color-black);
@@ -78,11 +58,6 @@ header.header {
 
 [data-theme="dark"] .logo-text {
   fill: white;
-}
-
-/* Landing page card styles */
-.card-grid > div {
-  background-color: var(--sl-color-black);
 }
 
 /* Github pulled spec content */

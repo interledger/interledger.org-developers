@@ -1,0 +1,158 @@
+---
+import HomeLayout from '../layouts/HomeLayout.astro';
+---
+<HomeLayout title="Developers">
+  <main>
+    <section class="hero">
+      <div class="content-wrapper">
+        <h2>Interledger Developers Portal</h2>
+        <p>Enable seamless exchange of value across payment networks.</p>
+        <div class="hero__cta">
+          <a class="hero__btn" href="/developers/get-started">Read the documentation</a>
+          <a class="hero__outlink" href="https://github.com/interledger">Contribute on Github</a>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="content-wrapper cards">
+        <div class="card">
+          <a href="/developers/rfcs/interledger-protocol">
+            <h3>Specifications</h3>
+            <p>Interledger specifications</p>
+          </a>
+        </div>
+        <div class="card">
+          <a href="/developers/tools">
+            <h3>Tools</h3>
+            <p>Libraries and tools</p>
+          </a>
+        </div>
+        <div class="card">
+          <a href="/developers/community">
+            <h3>Community</h3>
+            <p>Get involved with our community</p>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</HomeLayout>
+
+<style>
+  .hero {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: bottom right;
+    background-image: linear-gradient(to right, #7652E3 0%, #7D51DD 13%, #914ECE 33%, #B24AB5 57%, #E04493 84%, #FF417D 100%);
+    background-image: linear-gradient(to right, oklch(55.75% 0.209 289.24) 0%, oklch(55.81% 0.203 293.14) 13%, oklch(56.43% 0.193 305.11) 33%, oklch(58.53% 0.187 326.53) 57%, oklch(63.14% 0.204 353.52) 84%, oklch(67.18% 0.226 7.25) 100%);
+    min-height: 60vh;
+    padding-top: var(--space-m);
+    padding-bottom: var(--space-m);
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    color: var(--color-white);
+  }
+  
+  @media screen and (min-width: 800px) {
+    .hero {
+      background-position: center right;
+      min-height: 80vh;
+    }
+  }
+
+  @media screen and (max-width: 1600px) {
+    .hero .content-wrapper {
+      margin: initial;
+    }
+  }
+
+  .hero h2 {
+    color: var(--color-white);
+    font-size: var(--step-5);
+    max-width: 10em;
+    line-height: 1.2;
+    margin-bottom: var(--space-2xs);
+  }
+
+  .hero p {
+    margin-bottom: var(--space-m);
+  }
+
+  .hero__cta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap:var(--space-s);
+  }
+
+  @media screen and (max-width: 500px) {
+    .hero__cta {
+      justify-content: center;
+    }
+  }
+
+  .hero a {
+    text-decoration: none;
+  }
+
+  .hero__btn {
+    border-radius: 10em;
+    background-color: var(--color-bg);
+    padding: var(--space-xs) var(--space-s);
+    color: var(--color-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+  }
+  
+  .hero__btn::after {
+    content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12"><path d="M11.92 5.62a1.001 1.001 0 0 0-.21-.33l-5-5a1.004 1.004 0 0 0-1.42 1.42L8.59 5H1a1 1 0 0 0 0 2h7.59l-3.3 3.29a1.002 1.002 0 0 0 .325 1.639 1 1 0 0 0 1.095-.219l5-5a1 1 0 0 0 .21-.33 1 1 0 0 0 0-.76Z"/></svg>');
+    flex: none;
+    width: 0.6em;
+    filter: var(--filter-primary);
+  }
+
+  .hero__btn:hover {
+    text-decoration: underline;
+  }
+
+  .hero__outlink {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+  }
+
+  .hero__outlink::after {
+    content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16"><path fill="%23000" fill-rule="evenodd" d="M7.707.293A1 1 0 0 0 7 0H3a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V9a1 1 0 1 0-2 0v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4A1 1 0 0 0 7.707.293Zm7.238 5.964a1 1 0 0 0 .633-.224 1 1 0 0 0 .372-.783V1a1 1 0 0 0-1-1H10.7a1 1 0 1 0 0 2h1.84l-8.2 8.2a1.001 1.001 0 0 0 1.41 1.42l8.2-8.2-.01 1.83a1 1 0 0 0 1.005 1.007Z" clip-rule="evenodd"/></svg>');
+    flex: none;
+    width: 0.75em;
+    filter: invert(1);
+  }
+
+  .hero__outlink:hover {
+    color: currentColor;
+    text-decoration: underline;
+  }
+
+  .cards {
+    display: flex;
+    gap: var(--space-m);
+    flex-wrap: wrap;
+  }
+
+  @media screen and (min-width: 690px) {
+    .card {
+      flex: 1 1 0;
+    }
+  }
+
+  .card a {
+    text-decoration: none;
+  }
+
+  .card a:hover > p {
+    text-decoration: underline;
+  }
+</style>
