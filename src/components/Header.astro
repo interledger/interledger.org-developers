@@ -2,12 +2,24 @@
 import type { Props } from '@astrojs/starlight/props';
 import SocialIcons from "@astrojs/starlight/components/SocialIcons.astro";
 import ThemeSelect from "@astrojs/starlight/components/ThemeSelect.astro";
-import FoundationLogo from "../components/FoundationLogo.astro";
+import DevelopersLogo from "../components/DevelopersLogo.astro";
 ---
 
 <div class="header sl-flex">
-  <a href="/" class="site-title">
-    <FoundationLogo />
+  <a href="/developers" class="site-title">
+    <DevelopersLogo />
+  </a>
+  <a href="/" class="home-link overflower">
+      <span
+        class="overflower-short"
+        aria-hidden="true"
+        title="Interledger Foundation"
+      >
+        ILF
+      </span>
+      <span class="overflower-long">
+        Interledger Foundation
+      </span>
   </a>
   <div class="secondary-wrap">
     <SocialIcons {...Astro.props} />
@@ -18,10 +30,16 @@ import FoundationLogo from "../components/FoundationLogo.astro";
 </div>
 
 <style>
+  :global(header) {
+    border-block-start: 2px solid var(--color-primary-fallback);
+    border-block-start: 2px solid var(--color-primary);
+    box-shadow: 0px 0px 12px -4px var(--color-primary-fallback);
+    box-shadow: 0px 0px 12px -4px var(--color-primary);
+  }
+
   .header { 
     gap: var(--sl-nav-gap);
     align-items: center;
-    justify-content: space-between;
     height: 100%;
   }
 
@@ -36,8 +54,45 @@ import FoundationLogo from "../components/FoundationLogo.astro";
     flex: none;
   }
 
-  .secondary-wrap {
+  .overflower {
+    display: inline-flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    max-width: 100%;
+    white-space: nowrap;
     margin-left: auto;
+    height: 1.5em;
+  }
+
+  .overflower-short {
+    display: block;
+    overflow: hidden;
+    flex: 1 1 auto;
+    width: 0;
+    text-overflow: ellipsis;
+    text-align: right;
+  }
+
+  .overflower-long {
+    display: inline;
+    flex: 0 1 100%;
+  }
+
+  .home-link {
+    color: var(--color-primary-fallback);
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  :global([data-theme="dark"]) .home-link {
+    color: var(--sl-color-text-accent);
+  }
+
+  .home-link:hover {
+    text-decoration: underline;
+  }
+
+  .secondary-wrap {
     display: flex;
     align-items: center;
     gap: var(--sl-nav-gap);
