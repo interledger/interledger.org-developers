@@ -346,10 +346,8 @@ a.switch-link:hover {
 </style>
 
 <script>
-  // Site navigation CSS classes
 const siteLinksWrapper = document.querySelector("[data-nav-wrapper]");
 const wideNavMinWidth = window.matchMedia("(min-width: 1060px)");
-handleNavDisplayStyles(wideNavMinWidth);
 wideNavMinWidth.addEventListener("change", handleNavDisplayStyles);
 
 const siteNavToggle = document.getElementById("siteNavToggle");
@@ -361,23 +359,33 @@ if (document.contains(siteNavToggle)) {
 
 function handleMobileNavToggle() {
   siteLinksWrapper?.classList.toggle("offscreen");
-  if (siteLinksWrapper.getAttribute("class").includes("offscreen")) {
+  if (siteLinksWrapper?.getAttribute("class")?.includes("offscreen")) {
     menuIcon?.classList.remove("open");
   } else {
     menuIcon?.classList.add("open");
   }
 }
 
-function handleNavDisplayStyles(event: MediaQueryList) {
+function handleNavDisplayStyles(event: MediaQueryListEvent) {
   if (event.matches) {
     siteLinksWrapper?.classList.remove("offscreen");
   } else {
+    if (siteLinksWrapper) {
+      flashPrevention(siteLinksWrapper);
+    }
     siteLinksWrapper?.classList.add("offscreen");
   }
 }
 
+function flashPrevention(element: Element) {
+  element.setAttribute("style", "display:none");
+  setTimeout(() => {
+    element.removeAttribute("style");
+  }, 10);
+}
+
 // Site sub-navigation toggle
-const siteNav = document.querySelector(".site-nav__links");
+const siteNav = document.querySelector(".site-nav__links") as HTMLInputElement;
 
 if (document.contains(siteNav)) {
   const subLinks = document.querySelectorAll(".has-submenu > a");
@@ -386,7 +394,7 @@ if (document.contains(siteNav)) {
     subLink.setAttribute("aria-expanded", "false");
 
     subLink.addEventListener("click", function (event) {
-      const clickedSubLink = event.target;
+      const clickedSubLink = event.target as Element;
       const allSubLinks = Array.from(subLinks);
       const notClickedLinks = allSubLinks.filter(function (otherLink) {
         return otherLink !== clickedSubLink;
@@ -394,17 +402,17 @@ if (document.contains(siteNav)) {
       notClickedLinks.forEach((link) => {
         link.setAttribute("aria-expanded", "false");
       });
-      if (clickedSubLink.getAttribute("aria-expanded") === "true") {
-        clickedSubLink.setAttribute("aria-expanded", "false");
+      if (clickedSubLink?.getAttribute("aria-expanded") === "true") {
+        clickedSubLink?.setAttribute("aria-expanded", "false");
       } else {
-        clickedSubLink.setAttribute("aria-expanded", "true");
+        clickedSubLink?.setAttribute("aria-expanded", "true");
       }
       event.preventDefault();
       return false;
     });
   });
 
-  siteNav.addEventListener("keydown", function (event) {
+  siteNav?.addEventListener("keydown", function (event) {
     if (event.key === "Escape") {
       resetSubMenus();
     }
@@ -423,10 +431,11 @@ if (document.contains(siteNav)) {
   }
 }
 
-function isClickOutside(event: MouseEvent, nodeList: Iterable<unknown> | ArrayLike<unknown>) {
+function isClickOutside(event: MouseEvent, nodeList: NodeListOf<Element>) {
   let clickedInsideTarget = false;
+  const eventTarget = event.target as Element;
   Array.from(nodeList).forEach(function (element) {
-    if (element.contains(event.target)) {
+    if (element.contains(eventTarget)) {
       clickedInsideTarget = true;
     }
   });

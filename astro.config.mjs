@@ -7,7 +7,7 @@ export default defineConfig({
   base: "/developers",
   integrations: [
     starlight({
-      title: "Interledger Protocol (ILP)",
+      title: "Interledger",
       description: "Enable seamless exchange of value across payment networks.",
       customCss: [
         "./node_modules/@interledger/docs-design-system/src/styles/green-theme.css",
