@@ -41,19 +41,23 @@
   --space-2xl: clamp(4.5rem, 3.913rem + 2.6087vw, 6rem);
   --space-3xl: clamp(6.75rem, 5.8696rem + 3.913vw, 9rem);
   --border-radius: 6px;
+  --max-content-width: 1160px;
+  --site-header-height: 4.275rem;
+
   --box-shadow: 0px 1px 1px hsla(0, 0%, 0%, 0.06),
     0px 2px 2px hsla(0, 0%, 0%, 0.06);
-
-  --color-primary-fallback: #6d00cc;
-  --color-primary: oklch(45.77% 0.248 297.11);
   --color-white: #fff;
   --color-black: #000;
-  --max-content-width: 1160px;
-  --filter-primary: invert(18%) sepia(97%) saturate(3558%) hue-rotate(269deg)
-    brightness(73%) contrast(131%);
 
-  --color-bg: var(--color-white);
-  --color-text: var(--color-black);
+  --color-primary-fallback: #057972;
+  --color-primary: oklch(51.95% 0.089 187.7);
+  --color-primary-bg-fallback: rgba(7, 121, 114, 0.1);
+  --color-primary-bg: oklch(51.95% 0.089 187.7 / 0.1);
+  --filter-primary: invert(33%) sepia(60%) saturate(1165%) hue-rotate(139deg)
+    brightness(89%) contrast(96%);
+
+  --color-header-bg: var(--color-white);
+  --color-btn-bg: var(--color-white);
 }
 
 [data-theme="dark"] {

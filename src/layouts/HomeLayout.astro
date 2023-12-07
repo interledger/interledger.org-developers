@@ -72,16 +72,22 @@ const { title, description } = Astro.props;
 
 	section {
 		width: 100%;
-		padding-top: var(--space-l);
-		padding-bottom: var(--space-l);
+		padding-block: var(--space-l);
 	}
 
 	.content-wrapper {
 		max-width: var(--max-content-width);
 		min-width: 360px;
 		margin: auto;
-		padding-left: var(--space-s);
-		padding-right: var(--space-s);
+	}
+
+	@media screen and (max-width: 1324px) {
+		.content-wrapper {
+			max-width: var(--max-content-width);
+			min-width: 360px;
+			margin: auto;
+			padding-inline: 5%;
+		}
 	}
 
 	.heading--1,

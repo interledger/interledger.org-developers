@@ -61,12 +61,12 @@ header.header {
 }
 
 /* Github pulled spec content */
-.content h1 {
+.sl-markdown-content h1 {
   display: none;
 }
 
-.sl-container .content astro-island > h1 + p,
-.sl-container .content astro-island > h1 + blockquote {
+.sl-container .sl-markdown-content astro-island > h1 + p,
+.sl-container .sl-markdown-content astro-island > h1 + blockquote {
   margin-top: 0;
 }
 
@@ -83,14 +83,14 @@ header.header {
   font-family: var(--sl-font-system);
 }
 
-.content > blockquote,
-.content > h1 + blockquote {
+.sl-markdown-content > blockquote,
+.sl-markdown-content > h1 + blockquote {
   border-inline-start: 2px solid var(--sl-color-text-accent);
   font-size: var(--step-1);
   font-style: italic;
 }
 
-.content > :first-child {
+.sl-markdown-content > :first-child {
   margin-top: var(--space-s);
 }
 
@@ -152,16 +152,16 @@ div.community.community p {
 }
 
 /* Code block styles */
-.content pre {
+.sl-markdown-content pre {
   background-color: var(--astro-code-color-background);
   overflow-x: auto;
 }
 
-.content.content pre {
+.sl-markdown-content.sl-markdown-content pre {
   padding: 0;
 }
 
 /* Misc tweaks */
-.content img {
+.sl-markdown-content img {
   background-color: white;
 }
