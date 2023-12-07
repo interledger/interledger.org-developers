@@ -18,6 +18,13 @@ import FoundationLogo from "../components/FoundationLogo.astro";
 </div>
 
 <style>
+  :global(header) {
+    border-block-start: 2px solid var(--color-primary-fallback);
+    border-block-start: 2px solid var(--color-primary);
+    box-shadow: 0px 0px 12px -4px var(--color-primary-fallback);
+    box-shadow: 0px 0px 12px -4px var(--color-primary);
+  }
+
   .header { 
     gap: var(--sl-nav-gap);
     align-items: center;

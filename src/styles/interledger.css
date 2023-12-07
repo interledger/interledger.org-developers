@@ -47,7 +47,12 @@
   --sl-text-xs: var(--step--1);
   --sl-text-sm: var(--step--1);
 
-  --sl-nav-height: 5rem;
+  --sl-nav-height: 4.275rem;
+
+  --color-primary-fallback: #057972;
+  --color-primary: oklch(51.95% 0.089 187.7);
+  --color-primary-bg-fallback: rgba(7, 121, 114, 0.1);
+  --color-primary-bg: oklch(51.95% 0.089 187.7 / 0.1);
 }
 
 /* Site header overrides */
