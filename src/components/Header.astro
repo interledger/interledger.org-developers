@@ -84,6 +84,10 @@ import DevelopersLogo from "../components/DevelopersLogo.astro";
     text-decoration: none;
   }
 
+  :global([data-theme="dark"]) .home-link {
+    color: var(--sl-color-text-accent);
+  }
+
   .home-link:hover {
     text-decoration: underline;
   }
