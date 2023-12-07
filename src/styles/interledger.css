@@ -23,8 +23,6 @@
 }
 
 :root {
-  --sl-font: "Titillium Web";
-
   /* Text size and line height */
   --step--2: clamp(0.72rem, calc(0.95rem + -0.26vw), 0.89rem);
   --step--1: clamp(0.9rem, calc(1.03rem + -0.15vw), 1rem);
@@ -59,6 +57,7 @@
 header.header {
   background-color: var(--sl-color-black);
   border-bottom: 0;
+  font-family: "Titillium Web";
 }
 
 [data-theme="dark"] .logo-text {
