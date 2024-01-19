@@ -6,7 +6,7 @@ title: Interledger Protocol®
 
 Interledger Protocol (ILP) is an open protocol suite for sending payments across different ledgers. Like the internet, connectors route packets of money across independent networks. The open architecture and minimal protocol enable interoperability for any value transfer system.
 
-**Interledger is not tied to a single company, blockchain, or currency.**
+**Interledger is not tied to a single company, payment network, or currency.**
 
 <div class="overview-grid">
   <div class="overview-item">
@@ -36,7 +36,7 @@ Interledger Protocol (ILP) is an open protocol suite for sending payments across
 
 Enable seamless exchange of value across payment networks.
 
-Traditional payment networks operate independently from each other. Sending value is easy only if the sender and recipient have accounts on the same network, but it can be slow and expensive if they have accounts on different networks. Interledger makes it easy to transact in whatever currency or payment network you choose, because Interledger is not tied to any one company, blockchain, or currency. Using Interledger, you can send AUD to someone who wants to receive GBP, or you can send USD to someone who wants to receive EUR.
+Traditional payment networks operate independently from each other. Sending value is easy only if the sender and recipient have accounts on the same network, but it can be slow and expensive if they have accounts on different networks. Interledger makes it easy to transact in whatever currency or payment network you choose, because Interledger is not tied to any one company, payment network, or currency. Using Interledger, you can send AUD to someone who wants to receive GBP, or you can send USD to someone who wants to receive EUR.
 
 ## What is Interledger?
 
