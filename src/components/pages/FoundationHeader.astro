@@ -109,17 +109,14 @@ import FoundationLogo from "../FoundationLogo.astro";
   position: sticky;
   top: 0;
   z-index: 1;
-  border-block-start: 2px solid var(--color-primary-fallback);
-  border-block-start: 2px solid var(--color-primary);
-  box-shadow: 0px 0px 12px -4px var(--color-primary-fallback);
-  box-shadow: 0px 0px 12px -4px var(--color-primary);
+  border-block-start: 2px solid var(--color-header-accent);
+  box-shadow: var(--box-shadow);
 }
 
 .site-nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: var(--site-header-height);
 }
 
 .site-nav ul {
@@ -142,11 +139,13 @@ import FoundationLogo from "../FoundationLogo.astro";
 .site-nav__links a {
   text-decoration: underline 1.5px transparent;
   padding: var(--space-s) var(--space-2xs);
+  color: var(--color-black);
 }
 
 .site-nav__links a:hover {
-  background-color: var(--color-primary-bg-fallback);
-  background-color: var(--color-primary-bg);
+  background-color: var(--color-header-accent);
+  color: currentColor;
+  text-decoration-color: currentColor;
 }
 
 .menu-item--level-1 > a {
@@ -163,11 +162,6 @@ import FoundationLogo from "../FoundationLogo.astro";
   grid-area: site;
   padding-block: var(--space-s);
   text-decoration: none;
-}
-
-a.switch-link {
-  color: var(--color-primary-fallback);
-  color: var(--color-primary);
 }
 
 a.switch-link:hover {
@@ -187,13 +181,17 @@ a.switch-link:hover {
 }
 
 @media screen and (max-width: 1059px) {
+  .site-nav {
+    height: var(--site-header-height);
+  }
+  
   .site-links-wrapper {
     position: absolute;
     background-color: var(--color-header-bg);
     top: var(--site-header-height);
     right: 0;
     transition: transform 300ms ease-in-out;
-    border-block-start: 1px solid var(--color-primary);
+    border-block-start: 1px solid var(--color-header-accent);
   }
 
   .site-links-wrapper.offscreen {
@@ -213,8 +211,7 @@ a.switch-link:hover {
   }
 
   .menu-item--level-1 > .is-active {
-    border-inline-start: 2px solid var(--color-primary-fallback);
-    border-inline-start: 2px solid var(--color-primary);
+    border-inline-start: 2px solid var(--color-header-accent);
   }
 
   .menu-item--level-2 > .is-active {
@@ -222,8 +219,7 @@ a.switch-link:hover {
   }
 
   .switch-link:hover {
-    background-color: var(--color-primary-bg-fallback);
-    background-color: var(--color-primary-bg);
+    background-color: var(--color-header-accent);
   }
 
   .site-nav__toggle {
@@ -246,8 +242,7 @@ a.switch-link:hover {
     position: absolute;
     height: 4px;
     width: 100%;
-    background: var(--color-primary-fallback);
-    background: var(--color-primary);
+    background: currentColor;
     border-radius: 4px;
     opacity: 1;
     left: 0;
@@ -315,13 +310,6 @@ a.switch-link:hover {
     align-items: center;
   }
 
-  .site-nav__links .is-active {
-    text-decoration-color: var(--color-primary-fallback);
-    text-decoration-color: var(--color-primary);
-    color: var(--color-primary-fallback);
-    color: var(--color-primary);
-  }
-
   .has-submenu {
     position: relative;
   }
@@ -329,8 +317,7 @@ a.switch-link:hover {
   .site-nav .menu--level-2 {
     background-color: var(--color-header-bg);
     position: absolute;
-    border-inline-start: 2px solid var(--color-primary-fallback);
-    border-inline-start: 2px solid var(--color-primary);
+    border-inline-start: 2px solid var(--color-header-accent);
     transition: opacity 150ms ease-in;
   }
 
@@ -349,9 +336,9 @@ a.switch-link:hover {
     width: max-content;
     min-width: 100%;
     left: 0;
-    top: calc(1.3em + var(--space-s) * 2);
-    box-shadow: 0px 0px 12px -4px var(--color-primary-fallback);
-    box-shadow: 0px 0px 12px -4px var(--color-primary);
+    top: calc(1.4em + var(--space-s) * 2);
+    box-shadow: 2px 3px 6px -3px hsla(0, 0%, 0%, 0.06),
+    -2px 3px 6px -3px hsla(0, 0%, 0%, 0.06);
   }
 
   .site-nav__toggle {

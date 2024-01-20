@@ -56,7 +56,7 @@
 /* Site header overrides */
 header.header {
   background-color: var(--sl-color-black);
-  border-bottom: 0;
+  border-block-end: 0;
   font-family: "Titillium Web";
 }
 
@@ -71,11 +71,11 @@ header.header {
 
 .sl-container .sl-markdown-content astro-island > h1 + p,
 .sl-container .sl-markdown-content astro-island > h1 + blockquote {
-  margin-top: 0;
+  margin-block-start: 0;
 }
 
 .content-panel + .content-panel {
-  padding-top: 0;
+  padding-block-start: 0;
 }
 
 /* Navigation sidebar font issue */
@@ -95,16 +95,16 @@ header.header {
 }
 
 .sl-markdown-content > :first-child {
-  margin-top: var(--space-s);
+  margin-block-start: var(--space-s);
 }
 
 /* Markdown content layout styles */
 div.overview-item.overview-item p {
-  margin-top: var(--space-2xs);
+  margin-block-start: var(--space-2xs);
 }
 
 div.overview-item.overview-item div {
-  margin-top: 0;
+  margin-block-start: 0;
 }
 
 @media screen and (max-width: 599px),
@@ -125,12 +125,12 @@ div.overview-item.overview-item div {
   }
 
   div.overview-item.overview-item.overview-item {
-    margin-top: 0;
+    margin-block-start: 0;
     text-align: center;
   }
 
   div.overview-item.overview-item p {
-    margin-top: var(--space-3xs);
+    margin-block-start: var(--space-3xs);
   }
 
   div.overview-item img {
@@ -140,7 +140,7 @@ div.overview-item.overview-item div {
 }
 
 div.community.community p {
-  margin-top: var(--space-2xs);
+  margin-block-start: var(--space-2xs);
 }
 
 @media screen and (min-width: 600px) {
@@ -151,7 +151,7 @@ div.community.community p {
   }
 
   div.community.community div {
-    margin-top: 0;
+    margin-block-start: 0;
   }
 }
 

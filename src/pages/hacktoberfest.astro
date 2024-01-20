@@ -102,8 +102,7 @@ import Section from '../components/pages/Section.astro';
 
 	.vision {
 		max-width: 38em;
-		margin-left: auto;
-		margin-right: auto;
+		margin-inline: auto;
 	}
 
 	.intro-grid {
@@ -160,13 +159,11 @@ import Section from '../components/pages/Section.astro';
 	}
 
 	.padding--small {
-		padding-top: var(--space-s);
-		padding-bottom: var(--space-s);
+		padding-block: var(--space-s);
 	}
 
 	.padding--large {
-		padding-top: var(--space-xl);
-		padding-bottom: var(--space-xl);
+		padding-block: var(--space-xl);
 	}
 
 	.align--center {
@@ -174,10 +171,10 @@ import Section from '../components/pages/Section.astro';
 	}
 
 	h2, h3 {
-		margin-bottom: var(--space-s);
+		margin-block-end: var(--space-s);
 	}
 	
 	p {
-		margin-bottom: var(--space-xs);
+		margin-block-end: var(--space-xs);
 	}
 </style>

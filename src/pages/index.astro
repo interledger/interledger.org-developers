@@ -49,8 +49,8 @@ import HomeLayout from '../layouts/HomeLayout.astro';
     background-repeat: no-repeat;
     background-size: cover;
     background-position: bottom right;
-    background-image: linear-gradient(90deg, #057972 0%, #93944C 52.08%, #FF7A4E 100%);
-    background-image: linear-gradient(to right, oklch(51.95% 0.089 187.7) 0%, oklch(64.96% 0.095 109.48) 52.08%, oklch(72.76% 0.173 38.66) 100%);
+    background-image: linear-gradient(90deg, #007777 0%, #69BCC3 100%);
+    background-image: linear-gradient(to right, oklch(51.54% 0.088 194.77), oklch(74.53% 0.082 202.65));
     min-height: 60vh;
     padding-block: var(--space-m);
     color: var(--color-white);
@@ -60,7 +60,6 @@ import HomeLayout from '../layouts/HomeLayout.astro';
 
   .content-wrapper {
     display: flex;
-    align-items: center;
     justify-content: start;
     gap: var(--space-m);
   }
@@ -86,6 +85,10 @@ import HomeLayout from '../layouts/HomeLayout.astro';
   @media screen and (min-width: 800px) {
     .hero {
       min-height: 70vh;
+    }
+
+    .content-wrapper {
+      align-items: center;
     }
   }
 

@@ -42,21 +42,24 @@
   --space-3xl: clamp(6.75rem, 5.8696rem + 3.913vw, 9rem);
   --border-radius: 6px;
   --max-content-width: 1160px;
-  --site-header-height: 4.275rem;
+  --site-header-height: 4.375rem;
 
   --box-shadow: 0px 1px 1px hsla(0, 0%, 0%, 0.06),
     0px 2px 2px hsla(0, 0%, 0%, 0.06);
   --color-white: #fff;
   --color-black: #000;
+  --color-gray: #444;
+  --color-frost: rgba(255, 255, 255, 0.5);
 
-  --color-primary-fallback: #057972;
-  --color-primary: oklch(51.95% 0.089 187.7);
+  --color-primary-fallback: #007777;
+  --color-primary: oklch(51.54% 0.088 194.77);
   --color-primary-bg-fallback: rgba(7, 121, 114, 0.1);
   --color-primary-bg: oklch(51.95% 0.089 187.7 / 0.1);
-  --filter-primary: invert(33%) sepia(60%) saturate(1165%) hue-rotate(139deg)
-    brightness(89%) contrast(96%);
+  --filter-primary: invert(18%) sepia(85%) saturate(4735%) hue-rotate(172deg)
+    brightness(93%) contrast(101%);
 
   --color-header-bg: var(--color-white);
+  --color-header-accent: #eee;
   --color-btn-bg: var(--color-white);
 }
 
