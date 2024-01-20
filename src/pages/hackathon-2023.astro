@@ -263,8 +263,8 @@ import AnimatedSummitLogo from '../components/pages/AnimatedSummitLogo.astro';
 			color: var(--color-text);
 			cursor: pointer;
 			opacity: 0.75;
-			border-bottom-left-radius: var(--border-radius);
-			border-top-left-radius: var(--border-radius);
+			border-end-start-radius: var(--border-radius);
+			border-start-start-radius: var(--border-radius);
 			transition: opacity 300ms ease-in-out;
 		}
 
@@ -299,11 +299,11 @@ import AnimatedSummitLogo from '../components/pages/AnimatedSummitLogo.astro';
 	}
 
 	aside li {
-		margin-bottom: var(--space-3xs);
+		margin-block-end: var(--space-3xs);
 	}
 
 	aside li ul {
-		margin-top:  var(--space-3xs);
+		margin-block-start:  var(--space-3xs);
 	}
 
 	aside a {
@@ -322,7 +322,7 @@ import AnimatedSummitLogo from '../components/pages/AnimatedSummitLogo.astro';
 		display: flex;
 		gap: 1em;
 		justify-content: center;
-		margin-bottom: var(--space-m)
+		margin-block-end: var(--space-m)
 	}
 
 	.summit-logo__animate {
@@ -340,38 +340,36 @@ import AnimatedSummitLogo from '../components/pages/AnimatedSummitLogo.astro';
 
 	.testnet-logo {
 		max-width: 10em;
-		margin-top: var(--space-s);
-		margin-bottom: var(--space-s);
+		margin-block: var(--space-s);
 	}
 
 	.opp-snippets {
 		max-width: 15em;
-		margin-bottom: var(--space-s);
+		margin-block-end: var(--space-s);
 	}
 
 	.opp-logo {
 		max-width: 18em;
-		margin-bottom: var(--space-s);
+		margin-block-end: var(--space-s);
 	}
 
 	.webm-logo {
 		max-width: 16em;
-		margin-bottom: var(--space-s);
+		margin-block-end: var(--space-s);
 	}
 
 	.interledger-logo {
 		max-width: 12em;
-		margin-bottom: var(--space-s);
+		margin-block-end: var(--space-s);
 	}
 
 	.tigerbeetle-logo {
 		max-width: 12em;
-		margin-bottom: var(--space-s);
+		margin-block-end: var(--space-s);
 	}
 
 	.padding--large {
-		padding-top: var(--space-3xl);
-		padding-bottom: var(--space-3xl);
+		padding-block: var(--space-3xl);
 	}
 
 	.align--center {
@@ -379,11 +377,11 @@ import AnimatedSummitLogo from '../components/pages/AnimatedSummitLogo.astro';
 	}
 
 	h2, h3 {
-		margin-bottom: var(--space-s);
+		margin-block-end: var(--space-s);
 	}
 	
 	p, .content ul, ol {
-		margin-bottom: var(--space-xs);
+		margin-block-end: var(--space-xs);
 	}
 </style>
 

@@ -9,12 +9,12 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/starlight": "^0.15.0",
+    "@astrojs/starlight": "^0.16.0",
     "@interledger/docs-design-system": "^0.2.1",
     "@types/showdown": "^2.0.6",
-    "astro": "^4.0.3",
-    "node-html-parser": "^6.1.11",
-    "sharp": "^0.33.0",
+    "astro": "^4.2.1",
+    "node-html-parser": "^6.1.12",
+    "sharp": "^0.33.2",
     "showdown": "^2.1.0"
   }
 }
