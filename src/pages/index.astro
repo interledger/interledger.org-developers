@@ -71,14 +71,16 @@ import HomeLayout from '../layouts/HomeLayout.astro';
   .hero-image {
     flex: 2;
     max-width: 30rem;
+    display: flex;
   }
 
   @media screen and (max-width: 799px) {
     .hero {
       padding-block: var(--space-xl);
     }
-    .content-wrapper {
+    .hero .content-wrapper {
       flex-direction: column;
+      align-items: center;
     }
   }
   
@@ -89,6 +91,12 @@ import HomeLayout from '../layouts/HomeLayout.astro';
 
     .content-wrapper {
       align-items: center;
+    }
+  }
+
+  @media screen and (min-width: 1010px) {
+    .content-wrapper {
+      align-items: end;
     }
   }
 
