@@ -169,3 +169,9 @@ div.community.community p {
 .sl-markdown-content img {
   background-color: white;
 }
+
+@media (min-width: 80rem) {
+  nav.sidebar .sidebar-pane {
+    height: initial;
+  }
+}

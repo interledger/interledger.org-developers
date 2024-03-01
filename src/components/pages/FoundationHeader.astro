@@ -9,9 +9,6 @@ import FoundationLogo from "../FoundationLogo.astro";
     </a>
     <div class="site-links-wrapper offscreen" data-nav-wrapper id="siteNavLinks">
       <ul class="site-nav__links menu--level-1" id="siteNavMenu">
-        <li class="menu-item menu-item--level-1">
-          <a href="/">Home</a>
-        </li>
         <li class="menu-item has-submenu menu-item--level-1">
           <a href="/vision" aria-expanded="false">About us</a>
           <ul class="menu--level-2">
@@ -24,67 +21,75 @@ import FoundationLogo from "../FoundationLogo.astro";
             <li class="menu-item menu-item--level-2">
               <a href="/team">Team</a>
             </li>
+            <li class="menu-item menu-item--level-2">
+              <a href="https://interledger-foundation.breezy.hr/">Careers</a>
+            </li>
           </ul>
-
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
-          <a href="/opportunities" aria-expanded="false">Grants</a>
+          <a href="/financial-services" aria-expanded="false">Grants</a>
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
               <a href="/opportunities">Opportunities</a>
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href="/our-approach">Approach</a>
+              <a href="/financial-services">Financial Services</a>
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href="/impact">Impact</a>
+              <a href="/education">Education</a>
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href="/participation-guidelines">Participation guidelines</a>
-            </li>
-          </ul>
-        </li>
-        <li class="menu-item has-submenu menu-item--level-1">
-          <a href="/developers" aria-expanded="false" class="is-active">Developers</a>
-          <ul class="menu--level-2">
-            <li class="menu-item menu-item--level-2">
-              <a href="/developers/rfcs/interledger-protocol">Specifications</a>
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a href="/developers/tools">Tools</a>
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a href="/developers/community">Community</a>
+              <a href="/ambassadors">Ambassadors</a>
             </li>
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
-          <a href="/latest-talks" aria-expanded="false">Learning hub</a>
+          <a href="/developers" aria-expanded="false">Technology</a>
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
-              <a href="/latest-talks">Latest talks</a>
+              <a href="/open-standards">Open Standards</a>
+            </li>
+            <li class="menu-item menu-item--level-2">
+              <a href="/interledger">Interledger</a>
+            </li>
+            <li class="menu-item menu-item--level-2">
+              <a href="/developers">Developers Portal</a>
             </li>
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
-          <a href="/news" aria-expanded="false">News &amp; events</a>
+          <a href="/podcast" aria-expanded="false">Future | Money</a>
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
-              <a href="/latest-news">News</a>
+              <a href="/podcast">Podcast</a>
+            </li>
+            <li class="menu-item menu-item--level-2">
+              <a href="/art">Art</a>
+            </li>
+          </ul>
+        </li>
+        <li class="menu-item has-submenu menu-item--level-1">
+          <a href="/blog" aria-expanded="false">News</a>
+          <ul class="menu--level-2">
+            <li class="menu-item menu-item--level-2">
+              <a href="/blog">Blog</a>
+            </li>
+            <li class="menu-item menu-item--level-2">
+              <a href="/press">Press</a>
+            </li>
+          </ul>
+        </li>
+        <li class="menu-item has-submenu menu-item--level-1">
+          <a href="/get-involved" aria-expanded="false">Participate</a>
+          <ul class="menu--level-2">
+            <li class="menu-item menu-item--level-2">
+              <a href="/get-involved">Get involved</a>
             </li>
             <li class="menu-item menu-item--level-2">
               <a href="/events">Events</a>
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href="/podcast">Podcast</a>
-            </li>
-          </ul>
-        </li>
-        <li class="menu-item has-submenu menu-item--level-1">
-          <a href="/community" aria-expanded="false">Get involved</a>
-          <ul class="menu--level-2">
-            <li class="menu-item menu-item--level-2">
-              <a href="/community" >Community</a>
+              <a href="/participation-guidelines">Guidelines</a>
             </li>
           </ul>
         </li>
@@ -137,7 +142,7 @@ import FoundationLogo from "../FoundationLogo.astro";
 }
 
 .site-nav__links a {
-  text-decoration: underline 1.5px transparent;
+  text-decoration: none;
   padding: var(--space-s) var(--space-2xs);
   color: var(--color-black);
 }
@@ -145,15 +150,6 @@ import FoundationLogo from "../FoundationLogo.astro";
 .site-nav__links a:hover {
   background-color: var(--color-header-accent);
   color: currentColor;
-  text-decoration-color: currentColor;
-}
-
-.menu-item--level-1 > a {
-  text-underline-offset: 8px;
-}
-
-.menu-item--level-2 > a {
-  text-underline-offset: 4px;
 }
 
 .switch-link {
@@ -166,6 +162,7 @@ import FoundationLogo from "../FoundationLogo.astro";
 
 a.switch-link:hover {
   text-decoration: underline;
+  color: currentColor;
 }
 
 @media screen and (max-width: 479px) {
@@ -330,7 +327,9 @@ a.switch-link:hover {
     opacity: 0;
   }
 
-  .has-submenu > a[aria-expanded="true"] + ul {
+  .has-submenu > a[aria-expanded="true"] + ul,
+  .menu-item--level-1:hover > .menu--level-2,
+  .menu--level-2:hover {
     visibility: visible;
     opacity: 1;
     width: max-content;

@@ -1,0 +1,99 @@
+---
+import type { Page } from "astro";
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+type Props = {
+  page: Page<any>;
+};
+
+export async function getStaticPaths({ paginate }: any) {
+  const blogEntries = (await getCollection("blog")).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+  return paginate(blogEntries, { pageSize: 12 });
+}
+
+const { page } = Astro.props;
+---
+<BaseLayout title="Engineering blog">
+	<main>
+		<div class="content-wrapper">
+			<ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
+				<li itemprop="itemListElement" itemscope
+						itemtype="https://schema.org/ListItem">
+					<a itemprop="item" href="/developers">
+					<span itemprop="name">Developers Portal</span></a>
+					<meta itemprop="position" content="1" />
+				</li>
+			</ol>
+			<h1>Engineering Blog</h1>
+			<ol class="postlist">
+				{((page as any).data || []).map((blogPostEntry: any) => (
+					<li class="postlist-item">
+						<a href={`/developers/blog/${blogPostEntry.slug}`} class="postlist-link heading--6">{blogPostEntry.data.title}</a>
+						<time class="postlist-date" datetime={blogPostEntry.data.date.toISOString()}>
+							{blogPostEntry.data.date.toDateString()}
+						</time>
+					</li>
+				))}
+			</ol>
+		</div>
+	</main>
+</PageLayout>
+
+<style>
+main {
+	padding-block-start: var(--space-m);
+	padding-block-end: var(--space-xl);
+}
+
+.breadcrumbs {
+  list-style: none;
+  display: flex;
+  padding-inline-start: 0;
+  font-size: var(--step--1);
+  font-weight: 700;
+	padding-block-start: var(--space-l);
+}
+
+.breadcrumbs a {
+	color: var(--color-primary);
+	text-decoration: none;
+}
+
+h1 {
+	padding-block-start: var(--space-s);
+	padding-block-end: var(--space-m);
+}
+
+ol {
+	padding: 0;
+}
+
+.post-metadata,
+.links-nextprev,
+.postlist {
+	list-style: none;
+}
+
+.postlist-item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--space-s);
+}
+
+.postlist-date {
+  font-size: var(--step--1);
+}
+
+.postlist-link {
+  order: 1;
+	font-weight: 600;
+	text-decoration-color: transparent;
+	transition: text-decoration 300ms ease-in-out, color 300ms ease-in-out;
+}
+
+.postlist-link:hover {
+  text-decoration-color: currentColor;
+}
+</style>
+

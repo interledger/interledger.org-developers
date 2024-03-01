@@ -1,6 +1,8 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 
+import node from "@astrojs/node";
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://interledger.org",
@@ -10,7 +12,7 @@ export default defineConfig({
       title: "Interledger",
       description: "Enable seamless exchange of value across payment networks.",
       customCss: [
-        "./node_modules/@interledger/docs-design-system/src/styles/green-theme.css",
+        "./node_modules/@interledger/docs-design-system/src/styles/teal-theme.css",
         "./node_modules/@interledger/docs-design-system/src/styles/ilf-docs.css",
         "./src/styles/interledger.css",
         "./src/styles/atom-one-light.min.css",
@@ -38,10 +40,6 @@ export default defineConfig({
         github: "https://github.com/interledger",
       },
       sidebar: [
-        {
-          label: "Get started",
-          link: "/get-started",
-        },
         {
           label: "Specs",
           items: [
@@ -101,12 +99,8 @@ export default defineConfig({
           ],
         },
         {
-          label: "Tools",
-          link: "/tools",
-        },
-        {
-          label: "Community",
-          link: "/community",
+          label: "Get involved",
+          link: "/get-involved",
         },
       ],
     }),
