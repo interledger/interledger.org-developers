@@ -1,5 +1,0 @@
-[[redirects]]
-from = "/*"
-to = "https://interledger-devs-preview.netlify.app/developers/:splat"
-status = 301
-force = true
