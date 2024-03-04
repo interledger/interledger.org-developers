@@ -39,7 +39,7 @@ export default defineConfig({
       },
       sidebar: [
         {
-          label: "Specs",
+          label: "Specifications",
           items: [
             {
               label: "Interledger Protocol V4 (ILPv4)",

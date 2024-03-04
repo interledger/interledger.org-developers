@@ -1,11 +1,18 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import InterledgerIcon from '../components/logos/InterledgerIcon.astro';
+import OpenPaymentsIcon from '../components/logos/OpenPaymentsIcon.astro';
+import RafikiIcon from '../components/logos/RafikiIcon.astro';
 ---
 <BaseLayout title="Developers">
   <main>
     <section class="hero">
       <div class="content-wrapper">
-        <h1 class="hero__text heading--1">Interledger Developers Portal</h1>
+        <div class="text-wrapper">
+          <h1 class="hero__heading heading--2">Interledger Developers Portal</h1>
+          <p class="hero__txt">Help shape the future of interoperable payments and enable seamless exchange of value across payment networks.</p>
+          <a class="hero__btn" href="/developers/get-involved">Get involved</a>
+        </div>
         <div class="image-wrapper">
           <img src="/developers/img/devs.svg" alt="Illustration of developers working at a table" class="hero__img" />
         </div>
@@ -21,26 +28,26 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <section>
       <div class="content-wrapper cards">
         <div class="card">
-          <h2 class="heading--5">Open Payments</h2>
+          <h2 class="heading--6"><OpenPaymentsIcon /> Open Payments</h2>
           <p>Open Payments is an open API standard that can be implemented by account servicing entities to facilitate interoperability in the setup and completion of payments for different use cases.</p>
           <a href="https://github.com/interledger/open-payments">Learn more on Github</a>
         </div>
         <div class="card">
-          <h2 class="heading--5">Rafiki</h2>
+          <h2 class="heading--6"><RafikiIcon /> Rafiki</h2>
           <p>Rafiki is open source software that provides a more efficient method for an account servicing entity to enable Interledger functionality on its users' accounts.</p>
           <a href="https://github.com/interledger/rafiki">Learn more on Github</a>
         </div>
         <div class="card">
-          <h2 class="heading--5">Specifications</h2>
+          <h2 class="heading--6"><InterledgerIcon /> Specifications</h2>
           <p>The Interledger Protocol (ILP) is an open, neutral protocol for transferring money based on TCP/IP, designed for sending packets of money across different accounting ledgers. <a href="/developers/rfcs/interledger-protocol/">Read</a> the Interledger specifications or <a href="https://github.com/interledger/rfcs">contribute</a> to them.</p>
         </div>
         <div class="card">
-          <h2 class="heading--5">Test Network</h2>
+          <h2 class="heading--6"><InterledgerIcon /> Test Network</h2>
           <p>The Test Network (Testnet) is an open Interledger network working with test money designed for account servicing entities to test their Interledger integration.</p>
           <a href="https://github.com/interledger/testnet">Learn more on Github</a>
         </div>
         <div class="card">
-          <h2 class="heading--5">Engineering Blog</h2>
+          <h2 class="heading--6">Engineering Blog</h2>
           <p>Our team shares theirs thoughts and experiences on Interledger and the work that we are doing.</p>
           <a href="/developers/blog">Read our blog</a>
         </div>
@@ -79,18 +86,49 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     gap: var(--space-m);
   }
 
-  .hero__text {
+  .text-wrapper {
     flex: 3;
-    color: var(--color-white);
-    font-weight: 600;
-    max-width: 10em;
-    line-height: 1.2;
-    margin-block-end: var(--space-2xs);
   }
 
+  .hero__heading {
+    color: var(--color-white);
+    max-width: 10em;
+    line-height: 1.2;
+    font-weight: 600;
+    margin-block-end: var(--space-xs);
+  }
+
+  .hero__txt {
+    margin-block-end: var(--space-s);
+  }
+
+  .hero__btn {
+    border-radius: 10em;
+    background-color: var(--color-white);
+    padding: var(--space-xs) var(--space-s);
+    color: var(--color-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    text-decoration-color: transparent;
+    text-underline-offset: 4px;
+    transition: text-decoration-color ease-in-out 200ms;
+  }
+
+  .hero__btn:hover {
+    text-decoration-color: var(--color-primary);
+  }
+
+  .hero__btn::after {
+    content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12"><path d="M11.92 5.62a1.001 1.001 0 0 0-.21-.33l-5-5a1.004 1.004 0 0 0-1.42 1.42L8.59 5H1a1 1 0 0 0 0 2h7.59l-3.3 3.29a1.002 1.002 0 0 0 .325 1.639 1 1 0 0 0 1.095-.219l5-5a1 1 0 0 0 .21-.33 1 1 0 0 0 0-.76Z"/></svg>');
+    flex: none;
+    width: .6em;
+    filter: var(--filter-primary);
+  }
+  
   .image-wrapper {
     flex: 0 1 auto;
-    max-width: 30rem;
+    max-width: 28rem;
   }
 
   @media screen and (max-width: 799px) {
@@ -101,6 +139,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     .hero .content-wrapper {
       flex-direction: column;
       align-items: center;
+    }
+  }
+
+  @media screen and (min-width: 800px){
+    .hero {
+        min-height: 70vh;
+    }
+
+    .image-wrapper {
+      align-self: end;
     }
   }
   
@@ -126,11 +174,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   .card h2 {
     font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
   }
 
   .card h2,
   .card p {
     margin-block-end: var(--space-3xs);
+  }
+
+  .card h2 svg {
+    width: 1em;
   }
 
   .card a {
