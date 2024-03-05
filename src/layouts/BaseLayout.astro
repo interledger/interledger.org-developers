@@ -63,6 +63,12 @@ const { title, description } = Astro.props;
 		content: "";
 	}
 
+	@media screen and (max-width: 430px) {
+		body::before {
+			content: initial;
+		}
+	}
+
 	main {
 		flex: 1;
 		font-size: var(--step-0);
