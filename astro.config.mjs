@@ -39,6 +39,10 @@ export default defineConfig({
       },
       sidebar: [
         {
+          label: "Get involved",
+          link: "/get-involved",
+        },
+        {
           label: "Specifications",
           items: [
             {
@@ -95,10 +99,6 @@ export default defineConfig({
               },
             },
           ],
-        },
-        {
-          label: "Get involved",
-          link: "/get-involved",
         },
       ],
     }),
