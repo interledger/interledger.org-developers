@@ -1,50 +1,73 @@
 ---
-import HomeLayout from '../layouts/HomeLayout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import InterledgerIcon from '../components/logos/InterledgerIcon.astro';
+import OpenPaymentsIcon from '../components/logos/OpenPaymentsIcon.astro';
+import RafikiIcon from '../components/logos/RafikiIcon.astro';
 ---
-<HomeLayout title="Developers">
+<BaseLayout title="Developers">
   <main>
     <section class="hero">
       <div class="content-wrapper">
-        <div class="hero-text">
-          <h2>Interledger Developers Portal</h2>
-          <p>Enable seamless exchange of value across payment networks.</p>
-          <div class="hero__cta">
-            <a class="hero__btn" href="/developers/get-started">Read the documentation</a>
-            <a class="hero__outlink" href="https://github.com/interledger">Contribute on Github</a>
-          </div>
+        <div class="text-wrapper">
+          <h1 class="hero__heading heading--2">Interledger Developers Portal</h1>
+          <p class="hero__txt">Help shape the future of interoperable payments and enable seamless exchange of value across payment networks.</p>
+          <a class="hero__btn" href="/developers/get-involved">Get involved</a>
         </div>
-        <div class="hero-image">
+        <div class="image-wrapper">
           <img src="/developers/img/devs.svg" alt="Illustration of developers working at a table" class="hero__img" />
         </div>
       </div>
     </section>
 
     <section>
+      <div class="content-wrapper">
+        <p class="heading--4">Learn more about the various open-source projects that Interledger is working on.</p>
+      </div>
+    </section>
+
+    <section>
       <div class="content-wrapper cards">
         <div class="card">
-          <a href="/developers/rfcs/interledger-protocol">
-            <h3>Specifications</h3>
-            <p>Interledger specifications</p>
-          </a>
+          <h2 class="heading--6"><OpenPaymentsIcon /> Open Payments</h2>
+          <p>Open Payments is an open API standard that can be implemented by account servicing entities to facilitate interoperability in the setup and completion of payments for different use cases.</p>
+          <a href="https://github.com/interledger/open-payments">Learn more on Github</a>
         </div>
         <div class="card">
-          <a href="/developers/tools">
-            <h3>Tools</h3>
-            <p>Libraries and tools</p>
-          </a>
+          <h2 class="heading--6"><RafikiIcon /> Rafiki</h2>
+          <p>Rafiki is open source software that provides an efficient solution for an Account Servicing Entity to enable Interledger functionality on its users' accounts.</p>
+          <a href="https://github.com/interledger/rafiki">Learn more on Github</a>
         </div>
         <div class="card">
-          <a href="/developers/community">
-            <h3>Community</h3>
-            <p>Get involved with our community</p>
-          </a>
+          <h2 class="heading--6"><InterledgerIcon /> Specifications</h2>
+          <p>The Interledger Protocol (ILP) is an open, neutral protocol for transferring money based on TCP/IP, designed for sending packets of money across different accounting ledgers. <a href="/developers/rfcs/interledger-protocol/">Read</a> the Interledger specifications or <a href="https://github.com/interledger/rfcs">contribute</a> to them.</p>
+        </div>
+        <div class="card">
+          <h2 class="heading--6"><InterledgerIcon /> Test Network</h2>
+          <p>The Test Network (Testnet) is an open Interledger network working with test money designed for account servicing entities to test their Interledger integration.</p>
+          <a href="https://github.com/interledger/testnet">Learn more on Github</a>
+        </div>
+        <div class="card">
+          <h2 class="heading--6">Engineering Blog</h2>
+          <p>Our team shares their thoughts and experiences on Interledger and the work that we are doing.</p>
+          <a href="/developers/blog">Read our blog</a>
         </div>
       </div>
     </section>
   </main>
-</HomeLayout>
+</BaseLayout>
 
 <style>
+  main {
+    padding-block-end: var(--space-l);
+  }
+
+  section {
+    padding-block-start: var(--space-l);
+  }
+
+  section:last-child {
+    padding-block-end: var(--space-l);
+  }
   .hero {
     background-repeat: no-repeat;
     background-size: cover;
@@ -60,133 +83,117 @@ import HomeLayout from '../layouts/HomeLayout.astro';
 
   .content-wrapper {
     display: flex;
-    justify-content: start;
     gap: var(--space-m);
   }
 
-  .hero-text {
+  .text-wrapper {
     flex: 3;
   }
 
-  .hero-image {
-    flex: 2;
-    max-width: 30rem;
-    display: flex;
+  .hero__heading {
+    color: var(--color-white);
+    max-width: 10em;
+    line-height: 1.2;
+    font-weight: 600;
+    margin-block-end: var(--space-xs);
+  }
+
+  .hero__txt {
+    margin-block-end: var(--space-s);
+  }
+
+  .hero__btn {
+    border-radius: 10em;
+    background-color: var(--color-white);
+    padding: var(--space-xs) var(--space-s);
+    color: var(--color-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    text-decoration-color: transparent;
+    text-underline-offset: 4px;
+    transition: text-decoration-color ease-in-out 200ms;
+  }
+
+  .hero__btn:hover {
+    text-decoration-color: var(--color-primary);
+  }
+
+  .hero__btn::after {
+    content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12"><path d="M11.92 5.62a1.001 1.001 0 0 0-.21-.33l-5-5a1.004 1.004 0 0 0-1.42 1.42L8.59 5H1a1 1 0 0 0 0 2h7.59l-3.3 3.29a1.002 1.002 0 0 0 .325 1.639 1 1 0 0 0 1.095-.219l5-5a1 1 0 0 0 .21-.33 1 1 0 0 0 0-.76Z"/></svg>');
+    flex: none;
+    width: .6em;
+    filter: var(--filter-primary);
+  }
+  
+  .image-wrapper {
+    flex: 0 1 auto;
+    max-width: 28rem;
   }
 
   @media screen and (max-width: 799px) {
     .hero {
       padding-block: var(--space-xl);
     }
+
     .hero .content-wrapper {
       flex-direction: column;
       align-items: center;
     }
   }
-  
-  @media screen and (min-width: 800px) {
+
+  @media screen and (min-width: 800px){
     .hero {
-      min-height: 70vh;
+        min-height: 70vh;
     }
-  }
 
-  @media screen and (min-width: 1010px) {
-    .hero .content-wrapper {
-      align-items: end;
+    .image-wrapper {
+      align-self: end;
     }
-  }
-
-  
-  .hero h2 {
-    color: var(--color-white);
-    font-size: var(--step-5);
-    max-width: 10em;
-    line-height: 1.2;
-    margin-block-end: var(--space-2xs);
-  }
-
-  .hero p {
-    margin-block-end: var(--space-m);
-  }
-
-  .hero__cta {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap:var(--space-s);
-  }
-
-  @media screen and (max-width: 500px) {
-    .hero__cta {
-      justify-content: center;
-    }
-  }
-
-  .hero a {
-    text-decoration: none;
-  }
-
-  .hero__btn {
-    border-radius: 10em;
-    background-color: var(--color-btn-bg);
-    padding: var(--space-xs) var(--space-s);
-    color: var(--color-primary);
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2xs);
   }
   
-  .hero__btn::after {
-    content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12"><path d="M11.92 5.62a1.001 1.001 0 0 0-.21-.33l-5-5a1.004 1.004 0 0 0-1.42 1.42L8.59 5H1a1 1 0 0 0 0 2h7.59l-3.3 3.29a1.002 1.002 0 0 0 .325 1.639 1 1 0 0 0 1.095-.219l5-5a1 1 0 0 0 .21-.33 1 1 0 0 0 0-.76Z"/></svg>');
-    flex: none;
-    width: 0.6em;
-    filter: var(--filter-primary);
-  }
-
-  .hero__btn:hover {
-    text-decoration: underline;
-  }
-
-  .hero__outlink {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2xs);
-  }
-
-  .hero__outlink::after {
-    content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16"><path fill="%23000" fill-rule="evenodd" d="M7.707.293A1 1 0 0 0 7 0H3a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V9a1 1 0 1 0-2 0v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h4A1 1 0 0 0 7.707.293Zm7.238 5.964a1 1 0 0 0 .633-.224 1 1 0 0 0 .372-.783V1a1 1 0 0 0-1-1H10.7a1 1 0 1 0 0 2h1.84l-8.2 8.2a1.001 1.001 0 0 0 1.41 1.42l8.2-8.2-.01 1.83a1 1 0 0 0 1.005 1.007Z" clip-rule="evenodd"/></svg>');
-    flex: none;
-    width: 0.75em;
-    filter: invert(1);
-  }
-
-  .hero__outlink:hover {
-    color: currentColor;
-    text-decoration: underline;
-  }
-
-  .image-wrapper {
-    flex: 0 1 auto;
-    max-width: 30rem;
-  }
-
   .cards {
     display: flex;
-    gap: var(--space-m);
     flex-wrap: wrap;
   }
 
-  @media screen and (min-width: 690px) {
+  .card {
+    border-radius: var(--border-radius);
+    margin-inline: auto;
+    box-shadow: var(--box-shadow);
+    padding: var(--space-xs) var(--space-s);
+    background-color: var(--color-white);
+    width: 100%;
+  }
+
+  @media screen and (min-width: 800px) {
     .card {
-      flex: 1 1 0;
+      flex: 1 1 calc(50% - var(--space-m));
     }
+  }
+
+  .card h2 {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+  }
+
+  .card h2,
+  .card p {
+    margin-block-end: var(--space-3xs);
+  }
+
+  .card h2 svg {
+    width: 1em;
   }
 
   .card a {
     text-decoration: none;
+    color: var(--color-primary);
   }
 
-  .card a:hover > p {
+  .card a:hover {
     text-decoration: underline;
   }
 </style>

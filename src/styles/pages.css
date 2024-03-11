@@ -1,45 +1,68 @@
+/* Webfont import */
 @font-face {
   font-family: "Titillium";
   src: url("/developers/fonts/titilliumweb-regular.woff2") format("woff2");
-  font-weight: normal;
+  font-weight: 400;
   font-style: normal;
-}
-
-@font-face {
-  font-family: "Titillium";
-  src: url("/developers/fonts/titilliumweb-bold.woff2") format("woff2");
-  font-weight: bold;
-  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
   font-family: "Titillium";
   src: url("/developers/fonts/titilliumweb-italic.woff2") format("woff2");
-  font-weight: normal;
+  font-weight: 400;
   font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Titillium";
+  src: url("/developers/fonts/titilliumweb-bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Titillium";
+  src: url("/developers/fonts/titilliumweb-semibold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Titillium";
+  src: url("/developers/fonts/titilliumweb-extralight.woff2") format("woff2");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
 }
 
 /* Shared custom property values */
+/* @link https://utopia.fyi/type/calculator?c=360,18,1.25,1280,24,1.25,6,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
 :root {
   --system-ui: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  --step--1: clamp(0.9rem, 0.7826rem + 0.5217vw, 1.2rem);
-  --step-0: clamp(1.125rem, 0.9783rem + 0.6522vw, 1.5rem);
-  --step-1: clamp(1.4063rem, 1.2228rem + 0.8152vw, 1.875rem);
-  --step-2: clamp(1.7581rem, 1.529rem + 1.0185vw, 2.3438rem);
-  --step-3: clamp(2.1975rem, 1.9109rem + 1.2739vw, 2.93rem);
-  --step-4: clamp(2.7469rem, 2.3888rem + 1.5913vw, 3.6619rem);
-  --step-5: clamp(3.4331rem, 2.9853rem + 1.9902vw, 4.5775rem);
-  --step-6: clamp(4.2913rem, 3.7314rem + 2.488vw, 5.7219rem);
-  --space-3xs: clamp(0.3125rem, 0.288rem + 0.1087vw, 0.375rem);
-  --space-2xs: clamp(0.5625rem, 0.4891rem + 0.3261vw, 0.75rem);
-  --space-xs: clamp(0.875rem, 0.7772rem + 0.4348vw, 1.125rem);
-  --space-s: clamp(1.125rem, 0.9783rem + 0.6522vw, 1.5rem);
-  --space-m: clamp(1.6875rem, 1.4674rem + 0.9783vw, 2.25rem);
-  --space-l: clamp(2.25rem, 1.9565rem + 1.3043vw, 3rem);
-  --space-xl: clamp(3.375rem, 2.9348rem + 1.9565vw, 4.5rem);
-  --space-2xl: clamp(4.5rem, 3.913rem + 2.6087vw, 6rem);
-  --space-3xl: clamp(6.75rem, 5.8696rem + 3.913vw, 9rem);
+  --step--2: clamp(0.72rem, 0.6261rem + 0.4174vi, 0.96rem);
+  --step--1: clamp(0.9rem, 0.7826rem + 0.5217vi, 1.2rem);
+  --step-0: clamp(1.125rem, 0.9783rem + 0.6522vi, 1.5rem);
+  --step-1: clamp(1.4063rem, 1.2228rem + 0.8152vi, 1.875rem);
+  --step-2: clamp(1.7578rem, 1.5285rem + 1.019vi, 2.3438rem);
+  --step-3: clamp(2.1973rem, 1.9107rem + 1.2738vi, 2.9297rem);
+  --step-4: clamp(2.7466rem, 2.3883rem + 1.5922vi, 3.6621rem);
+  --step-5: clamp(3.4332rem, 2.9854rem + 1.9903vi, 4.5776rem);
+  --step-6: clamp(4.2915rem, 3.7318rem + 2.4878vi, 5.722rem);
+  --space-3xs: clamp(0.3125rem, 0.288rem + 0.1087vi, 0.375rem);
+  --space-2xs: clamp(0.5625rem, 0.4891rem + 0.3261vi, 0.75rem);
+  --space-xs: clamp(0.875rem, 0.7772rem + 0.4348vi, 1.125rem);
+  --space-s: clamp(1.125rem, 0.9783rem + 0.6522vi, 1.5rem);
+  --space-m: clamp(1.6875rem, 1.4674rem + 0.9783vi, 2.25rem);
+  --space-l: clamp(2.25rem, 1.9565rem + 1.3043vi, 3rem);
+  --space-xl: clamp(3.375rem, 2.9348rem + 1.9565vi, 4.5rem);
+  --space-2xl: clamp(4.5rem, 3.913rem + 2.6087vi, 6rem);
+  --space-3xl: clamp(6.75rem, 5.8696rem + 3.913vi, 9rem);
+
   --border-radius: 6px;
   --max-content-width: 1160px;
   --site-header-height: 4.375rem;
@@ -60,7 +83,6 @@
 
   --color-header-bg: var(--color-white);
   --color-header-accent: #eee;
-  --color-btn-bg: var(--color-white);
 }
 
 [data-theme="dark"] {

@@ -2,7 +2,7 @@
 import type { Props } from '@astrojs/starlight/props';
 import SocialIcons from "@astrojs/starlight/components/SocialIcons.astro";
 import ThemeSelect from "@astrojs/starlight/components/ThemeSelect.astro";
-import DevelopersLogo from "../components/DevelopersLogo.astro";
+import DevelopersLogo from "./logos/DevelopersLogo.astro";
 ---
 
 <div class="header sl-flex">
@@ -21,11 +21,9 @@ import DevelopersLogo from "../components/DevelopersLogo.astro";
         Interledger Foundation
       </span>
   </a>
-  <div class="secondary-wrap">
+  <div class="sl-hidden md:sl-flex secondary-wrap">
     <SocialIcons {...Astro.props} />
-    <div class="sl-hidden md:sl-flex">
-      <ThemeSelect {...Astro.props} />
-    </div>
+    <ThemeSelect {...Astro.props} />
   </div>
 </div>
 
@@ -93,14 +91,7 @@ import DevelopersLogo from "../components/DevelopersLogo.astro";
   }
 
   .secondary-wrap {
-    display: flex;
     align-items: center;
-    gap: var(--sl-nav-gap);
-  }
-
-  @media screen and (max-width: 799px) {
-    .secondary-wrap :global(.divider) {
-      border-inline-end-color: transparent;
-    }
+    gap: var(--space-s);
   }  
 </style>

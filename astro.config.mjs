@@ -10,7 +10,7 @@ export default defineConfig({
       title: "Interledger",
       description: "Enable seamless exchange of value across payment networks.",
       customCss: [
-        "./node_modules/@interledger/docs-design-system/src/styles/green-theme.css",
+        "./node_modules/@interledger/docs-design-system/src/styles/teal-theme.css",
         "./node_modules/@interledger/docs-design-system/src/styles/ilf-docs.css",
         "./src/styles/interledger.css",
         "./src/styles/atom-one-light.min.css",
@@ -39,11 +39,11 @@ export default defineConfig({
       },
       sidebar: [
         {
-          label: "Get started",
-          link: "/get-started",
+          label: "Get involved",
+          link: "/get-involved",
         },
         {
-          label: "Specs",
+          label: "Specifications",
           items: [
             {
               label: "Interledger Protocol V4 (ILPv4)",
@@ -99,14 +99,6 @@ export default defineConfig({
               },
             },
           ],
-        },
-        {
-          label: "Tools",
-          link: "/tools",
-        },
-        {
-          label: "Community",
-          link: "/community",
         },
       ],
     }),
