@@ -1,6 +1,5 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
-import { remarkDescription } from "./src/plugins/excerpt.mjs";
 
 // https://astro.build/config
 export default defineConfig({
@@ -104,9 +103,6 @@ export default defineConfig({
       ],
     }),
   ],
-  markdown: {
-    remarkPlugins: [remarkDescription],
-  },
   server: {
     port: 1103,
   },
