@@ -1,4 +1,15 @@
-> TODO: Add header section details
+---
+layout: ../../layouts/BlogLayout.astro
+title: The Telemetry Tale
+description: A journey into the metrics of Interledger
+date: 2024-04-10
+slug: the-telemetry-tale
+author: Sarah Jones
+author_url: www.linkedin.com/in/sarah-jones-ba6bb6b9
+tags:
+  - Interledger
+  - Telemetry
+---
 # The Telemetry Tale
 ## A Journey into the Metrics of Interledger
 
@@ -24,7 +35,8 @@ We ran into a roadblock when we realized that AWS-managed Grafana does not allow
 You can view our public dashboard for test data telemetry [here](https://rafikitelemetry.grafana.net/public-dashboards/f70c8a6033b14da5a9f1cb974def602a).
 
 Here is an example of how it looks:
-> TODO: image goes here
+
+![A screenshot the Testnet's telemetry dashboard](/img/blog/2024-04-10/testnet-telemetry-dashboard-screenshot.png)
 
 Each column of our dashboard represents one of our metrics (number of transactions, value sent through the network, and average transaction value) measured over the last hour, day, week, and month respectively.
 
@@ -76,7 +88,7 @@ For more information please have a look at our privacy [docs](https://github.com
 
 ### Architecture and Instrumentation
 
-> TODO: Image goes here
+![The Rafiki telemetry architecture](/img/blog/2024-04-10/telemetry-architecture.png)
 
 The [number of transactions](https://github.com/interledger/rafiki/blob/d3be6b8d151d8cebc32b862e52a7bb678674d48e/packages/backend/src/open_payments/payment/outgoing/lifecycle.ts#L84-L90) is extracted from the Open Payments outgoing payment lifecycle and the value metric is handled by a [telemetry middleware](https://github.com/interledger/rafiki/blob/d3be6b8d151d8cebc32b862e52a7bb678674d48e/packages/backend/src/payment-method/ilp/connector/core/middleware/telemetry.ts) layer inside the ILP connector core.
 
