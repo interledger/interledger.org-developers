@@ -1,3 +1,4 @@
+> TODO: Add header section details
 # The Telemetry Tale
 ## A Journey into the Metrics of Interledger
 
@@ -23,6 +24,7 @@ We ran into a roadblock when we realized that AWS-managed Grafana does not allow
 You can view our public dashboard for test data telemetry [here](https://rafikitelemetry.grafana.net/public-dashboards/f70c8a6033b14da5a9f1cb974def602a).
 
 Here is an example of how it looks:
+> TODO: image goes here
 
 Each column of our dashboard represents one of our metrics (number of transactions, value sent through the network, and average transaction value) measured over the last hour, day, week, and month respectively.
 
@@ -52,6 +54,18 @@ Converting all transactions to a standardized base currency ensures a uniform me
 
 This method categorizes transaction values into "buckets" to protect privacy, with the bucket size dictating the rounding precision. For common, lower-value transactions, we use a linear scale to create closely spaced buckets, enabling detailed granularity. For less common, higher-value transactions that necessitate greater privacy, we switch to logarithmic scaling, resulting in wider bucket intervals. Extreme values are managed by "clipping," where values beyond set thresholds are grouped into maximum or minimum buckets, ensuring all values fall within predefined limits. Values are then rounded to a precision point that is determined by the nearest bucket edge.
 
+E.g.
+| Raw Value | Bucket Size | Rounded Value |
+|-----------|-------------|---------------|
+| 8300 | 10000 | 10000 |
+| 13200 | 15000 | 15000 |
+| 147700 | 160000 | 160000 |
+| 1426100 | 2560000 | 2560000 |
+| 1788200 | 2560000 | 2560000 |
+| 90422400 | 10000000 | 90000000 |
+| 112400400 | 10000000 | 100000000 |
+| 222290500 | 10000000 | 100000000 |
+
 #### Local Differential Privacy
 
 Fully activating nerd mode we read up on Local Differential Privacy (LDP). LDP is a variant of differential privacy where noise is added to each individual's data point locally before it is made available for collection. Once the data has been rounded we apply a random amount of noise to each data point. This noise is derived from the Laplacian distribution which is generated based on a privacy parameter that is relative to the size of the rounded value. This distribution is characterized by its sharp peak and exponential decay, which means that most of the noise added to the data will be relatively small, thus minimally impacting the overall utility of the data, while providing a strong guarantee of privacy.
@@ -61,6 +75,8 @@ Central to our privacy framework is the empowerment of ASEs with the informed ab
 For more information please have a look at our privacy [docs](https://github.com/interledger/rafiki/blob/main/packages/documentation/src/content/docs/telemetry/privacy.md) and our [implementation](https://github.com/interledger/rafiki/blob/main/packages/backend/src/telemetry/privacy.ts).
 
 ### Architecture and Instrumentation
+
+> TODO: Image goes here
 
 The [number of transactions](https://github.com/interledger/rafiki/blob/d3be6b8d151d8cebc32b862e52a7bb678674d48e/packages/backend/src/open_payments/payment/outgoing/lifecycle.ts#L84-L90) is extracted from the Open Payments outgoing payment lifecycle and the value metric is handled by a [telemetry middleware](https://github.com/interledger/rafiki/blob/d3be6b8d151d8cebc32b862e52a7bb678674d48e/packages/backend/src/payment-method/ilp/connector/core/middleware/telemetry.ts) layer inside the ILP connector core.
 
