@@ -3,7 +3,7 @@
 
 ### Charting the Course
 
-Rafiki is open-source software that enables Account Servicing Entities (ASEs), like digital wallet providers, to leverage Interledger functionality. Interledger creates interoperability between different payment systems and currencies, making payments easier, faster, and cheaper. We hope that by removing the friction of this integration, we can expand the adoption of Interledger and grow the network. This is where our tale begins, on a balmy August in 2023, with the Rafiki team united for our work week in Cluj-Napoca, Romania. In order to measure the growth of the network, we needed to capture its state over time: 
+Rafiki is open-source software that enables Account Servicing Entities (ASEs), like digital wallet providers, to leverage [Interledger](https://interledger.org/interledger) functionality. Interledger creates interoperability between different payment systems and currencies, making payments easier, faster, and cheaper. We hope that by removing the friction of this integration, we can expand the adoption of Interledger and grow the network. This is where our tale begins, on a balmy August in 2023, with the Rafiki team united for our work week in Cluj-Napoca, Romania. In order to measure the growth of the network, we needed to capture its state over time: 
 
 - how many transactions occurred on the network over the last week / month / year
 - how much value flowed over the network in the last week / month / year
@@ -20,7 +20,7 @@ The allure of managed services began to fade as we grappled with their constrain
 
 We ran into a roadblock when we realized that AWS-managed Grafana does not allow for public dashboards. To resolve this we had to actually abandon AWS-managed Grafana and move over to Grafana Cloud. While they offered a workaround by editing the configuration to enable public dashboard access upon request—a process they handled with commendable responsiveness. Unfortunately, it still fell short by imposing limitations on embedding these dashboards on our own site. Despite Grafana Cloud’s responsive support team, we also encountered issues adding the AWS-Managed Prometheus as a data source. Our sigv4 authentication failed with a 403 Forbidden response, despite having the appropriate IAM permissions. The issue resolved spontaneously without clear intervention, implying an external factor (potentially AWS-side changes or maintenance) was at play. 
 
-You can view our public dashboard for test data telemetry here.
+You can view our public dashboard for test data telemetry [here](https://rafikitelemetry.grafana.net/public-dashboards/f70c8a6033b14da5a9f1cb974def602a).
 
 Here is an example of how it looks:
 
@@ -46,7 +46,7 @@ The Interledger Protocol (ILP) naturally anonymizes transactions by splitting la
 
 #### Currency Conversion
 
-Converting all transactions to a standardized base currency ensures a uniform metric for comparison and introduces a degree of data obfuscation through the daily sampling of conversion rates, which adds an approximation layer to the transaction details. Our AWS Lambda function retrieves and stores daily exchange rates in a publicly accessible Amazon S3 bucket, deliberately avoiding versioning to further enhance privacy. Of course, this is only relevant for non-USD transactions.
+Converting all transactions to a standardized base currency ensures a uniform metric for comparison and introduces a degree of data obfuscation through the daily sampling of conversion rates, which adds an approximation layer to the transaction details. Our [AWS Lambda function](https://github.com/interledger/rafiki/blob/main/aws/lambdas/exchange-rates/main.go) retrieves and stores daily exchange rates in a publicly accessible Amazon S3 bucket, deliberately avoiding versioning to further enhance privacy. Of course, this is only relevant for non-USD transactions.
 
 #### Bucketing and Rounding Technique
 
@@ -58,11 +58,11 @@ Fully activating nerd mode we read up on Local Differential Privacy (LDP). LDP i
 
 Central to our privacy framework is the empowerment of ASEs with the informed ability to opt-in or opt-out of the telemetry service. We also only collect data on outgoing payments, thus honoring the preferences of those who may choose to disable telemetry. In other words if one ASE enables telemetry and receives payments from an entity who has not enabled telemetry we won’t collect metrics on those incoming payments. 
 
-For more information please have a look at our privacy docs and our implementation.
+For more information please have a look at our privacy [docs](https://github.com/interledger/rafiki/blob/main/packages/documentation/src/content/docs/telemetry/privacy.md) and our [implementation](https://github.com/interledger/rafiki/blob/main/packages/backend/src/telemetry/privacy.ts).
 
 ### Architecture and Instrumentation
 
-The number of transactions is extracted from the Open Payments outgoing payment lifecycle and the value metric is handled by a telemetry middleware layer inside the ILP connector core.
+The [number of transactions](https://github.com/interledger/rafiki/blob/d3be6b8d151d8cebc32b862e52a7bb678674d48e/packages/backend/src/open_payments/payment/outgoing/lifecycle.ts#L84-L90) is extracted from the Open Payments outgoing payment lifecycle and the value metric is handled by a [telemetry middleware](https://github.com/interledger/rafiki/blob/d3be6b8d151d8cebc32b862e52a7bb678674d48e/packages/backend/src/payment-method/ilp/connector/core/middleware/telemetry.ts) layer inside the ILP connector core.
 
 Before these metrics are sent to the Otel collectors we’ve implemented local privacy-preserving measures, including:
 - packetization which is inherent in the Interledger Protocol (ILP)
@@ -70,9 +70,9 @@ Before these metrics are sent to the Otel collectors we’ve implemented local p
 - rounding data to a precision point determined by bucketing
 - local differential privacy in the form of adding Laplacian noise to anonymize transaction data
 
-Finally, we grappled with the dilemma of disentangling playground data from our test network and live production data. The Test Network (Testnet) is an open Interledger network using test money within example wallet and e-commerce applications. Rafiki also provides a local playground to experiment with. We’d like to monitor activity within the testing environments to gauge interest in the Interledger Protocol (ILP) and identify usage patterns by new participants. We’ve opted to provide users the choice between the test network (testnet) and the live network (livenet). To support this dual-environment approach, the infrastructure for telemetry was effectively expanded to include two separate services: one dedicated to collecting and managing telemetry data from the test network and another for the live network. This setup ensures that data from each environment is handled independently.
+Finally, we grappled with the dilemma of disentangling playground data from our test network and live production data. The [Test Network](https://github.com/interledger/testnet) (Testnet) is an open Interledger network using test money within example wallet and e-commerce applications. Rafiki also provides a [local playground](https://github.com/interledger/rafiki/tree/main/localenv) to experiment with. We’d like to monitor activity within the testing environments to gauge interest in the Interledger Protocol (ILP) and identify usage patterns by new participants. We’ve opted to provide users the choice between the test network (testnet) and the live network (livenet). To support this dual-environment approach, the infrastructure for telemetry was effectively expanded to include two separate services: one dedicated to collecting and managing telemetry data from the test network and another for the live network. This setup ensures that data from each environment is handled independently.
 
-We’re using an AWS ECS Fargate deployment for our Telemetry Cluster. The cluster holds services for our two environments: livenet and testnet, both of them having a Network Load Balancer (NLB) in order to load-balance over their own set of ECS task replicas. By using an NLB instead of the Application Load Balancer (ALB), we are not taking the hit of parsing the L7 (OSI Model) protocols and we do not have to do TLS termination at load balancer level. In our case, We just need to pass the data received to Prometheus, and application-layer routing decisions are not needed. Acting on L4 is of greater convenience, as all we need is the TCP packets being redirected to one of the running ECS tasks.
+We’re using an AWS ECS Fargate deployment for our Telemetry Cluster. The cluster holds services for our two environments: livenet and testnet, both of them having a Network Load Balancer (NLB) in order to load-balance over their own set of ECS task replicas. By using an NLB instead of the Application Load Balancer (ALB), we are not taking the hit of parsing the L7 ([OSI Model](https://en.wikipedia.org/wiki/OSI_model)) protocols and we do not have to do TLS termination at load balancer level. In our case, We just need to pass the data received to Prometheus, and application-layer routing decisions are not needed. Acting on L4 is of greater convenience, as all we need is the TCP packets being redirected to one of the running ECS tasks.
 
 When integrating ASEs opt-in for telemetry, metrics are being sent to our Telemetry Service using gRPC. The collectors capture and export our data by periodically pushing it to an Amazon-managed Prometheus (AMP) instance for storage. Finally, Grafana Cloud is used to query Prometheus in order to visualize our data in dashboards. 
 
@@ -80,7 +80,7 @@ In order for ASEs to build their own telemetry solution, Rafiki can send data to
 
 Thus ASEs can choose to opt-in and send telemetry metrics to us, optionally collect metrics for their own personal use, or opt-out of telemetry entirely.
 
-Please check out our telemetry docs, integration guide, and our telemetry code on GitHub.
+Please check out our telemetry [docs](https://github.com/interledger/rafiki/blob/main/packages/documentation/src/content/docs/telemetry/overview.md), [integration guide](https://github.com/interledger/rafiki/blob/main/packages/documentation/src/content/docs/telemetry/integrating.md), and our telemetry [code](https://github.com/interledger/rafiki/tree/main/packages/backend/src/telemetry) on GitHub.
 
 ### Reflecting on Our Journey
 
