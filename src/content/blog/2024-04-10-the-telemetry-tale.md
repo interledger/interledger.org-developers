@@ -102,7 +102,7 @@ Finally, we grappled with the dilemma of disentangling playground data from our 
 
 We’re using an AWS ECS Fargate deployment for our Telemetry Cluster. The cluster holds services for our two environments: livenet and testnet, both of them having a Network Load Balancer (NLB) in order to load-balance over their own set of ECS task replicas. By using an NLB instead of the Application Load Balancer (ALB), we are not taking the hit of parsing the L7 ([OSI Model](https://en.wikipedia.org/wiki/OSI_model)) protocols and we do not have to do TLS termination at load balancer level. In our case, we just need to pass the data received to Prometheus, and application-layer routing decisions are not needed. Acting on L4 is of greater convenience, as all we need is the TCP packets being redirected to one of the running ECS tasks.
 
-When integrating ASEs opt-in for telemetry, metrics are being sent to our Telemetry Service using gRPC. The collectors capture and export our data by periodically pushing it to an Amazon-managed Prometheus (AMP) instance for storage. Finally, Grafana Cloud is used to query Prometheus in order to visualize our data in dashboards. 
+When integrating ASEs opt-in for telemetry, metrics are being sent to our Telemetry Services using gRPC. The collectors capture and export our data by periodically pushing it to an Amazon-managed Prometheus (AMP) instance for storage. Finally, Grafana Cloud is used to query Prometheus in order to visualize our data in dashboards. 
 
 In order for ASEs to build their own telemetry solution, Rafiki can send data to multiple endpoints. This allows for integrating a local Otel collector container that acts as a sidecar and can support custom requirements.
 
