@@ -55,7 +55,7 @@ Privacy is always important when it comes to financial transactions. It is not o
 
 #### Packetization
 
-The Interledger Protocol (ILP) naturally anonymizes transactions by splitting larger transactions across multiple payment packets. Nevertheless, to cover scenarios where a transaction might be represented in a single packet, we've employed additional measures. 
+The Interledger Protocol (ILP) naturally anonymizes transactions by splitting larger transactions across multiple payment packets. This only applies when the maximum value per ILP packet is smaller than the total transaction value.
 
 #### Currency Conversion
 
@@ -99,7 +99,7 @@ In summary, before these metrics are sent to the Otel collectors we’ve impleme
 
 Finally, we grappled with the dilemma of disentangling playground data from our test network and live production data. The [Test Network](https://github.com/interledger/testnet) (Testnet) is an open Interledger network using test money within example wallet and e-commerce applications. Rafiki also provides a [local playground](https://github.com/interledger/rafiki/tree/main/localenv) to experiment with. We’d like to monitor activity within the testing environments to gauge interest in the Interledger Protocol (ILP) and identify usage patterns by new participants. We’ve opted to provide users the choice between the test network (testnet) and the live network (livenet). To support this dual-environment approach, the infrastructure for telemetry was effectively expanded to include two separate services: one dedicated to collecting and managing telemetry data from the test network and another for the live network. This setup ensures that data from each environment is handled independently.
 
-We’re using an AWS ECS Fargate deployment for our Telemetry Cluster. The cluster holds services for our two environments: livenet and testnet, both of them having a Network Load Balancer (NLB) in order to load-balance over their own set of ECS task replicas. By using an NLB instead of the Application Load Balancer (ALB), we are not taking the hit of parsing the L7 ([OSI Model](https://en.wikipedia.org/wiki/OSI_model)) protocols and we do not have to do TLS termination at load balancer level. In our case, we just need to pass the data received to Prometheus, and application-layer routing decisions are not needed. Acting on L4 is of greater convenience, as all we need is the TCP packets being redirected to one of the running ECS tasks.
+Our telemetry clusters are deployed on AWS, utilizing the ECS Fargate service to support two distinct operational environments: the live network environment (livenet) and the test network environment (testnet). Since the two environments are separate, it is the Rafiki client that determines where to send the data and the load balancers themselves do not need to decrypt GRPC/HTTPS messages to direct traffic between environments. This way each environment has its own load balancer to simply load-balance over their set of ECS task replicas. This configuration maintains good separation between testnet and livenet data as well as optimizing our resource utilization, leading to a cleaner, more efficient, and cost-effective telemetry infrastructure.
 
 When integrating ASEs opt-in for telemetry, metrics are being sent to our Telemetry Services using gRPC. The collectors capture and export our data by periodically pushing it to an Amazon-managed Prometheus (AMP) instance for storage. Finally, Grafana Cloud is used to query Prometheus in order to visualize our data in dashboards. 
 
