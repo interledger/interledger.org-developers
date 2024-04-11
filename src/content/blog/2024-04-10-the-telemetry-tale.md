@@ -10,7 +10,6 @@ tags:
   - Interledger
   - Telemetry
 ---
-# The Telemetry Tale
 ## A Journey into the Metrics of Interledger
 
 ### Charting the Course
