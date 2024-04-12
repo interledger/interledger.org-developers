@@ -1,0 +1,83 @@
+/* Shared styles for Starlight docs pages */
+:root,
+::backdrop {
+  /* @link https://utopia.fyi/type/calculator?c=300,16,1.125,1440,16,1.2,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
+  --step-1: clamp(1.125rem, 1.1053rem + 0.1053vi, 1.2rem);
+  --space-2xs: clamp(0.5rem, 0.5rem + 0vi, 0.5rem);
+  --space-xs: clamp(0.75rem, 0.75rem + 0vi, 0.75rem);
+
+  --sl-text-h4: var(--step-1);
+
+  --border-radius: 6px;
+
+  --sl-color-gray-7: hsl(224, 19%, 97%);
+  --sl-color-gray-6: hsl(224, 20%, 94%);
+}
+
+:not(h1, h2, h3, h4, h5, h6)
+  + :is(h1, h2, h3, h4, h5, h6, .heading):not(:where(.not-content *)) {
+  margin-block-start: var(--space-m);
+}
+
+/* Table style overrides */
+table {
+  display: table;
+  width: 100%;
+}
+
+table code {
+  word-break: break-all;
+}
+
+th {
+  text-align: left;
+}
+
+thead tr:first-of-type th:first-of-type {
+  border-start-start-radius: var(--border-radius);
+}
+
+thead tr:first-of-type th:last-of-type {
+  border-start-end-radius: var(--border-radius);
+}
+
+thead + tbody tr:nth-child(2n):not(:where(.not-content *)) {
+  background-color: var(--sl-color-gray-7, var(--sl-color-gray-6));
+}
+
+thead + tbody tr:nth-child(2n + 1):not(:where(.not-content *)) {
+  background-color: initial;
+}
+
+tr:nth-child(2n):not(:where(.not-content *)) {
+  background-color: initial;
+}
+
+tr:nth-child(2n + 1):not(:where(.not-content *)) {
+  background-color: var(--sl-color-gray-7, var(--sl-color-gray-6));
+}
+
+:is(th, td):not(:where(.not-content *)) {
+  border: 0;
+  padding: var(--space-2xs) var(--space-xs);
+}
+
+tbody tr:first-of-type:not(:where(.not-content *)) th:first-child,
+tbody tr:first-of-type:not(:where(.not-content *)) td:first-child {
+  border-start-start-radius: var(--border-radius);
+}
+
+tbody tr:first-of-type:not(:where(.not-content *)) th:last-child,
+tbody tr:first-of-type:not(:where(.not-content *)) td:last-child {
+  border-start-end-radius: var(--border-radius);
+}
+
+tbody tr:last-of-type:not(:where(.not-content *)) th:first-child,
+tbody tr:last-of-type:not(:where(.not-content *)) td:first-child {
+  border-end-start-radius: var(--border-radius);
+}
+
+tbody tr:last-of-type:not(:where(.not-content *)) th:last-child,
+tbody tr:last-of-type:not(:where(.not-content *)) td:last-child {
+  border-end-end-radius: var(--border-radius);
+}
