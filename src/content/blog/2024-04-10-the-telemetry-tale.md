@@ -44,7 +44,7 @@ This meant that when we encountered issues it was not clear whether the problem 
 
 We ran into a roadblock when we realized that AWS-managed Grafana does not allow for public dashboards. To resolve this we had to actually abandon AWS-managed Grafana and move over to Grafana Cloud. They offered a workaround by editing the configuration to enable public dashboard access upon request--a process they handled with commendable responsiveness. Unfortunately, it still fell short by imposing limitations on embedding these dashboards on our own site.
 
-Despite Grafana Cloud’s responsive support team, we also encountered issues adding the AWS-Managed Prometheus as a data source. Our [sigv4 authentication](https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html) failed with a 403 Forbidden response, despite having the appropriate IAM permissions. The issue resolved spontaneously without clear intervention, implying an external factor (potentially AWS-side changes or maintenance) was at play.
+Despite Grafana Cloud’s responsive support team, we also encountered issues adding the AWS-Managed Prometheus as a data source. Our [sigv4 authentication](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_aws-signing.html) failed with a 403 Forbidden response, despite having the appropriate IAM permissions. The issue resolved spontaneously without clear intervention, implying an external factor (potentially AWS-side changes or maintenance) was at play.
 
 You can view our public dashboard for test data telemetry [here](https://rafikitelemetry.grafana.net/public-dashboards/f70c8a6033b14da5a9f1cb974def602a).
 
