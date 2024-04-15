@@ -83,6 +83,7 @@
 
   --color-header-bg: var(--color-white);
   --color-header-accent: #eee;
+  --color-table-stripe: #f6f7f9;
 }
 
 [data-theme="dark"] {

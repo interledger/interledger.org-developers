@@ -114,9 +114,12 @@ article :global(p),
 article :global(ol),
 article :global(ul),
 article :global(h2),
-article :global(h3),
 article :global(figure) {
   margin-block-end: var(--space-s);
+}
+
+article :global(h3) {
+  margin-block-end: var(--space-xs);
 }
 
 article :global(a) {
@@ -131,5 +134,58 @@ article :global(a:hover) {
 article :global(figcaption) {
 	font-size: var(--step--1);
 	font-style: italic;
+}
+
+article :global(table) {
+  display: table;
+  width: 100%;
+	border-collapse: collapse;
+	border-radius: var(--border-radius);
+	box-shadow: var(--box-shadow);
+	margin-block-end: var(--space-m);
+}
+
+article :global(th) {
+  text-align: left;
+}
+
+article :global(th, td) {
+  padding: var(--space-3xs) var(--space-2xs);
+}
+
+article :global(thead tr:first-of-type th:first-of-type) {
+  border-start-start-radius: var(--border-radius);
+}
+
+article :global(thead tr:first-of-type th:last-of-type) {
+  border-start-end-radius: var(--border-radius);
+}
+
+article :global(thead tr) {
+  background-color: var(--color-table-stripe);
+}
+
+article :global(thead + tbody tr:nth-child(2n)) {
+  background-color: var(--color-table-stripe);
+}
+
+article :global(tbody tr:first-of-type th:first-child),
+article :global(tbody tr:first-of-type td:first-child) {
+  border-start-start-radius: var(--border-radius);
+}
+
+article :global(tbody tr:first-of-type th:last-child),
+article :global(tbody tr:first-of-type td:last-child) {
+  border-start-end-radius: var(--border-radius);
+}
+
+article :global(tbody tr:last-of-type th:first-child),
+article :global(tbody tr:last-of-type td:first-child) {
+  border-end-start-radius: var(--border-radius);
+}
+
+article :global(tbody tr:last-of-type th:last-child),
+article :global(tbody tr:last-of-type td:last-child) {
+  border-end-end-radius: var(--border-radius);
 }
 </style>
