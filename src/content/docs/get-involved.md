@@ -8,7 +8,7 @@ We appreciate your interest in contributing to Interledger and welcome contribut
 
 If you are new to Interledger and are not sure where your skills can be applied, we hope that the following list can help you get started. And we welcome your questions and feedback in [our Slack channel](https://communityinviter.com/apps/interledger/interledger-working-groups-slack).
 
-If you have experience with maintaining and contributing to **open-source projects**, we would love to have you (pending text to be written).
+If you have experience maintaining and contributing to **open-source projects**, we would love to have you get involved with any of the following projects.
 
 If you are most comfortable working with **Typescript**, you can contribute to [Rafiki](https://github.com/interledger/rafiki), [Testnet](https://github.com/interledger/testnet) or the [Open Payments SDK](https://github.com/interledger/open-payments).
 
