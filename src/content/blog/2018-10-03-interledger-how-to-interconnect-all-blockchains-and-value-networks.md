@@ -23,7 +23,7 @@ Interledger is now live and the core protocol was finalized in late 2017. The ne
 
 ## A Network of Decentralized Exchanges
 
-Interledger is made up of a network of [connectors](https://interledger.org/rfcs/0001-interledger-architecture/#connectors), independent operators that act as decentralized exchanges or market makers for cryptocurrencies, fiat currencies, and other tokenized assets. The protocol allows users to transact natively on the network of their choice, without needing to move assets to a centralized exchange or to a specific blockchain for trading.
+Interledger is made up of a network of [connectors](https://interledger.org/developers/rfcs/interledger-architecture/#sender-receiver-connectors), independent operators that act as decentralized exchanges or market makers for cryptocurrencies, fiat currencies, and other tokenized assets. The protocol allows users to transact natively on the network of their choice, without needing to move assets to a centralized exchange or to a specific blockchain for trading.
 
 The Interledger network has no central authority or company and the protocol is not tied to any currency, token or blockchain.
 
@@ -51,15 +51,15 @@ The key features of the Interledger Protocol are:
 
 The core of the Interledger Protocol (ILP) is the ILP packet, the messaging standard used between senders, connectors, and receivers. The packet is inspired by Internet Protocol (IP) packets and addresses, which are the core of the Internet.
 
-[ILPv4](https://interledger.org/rfcs/0027-interledger-protocol-4/) has three packet types: Prepare, Fulfill, and Reject; which correspond to request, response, and error messages. Connectors forward Prepare packets from senders to receivers and the connectors relay the Fulfill or Reject packets back from the receivers to the senders.
+[ILPv4](https://interledger.org/developers/rfcs/interledger-protocol/) has three packet types: Prepare, Fulfill, and Reject; which correspond to request, response, and error messages. Connectors forward Prepare packets from senders to receivers and the connectors relay the Fulfill or Reject packets back from the receivers to the senders.
 
-Prepare packets have only five fields: a destination address, amount, end-to-end data, and a “condition” and expiration that enable the trustless sending. The packet format is network-agnostic and the universal [ILP address](https://interledger.org/rfcs/0015-ilp-addresses/) scheme helps connectors route packets to the correct receiver.
+Prepare packets have only five fields: a destination address, amount, end-to-end data, and a “condition” and expiration that enable the trustless sending. The packet format is network-agnostic and the universal [ILP address](https://interledger.org/developers/rfcs/ilp-addresses/) scheme helps connectors route packets to the correct receiver.
 
 ### Trustless Sending
 
 The second key feature of Interledger is that it enables users to send money through the network of connectors without needing to trust them. ILP guarantees that the sender’s money cannot be lost or stolen in flight, which is critical for creating an open and competitive network.
 
-Interledger uses a [“forward-and-backward” packet flow](https://interledger.org/rfcs/0027-interledger-protocol-4/#ilp-packet-lifecycle), or incentivized two-phase commit, in which the recipient gets paid before the money ever leaves the sender’s account.
+Interledger uses a [“forward-and-backward” packet flow](https://interledger.org/developers/rfcs/interledger-protocol/#ilp-packet-lifecycle), or incentivized two-phase commit, in which the recipient gets paid before the money ever leaves the sender’s account.
 
 ![Diagram showing the “forward-and-backward” packet flow](/developers/img/blog/2018-10-03/packet-flow.webp)
 
@@ -69,11 +69,11 @@ Interledger uses a [“forward-and-backward” packet flow](https://interledger
 
 ### Packetizing Value
 
-Interledger’s third key feature (and the [biggest difference between ILPv1 and ILPv4](https://interledger.org/rfcs/0027-interledger-protocol-4/#differences-from-previous-versions-of-ilp)) is packetizing value, or splitting up larger transfers into many lower-value packets. This is very similar to how big files sent over the internet are sent as many small packets. The benefits are surprisingly analogous to the internet itself, as homogeneous packets increase the network’s efficiency, security, and interoperability
+Interledger’s third key feature (and the [biggest difference between ILPv1 and ILPv4](https://interledger.org/developers/rfcs/interledger-protocol/#differences-from-previous-versions-of-ilp)) is packetizing value, or splitting up larger transfers into many lower-value packets. This is very similar to how big files sent over the internet are sent as many small packets. The benefits are surprisingly analogous to the internet itself, as homogeneous packets increase the network’s efficiency, security, and interoperability
 
 Connectors process Interledger packets using limited pools of capital or liquidity, and using this efficiently is central to keeping costs low. Each Prepare packet requires connectors to hold the specified amount of money until the transaction is fulfilled or rejected. Smaller packet amounts help connectors avoid reserving large amounts of money for each transaction before knowing if it will be fulfilled. Connectors can operate with smaller pools of liquidity and increase the velocity and utilization of their money.
 
-Packetized payments also increase the security and resilience of the network. Connectors can allocate their liquidity like Internet bandwidth (“payment bandwidth”) to prevent users from interfering with others’ connections. Additionally, smaller packets enable the use of shorter Prepare packet timeouts, which is critical for mitigating the [“free option problem”](https://altheamesh.com/blog/the-free-option-problem/) (locking in an exchange rate that attackers could exploit). At the same time, lower-value packets reduce the [risk](https://interledger.org/rfcs/0018-connector-risk-mitigations/) to a connector posed by failing to deliver the Fulfill packet in time.
+Packetized payments also increase the security and resilience of the network. Connectors can allocate their liquidity like Internet bandwidth (“payment bandwidth”) to prevent users from interfering with others’ connections. Additionally, smaller packets enable the use of shorter Prepare packet timeouts, which is critical for mitigating the [“free option problem”](https://altheamesh.com/blog/the-free-option-problem/) (locking in an exchange rate that attackers could exploit). At the same time, lower-value packets reduce the [risk](https://github.com/interledger/rfcs/blob/main/0018-connector-risk-mitigations/0018-connector-risk-mitigations.md) to a connector posed by failing to deliver the Fulfill packet in time.
 
 Finally, packetized payments help Interledger connect more disparate types of ledgers and facilitate a broader array of use cases. Smaller packets can be cleared through ILP without ledger-provided escrow, which was needed for [ILPv1](https://interledger.org/rfcs/0003-interledger-protocol/#model-of-operation). This reduces the requirements for integrating a ledger down to just having the ability to transfer value (though simple payment channels are nice to have to increase speed and lower costs).
 
@@ -87,7 +87,7 @@ The early Interledger network is optimized for micropayment use cases and trustl
 - [StrataLabs](https://www.stratalabs.io/) is the first commercial Interledger connector company, enabling micropayment services like Coil.
 - [Kava](https://kava.io/) runs an Interledger connector and is developing technology for the ILP ecosystem including new cross-currency integrations and a [Cosmos](https://cosmos.network/)\-based blockchain optimized for ILP.
 - [The Bill & Melinda Gates Foundation](https://www.gatesfoundation.org/What-We-Do/Global-Growth-and-Opportunity/Financial-Services-for-the-Poor) developed [Mojaloop](http://mojaloop.io/), an open source payment system for emerging markets, using Interledger to increase financial inclusion through interoperability.
-- [Ilp.ix](https://ilp-ix.link/), an [mlab](https://mlab.company/) project, is an XRP peering exchange that helps connectors find and connect to one another.
+- Ilp.ix, an [mlab](https://mlab.company/) project, is an XRP peering exchange that helps connectors find and connect to one another.
 - [XRP Tip Bot](https://www.xrptipbot.com/) enables Twitter, Reddit, and Discord users to tip one another using XRP and ILP.
 - More are in stealth mode and coming soon!
 
@@ -95,7 +95,7 @@ The early Interledger network is optimized for micropayment use cases and trustl
 
 - Interested in running an Interledger connector? Check out [this guide](https://medium.com/interledger-blog/running-your-own-ilp-connector-c296a6dcf39a).
 - Want to start building apps with Interledger? Download [moneyd](https://medium.com/interledger-blog/using-moneyd-to-join-the-ilp-testnet-ba64bd42bb14) and check out the [tutorials](https://medium.com/interledger-blog) to connect to Interledger in just a few minutes.
-- If you’re interested in getting involved in the project, join the bi-weekly [community calls](https://interledger.org/community.html) and come chat with us on [Gitter](https://gitter.im/interledger/Lobby).
+- If you’re interested in getting involved in the project, join the bi-weekly [community calls](https://interledger.org/events) and come chat with us on [Gitter](https://gitter.im/interledger/Lobby).
 
 At Xpring, Ripple’s ecosystem initiative, we’re focused on supporting developers and projects building both infrastructure and applications in the Interledger ecosystem. We’re specifically interested in new connectors and wallets as well as micropayment services and decentralized exchange applications. If you’re building in these areas, please get in touch at [xpring@ripple.com](mailto:xpring@ripple.com).
 
@@ -103,6 +103,6 @@ Disclosure: Xpring is an investor in Coil and StrataLabs.
 
 ## About Interledger
 
-Interledger is an open source protocol developed by the [W3C Interledger Community Group](https://interledger.org/community.html). There is no Interledger company, currency, or blockchain.
+Interledger is an open source protocol developed by the [W3C Interledger Community Group](https://www.w3.org/community/interledger/). There is no Interledger company, currency, or blockchain.
 
 _Thanks to Danny Aranda, Brandon Curtis, Kevin Davis, Meredith Finkelstein, Jamie Goldstein, Brian Kerr, Akash Khosla, Austin King, Zaki Manian, Cristina Nita-Rotaru, Teemu Paivinen, Sid Ramesh, Rome Reginelli, Dan Robinson, Dino Rodriguez, and Scott Stuart for their feedback on this post!_
