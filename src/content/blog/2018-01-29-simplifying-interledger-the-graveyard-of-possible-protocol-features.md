@@ -135,4 +135,4 @@ However, the shift to smaller, faster payments ultimately led to the [realizati
 
 Wondering what’s left in Interledger V4 if all of this has been taken out? Keep an eye out for upcoming posts that will explain it in detail!
 
-Check out [Interledger.org](https://interledger.org/) and join the [community group](http://interledger.org/community.html) to learn more and get involved in the project!
+Check out [Interledger.org](https://interledger.org/) and join the [community](https://community.interledger.org/) to learn more and get involved in the project!
