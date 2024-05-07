@@ -1,5 +1,6 @@
 ---
 import type { Props } from '@astrojs/starlight/props';
+import Search from "@astrojs/starlight/components/Search.astro";
 import SocialIcons from "@astrojs/starlight/components/SocialIcons.astro";
 import ThemeSelect from "@astrojs/starlight/components/ThemeSelect.astro";
 import DevelopersLogo from "./logos/DevelopersLogo.astro";
@@ -21,7 +22,9 @@ import DevelopersLogo from "./logos/DevelopersLogo.astro";
         Interledger Foundation
       </span>
   </a>
+  <Search {...Astro.props} />
   <div class="sl-hidden md:sl-flex secondary-wrap">
+    
     <SocialIcons {...Astro.props} />
     <ThemeSelect {...Astro.props} />
   </div>
@@ -93,5 +96,9 @@ import DevelopersLogo from "./logos/DevelopersLogo.astro";
   .secondary-wrap {
     align-items: center;
     gap: var(--space-s);
-  }  
+  }
+
+  :global(site-search > button[data-open-modal]) {
+    width: auto;
+  }
 </style>
