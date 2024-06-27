@@ -21,7 +21,7 @@ An alternative is for applications to integrate directly with their bank's payme
 
 This problem gets even more complicated when we consider situations where either the sender or the recipient of funds does not have a bank account. What if a payment has to take place between a bank and a mobile money provider? Now the application would have to also integrate with the mobile money provider. Custom integration becomes an expansive problem.
 
-What if there was a way for an application to access your account directly? Currently, even if you provide an application with your account details, it likely wouldn't be able to do much with them, even with your permission. As an account owner, shouldn't you have the power to decide who can access your account and what they can do with it?
+What if there was a way for an application to access your account directly, and securely? Currently, even if you provide an application with your account details, it likely wouldn't be able to do much with them, even with your permission. As an account owner, shouldn't you have the power to decide who can access your account and what they can do with it?
 
 ## The Promise of the Open Payments Standard
 
@@ -79,7 +79,7 @@ For most people, accessing an Open Payments-enabled account depends on their fin
 
 A world with direct access to accounts through the Open Payments standard fosters innovation and inclusion by reducing barriers to entry for developers, who can create direct payment solutions more quickly and at a lower cost without the need for custom integrations. This democratization of development enables smaller companies and startups to compete and innovate.
 
-Users are empowered to give clients direct access to their accounts. They can give access to who they want, to do what they want within set limits. Users also benefit from seamless transactions, transparency with regards to what fees they incur, and enhanced control over their financial data, improving trust and security. Financial inclusion is significantly increased by enabling access for those without traditional bank accounts, as well as cutting down on the costs of making payments which is achieved by reducing the development effort required in integrating with other account providers and cutting out unnecessary intermediaries thus removing any additional fees.
+Users are empowered to give clients direct access to their accounts. They can give access to who they want, to do what they want within set limits. Users also benefit from seamless transactions, transparency with regards to what fees they incur, and enhanced control over their financial data, improving trust and security. Financial inclusion is significantly increased by enabling access for those without traditional bank accounts, as well as cutting down on the costs of making payments by removing unnecessary intermediaries, and reducing the development effort of payment integrations.
 
 ## TLDR
 
