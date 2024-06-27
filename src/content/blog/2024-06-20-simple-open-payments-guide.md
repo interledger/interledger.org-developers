@@ -80,7 +80,7 @@ For most people, accessing an Open Payments-enabled account depends on their fin
 
 A world with direct access to accounts through the Open Payments standard fosters innovation and inclusion by reducing barriers to entry for developers, who can create direct payment solutions more quickly and at a lower cost without the need for custom integrations. This democratization of development enables smaller companies and startups to compete and innovate.
 
-Users are empowered to give clients direct access to their accounts. They can give access to who they want, to do what they want within set limits. Users also benefit from seamless transactions, transparency with regards to what fees they incur, and enhanced control over their financial data, improving trust and security. Financial inclusion is significantly increased by enabling access for those without traditional bank accounts, as well as cutting down on the costs of making payments by removing unnecessary intermediaries, and reducing the development effort of payment integrations.
+Users are empowered to give applications direct access to their accounts. They can give access to who they want, to do what they want within set limits. Users also benefit from seamless transactions, transparency with regards to what fees they incur, and enhanced control over their financial data, improving trust and security. Financial inclusion is significantly increased by enabling access for those without traditional bank accounts, as well as cutting down on the costs of making payments by removing unnecessary intermediaries, and reducing the development effort of payment integrations.
 
 ## TLDR
 
