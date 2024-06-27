@@ -45,6 +45,10 @@ export default defineConfig({
       },
       sidebar: [
         {
+          label: "Overview",
+          link: "/get-started",
+        },
+        {
           label: "Get involved",
           link: "/get-involved",
         },
