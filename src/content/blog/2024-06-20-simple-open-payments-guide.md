@@ -13,7 +13,7 @@ tags:
 
 ## The Current Digital Payments Landscape
 
-Handling payments is a crucial part of many online applications. Whether you’re running an eCommerce site selling products, a fundraising platform accepting donations, a streaming service charging for content, or a subscription service requiring monthly fees, digital payments are at the core of the operation.
+Handling payments is a crucial part of many online applications. Whether you’re visiting an eCommerce site selling products, a fundraising platform accepting donations, a streaming service charging for content, or a subscription service requiring monthly fees, digital payments are at the core of their operations.
 
 Many application developers rely on third-party payment gateways to handle these transactions. Companies like PayPal, Stripe, and Square offer services to process credit card payments on behalf of the application. In return for these services, applications incur various fees, which can include monthly fees, flat rates per transaction, or a percentage of the transaction amounts. This approach, while convenient, introduces additional expenses and makes the application reliant on a third-party provider. This reliance can limit control over the user experience, such as forcing users to trust third-party providers with sensitive information like credit card details.
 
@@ -40,8 +40,8 @@ The Open Payments protocol also aims to make transactions more transparent. Befo
 The Open Payments standard addresses key questions such as:
 
 - Where should the money be sent, exactly? It provides a standardized way to identify and locate user accounts across different financial institutions.
-- Ensuring all parties agree on the final amount after any fees are added to a transaction.
-- Determining the best underlying method to use for the transaction.
+- Do all all parties agree on the final amount after any fees are added to a transaction?
+- What is the best underlying method to use for the transaction?
 
 With the Open Payments standard, applications do not need to be registered financial service providers (FSPs) to facilitate transactions. Instead of moving or holding money, applications send payment obligations. This means they are not transferring money directly but are sending instructions to your financial institution to transfer the funds on your behalf. This setup eliminates the need for the application to be a financial service provider itself, even though it has direct communication access to your account. This is beneficial for applications because they don’t need to contend with the legal and compliance hurdles required to be a financial services provider. But it’s also advantageous for you because you don't need to share sensitive information with online applications. Applications storing information like credit card numbers and CVV codes always pose a risk of data leaks or hacking, even with the best intentions.
 
@@ -51,7 +51,7 @@ You might think, this sounds convenient, but is it secure? I don’t want just a
 
 With the Open Payments standard, you remain in full control of your financial transactions. When an application uses Open Payments, it securely shares key information about itself with the financial institutions it interacts with. This verification ensures that the account provider knows the application is legitimate when making a payment request on your behalf.
 
-Importantly, any withdrawal of money from your account requires your explicit consent. When you grant an application access to your account, you are not giving it unrestricted access. Instead, you specify the access rights: the exact amount, the time frame, and whether it can access your balance or move funds. Open Payments also supports recurring payments, allowing you to define how often, for how long, and up to what amount an application can access your account. This granular control ensures that you are always aware of and consenting to the transactions made from your account.
+Importantly, any withdrawal of money from your account requires your explicit consent. When you grant an application access to your account, you are not giving it unrestricted access. Instead, you control the access rights: the exact amount, the time frame, and whether it can access your transaction history or move funds. Open Payments also supports recurring payments, allowing you to define how often, for how long, and up to what amount an application can access your account. This granular control ensures that you are always aware of and consenting to the transactions made from your account.
 
 ## There Are Some Catches
 
