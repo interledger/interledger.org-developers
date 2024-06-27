@@ -67,7 +67,8 @@ Another scenario arises when the sender's and recipient's account providers are 
 
 ## What's Happening in the Open Payments Space Today?
 
-- Is there anyone in the wild using OP now?
+<!-- TODO:  -->
+- INCOMPLETE: Is there anyone in the wild using OP now?
 
 Currently, the adoption of the Open Payments standard is still in progress. Some innovative institutions and services have begun to integrate this standard, but widespread use is still developing.
 
