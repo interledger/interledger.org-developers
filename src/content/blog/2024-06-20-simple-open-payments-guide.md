@@ -17,6 +17,8 @@ Handling payments is a crucial part of many online applications. Whether it's an
 
 Many application developers rely on third-party payment gateways to handle these transactions. Companies like PayPal, Stripe, and Square offer services to process credit card payments on behalf of the application. In return for these services, applications incur various fees, which can include monthly fees, flat rates per transaction, or a percentage of the transaction amounts. This approach, while convenient, introduces additional expenses and makes the application reliant on a third-party provider. This reliance can limit control over the user experience, such as forcing users to trust third-party providers with sensitive information like credit card details.
 
+![Most applications' payment implementation today](/developers/img/blog/2024-06-20/credit-cards.png)
+
 An alternative is for applications to integrate directly with their bank's payment processing services. This method can offer lower transaction fees and increase control over the payment process. However, it requires significant development effort and is not always possible. Additionally, switching to a different bank becomes very challenging due to the extensive integration work that was already completed.
 
 This problem gets even more complicated when we consider situations where either the sender or the recipient of funds does not have a bank account. What if a payment has to take place between a bank and a mobile money provider? Now the application would have to also integrate with the mobile money provider. Custom integration becomes an expansive problem.
@@ -26,6 +28,8 @@ What if there was a way for an application to access your account directly, and 
 ## The Promise of the Open Payments Standard
 
 Open Payments aims to change that by enabling applications to access users' accounts directly without needing multiple custom integrations. Standardization is key to eliminating these custom integrations. With a single integration point, applications can access any account that implements the standard, whether it's a bank account, a digital wallet, or a mobile money account. The only requirement is that both the sender's and recipient's account providers support the Open Payments standard.
+
+![Open Payments allow applications to talk to accounting service entities directly](/developers/img/blog/2024-06-20/open-payments.png)
 
 Consider how email works: if you have a Gmail account and someone else has an Outlook account, it doesn't matter because our email providers communicate using a shared, standardized language, allowing us to send emails seamlessly across providers. To send an email, you don't need to know the other person's email provider; you just need their email address.
 
@@ -57,7 +61,7 @@ Importantly, any withdrawal of money from your account requires your explicit co
 
 For this system to work, both the sender and the recipient must have Open Payments-enabled accounts. This requirement poses an adoption hurdle, which the Interledger Foundation is actively addressing. We are dedicated to making adoption as seamless as possible for financial service providers (FSPs) and applications by providing extensive support and resources.
 
-It's important to note that integrating Open Payments does not guarantee a shared settlement layer. A settlement layer in a payment system refers to the infrastructure and processes used to actually transfer the funds between parties to finalize transactions. This includes the mechanisms that ensure that money moves from the sender to the recipient and that all parties' accounts are accurately updated. It is the actual movement of your money out of your account and into someone else's. Open Payments is designed to enable different payment systems to communicate and transact with each other. However, at the end of the day, those systems also need to be connected in such a way that they can settle the movement of funds between accounts as well. 
+It's important to note that integrating Open Payments does not guarantee a shared settlement layer. A settlement layer in a payment system refers to the infrastructure and processes used to actually transfer the funds between parties to finalize transactions. This includes the mechanisms that ensure that money moves from the sender to the recipient and that all parties' accounts are accurately updated. It is the actual movement of your money out of your account and into someone else's. Open Payments is designed to enable different payment systems to communicate and transact with each other. However, at the end of the day, those systems also need to be connected in such a way that they can settle the movement of funds between accounts as well.
 
 Many financial institutions already have established pathways and processes for moving money between accounts. Interledger automates and optimizes how these institutions navigate this network. If you think of Open Payments as a way of sending payment obligations directly to the relevant account provider, then Interledger is about finding the best route through that exisiting network that allows funds to be transferred and payments to be completed. While Open Payments simplifies the initiation of payments, it doesn't guarantee that a route for completing those payments will always be found, potentially leading to failed transactions. However, as adoption of the standard grows, more people will gain access to an expanding and interconnected payments network, reducing the likelihood of payment failures.
 
@@ -68,6 +72,7 @@ Another scenario arises when the sender's and recipient's account providers are 
 ## What's Happening in the Open Payments Space Today?
 
 <!-- TODO:  -->
+
 - INCOMPLETE: Is there anyone in the wild using OP now?
 
 Currently, the adoption of the Open Payments standard is still in progress. Some innovative institutions and services have begun to integrate this standard, but widespread use is still developing.
