@@ -77,7 +77,7 @@ Another scenario arises when the sender's and recipient's account providers are 
 
 Currently, the adoption of the Open Payments standard is still in progress. Some innovative institutions and services have begun to integrate this standard, but widespread use is still developing.
 
-In South Africa, for instance, Fynbos Wallet is an example of a provider working with the Open Payments standard. However, its interactions are still primarily limited to other users within the same country due to regulatory and technical constraints.
+[GateHub](https://gatehub.net/) is a digital wallet provider working with the Open Payments standard globally. They are able to facilitate some cross-currency transactions, although regulatory limitations may apply depending on the user's country of residence. The [Fynbos Wallet](https://wallet.fynbos.app) is another example. They are operational in America, Europe, and South Africa. However, transactions are currently limited to other Fynbos users within the same region due to regulatory and technical constraints. There are plans underway to create payment channels between Fybos and GateHub users in Europe.
 
 For most people, accessing an Open Payments-enabled account depends on their financial institutions adopting the standard. As more banks, digital wallets, and mobile money providers incorporate Open Payments, the benefits will become more widely accessible.
 
