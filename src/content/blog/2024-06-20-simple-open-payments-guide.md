@@ -79,6 +79,8 @@ Currently, the adoption of the Open Payments standard is still in progress. Some
 
 [GateHub](https://gatehub.net/) is a digital wallet provider working with the Open Payments standard globally. They are able to facilitate some cross-currency transactions, although regulatory limitations may apply depending on the user's country of residence. The [Fynbos Wallet](https://wallet.fynbos.app) is another example. They are operational in America, Europe, and South Africa. However, transactions are currently limited to other Fynbos users within the same region due to regulatory and technical constraints. There are plans underway to create payment channels between Fybos and GateHub users in Europe.
 
+As well as having the first digital wallet providers that are Open Payments-enabled, we also have an application that runs Open Payments. [Interledger Pay](https://interledgerpay.com/) is a simplified payment platform that allows you to easily send or request money using your wallet address.
+
 For most people, accessing an Open Payments-enabled account depends on their financial institutions adopting the standard. As more banks, digital wallets, and mobile money providers incorporate Open Payments, the benefits will become more widely accessible.
 
 ## What Are the Possibilities for Tomorrow?
