@@ -84,7 +84,7 @@ Connectors can optimize for speed and throughput, because every transaction— f
 The early Interledger network is optimized for micropayment use cases and trustlessly trading cryptocurrencies natively across blockchains. Here are some of the infrastructure and application companies building with ILP (and yes, they’re hiring!):
 
 - [Coil](https://coil.com/) is a subscription service for supporting web content creators underpinned by Interledger micropayments and the proposed [Web Monetization standard](https://webmonetization.org/). Link to [demo](https://www.youtube.com/watch?v=q6sXGdQ_knE).
-- [StrataLabs](https://www.stratalabs.io/) is the first commercial Interledger connector company, enabling micropayment services like Coil.
+- [StrataLabs](https://web.archive.org/web/20201113153526/https://www.stratalabs.io/) is the first commercial Interledger connector company, enabling micropayment services like Coil.
 - [Kava](https://kava.io/) runs an Interledger connector and is developing technology for the ILP ecosystem including new cross-currency integrations and a [Cosmos](https://cosmos.network/)\-based blockchain optimized for ILP.
 - [The Bill & Melinda Gates Foundation](https://www.gatesfoundation.org/What-We-Do/Global-Growth-and-Opportunity/Financial-Services-for-the-Poor) developed [Mojaloop](http://mojaloop.io/), an open source payment system for emerging markets, using Interledger to increase financial inclusion through interoperability.
 - Ilp.ix, an [mlab](https://mlab.company/) project, is an XRP peering exchange that helps connectors find and connect to one another.
