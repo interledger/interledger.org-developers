@@ -53,7 +53,7 @@ You might think, this sounds convenient, but is it secure? I don’t want just a
 
 ## You Remain in Control
 
-With the Open Payments standard, you remain in full control of your financial transactions. When an application uses Open Payments, it securely shares key information about itself with the financial institutions it interacts with. This verification ensures that the account provider knows the application is legitimate when making a payment request on your behalf.
+With the Open Payments standard, you remain in full control of your financial transactions. When an application uses Open Payments, it securely and cryptographically shares important information about itself with the financial institutions it interacts with. This verification ensures that the account provider knows the application is legitimate when making a payment request on your behalf.
 
 Importantly, any withdrawal of money from your account requires your explicit consent. When you grant an application access to your account, you are not giving it unrestricted access. Instead, you control the access rights: the exact amount, the time frame, and whether it can access your transaction history or move funds. Open Payments also supports recurring payments, allowing you to define how often, for how long, and up to what amount an application can access your account. This granular control ensures that you are always aware of and consenting to the transactions made from your account.
 
