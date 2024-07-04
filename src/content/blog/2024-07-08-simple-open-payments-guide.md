@@ -23,6 +23,8 @@ An alternative is for applications to integrate directly with their bank's payme
 
 This problem gets even more complicated when we consider situations where either the sender or the recipient of funds does not have a bank account. What if a payment has to take place between a bank and a mobile money provider? Now the application would have to also integrate with the mobile money provider. Custom integration becomes an expansive problem.
 
+![Custom integrations are not scaleable](/developers/img/blog/2024-06-20/custom-integration.png)
+
 What if there was a way for an application to access your account directly, and securely? Currently, even if you provide an application with your account details, it likely wouldn't be able to do much with them, even with your permission. As an account owner, shouldn't you have the power to decide who can access your account and what they can do with it?
 
 ## The Promise of the Open Payments Standard
