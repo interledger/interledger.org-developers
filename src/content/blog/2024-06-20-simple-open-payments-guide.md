@@ -77,7 +77,7 @@ Another scenario arises when the sender's and recipient's account providers are 
 
 Currently, the adoption of the Open Payments standard is still in progress. Some innovative institutions and services have begun to integrate this standard, but widespread use is still developing.
 
-[GateHub](https://gatehub.net/) is a digital wallet provider working with the Open Payments standard globally. They are able to facilitate some cross-currency transactions, although regulatory limitations may apply depending on the user's country of residence. The [Fynbos Wallet](https://wallet.fynbos.app) is another example. They are operational in America, Europe, and South Africa. However, transactions are currently limited to other Fynbos users within the same region due to regulatory and technical constraints. There are plans underway to create payment channels between Fybos and GateHub users in Europe.
+[GateHub](https://gatehub.net/) is a digital wallet provider working with the Open Payments standard globally. They facilitate some cross-currency transactions, although regulatory limitations may apply depending on the user's country of residence. [Chimoney](https://chimoney.io/) and [Fynbos](https://wallet.fynbos.app) digital wallets have also implemented Open Payments capabilities. Chimoney enables Open Payments transfers between Chimoney accounts, and Fynbos supports payments between Fynbos accounts. Fynbos is operational in America, Europe, and South Africa. However, Fynbos transactions are currently limited to wallets in the same region due to regulatory and technical constraints. Plans are underway to establish payment channels between Fynbos and GateHub users, beginning with Europe soon.
 
 As well as having the first digital wallet providers that are Open Payments-enabled, we also have an application that runs Open Payments. [Interledger Pay](https://interledgerpay.com/) is a simplified payment platform that allows you to easily send or request money using your wallet address.
 
@@ -93,7 +93,7 @@ Users are empowered to give applications direct access to their accounts. They c
 
 If you're curious about how the Open Payments standard works in practice, you can explore it by creating an account on the [Interledger Test Wallet](https://rafiki.money/). Upon account creation you'll be given a wallet address. This enables you to get hands on experience of simulating transactions using Open Payments. Once you're set up with your account, and have given yourself a generous amount of fictional money, you can embark on a shopping spree at the [Interledger Boutique](https://rafiki.boutique) and buy some delightful products ranging from luck to kindness.
 
-## TLDR
+## Key Takeaways
 
 Standardization enhances interoperability by reducing the development effort required for each integration. This alone brings down costs while providing a scalable and efficient solution for handling digital payments. When interoperability is easy, there is no need for unnecessary middlemen and the fees they add to the cost of transactions.
 
