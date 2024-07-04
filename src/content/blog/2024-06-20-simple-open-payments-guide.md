@@ -71,10 +71,6 @@ Another scenario arises when the sender's and recipient's account providers are 
 
 ## What's Happening in the Open Payments Space Today?
 
-<!-- TODO:  -->
-
-- INCOMPLETE: Is there anyone in the wild using OP now?
-
 Currently, the adoption of the Open Payments standard is still in progress. Some innovative institutions and services have begun to integrate this standard, but widespread use is still developing.
 
 [GateHub](https://gatehub.net/) is a digital wallet provider working with the Open Payments standard globally. They facilitate some cross-currency transactions, although regulatory limitations may apply depending on the user's country of residence. [Chimoney](https://chimoney.io/) and [Fynbos](https://wallet.fynbos.app) digital wallets have also implemented Open Payments capabilities. Chimoney enables Open Payments transfers between Chimoney accounts, and Fynbos supports payments between Fynbos accounts. Fynbos is operational in America, Europe, and South Africa. However, Fynbos transactions are currently limited to wallets in the same region due to regulatory and technical constraints. Plans are underway to establish payment channels between Fynbos and GateHub users, beginning with Europe soon.
