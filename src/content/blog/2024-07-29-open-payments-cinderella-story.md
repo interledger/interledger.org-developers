@@ -11,6 +11,8 @@ tags:
   - Open Payments
 ---
 
+## The Internet Runs on OAuth 2.0
+
 If you’ve ever signed into a website with your Google account, Apple ID, or perhaps an account on a social media website, then you’ve participated in a grand tradition of access delegation that began back in 2007, when the core protocol for the first iteration of OAuth was released. Since then, the protocol has expanded into what we see throughout the web today in the form of OAuth 2.0.
 
 At a certain point in Rafiki’s development it became necessary to implement a standard that described how third parties could initiate payments on behalf of someone else. This standard came to be known as Open Payments, which not only would have to provide a framework to describe those payments, but also incorporate an access delegation method for those third parties to use. Having such a well-established access delegation method like OAuth 2.0 made it seem like a clear choice as an authorization method for this standard.
@@ -64,6 +66,8 @@ scope = "outgoing-payment:100:USD:P1M"
 
 This approach is starting to push the boundaries of convenience and ability to parse the scope. Do we need to enforce an order in which information is added to a scope, so that it can be parsed properly? How would we handle optional parts? Should we just stringify a JSON object and call that a scope? From a development standpoint, things are starting to get out of hand.
 
+## Trying to Make it Work with OAuth 2.0
+
 An early attempt to add this context to an authorized payment was through something called “mandates”. These were objects that a third party client would create on an Open Payments resource server that contained the aforementioned payment information. That mandate would then be referenced inside of a Authorization Details object, which would then be stringified and passed as a query parameter in an OAuth authorization URL:
 
 ```
@@ -90,6 +94,8 @@ Now we’re getting messy again. It’s immediately clear how much noise is in t
 Compare this sequence diagram with the previous sequence diagram and the increased complexity. There’s more interaction with the resource server just to set up the authorization flow and more work after the flow in order to initiate the payment.
 
 ![The Mandates Sequence Diagram](/developers/img/blog/2024-07-29/mandates-sequence-diagram.png)
+
+## A New Approach
 
 Enter the Grant Negotiation and Authorization Protocol (GNAP), the heir apparent to the OAuth lineage. While maintaining the standard of security that OAuth established, GNAP is capable of authorizing a broader range of actions. Consider the authorization of a payment. Not only does the _ability_ to make a payment need to be specified when authorizing it, but also the _recipient_ and the _amount_ of the payment. Those complications are difficult to account for in OAuth, but much easier to handle in GNAP.
 
@@ -162,14 +168,9 @@ Note how much more specific and readable a grant request can be with its intenti
 All access delegation is kept within an authorization server, making accounting the resource server’s sole responsibility.
 There is a clear way to describe the parameters for a payment.
 
-
-
-
-
-
-
-
 For reference, we have a more tame sequence diagram with GNAP. It’s closer to the baseline set by the OAuth 2.0 sequence diagram and keeps the responsibilities of the resource server properly separated from the authorization flow at large.
+
+![GNAP Sequence Diagram](/developers/img/blog/2024-07-29/gnap-sequence-diagram.png)
 
 With this in mind, it’s clear that GNAP is best suited for sending payments via Open Payments. Though the spec is not officially final, progress is steady and the future looks promising - the specifications are well on their way to becoming a proper RFC. [The core protocol](https://datatracker.ietf.org/doc/draft-ietf-gnap-core-protocol/) was recently approved by the IESG and has entered the IESG editor’s queue. [The specification for resource servers](https://datatracker.ietf.org/doc/draft-ietf-gnap-resource-servers/) is also on the cusp of being submitted to the IESG for publication.
 
