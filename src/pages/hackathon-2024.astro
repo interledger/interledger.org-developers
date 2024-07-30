@@ -1,0 +1,204 @@
+---
+import LanderLayout from '../layouts/LanderLayout.astro';
+import Section from '../components/pages/Section.astro';
+---
+
+<LanderLayout title="Interledger Hackathon 2024" gradient='option2'>
+	<main>
+		<button id="toggleNav" class="toggle-nav" aria-expanded="false" aria-controls="mobileNav">
+			<svg fill="none" viewBox="0 0 64 40"><path fill="#fff" fill-rule="evenodd" d="M41.201 39.618H3.998A3.018 3.018 0 0 1 .98 36.6v-1.2a3.018 3.018 0 0 1 3.018-3.018h37.203a3.018 3.018 0 0 1 3.018 3.018v1.2a3.018 3.018 0 0 1-3.018 3.018Zm0-16H3.998A3.018 3.018 0 0 1 .98 20.6v-1.2a3.018 3.018 0 0 1 3.018-3.018h37.203a3.018 3.018 0 0 1 3.018 3.018v1.2a3.018 3.018 0 0 1-3.018 3.018Zm0-16H3.998A3.018 3.018 0 0 1 .98 4.6V3.4A3.018 3.018 0 0 1 3.998.382h37.203A3.018 3.018 0 0 1 44.219 3.4v1.2a3.018 3.018 0 0 1-3.018 3.018Zm19.6 32h-6.003a3.018 3.018 0 0 1-3.017-3.018v-1.2a3.018 3.018 0 0 1 3.017-3.018h6.003a3.018 3.018 0 0 1 3.018 3.018v1.2a3.018 3.018 0 0 1-3.018 3.018Zm0-16h-6.003a3.018 3.018 0 0 1-3.017-3.018v-1.2a3.018 3.018 0 0 1 3.017-3.018h6.003a3.018 3.018 0 0 1 3.018 3.018v1.2a3.018 3.018 0 0 1-3.018 3.018Zm.001-16h-6.004A3.018 3.018 0 0 1 51.781 4.6V3.4A3.018 3.018 0 0 1 54.798.382h6.004A3.018 3.018 0 0 1 63.819 3.4v1.2a3.018 3.018 0 0 1-3.017 3.018Z" clip-rule="evenodd"/></svg>
+			<span>ToC</span>
+		</button>
+		<aside id="mobileNav" aria-hidden="true" aria-labelledby="toggleNav">
+			<nav>
+				<ul>
+					<li><a href="#open-payments">Background</a>
+					
+					</li>
+					<li><a href="#web-monetization">Web Monetization</a>
+					
+					</li>
+					<li><a href="#ilp-stack-design">ILP Stack Design</a>
+	
+					</li>
+					<li><a href="#interledger-test-network">Interledger Test Network</a>
+				
+					</li>
+					<li><a href="#tigerbeetle">TigerBeetle</a>
+			
+					</li>
+				</ul>
+			</nav>
+		</aside>
+
+		<Section class="hero">
+			<header>
+				<div class="logos">
+					<img src="/developers/img/lander/logo-makedev.svg" alt="make.dev" />
+					<img src="/developers/img/lander/logo-foundation.svg" alt="Interledger Foundation" />
+				</div>
+				<h1>Interledger Hackathon 2024</h1>
+			</header>
+		</Section>
+
+		<div class="content">
+	
+		</div>
+	</main>
+</LanderLayout>
+
+<style>
+	@media screen and (min-width: 850px) {
+		main {
+			display: grid;
+			grid-template-columns: max-content 1fr;
+			grid-template-rows: auto auto;
+			grid-template-areas: 'hero hero' 'sidebar content';
+		}
+
+		.hero {
+			grid-area: hero;
+		}
+		.content {
+			grid-area: content;
+		}
+
+		aside {
+			grid-area: sidebar;
+			position: sticky;
+			top: 0;
+			align-self: start;
+			overflow-y: auto;
+			max-height: 100vh;
+		}
+
+		.toggle-nav {
+			display: none;
+		}
+	}
+
+	@media screen and (max-width: 849px) {
+		.toggle-nav {
+			position: fixed;
+			top: 4em;
+			right: 0;
+			display: inline-block;
+			border: 0;
+			background-color: rgba(0, 0, 0, 0.5);
+			padding: var(--space-2xs);
+			font-size: var(--step-0);
+			color: var(--color-text);
+			cursor: pointer;
+			opacity: 0.75;
+			border-end-start-radius: var(--border-radius);
+			border-start-start-radius: var(--border-radius);
+			transition: opacity 300ms ease-in-out;
+		}
+
+		.toggle-nav:hover {
+			opacity: 1;
+		}
+
+		aside {
+			background-color: rgba(0, 0, 0, 0.75);
+			transform: translateX(-100%);
+			position: fixed;
+			top: 0;
+			height: 100%;
+			z-index: 1;
+		}
+
+		aside.visible {
+			transform: translateX(0);
+		}
+	}
+	aside {
+		padding: var(--space-xs);
+		font-size: var(--step--1);
+		overflow-y: auto;
+		max-height: 100vh;
+		transition: transform 300ms ease-in-out;
+		height: 100%;
+	}
+
+	aside ul {
+		list-style: none;
+	}
+
+	aside li {
+		margin-block-end: var(--space-3xs);
+	}
+
+	aside li ul {
+		margin-block-start:  var(--space-3xs);
+	}
+
+	aside a {
+		text-decoration: none;
+	}
+
+	aside nav > ul {
+		padding-inline-start: 0;
+	}
+
+	.hero {
+		text-align: center;
+
+	}
+
+	.logos {
+		display: flex;
+		gap: var(--space-xl);
+		align-items: center;
+		justify-content: center;
+		margin-block-end: var(--space-l);
+	}
+
+	.logos img {
+		max-width: 15rem;
+
+	}
+
+	h1 {
+		line-height: 1.1;
+	}
+
+	.padding--large {
+		padding-block: var(--space-3xl);
+	}
+
+	h2, h3 {
+		margin-block-end: var(--space-s);
+	}
+	
+	p, .content ul, ol {
+		margin-block-end: var(--space-xs);
+	}
+</style>
+
+<script>
+	const sidebar = document.getElementById('mobileNav');
+	const toggle = document.getElementById('toggleNav');
+	const show = () => {
+		sidebar?.classList.toggle('visible');
+		toggle?.setAttribute('aria-expanded', 'true')
+		sidebar?.setAttribute('aria-hidden', 'false')
+	}
+	const hide = () => {
+		sidebar?.classList.remove('visible');
+		toggle?.setAttribute('aria-expanded', 'false');
+		sidebar?.setAttribute('aria-hidden', 'true');
+	}
+	const handleClosure = (event: { target: any; }) => !sidebar?.contains(event.target) && hide();
+	window.addEventListener('click', handleClosure);
+	window.addEventListener('focusin', handleClosure);
+	toggle?.addEventListener('click', event => {
+		event.stopPropagation();
+  	JSON.parse(toggle.getAttribute('aria-expanded') ?? '{}') ? hide() : show();
+	}, false);
+	document.addEventListener('keyup', function(evt) {
+		if (evt.key == 'Escape') {
+			hide();
+		}
+	}, false);
+</script>
