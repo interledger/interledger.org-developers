@@ -1,0 +1,44 @@
+---
+const { src, alt, hasBorder = true } = Astro.props;
+---
+<div>
+  {hasBorder ? <img src={src} alt={alt} class="border" /> : <img src={src} alt={alt} />}
+  <a
+    href={src}
+    target='_blank'
+    rel='noopener noreferrer'
+  >
+    View full image
+  </a>
+</div>
+
+<style>
+div {
+  text-align: right;
+}
+
+img[src$='.svg' i] {
+  background-color: white;
+}
+
+.border {
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  border: 2px solid var(--color-accent-transparent);
+}
+
+a {
+  white-space: nowrap;
+  display: inline-flex;
+  gap: var(--space-3xs);
+  margin-block-start: var(--space-3xs);
+  margin-block-end: var(--space-s);
+  font-size: var(--step--1);
+}
+
+a::after {
+  content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18"><path stroke="hsl(221,8%,56%)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 3H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M11 1h6m0 0v6m0-6L7 11"/></svg>');
+  height: 0.75em;
+  width: 0.75em;
+}
+</style>
