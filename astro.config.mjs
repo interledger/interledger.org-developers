@@ -113,6 +113,10 @@ export default defineConfig({
       ],
       expressiveCode: {
         themes: ["github-dark-dimmed"],
+        styleOverrides: {
+          borderColor: "transparent",
+          borderRadius: "var(--border-radius)",
+        },
       },
     }),
   ],
