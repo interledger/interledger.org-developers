@@ -14,7 +14,6 @@
     "@interledger/docs-design-system": "^0.5.2",
     "@types/showdown": "^2.0.6",
     "astro": "^4.13.1",
-    "astro-expressive-code": "^0.35.6",
     "html-to-text": "^9.0.5",
     "markdown-it": "^14.1.0",
     "node-html-parser": "^6.1.13",
