@@ -112,7 +112,7 @@ export default defineConfig({
         },
       ],
       expressiveCode: {
-        themes: ["github-dark-dimmed"]
+        themes: ["github-dark-dimmed"],
       },
     }),
   ],
