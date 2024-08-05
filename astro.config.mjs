@@ -1,4 +1,5 @@
 import { defineConfig } from "astro/config";
+import astroExpressiveCode from "astro-expressive-code";
 import starlight from "@astrojs/starlight";
 import starlightLinksValidator from "starlight-links-validator";
 
@@ -7,6 +8,9 @@ export default defineConfig({
   site: "https://interledger.org",
   base: "/developers",
   integrations: [
+    astroExpressiveCode({
+      themes: ["github-dark-dimmed"],
+    }),
     starlight({
       title: "Interledger",
       description: "Enable seamless exchange of value across payment networks.",
