@@ -19,8 +19,6 @@ tags:
   - SPSP
 ---
 
-import LargeImg from "/src/components/pages/LargeImg.astro";
-
 If you have stumbled across terms like _Interledger Protocol, Interledger Stack, Interledger Foundation, Open Payments, Rafiki, Rafiki.money, Dassie, Web Monetization (extension), STREAM, SPSP, packets_, … and you are like
 
 <p align="center">
@@ -42,7 +40,7 @@ What does that really mean? Let’s say I have a German bank account and want to
 
 Interledger is designed to be a network of nodes that forward payment messages while also taking care of any “currency” conversion, where “currency” could be anything of value including fiat currencies, crypto currencies, or mobile money.
 
-<LargeImg src="/developers/img/blog/2024-08-13/network.png" alt="Network" />
+![Interledger network diagram](/developers/img/blog/2024-08-13/network.png)
 
 My bank account holds Euros and Allan’s mobile money account holds South African Rands. When looking at the above graph, there are multiple ways my money could be sent–or routed–to Allan. Interledger ensures that the packets take the fastest and cheapest route from the Interledger node servicing me to the Interledger node servicing Allan. Hence, Interledger is designed to be a network on top of existing payment networks that serves as the interoperability layer between them all.
 
@@ -57,7 +55,7 @@ And with that, what are these protocols that we are developing and maintaining?
 
 The Interledger stack, much like the Internet stack, consists of multiple layers. This is not a coincidence, since the Interledger stack was modeled after the Internet stack. Hence, for every layer in the Internet stack, there is an equivalent in the Interledger stack. Each layer serves a specific function and interacts with the layers above and below it. Let's explore each layer of the Interledger stack, from the bottom up.
 
-<LargeImg src="/developers/img/blog/2024-08-13/stack.png" alt="Stack" />
+![Interledger stack vs the Internet stack](/developers/img/blog/2024-08-13/stack.png)
 
 If you prefer a video version of this, please check out my [Interledger Stack presentation](https://youtu.be/sqGjkZKFjgo) on Youtube.
 
@@ -82,10 +80,7 @@ The core of the Interledger stack is the [Interledger Protocol](https://interled
 
 Why are we using a two-phase rather than a single phase transfer protocol? Let us have a look at an example of a single-phase transfer.
 
-<LargeImg
-  src="/developers/img/blog/2024-08-13/transfer.png"
-  alt="Single-phase Transfer"
-/>
+![Single-phase transfer diagram](/developers/img/blog/2024-08-13/transfer.png)
 
 Alice on the left is a customer of an Account Servicing Entity (ASE) that runs an Interledger node or connector (A).
 
@@ -95,10 +90,7 @@ Bob on the right is a customer of the Account Servicing Entity that runs the Int
 
 In order to move that risk of transfer failure from the end users, Alice and Bob, to the connector nodes, the Interledger Protocol defines a two-phase transfer.
 
-<LargeImg
-  src="/developers/img/blog/2024-08-13/2p-transfer.png"
-  alt="Two-phase Transfer"
-/>
+![Two-phase transfer diagram](/developers/img/blog/2024-08-13/2p-transfer.png)
 
 The ILP packet transfer begins with the sending connector (A) constructing an ILP Prepare packet, containing the receiver's ILP address, an execution condition, amount, and expiry time. The sending connector may also include additional data, the format of which is determined by the higher-level protocol in use. This packet is sent to connector (B) over an authenticated channel, set up using a link layer protocol. Connector (B) verifies connector (A)’s liquidity balance and, if sufficient, debits the amount from the connector’s liquidity account. The connector then uses routing tables to determine the next hop, adjusts the packet's amount and expiry for its exchange rate, and forwards the packet.
 
@@ -125,9 +117,9 @@ An example ILP address might look like this: `g.us-fed.ach.acmebank.acmecorp.~ip
 
 [Payment pointers](https://paymentpointers.org/) are a user-friendly way to represent ILP addresses, similar to how URLs are used to represent IP addresses. They make it easier for users to handle and share their payment information.
 
-A payment pointer always begins with a dollar sign (`$`) followed by a URL-like structure. For example: $wallet.com/alice. This payment pointer resolves to a URL https://wallet.com/alice and points to an ILP address, e.g. `test.wallet.alice` (no optional interaction part).
+A payment pointer always begins with a dollar sign (`$`) followed by a URL-like structure. For example: `$wallet.com/alice`. This payment pointer resolves to a URL `https://wallet.com/alice` and points to an ILP address, e.g. `test.wallet.alice` (no optional interaction part).
 
-Payment pointers can also be hosted on the root domain. In that case, a payment pointer like $mymarketplace.com resolves to https://marketplace.com/.well-known/pay and points to an ILP address like `g.wallet.mymarketplace`.
+Payment pointers can also be hosted on the root domain. In that case, a payment pointer like `$mymarketplace.com` resolves to `https://marketplace.com/.well-known/pay` and points to an ILP address like `g.wallet.mymarketplace`.
 
 We will come back to payment pointers in the section on the Application Layer, specifically the section on the Simple Payment Setup Protocol (SPSP). If you can’t wait, feel free and [skip ahead](#application-layer).
 
@@ -135,7 +127,7 @@ We will come back to payment pointers in the section on the Application Layer, s
 
 The transport layer builds on ILP by providing additional functionalities for managing value transfer. The only supported protocol at the moment is the [STREAM Protocol](https://interledger.org/developers/rfcs/stream-protocol/) (Streaming Transport for Real-time Exchange of Assets and Messages).
 
-<LargeImg src="/developers/img/blog/2024-08-13/stream.gif" alt="STREAM" />
+![STREAM protocol animation](/developers/img/blog/2024-08-13/stream.gif)
 
 STREAM is a versatile and secure transport protocol for ILP, facilitating efficient and scalable transmission of money and data. It offers a range of features designed to optimize ILP-based transactions:
 
@@ -158,7 +150,15 @@ The application layer is the final layer of the Interledger stack, defining deve
 
 [SPSP](https://interledger.org/developers/rfcs/simple-payment-setup-protocol/) simplifies the process of setting up payments. When a GET request is made to a URL associated with a payment pointer using the SPSP request headers, SPSP defines what needs to be returned.
 
-<LargeImg src="/developers/img/blog/2024-08-13/spsp.png" alt="SPSP" />
+```http wrap
+HTP/1.1 200 OK
+Content-Type: application/spsp4+json
+{
+  "destination_account": "example.ilpdemo.red.bob",
+  "shared_secret": "6jR5iNIVRvqeasJeCty6C+YB5X9FhSOUPCL/5nha5Vs=",
+  "Receipts_enabled": true
+}
+```
 
 These include the `destination_account`, which is the ILP address of the recipient, a `shared_secret` for encrypting STREAM packets, and may include a flag called `receipts_enabled`, indicating whether [STREAM receipts](https://interledger.org/developers/rfcs/stream-receipts/) have been requested. SPSP ensures a secure and straightforward payment setup for entities or individuals with direct ILP access, meaning entities or individuals that are able to create, send, and receive ILP packets directly without the help of another entity.
 
@@ -170,7 +170,7 @@ For an in-depth introduction to Open Payments, check out [Sarah’s fantastic bl
 
 [Web Monetization](https://webmonetization.org/) is not part of the Interledger stack but is a user-facing application that sits on top of the ILP stack.
 
-<LargeImg src="/developers/img/blog/2024-08-13/wm.png" alt="Web Monetization" />
+![Web Monetization in the Interledger stack](/developers/img/blog/2024-08-13/wm.png)
 
 Web Monetization is a proposed W3C standard that facilitates seamless payments directly within the web browsing experience. It allows website visitors to pay an amount of their choosing to websites with minimal to no user interaction. As a proposed standard, the goal is for Web Monetization to be natively built into browsers; however, no browsers currently support the functionality. Hence, the Interledger Foundation is working on a browser extension to enable Web Monetization functionality in the meantime.
 
@@ -180,7 +180,7 @@ When a web browser (or the Web Monetization extension) encounters a web-monetize
 
 The answer to this question is very short: it is a [reference implementation](https://github.com/interledger/rafiki) of the Interledger stack. It is **not** a wallet, **not** a platform, and **not** a service! **It is software.**
 
-<LargeImg src="/developers/img/blog/2024-08-13/rafiki.png" alt="Rafiki" />
+![Components of the Interledger stack included in Rafiki](/developers/img/blog/2024-08-13/rafiki.png)
 
 [Rafiki](https://rafiki.dev/) is open-source software that is freely available for any licensed entity. The purpose of Rafiki is to minimize the effort for entities to incorporate Interledger on their users’ accounts and run as a connector on the ILP network. Rafiki uses ILPoverHTTP rather than BTP because we assume that packet sizes for these transactions will be a bit bigger, maybe as big as a cent. Hence, payments are split into fewer packets, making the establishment of a socket connection excessive.
 
