@@ -117,9 +117,9 @@ An example ILP address might look like this: `g.us-fed.ach.acmebank.acmecorp.~ip
 
 [Payment pointers](https://paymentpointers.org/) are a user-friendly way to represent ILP addresses, similar to how URLs are used to represent IP addresses. They make it easier for users to handle and share their payment information.
 
-A payment pointer always begins with a dollar sign (`$`) followed by a URL-like structure. For example: $wallet.com/alice. This payment pointer resolves to a URL https://wallet.com/alice and points to an ILP address, e.g. `test.wallet.alice` (no optional interaction part).
+A payment pointer always begins with a dollar sign (`$`) followed by a URL-like structure. For example: `$wallet.com/alice`. This payment pointer resolves to a URL `https://wallet.com/alice` and points to an ILP address, e.g. `test.wallet.alice` (no optional interaction part).
 
-Payment pointers can also be hosted on the root domain. In that case, a payment pointer like $mymarketplace.com resolves to https://marketplace.com/.well-known/pay and points to an ILP address like `g.wallet.mymarketplace`.
+Payment pointers can also be hosted on the root domain. In that case, a payment pointer like `$mymarketplace.com` resolves to `https://marketplace.com/.well-known/pay` and points to an ILP address like `g.wallet.mymarketplace`.
 
 We will come back to payment pointers in the section on the Application Layer, specifically the section on the Simple Payment Setup Protocol (SPSP). If you can’t wait, feel free and [skip ahead](#application-layer).
 
