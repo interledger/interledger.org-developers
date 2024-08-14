@@ -117,6 +117,9 @@ export default defineConfig({
           borderColor: "transparent",
           borderRadius: "var(--border-radius)",
         },
+        defaultProps: {
+          wrap: true,
+        },
       },
     }),
   ],
