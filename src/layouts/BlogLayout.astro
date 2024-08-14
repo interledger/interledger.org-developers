@@ -10,7 +10,7 @@ const longDate = dateObj.toDateString().substring(4);
 const rawHTMLString = `This article was originally published at <a href=${frontmatter.external_url}>${frontmatter.external_url}</a>.`
 ---
 
-<BaseLayout title={frontmatter.title}>
+<BaseLayout title={frontmatter.title} ogType="article" ogImageUrl={frontmatter.ogImageUrl ? new URL(frontmatter.ogImageUrl, Astro.site).href : new URL('/img/og-image.png', Astro.site).href}>
 	<main>
 		<article itemscope itemtype="http://schema.org/Article" class="content-wrapper">
 			<ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
