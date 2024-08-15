@@ -27,7 +27,7 @@ const { title, description, ogType, ogImageUrl, canonicalURL = new URL(Astro.url
 
 		<meta property="og:title" content={title ? `${title} | Interledger Foundation` : 'Interledger Foundation'} />
 		<meta property="og:type" content={ogType ? ogType : 'website'} />
-		<meta property="og:image" content={ogImageUrl ? ogImageUrl : new URL('/img/og-image.png', Astro.site).href} />
+		<meta property="og:image" content={ogImageUrl ? ogImageUrl : new URL('/developers/img/og-image.png', Astro.site).href} />
 		<meta property="og:url" content={canonicalURL} />
 
 		<link rel="icon" type="image/svg+xml" href="/developers/favicon.svg" />
