@@ -9,11 +9,11 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/node": "^8.3.2",
-    "@astrojs/starlight": "^0.25.3",
+    "@astrojs/node": "^8.3.3",
+    "@astrojs/starlight": "^0.25.5",
     "@interledger/docs-design-system": "^0.5.2",
     "@types/showdown": "^2.0.6",
-    "astro": "^4.13.1",
+    "astro": "^4.14.0",
     "html-to-text": "^9.0.5",
     "markdown-it": "^14.1.0",
     "node-html-parser": "^6.1.13",

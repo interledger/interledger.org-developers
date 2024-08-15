@@ -7,9 +7,12 @@ interface Props {
 	title: string;
 	description?: string;
 	gradient?: string;
+	ogType?: string;
+	ogImageUrl?: string;
+	canonicalURL?: string;
 }
 
-const { title, description } = Astro.props;
+const { title, description, ogType, ogImageUrl, canonicalURL = new URL(Astro.url.pathname, Astro.site).href, } = Astro.props;
 ---
 
 <!doctype html>
@@ -21,6 +24,12 @@ const { title, description } = Astro.props;
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title ? `${title} | Interledger Foundation` : 'Interledger Foundation'}</title>
+
+		<meta property="og:title" content={title ? `${title} | Interledger Foundation` : 'Interledger Foundation'} />
+		<meta property="og:type" content={ogType ? ogType : 'website'} />
+		<meta property="og:image" content={ogImageUrl ? ogImageUrl : new URL('/img/og-image.png', Astro.site).href} />
+		<meta property="og:url" content={canonicalURL} />
+
 		<link rel="icon" type="image/svg+xml" href="/developers/favicon.svg" />
 		<script defer src="https://ilf-site-analytics.netlify.app/script.js" data-website-id="50d81dd1-bd02-4f82-8a55-34a09ccbbbd9" data-domains="interledger.org"></script>
 	</head>
