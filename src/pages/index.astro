@@ -31,22 +31,22 @@ import RafikiIcon from '../components/logos/RafikiIcon.astro';
     <section>
       <div class="content-wrapper cards">
         <div class="card">
-          <h2 class="heading--6"><a href="https://github.com/interledger/open-payments" data-umami-event="Devs page link - GitHub"><OpenPaymentsIcon /> Open Payments Repository</a> </h2>
+          <h2 class="heading--6"><a href="https://github.com/interledger/open-payments" data-umami-event="Devs page link - GitHub"><OpenPaymentsIcon /> Open Payments Repo</a> </h2>
           <p>Open Payments is an open API standard that can be implemented by account servicing entities to facilitate interoperability in the setup and completion of payments for different use cases.</p>
         </div>
 
         <div class="card">
-          <h2 class="heading--6"><a href="https://github.com/interledger/rafiki" data-umami-event="Devs page link - Rafiki"><RafikiIcon /> Rafiki</a> </h2>
+          <h2 class="heading--6"><a href="https://github.com/interledger/rafiki" data-umami-event="Devs page link - Rafiki"><RafikiIcon /> Rafiki Repo</a> </h2>
           <p>Rafiki is open source software that provides an efficient solution for an Account Servicing Entity to enable Interledger functionality on its users' accounts.</p>            
         </div>
 
         <div class="card">
-          <h2 class="heading--6"><a href="https://github.com/interledger/rfcs" data-umami-event="Devs page link - RFCs"><InterledgerIcon /> Interledger Specifications</a></h2>
+          <h2 class="heading--6"><a href="https://github.com/interledger/rfcs" data-umami-event="Devs page link - RFCs"><InterledgerIcon /> Specifications Repo</a></h2>
           <p>The <a href="/developers/rfcs/interledger-protocol/" data-umami-event="Devs page link - Read specs">Interledger Protocol (ILP)</a> is an open, neutral protocol for transferring money based on TCP/IP, designed for sending packets of money across different accounting ledgers.</p>
         </div>
 
         <div class="card">
-          <h2 class="heading--6"><a href="https://github.com/interledger/testnet" data-umami-event="Devs page link - Testnet"><InterledgerIcon /> Test Network</a></h2>
+          <h2 class="heading--6"><a href="https://github.com/interledger/testnet" data-umami-event="Devs page link - Testnet"><InterledgerIcon /> Test Network Repo</a></h2>
           <p>The Test Network (Testnet) is an open Interledger network working with test money designed for account servicing entities to test their Interledger integration.</p>
         </div>
         <div class="card">
@@ -145,6 +145,12 @@ import RafikiIcon from '../components/logos/RafikiIcon.astro';
     display: flex;
     align-items: center;
     gap: var(--space-s);
+  }
+
+  @media screen and (max-width: 420px) {
+    .hero__cta {
+      flex-direction: column;
+    }
   }
 
   .hero__btn {
