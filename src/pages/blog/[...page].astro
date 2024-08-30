@@ -26,7 +26,13 @@ const { page } = Astro.props;
 					<meta itemprop="position" content="1" />
 				</li>
 			</ol>
-			<h1>Engineering Blog</h1>
+			<header>
+				<h1>Engineering Blog</h1>
+				<a class="cta__blog" href="/blog">
+					<p>Check out Foundation updates</p>
+					<img src="/developers/img/ernie-purple.svg" alt="Ernie holding an envelope" aria-hidden="true">
+				</a>
+			</header>
 			<ol class="postlist">
 				{((page as any).data || []).map((blogPostEntry: any) => {
 					const excerpt = `${createExcerpt(blogPostEntry.body).substring(0, 300)}...`;
@@ -65,13 +71,54 @@ main {
 	text-decoration: none;
 }
 
-h1 {
-	padding-block-start: var(--space-s);
-	padding-block-end: var(--space-m);
-}
-
 ol {
 	padding: 0;
+}
+
+header {
+	padding-block-start: var(--space-s);
+	padding-block-end: var(--space-m);
+	display: flex;
+  justify-content: space-between;
+  align-items: center;
+	gap: var(--space-xs);
+}
+
+@media screen and (max-width: 730px) {
+	header {
+		flex-direction: column;
+		align-items: start;
+	}
+}
+
+.cta__blog {
+	display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  padding: var(--space-3xs) var(--space-2xs);
+  background-color: white;
+  box-shadow: var(--box-shadow);
+  border-radius: var(--border-radius);
+  font-size: var(--step--1);
+  background-image: var(--color-white);
+}
+
+.cta__blog {
+  text-decoration-color: transparent;
+	transition: text-decoration-color 300ms ease-in-out;
+}
+
+.cta__blog:hover {
+	color: currentColor;
+  text-decoration-color: currentColor;
+}
+
+.cta__blog p {
+  flex: none;
+}
+
+.cta__blog img {
+  width: 4em;
 }
 
 .post-metadata,
