@@ -93,7 +93,7 @@ On test start, we create MASEs for `cloud-nine-wallet` and `happy-life-bank` and
 
 **Open Payments:**
 
-This is our primary payment flow and would be used in contexts such as e-commerce. It consist of creating an incoming payment, quote, and outgoing payment along with their requisite grants. The outgoing payment requires a grant interaction which needs to be implemented by an ASE and is mocked for these tests. Refer to our documentation for details on the [grant interaction flow](https://rafiki.dev/concepts/open-payments/grant-interaction/) and [this blog post](https://interledger.org/developers/blog/open-payments-cinderella-story/) for an in-depth look into our authorization method.
+This is our primary payment flow and would be used in contexts such as e-commerce. It consist of creating an incoming payment, quote, and outgoing payment along with their requisite grants. For more details on this flow visit our [Open Payments Flow documentation](https://openpayments.dev/introduction/op-flow/). The outgoing payment requires a grant interaction which needs to be implemented by an ASE and is mocked for these tests. For detailed information on these grants and how we handle authorization in general, see our [Open Payments Grants guide](https://openpayments.dev/introduction/grants/).
 
 We run this flow with the following variations:
 
