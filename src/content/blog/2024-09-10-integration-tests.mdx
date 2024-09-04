@@ -48,7 +48,7 @@ Before arriving at this solution we considered a few variations:
 
 - **Bruno CLI and existing local environment**: Given that we wanted to automate our manual tests consisting of Bruno requests, the first option we explored was simply using the [Bruno CLI](https://docs.usebruno.com/bru-cli/overview) to run our existing example flows. However, our “Open Payments” flow requires a short UI interaction on the MASE which would have been difficult to mock from a Bruno request. Additionally, we would not have access to the webhooks and it would generally limit our testing capabilities. Reusing the same Docker environment would also prevent us from configuring the test and local environments independently.
 - **Testcontainers**: We considered using [Testcontainers](https://testcontainers.com/) in our Jest tests instead of launching native Docker containers from a shell script. While Testcontainers is a powerful tool for managing Docker containers in code, we do not currently need to set up and tear down the environment between tests because our tests do not require a fresh state. However, if we extend our tests and find they cause side effects between tests, we could utilize Testcontainers to rebuild the environment, ensuring proper isolation. Additionally, managing containers outside of Jest allows us to maintain a more persistent environment that is not tied to the lifecycle of the tests. This flexibility makes it easier to reuse the environment for additional testing purposes. In the event that we need to leverage the power of Testcontainers in the future we can [leverage our existing Docker Compose files](https://node.testcontainers.org/features/compose/) to transition.
-- **Dockerising Test Runner**: We also considered putting the tests in a Docker image and running them inside the Docker network instead of from the host machine. This would solve [some networking issues](#url-handling) but introduces additional complexity with creating a new Docker image for the tests and retrieving test exit codes and displaying test output. Additionally, running tests in Docker would require a full environment restart for each test run, making the development process more cumbersome.
+- **Dockerizing Test Runner**: We also considered putting the tests in a Docker image and running them inside the Docker network instead of from the host machine. This would solve [some networking issues](#url-handling) but introduces additional complexity with creating a new Docker image for the tests and retrieving test exit codes and displaying test output. Additionally, running tests in Docker would require a full environment restart for each test run, making the development process more cumbersome.
 
 ### Key Benefits
 
@@ -89,18 +89,28 @@ Using Jest as our testing framework, we structured our test code around a few ke
 
 2. **Test Actions:** These are functions analogous to our Bruno requests but designed to be repeatable across tests. These actions abstract away some baseline assumptions about the sending/receiving MASE relationship, assertions, and how each endpoint is called.
 
-On test start, we create MASEs for `cloud-nine-wallet` and `happy-life-bank` and seed their respective Rafiki instances. Then these are designated as `sendingASE` and `receivingASE` in our test actions and we run our test flows with several variations. These include:
+On test start, we create MASEs for `cloud-nine-wallet` and `happy-life-bank` and seed their respective Rafiki instances. Then these are designated as `sendingASE` and `receivingASE` in our test actions and we run our test flows which include:
 
 **Open Payments:**
 
-- With Continuation via Polling
-- With Continuation via Finish method
-- Without Quote step
+This is our primary payment flow and would be used in contexts such as e-commerce. It consist of creating an incoming payment, quote, and outgoing payment along with their requisite grants. The outgoing payment requires a grant interaction which needs to be implemented by an ASE and is mocked for these tests. Refer to our documentation for details on the [grant interaction flow](https://rafiki.dev/concepts/open-payments/grant-interaction/) and [this blog post](https://interledger.org/developers/blog/open-payments-cinderella-story/) for an in-depth look into our authorization method.
+
+We run this flow with the following variations:
+
+- With continuation via polling
+- With continuation via finish method
+- Without explicit quote step
 
 **Peer-to-Peer:**
 
+A simple form of payment that consists of creating a receiver (incoming payment), quote, and outgoing payment without any grant requests.
+
+We run this flow with the following variations:
+
 - Single currency
 - Cross currency
+
+To ensure functionality of these critical payment flows as our codebase evolves, we've integrated these tests into a GitHub Action. [This action](https://github.com/interledger/rafiki/blob/main/.github/workflows/node-build.yml) runs automatically against all pull requests, safeguarding our main branch from potential regressions.
 
 #### URL Handling
 
