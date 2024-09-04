@@ -15,7 +15,7 @@ tags:
 
 import LargeImg from "/src/components/pages/LargeImg.astro";
 
-Rafiki is open source software that allows an [Account Servicing Entity](https://rafiki.dev/concepts/account-servicing-entity/) to enable Interledger functionality on its users’ accounts, so testing is really important to us. Given the critical nature of handling payments, it's essential that our tests not only validate correctness but also build confidence for our integrators.
+[Rafiki](https://rafiki.dev/) is open source software that allows an [Account Servicing Entity](https://rafiki.dev/concepts/account-servicing-entity/) to enable Interledger functionality on its users’ accounts, so testing is really important to us. Given the critical nature of handling payments, it's essential that our tests not only validate correctness but also build confidence for our integrators.
 
 Historically, Rafiki was tested via a combination of unit tests and manually running sequences of [Bruno](https://www.usebruno.com/) requests constituting different payment flows using two local Mock Account Servicing Entities (MASE). The MASEs are part of our local development playground and encapsulate the necessary components for integrating with Rafiki, including accounting, webhook handling, and consent interactions to facilitate payment flows. These MASEs run in [Docker](https://www.docker.com/) alongside their own Rafiki instances. [Visit our documentation](https://rafiki.dev/playground/overview) to learn more about MASEs and our local playground.
 
