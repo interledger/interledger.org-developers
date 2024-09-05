@@ -2,7 +2,7 @@
 layout: ../../layouts/BlogLayout.astro
 title: "Leveling Up Rafiki Testing: Shifting from Manual to Automated"
 description: "How we automated our manual payment flow tests."
-date: 2024-09-10
+date: 2024-09-06
 slug: integration-tests
 author: Blair Currey
 author_url: https://www.linkedin.com/in/blair-currey/
@@ -65,7 +65,7 @@ Let's take a closer look at the structure of our test code and the key component
 
 Our test environment resembles our local development environment with some key variations. We implemented a Cloud Nine Wallet and Happy Life Bank MASE in the Jest test suite so that they can be controlled and inspected as needed. To facilitate these new MASE implementations we extracted `mock-account-servicing-entity`’s core logic into a new [mock-account-service-lib](https://github.com/interledger/rafiki/tree/main/packages/mock-account-service-lib). Each of these MASE’s integrate with a paired down version of Rafiki consisting of the `auth` and `backend` services and their requisite data stores. These Rafiki instances are defined and configured in Docker Compose files for each MASE.
 
-![Integration Test Architecture Diagram](/developers/img/blog/2024-09-10/architecture.png)
+![Integration Test Architecture Diagram](/developers/img/blog/2024-09-06/architecture.png)
 
 #### Launching the Test Environment and Running Tests
 
@@ -119,7 +119,7 @@ Running tests from the host machine against services in Docker posed a problem w
 This sequence diagram illustrates how a request from the host machine resolves using the mapped hostnames.
 
 <LargeImg
-  src="/developers/img/blog/2024-09-10/url-problem.png"
+  src="/developers/img/blog/2024-09-06/url-problem.png"
   alt="URL Problem Sequence Diagram"
 />
 
