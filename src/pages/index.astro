@@ -11,7 +11,10 @@ import RafikiIcon from '../components/logos/RafikiIcon.astro';
         <div class="text-wrapper">
           <h1 class="hero__heading heading--2">Interledger Developers Portal</h1>
           <p class="hero__txt">Help shape the future of interoperable payments and enable seamless exchange of value across payment networks.</p>
-          <a class="hero__btn" href="/developers/get-involved" data-umami-event="Devs page link - Get involved">Get involved</a>
+          <div class="hero__cta">
+            <a class="btn hero__btn" href="/developers/get-involved" data-umami-event="Devs page link - Get involved">Get involved</a>
+            <a class="external" href="https://github.com/interledger" target="_blank" rel="noopener noreferrer">Contribute on Github</a>
+          </div>
         </div>
         <div class="image-wrapper">
           <img src="/developers/img/devs.svg" alt="Illustration of developers working at a table" class="hero__img" />
@@ -21,35 +24,35 @@ import RafikiIcon from '../components/logos/RafikiIcon.astro';
 
     <section>
       <div class="content-wrapper">
-        <p class="heading--5">Learn more about the various open-source projects that Interledger is working on.</p>
+        <p class="heading--5">We welcome contributions to our open-source repositories on GitHub. If you find them valuable, please give us a star. Your support makes a difference!</p>
       </div>
     </section>
 
     <section>
       <div class="content-wrapper cards">
         <div class="card">
-          <h2 class="heading--6"><OpenPaymentsIcon /> Open Payments</h2>
+          <h2 class="heading--6"><a href="https://github.com/interledger/open-payments" data-umami-event="Devs page link - GitHub" target="_blank" rel="noopener noreferrer"><OpenPaymentsIcon /> Open Payments Repo</a> </h2>
           <p>Open Payments is an open API standard that can be implemented by account servicing entities to facilitate interoperability in the setup and completion of payments for different use cases.</p>
-          <a href="https://github.com/interledger/open-payments" data-umami-event="Devs page link - GitHub">Learn more on Github</a>
         </div>
+
         <div class="card">
-          <h2 class="heading--6"><RafikiIcon /> Rafiki</h2>
-          <p>Rafiki is open source software that provides an efficient solution for an Account Servicing Entity to enable Interledger functionality on its users' accounts.</p>
-          <a href="https://github.com/interledger/rafiki" data-umami-event="Devs page link - Rafiki">Learn more on Github</a>
+          <h2 class="heading--6"><a href="https://github.com/interledger/rafiki" data-umami-event="Devs page link - Rafiki" target="_blank" rel="noopener noreferrer"><RafikiIcon /> Rafiki Repo</a> </h2>
+          <p>Rafiki is open source software that provides an efficient solution for an Account Servicing Entity to enable Interledger functionality on its users' accounts.</p>            
         </div>
+
         <div class="card">
-          <h2 class="heading--6"><InterledgerIcon /> Specifications</h2>
-          <p>The Interledger Protocol (ILP) is an open, neutral protocol for transferring money based on TCP/IP, designed for sending packets of money across different accounting ledgers. <a href="/developers/rfcs/interledger-protocol/" data-umami-event="Devs page link - Read specs">Read</a> the Interledger specifications or <a href="https://github.com/interledger/rfcs" data-umami-event="Devs page link - RFCs">contribute</a> to them.</p>
+          <h2 class="heading--6"><a href="https://github.com/interledger/rfcs" data-umami-event="Devs page link - RFCs" target="_blank" rel="noopener noreferrer"><InterledgerIcon /> Specifications Repo</a></h2>
+          <p>The <a href="/developers/rfcs/interledger-protocol/" data-umami-event="Devs page link - Read specs">Interledger Protocol (ILP)</a> is an open, neutral protocol for transferring money based on TCP/IP, designed for sending packets of money across different accounting ledgers.</p>
         </div>
+
         <div class="card">
-          <h2 class="heading--6"><InterledgerIcon /> Test Network</h2>
+          <h2 class="heading--6"><a href="https://github.com/interledger/testnet" data-umami-event="Devs page link - Testnet" target="_blank" rel="noopener noreferrer"><InterledgerIcon /> Test Network Repo</a></h2>
           <p>The Test Network (Testnet) is an open Interledger network working with test money designed for account servicing entities to test their Interledger integration.</p>
-          <a href="https://github.com/interledger/testnet" data-umami-event="Devs page link - Testnet">Learn more on Github</a>
         </div>
         <div class="card">
           <h2 class="heading--6">Engineering Blog</h2>
           <p>Our team shares their thoughts and experiences on Interledger and the work that we are doing.</p>
-          <a href="/developers/blog" data-umami-event="Devs page link - Blog">Read our blog</a>
+          <a class="btn card__btn" href="/developers/blog" data-umami-event="Devs page link - Blog">Read our blog</a>
         </div>
       </div>
     </section>
@@ -90,6 +93,42 @@ import RafikiIcon from '../components/logos/RafikiIcon.astro';
     flex: 3;
   }
 
+  .btn {
+    border-radius: 10em;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    text-decoration-color: transparent;
+    text-underline-offset: 4px;
+    transition: text-decoration-color ease-in-out 200ms;
+  }
+
+  .btn::after {
+    content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12"><path d="M11.92 5.62a1.001 1.001 0 0 0-.21-.33l-5-5a1.004 1.004 0 0 0-1.42 1.42L8.59 5H1a1 1 0 0 0 0 2h7.59l-3.3 3.29a1.002 1.002 0 0 0 .325 1.639 1 1 0 0 0 1.095-.219l5-5a1 1 0 0 0 .21-.33 1 1 0 0 0 0-.76Z"/></svg>');
+    flex: none;
+    width: .6em;
+  }
+
+  .external {
+    text-decoration-color: transparent;
+    text-underline-offset: 4px;
+    transition: text-decoration-color ease-in-out 200ms;
+    cursor: pointer;
+  }
+
+  .external:hover {
+    color: var(--color-white);
+    text-decoration: underline;
+  }
+
+  .external::after {
+    content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18"><path stroke="hsl(180,0%,100%)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 3H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M11 1h6m0 0v6m0-6L7 11"/></svg>');
+    height: 0.75em;
+    width: 0.75em;
+    display: inline-block;
+    margin-inline: var(--space-3xs);
+  }
+
   .hero__heading {
     color: var(--color-white);
     max-width: 10em;
@@ -102,17 +141,22 @@ import RafikiIcon from '../components/logos/RafikiIcon.astro';
     margin-block-end: var(--space-s);
   }
 
-  .hero__btn {
-    border-radius: 10em;
-    background-color: var(--color-white);
-    padding: var(--space-xs) var(--space-s);
-    color: var(--color-primary);
-    display: inline-flex;
+  .hero__cta {
+    display: flex;
     align-items: center;
-    gap: var(--space-2xs);
-    text-decoration-color: transparent;
-    text-underline-offset: 4px;
-    transition: text-decoration-color ease-in-out 200ms;
+    gap: var(--space-s);
+  }
+
+  @media screen and (max-width: 420px) {
+    .hero__cta {
+      flex-direction: column;
+    }
+  }
+
+  .hero__btn {
+    background-color: var(--color-white);
+    color: var(--color-primary);
+    padding: var(--space-xs) var(--space-s);
   }
 
   .hero__btn:hover {
@@ -120,9 +164,6 @@ import RafikiIcon from '../components/logos/RafikiIcon.astro';
   }
 
   .hero__btn::after {
-    content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12"><path d="M11.92 5.62a1.001 1.001 0 0 0-.21-.33l-5-5a1.004 1.004 0 0 0-1.42 1.42L8.59 5H1a1 1 0 0 0 0 2h7.59l-3.3 3.29a1.002 1.002 0 0 0 .325 1.639 1 1 0 0 0 1.095-.219l5-5a1 1 0 0 0 .21-.33 1 1 0 0 0 0-.76Z"/></svg>');
-    flex: none;
-    width: .6em;
     filter: var(--filter-primary);
   }
   
@@ -161,7 +202,7 @@ import RafikiIcon from '../components/logos/RafikiIcon.astro';
     border-radius: var(--border-radius);
     margin-inline: auto;
     box-shadow: var(--box-shadow);
-    padding: var(--space-xs) var(--space-s);
+    padding: var(--space-s) var(--space-s);
     background-color: var(--color-white);
     width: 100%;
   }
@@ -174,9 +215,18 @@ import RafikiIcon from '../components/logos/RafikiIcon.astro';
 
   .card h2 {
     font-weight: 600;
+  }
+
+  .card h2 a {
     display: flex;
-    align-items: center;
     gap: var(--space-2xs);
+  }
+
+  .card h2 a::after {
+    content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18"><path stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 3H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M11 1h6m0 0v6m0-6L7 11"/></svg>');
+    height: 0.75em;
+    width: 0.75em;
+    filter: var(--filter-primary);
   }
 
   .card h2,
@@ -188,12 +238,28 @@ import RafikiIcon from '../components/logos/RafikiIcon.astro';
     width: 1em;
   }
 
-  .card a {
+  .card a:not(.card__btn) {
     text-decoration: none;
     color: var(--color-primary);
   }
 
   .card a:hover {
     text-decoration: underline;
+  }
+
+  .card__btn {
+    font-size: smaller;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    margin-block-start: var(--space-xs);
+    padding: var(--space-2xs) var(--space-xs);
+  }
+
+  .card__btn:hover {
+    color: var(--color-white);
+  }
+
+  .card__btn::after {
+    filter: var(--filter-white);
   }
 </style>
