@@ -69,7 +69,7 @@ Familiarity with these frameworks will be valuable in understanding how Rafiki w
 
 As mentioned before, the Rafiki `backend` manages Open Payments resources. These resources are managed by services attached to an inversion-of-control (IoC) container via dependency injection with AdonisJS, as also mentioned previously. To see this in action, the [`/src/index.ts`](https://github.com/interledger/rafiki/blob/main/packages/backend/src/index.ts) is the best place to look. Take [this example](https://github.com/interledger/rafiki/blob/main/packages/backend/src/index.ts) of how the service for handling incoming payment routes gets injected into the IoC container:
 
-```
+```ts wrap
 import { Ioc, IocContract } from '@adonisjs/fold'
 import { createIncomingPaymentRoutes } from './open_payments/payment/incoming/routes'
 
@@ -93,7 +93,7 @@ In this call, a name for the service is passed to the IoC container, and a facto
 
 These services are then attached to routes in the [`/src/app.ts`](https://github.com/interledger/rafiki/blob/main/packages/backend/src/app.ts) file. The `app.ts` file is a great place to work backwards from and see which routes exist on the backend server and what services are used to complete the operations presented by the routes. Take [this route](https://github.com/interledger/rafiki/blob/main/packages/backend/src/app.ts#L432-L454) for example:
 
-```
+```ts wrap
 const incomingPaymentRoutes = await this.container.use(
   'incomingPaymentRoutes'
 )
@@ -136,7 +136,7 @@ In order fulfill the payments described in Open Payments resources and maintain 
 The Authorization Server on Rafiki is structured similarly to the backend, in that it injects services into an IoC container which are retrieved by routes on Koa server to perform the business logic.
 
 [index.ts](https://github.com/interledger/rafiki/blob/main/packages/auth/src/index.ts)
-```
+```ts wrap
 import { Ioc, IocContract } from '@adonisjs/fold'
 import { createGrantRoutes } from './grant/routes'
 
@@ -162,7 +162,7 @@ container.singleton('grantRoutes', async (deps: IocContract<AppServices>) => {
 Again, note the route service for grants is mounted to the container, and then subsequently referenced when attaching service functions to the relevant routes.
 
 [app.ts](https://github.com/interledger/rafiki/blob/main/packages/auth/src/app.ts)
-```
+```ts wrap
 const grantRoutes = await this.container.use('grantRoutes')
 
 ...
@@ -194,7 +194,7 @@ Pages on the frontend acquire data to populate the view and send data in request
 ## Seeing Rafiki In Action
 
 If Docker is installed, the whole environment can be started with a single command:
-```
+```ts wrap
 pnpm localenv:compose up
 ```
 
