@@ -67,7 +67,7 @@ Familiarity with these frameworks will be valuable in understanding how Rafiki w
 
 ### The Rafiki Backend
 
-As mentioned before, the Rafiki `backend` manages Open Payments resources. These resources are managed by services attached to an inversion-of-control (IoC) container via dependency injection with AdonisJS, as also mentioned previously. To see this in action, the [`/src/index.ts`](https://github.com/interledger/rafiki/blob/main/packages/backend/src/index.ts) is the best place to look. Take [this example](https://github.com/interledger/rafiki/blob/main/packages/backend/src/index.ts) of how the service for handling incoming payment routes gets injected into the IoC container:
+As mentioned before, the Rafiki `backend` manages Open Payments resources. These resources are managed by services attached to an inversion-of-control (IoC) container via dependency injection with AdonisJS, as also mentioned previously. To see this in action, the [`/src/index.ts`](https://github.com/interledger/rafiki/blob/main/packages/backend/src/index.ts) is the best place to look. Take this example of how the service for handling incoming payment routes gets injected into the IoC container:
 
 ```ts wrap
 import { Ioc, IocContract } from '@adonisjs/fold'
@@ -205,7 +205,7 @@ With this environment live, the Admin GraphQL Endpoints can be demoed using [Bru
 To help provide an idea of what integrating with Rafiki would be like, the local Docker environment also starts up two [Mock Accout Servicing Entities (Mock ASEs)](https://github.com/interledger/rafiki/tree/main/localenv/mock-account-servicing-entity) to represent integrators of Rafiki.
 These Mock ASEs have [pages that display information for individual accounts](https://github.com/interledger/rafiki/blob/main/localenv/mock-account-servicing-entity/app/routes/accounts.%24accountId.tsx) on their respective Rafiki instances. Crucially, they each also host [pages that collect authorization from account owners](https://github.com/interledger/rafiki/blob/main/localenv/mock-account-servicing-entity/app/routes/consent-screen.tsx) for payments made using grants from the `auth` server.
 
-<LargeImg src="/developers/img/blog/2024-09-23/mock-ase-consent-screen.png" alt="A screenshot of the Mock ASE's consent screen" />
+![A screenshot of the Mock ASE's consent screen](/developers/img/blog/2024-09-23/mock-ase-consent-screen.png)
 
 The flow for creating an outgoing payment can also be demoed with a combination of Bruno API calls and the Mock ASE consent screen.
 
