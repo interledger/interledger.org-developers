@@ -1,7 +1,7 @@
 ---
 layout: ../../layouts/BlogLayout.astro
-title: "Architecture Breakdown of Rafiki (Pending Title)"
-description: ''
+title: "Breaking Down Rafiki: What Makes Our Friend Tick"
+description: 'A low-level introduction to the software packages that comprise Rafiki.'
 date: 2024-09-23
 slug: rafiki-low-level-intro
 authors: [Nathan Lie]
@@ -25,7 +25,7 @@ This article assumes the reader has high-level knowledge of the following concep
 * [Open Payments](https://openpayments.dev/introduction/overview/)
 * [Interledger](https://interledger.org/developers/get-started/#how-does-interledger-work)
 
-This article also assumes that the reader already have high-level knowledge of [Rafiki](https://rafiki.dev/introduction/overview/) itself, and that they understand on that level how it accomplishes being an Interledger node and an Open Payments server.
+This article also assumes that its readers already have high-level knowledge of [Rafiki](https://rafiki.dev/introduction/overview/) itself, and that they understand on that level how it accomplishes being an Interledger node and an Open Payments server.
 
 ## Components
 
@@ -33,8 +33,8 @@ This article also assumes that the reader already have high-level knowledge of [
 
 Rafiki is comprised primarily of three packages:
 
-* A [`backend`](https://github.com/interledger/rafiki/tree/main/packages/backend) package that extends an API for managing Open Payments resources like Incoming or Outgoing Payments, an Admin API, and an API from the Interledger connector to . 
-* An [`auth`](https://github.com/interledger/rafiki/tree/main/packages/auth) package that provide third parties with a method of acquiring authorization to manage Open Payments resources on the Rafiki instance's associated `backend` package.
+* A [`backend`](https://github.com/interledger/rafiki/tree/main/packages/backend) package that extends an API for managing Open Payments resources like Incoming or Outgoing Payments, an Admin API, and an API from the Interledger connector to accept ILP packets. 
+* An [`auth`](https://github.com/interledger/rafiki/tree/main/packages/auth) package that provide third parties with a method of acquiring authorization to manage Open Payments resources on the Rafiki instance's associated `backend` package. It also extends an Admin API as well.
 * A [`frontend`](https://github.com/interledger/rafiki/tree/main/packages/frontend) that serves as an Admin-level UI for that Rafiki instance. It allows the manager of that Rafiki instance to directly manage items such as other peers on the Interledger network or what currencies it supports.
 
 Rafiki also maintains a few other utility packages:
@@ -47,7 +47,7 @@ All of these packages are managed together as a monorepo using [pnpm](https://pn
 
 ### The `backend` and `auth` stacks
 
-Both the `backend` and `auth` packages are largely built in the same way. They both leverage the same two Node.js frameworks:
+Both the `backend` and `auth` packages are largely built in the same way. They both leverage the same three Node.js frameworks:
 
 * [KoaJS](https://koajs.com/)
 * [AdonisJS](https://docs.adonisjs.com/guides/preface/introduction)
@@ -61,7 +61,7 @@ KnexJS is an ORM that manages calls made to Rafiki's Postgres database.
 
 Additionally, both packages extend a [GraphQL API](https://github.com/interledger/rafiki/blob/main/packages/backend/src/graphql/schema.graphql) that serves as an Admin API.
 
-Finally, [ObjectionJS](https://vincit.github.io/objection.js/) is used as an ORM to perform database operations.
+Finally, [ObjectionJS](https://vincit.github.io/objection.js/) is used as an ORM to perform database operations. It leverages the query building syntax of KnexJS to express its database operations.
 
 Familiarity with these frameworks will be valuable in understanding how Rafiki works, and with understanding the rest of this post.
 
@@ -129,7 +129,7 @@ In this mounting of the `POST /incoming-payments` route, all of the middleware a
 
 Finally, the `backend` also launches a GraphQL server that extends an API defined by [this schema](https://github.com/interledger/rafiki/blob/main/packages/backend/src/graphql/schema.graphql).
 
-In order fulfill the payments described in Open Payments resources and maintain peering relationships, Rafiki runs an instance of an Interledger Connector, acting as its node on the Interledger network.
+In order fulfill the payments described in Open Payments resources and maintain peering relationships, Rafiki runs an instance of an Interledger Connector, acting as its node on the Interledger network. More on this in a future blog post.
 
 ### The Rafiki Authorization Server
 
@@ -193,7 +193,7 @@ Pages on the frontend acquire data to populate the view and send data in request
 
 ## Seeing Rafiki In Action
 
-If Docker is installed, the whole environment can be started with a single command:
+If Docker is installed, the whole environment can be started locally with a single command:
 ```ts wrap
 pnpm localenv:compose up
 ```
