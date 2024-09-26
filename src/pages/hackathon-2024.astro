@@ -1,0 +1,58 @@
+---
+import LanderLayout from '../layouts/LanderLayout.astro';
+import Section from '../components/pages/Section.astro';
+---
+
+<LanderLayout title="Interledger Hackathon 2024" gradient='option2'>
+	<main>
+		<Section class="hero">
+			<header>
+				<div class="logos">
+					<img src="/developers/img/lander/logo-makedev.svg" alt="make.dev" />
+					<img src="/developers/img/lander/logo-foundation.svg" alt="Interledger Foundation" />
+				</div>
+				<h1>Interledger Hackathon 2024</h1>
+			</header>
+		</Section>
+
+		<div class="content">
+	
+		</div>
+	</main>
+</LanderLayout>
+
+<style>
+	.hero {
+		text-align: center;
+
+	}
+
+	.logos {
+		display: flex;
+		gap: var(--space-xl);
+		align-items: center;
+		justify-content: center;
+		margin-block-end: var(--space-l);
+	}
+
+	.logos img {
+		max-width: 15rem;
+
+	}
+
+	h1 {
+		line-height: 1.1;
+	}
+
+	.padding--large {
+		padding-block: var(--space-3xl);
+	}
+
+	h2, h3 {
+		margin-block-end: var(--space-s);
+	}
+	
+	p, .content ul, ol {
+		margin-block-end: var(--space-xs);
+	}
+</style>
