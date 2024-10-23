@@ -28,7 +28,48 @@ Although these APIs should not be exposed to the wider internet in a Rafiki depl
 The assessment outlined a few recommendations against common GraphQL attacks, one of which was the disabling of the introspection query in production. Introspection can provide access into the whole structure of a GraphQL schema (types, queries, mutations, deprecated fields) which is useful during development, but can provide a lot of knowledge to bad actors looking to exploit the API. Based on the recommendation, we turned off introspection in production.
 
 ### Preventing Denial of Service GraphQL Attacks
-Due to the structure of GraphQL APIs, it is sometimes not possible to avoid circular relationships between the models. As a result, bad actors can create requests containing circular queries, causing nested fields to be resolved recursively. Without proper handling, this can cause the server to grind to a halt trying to process these kinds of requests. The recommendation from the audit was to limit the depth of valid queries, such that no requests past a certain level of nesting can be resolved. We ended up [using](https://github.com/interledger/rafiki/pull/2537) a library called `@escape.tech/graphql-armor` to achieve this restriction.
+Due to the structure of GraphQL APIs, it is sometimes not possible to avoid circular relationships between the models. As a result, bad actors can create requests containing circular queries, causing nested fields to be resolved recursively:
+```gql
+query {
+  __schema {
+    types {
+      name
+      fields {
+        name
+        type {
+          name
+          fields {
+            name
+            type {
+              name
+              ...
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+Without proper handling, this can cause the server to grind to a halt trying to process these kinds of requests. The recommendation from the audit was to limit the depth of valid queries, such that no requests past a certain level of nesting can be resolved.
+
+In addition, there is a threat of field duplication attacks in GraphQL APIs: an attacker tries to overload the API by excessively requesting fields many times over in a single query. Even though standard GraphQL implementations end up correctly calling the underlying resolver (handler) only once per field, the GraphQL parser needs to do a lot of work to actually process the request, potentially leading to a denial of service (DoS).
+
+```gql
+query GetAsset($id: String!) {
+  asset(id: $id) {
+    id
+    code
+    scale
+    liquidity
+    liquidity
+    liquidity
+    ...
+  }
+}
+```
+This can be prevented by limiting queries that go above a certain complexity threshold, or by limiting the number of "tokens" (such as fields) allowed in a request. 
+We ended up [using](https://github.com/interledger/rafiki/pull/2537) a library called [`@escape.tech/graphql-armor`](https://escape.tech/graphql-armor/docs/getting-started/) to set different kinds of constraints to protect us from these kinds of attacks.
 
 ## Admin UI (frontend package)
 As part of the Rafiki software stack, we also publish a frontend package. This is a Remix application that enables managing a Rafiki instance using a web-interface. There are few common vulnerabilities that are common across web applications. One of them is clickjacking: a bad actor embeds a legitimate site in an iframe, and then uses several techniques to trick users into entering information meant for the original site in order to gather (or "highjack") clicks and keystrokes ultimately performing unintended actions on behalf of the user, such as submitting forms, making transactions, or altering account settings. In order to prevent this, the testers recommended adding an `X-Frame-Options` header in the responses from the web application. In the `X-Frame-Options` header, we now return the value of `SAMEORIGIN`, which allows framing only by pages with the same domain as in the response itself, preventing bad actors from framing the Rafiki Admin UI on malicious sites.
