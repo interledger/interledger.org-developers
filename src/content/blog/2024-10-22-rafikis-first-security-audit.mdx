@@ -2,7 +2,7 @@
 layout: ../../layouts/BlogLayout.astro
 title: "Rafiki's First Security Audit"
 description: "Takeaways from Rafiki's 2023 security audit"
-date: 2024-10-22
+date: 2024-10-23
 slug: rafikis-first-security-audit
 authors: [Max Kurapov]
 author_urls: [https://www.linkedin.com/in/mkurapov]
@@ -12,9 +12,7 @@ tags:
   - audit
 ---
 
-At the beginning of the year, we were in contact with a security and penetration testing company to do an audit of Rafiki. Even though the software is still in its early stages, it is essential to gather feedback early to build a strong foundation for the software's security. The primary goals of the assessment were to evaluate several Rafiki components: the GraphQL Admin APIs, the frontend Admin UI component, as well as our underlying ILPv4 protocol.
-
-The assessment was done using Rafiki’s local playground, based on the Open Source Security Testing Methodology Manual (OSSTMM) and Open Source Web Application Security Project (OWASP) methodologies. Given all of the source code for Rafiki and the local playground is readily available, this was deemed as a “crystal-box” test, meaning all of the source code, endpoints, architecture, etc. was known in-advance to the testers. 
+At the beginning of the year, we were in contact with a security and penetration testing company to do an audit of Rafiki. Even though the software is still in its early stages, it is essential to gather feedback early to build a strong foundation for the software's security. The primary goals of the assessment were to evaluate several Rafiki components: the GraphQL Admin APIs, the frontend Admin UI component, as well as our underlying [ILPv4 protocol](https://interledger.org/developers/get-started/). The assessment was done using Rafiki’s local playground, based on the [Open Source Security Testing Methodology Manual (OSSTMM)](https://www.isecom.org/research.html) and [Open Source Web Application Security Project (OWASP)](https://owasp.org/) methodologies. 
 
 Here are some of the takeaways from the audit:
 
@@ -22,7 +20,7 @@ Here are some of the takeaways from the audit:
 ### HMAC signing
 While the assessment mentioned adding a security mechanism to our GraphQL Admin APIs in both the backend and auth packages as part of the report, this was a known priority even before the audit.
 
-Although these APIs should not be exposed to the wider internet in a Rafiki deployment, we want to provide our Account Servicing Entities (ASEs) running the software with as many security safeguards as possible. Given that the typical usage of the Admin APIs is through service-to-service requests, we chose to go with a simple and effective solution similar to what we had already integrated for our webhooks: adding HMAC signature support. This is done by having a shared key between the Rafiki services, and the integrator’s service. When calling the Admin API, the integrator generates a signature of the payload (containing a timestamp and request body) using HMAC with sha256 algorithm and the secret key. Upon receiving the request in the Admin API, backend and auth verifies this signature to validate the request’s authenticity & integrity.
+Although these APIs should not be exposed to the wider internet in a Rafiki deployment, we want to provide our [Account Servicing Entities (ASEs)](https://rafiki.dev/overview/overview/#more-about-account-servicing-entities) running the software with as many security safeguards as possible. Given that the typical usage of the Admin APIs is through service-to-service requests, we chose to go with a simple and effective solution similar to what we had already integrated for our webhooks: adding HMAC signature support. This is done by having a shared key between the Rafiki services, and the integrator’s service. When calling the Admin API, the integrator generates a signature of the payload (containing a timestamp and request body) using HMAC with sha256 algorithm and the secret key. Upon receiving the request in the Admin API, backend and auth verifies this signature to validate the request’s authenticity & integrity.
 
 ### Disabling GraphQL Introspection Query
 The assessment outlined a few recommendations against common GraphQL attacks, one of which was the disabling of the introspection query in production. Introspection can provide access into the whole structure of a GraphQL schema (types, queries, mutations, deprecated fields) which is useful during development, but can provide a lot of knowledge to bad actors looking to exploit the API. Based on the recommendation, we turned off introspection in production.
@@ -78,7 +76,7 @@ As part of the Rafiki software stack, we also publish a frontend package. This i
 Given we use a lot of different published libraries in Rafiki, we are vulnerable to security exploits found in them, and of course, their dependencies. During the assessment, the testers used code scanning tool Snyk to find several vulnerable dependencies in the Rafiki repository. Even though we have renovate-bot to automatically open PRs to manage any outdated libraries, it wasn’t directly incorporated into our continuous integration (CI) pipeline. After the assessment, we added a few code scanners into our CI workflow: Trivy and Grype. Both of these tools have large databases of known exploits for libraries (similar to Snyk), and with each commit into a PR, Trivy and Gripe scan the build (and potentially, the to-be-published Docker image) for high-risk vulnerabilities and indicates it in the PR. This allows us to be more proactive in fixing these issues, instead of relying on less regular merges of dependency updates with renovate-bot.
 
 ## ILP & STREAM
-Rafiki runs an ILP connector (using [STREAM](https://interledger.org/developers/rfcs/stream-protocol/) as the transport protocol) as part of its software. This is how two peered Rafiki instances interact and make payments actually work between one another.
+Rafiki runs an ILP connector (using [STREAM](https://interledger.org/developers/rfcs/stream-protocol/) as the transport protocol) as part of its software. This is how two peered Rafiki instances interact and make payments between one another.
 One of the questions we wanted to ask the auditors during the assessment was, _"if you intercept an ILP packet, could you get any useful information out of it?"_. Using the local playground, we worked together with the auditors to capture ILP (STREAM) packets between the ILP connectors of two Rafiki instances. In the local playground, these requests are done over HTTP. Even though in a production environment the connector-to-connector communication would be done over HTTPS, it gave us visibility into what the requests & responses look like over an insecure protocol. The auditors observed that the ILP STREAM packets were properly encrypted in transit:
 
 ![Inspected ILP Packet](/developers/img/blog/2024-10-22/packet.png)
@@ -87,6 +85,6 @@ The STREAM transport protocol relies on exchanging a symmetric secret to encrypt
 
 <br/>
 These were some of the findings we had as part of Rafiki's first security audit.
-Going forward, we will be doing annual reviews of this nature within Rafiki, as well as the ecosystem as a whole. It is always helpful to get an experienced, outside perspective about how we can continue improving - particularly when it comes to a vital aspect of building software: security.
+Going forward, we will be doing annual reviews of this nature within Rafiki, as well as the ecosystem as a whole. It is always helpful to get an experienced, outside perspective about how we can continue improving - particularly when it comes to vital aspects of building software, such as security.
 
 
