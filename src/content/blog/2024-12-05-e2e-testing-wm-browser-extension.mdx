@@ -90,7 +90,7 @@ While we can trigger some of the background API requests and test the extensionâ
 
 In case you havenâ€™t seen the extension yet, this is what it looks like:
 
-{/* TODO: add images here */}
+![Web Monetization extension's popup](/developers/img/blog/2024-12-05/extension-popup.png)
 
 Playwright doesn't have a magic button to open and poke around in the popup just yet. We can try using `chrome.action.openPopup()`, but that's a bit tricky. It needs user input in Firefox, and in Chrome, it's picky about which window it shows up in (i.e. only in the currently focused one). Even if we manage to open it, getting to its content is still a puzzle.
 
