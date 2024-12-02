@@ -356,6 +356,7 @@ export const test = base.extend<TestScope, WorkerScope>({
 ### Saving the wallet’s connected state
 
 When a user connects their wallet with the extension, we receive their permission to send their funds in the form of tokens. With Open Payments, we use [GNAP grants & tokens](https://interledger.org/developers/blog/open-payments-cinderella-story/) to facilitate that. GNAP is a next-generation protocol for delegating access to APIs securely & flexibly; you can consider it a successor of OAuth.
+
 While testing, we're exploring ways to store these grants and tokens after the test wallet is connected. This would eliminate the need to reconnect the wallet before every single test. Imagine having to unlock your phone every time you wanted to open a new app – not ideal, right?
 
 ## Firefox?
@@ -372,14 +373,9 @@ Let's keep an eye on Playwright's development and hope for future updates that m
 
 We'll level up our testing game by diving deeper into browser-specific features like Edge's split view and adding more tests to cover every corner case. We'll push the extension to its limits, simulating different user interactions and trying to break it, to build a rock-solid extension that provides a great user experience.
 
-Want to dive deeper into our testing strategy? Check out our [GitHub repo for the Web Monetization extension](https://github.com/interledger/web-monetization-extension). We're always open to feedback and contributions, so feel free to submit a pull request, join our [community slack](https://communityinviter.com/apps/interledger/interledger-working-groups-slack), or participate in the next [community call](https://docs.google.com/document/u/1/d/1T_Q_eRZtL8GluJR9rVADd7fvkB8mPluMk-d96LM4vlg/edit#heading=h.ybdhwl6k5886).!
-
-
-{/* TODO: update footer */}
+Want to dive deeper into our testing strategy? Check out our [GitHub repo for the Web Monetization extension](https://github.com/interledger/web-monetization-extension). We're always open to feedback and contributions, so feel free to submit a pull request!
 
 ---
-
-If you want to stay updated with all open opportunities and news from the Interledger Foundation, you can subscribe to our [newsletter](https://interledger.org/subscribe).
 
 As we are open source, you can easily check our work on [GitHub](https://github.com/interledger/). If the work mentioned here inspired you, we welcome your contributions. You can join our [community slack](https://communityinviter.com/apps/interledger/interledger-working-groups-slack) or participate in the next [community call](https://docs.google.com/document/u/1/d/1T_Q_eRZtL8GluJR9rVADd7fvkB8mPluMk-d96LM4vlg/edit#heading=h.ybdhwl6k5886), which takes place each second Wednesday of the month.
 
