@@ -10,11 +10,11 @@ tags:
   - Web Monetization
 ---
 
-A sharp test suite anticipates problems, catching them before they surprise users. As developers, we often get a bit too familiar with our own code. With our inevitably biased views, we often end up overlooking issues from outlier scenarios, or usability considerations, all the way to the “oops” bugs. End-to-end tests help us view the product more objectively, from a user's perspective. Automating these tests saves time and ensures consistent quality throughout the development process.
+A sharp test suite anticipates problems, catching them before they surprise users. As developers, we often get a bit too familiar with our own code. With our inevitably biased views, we often end up overlooking issues from outlier scenarios, or usability considerations, all the way to the "oops" bugs. End-to-end tests help us view the product more objectively, from a user's perspective. Automating these tests saves time and ensures consistent quality throughout the development process.
 
-However, automated end-to-end testing of a browser extension is a bit… complicated. But don't worry, we’re up for this challenge! I'll share with you how we do end-to-end testing of the [Web Monetization browser extension](https://github.com/interledger/web-monetization-extension).
+However, automated end-to-end testing of a browser extension is a bit… complicated. But don't worry, we're up for this challenge! I'll share with you how we do end-to-end testing of the [Web Monetization browser extension](https://github.com/interledger/web-monetization-extension).
 
-For context, [Web Monetization](https://webmonetization.org) (WM) is a new way to support websites without ads or subscriptions. You, as the sender, specify your [Open Payments wallet address](https://openpayments.dev/introduction/wallet-addresses/) (think of it like an email address to send or receive money on the web), and the [websites specify theirs](https://webmonetization.org/docs/guides/monetize-page/). As you browse the web, your browser sends small payments to the websites. Sounds cool, right? It’s promising, but it lacks native support in browsers today. We created a browser extension to bridge this gap, enabling you to support your favorite creators today.
+For context, [Web Monetization](https://webmonetization.org) (WM) is a new way to support websites without ads or subscriptions. You, as the sender, specify your [Open Payments wallet address](https://openpayments.dev/introduction/wallet-addresses/) (think of it like an email address to send or receive money on the web), and the [websites specify theirs](https://webmonetization.org/docs/guides/monetize-page/). As you browse the web, your browser sends small payments to the websites. Sounds cool, right? It's promising, but it lacks native support in browsers today. We created a browser extension to bridge this gap, enabling you to support your favorite creators today.
 
 ![Playwright UI while testing the Wbe Monetization browser extension](/developers/img/blog/2024-12-05/playwright.png)
 
@@ -24,7 +24,7 @@ While there are plenty of tools to facilitate end-to-end (E2E) testing for web a
 
 We use [Playwright](https://playwright.dev/) to run E2E tests. It has [some pointers](https://playwright.dev/docs/chrome-extensions) to get us started.
 
-Right now, Playwright only plays nicely with Chromium-based browsers, so we run our tests in Chrome and Edge. Firefox support is nearly there! We'll dive into the Chromium stuff first, then I’ll give a quick status update on Firefox. The code snippets are written in TypeScript, so it's helpful to have a basic understanding of its syntax.
+Right now, Playwright only plays nicely with Chromium-based browsers, so we run our tests in Chrome and Edge. Firefox support is nearly there! We'll dive into the Chromium stuff first, then I'll give a quick status update on Firefox. The code snippets are written in TypeScript, so it's helpful to have a basic understanding of its syntax.
 
 ## Loading the extension
 
@@ -88,9 +88,9 @@ We can use this trick to mess with all sorts of extension APIs - opening and clo
 
 ## Accessing the popup
 
-While we can trigger some of the background API requests and test the extension’s behavior, there's one missing piece: the user interface, the nifty [default popup](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/action) that the users will actually interact with. Without testing how users interact with it, we're just checking the engine, not taking the whole car for a spin – not exactly end-to-end testing, right?
+While we can trigger some of the background API requests and test the extension's behavior, there's one missing piece: the user interface, the nifty [default popup](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/action) that the users will actually interact with. Without testing how users interact with it, we're just checking the engine, not taking the whole car for a spin – not exactly end-to-end testing, right?
 
-In case you haven’t seen the extension yet, this is what it looks like:
+In case you haven't seen the extension yet, this is what it looks like:
 
 ![Web Monetization extension's popup](/developers/img/blog/2024-12-05/extension-popup.png)
 
@@ -355,7 +355,7 @@ export const test = base.extend<TestScope, WorkerScope>({
 });
 ```
 
-### Saving the wallet’s connected state
+### Saving the wallet's connected state
 
 When a user connects their wallet with the extension, we receive their permission to send their funds in the form of tokens. With Open Payments, we use [GNAP grants & tokens](https://interledger.org/developers/blog/open-payments-cinderella-story/) to facilitate that. GNAP is a next-generation protocol for delegating access to APIs securely & flexibly; you can consider it a successor of OAuth.
 
