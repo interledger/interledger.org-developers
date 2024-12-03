@@ -2,7 +2,7 @@
 layout: ../../layouts/BlogLayout.astro
 title: "End-to-end testing the Web Monetization browser extension"
 description: "E2E testing browser extensions? It's tricky, but we've got it covered."
-date: 2024-12-05
+date: 2024-12-03
 slug: e2e-testing-wm-browser-extension
 authors: [Sid Vishnoi]
 author_urls: [https://sidvishnoi.com?ref=ilf_engg_blog]
@@ -16,7 +16,7 @@ However, automated end-to-end testing of a browser extension is a bit… complic
 
 For context, [Web Monetization](https://webmonetization.org) (WM) is a new way to support websites without ads or subscriptions. You, as the sender, specify your [Open Payments wallet address](https://openpayments.dev/introduction/wallet-addresses/) (think of it like an email address to send or receive money on the web), and the [websites specify theirs](https://webmonetization.org/docs/guides/monetize-page/). As you browse the web, your browser sends small payments to the websites. Sounds cool, right? It's promising, but it lacks native support in browsers today. We created a browser extension to bridge this gap, enabling you to support your favorite creators today.
 
-![Playwright UI while testing the Web Monetization browser extension](/developers/img/blog/2024-12-05/playwright.png)
+![Playwright UI while testing the Web Monetization browser extension](/developers/img/blog/2024-12-03/playwright.png)
 
 ## How does it work?
 
@@ -92,7 +92,7 @@ While we can trigger some of the background API requests and test the extension'
 
 In case you haven't seen the extension yet, this is what it looks like:
 
-![Web Monetization extension's popup](/developers/img/blog/2024-12-05/extension-popup.png)
+![Web Monetization extension's popup](/developers/img/blog/2024-12-03/extension-popup.png)
 
 Playwright doesn't have a magic button to open and poke around in the popup just yet. We can try using `chrome.action.openPopup()`, but that's a bit tricky. It needs user input in Firefox, and in Chrome, it's picky about which window it shows up in (i.e. only in the currently focused one). Even if we manage to open it, getting to its content is still a puzzle.
 
