@@ -338,7 +338,7 @@ setup("authenticate", async ({ page }) => {
 // tests/e2e/fixtures/base.ts
 export const test = base.extend<TestScope, WorkerScope>({
   persistentContext: [
-    async ({browserName}, use, workerInfo) => {
+    async ({ browserName }, use, workerInfo) => {
       const context = await loadExtension(browserName);
 
       if (workerInfo.project.name !== "setup") {
