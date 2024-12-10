@@ -36,6 +36,15 @@ export default defineConfig({
             defer: true,
           },
         },
+        {
+          tag: 'script',
+          attrs: {
+            defer: true,
+            'data-website-id': '50d81dd1-bd02-4f82-8a55-34a09ccbbbd9',
+            src: 'https://ilf-site-analytics.netlify.app/script.js',
+            'data-domains': 'interledger.org'
+          }
+        }
       ],
       components: {
         Header: "./src/components/Header.astro",
