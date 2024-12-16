@@ -1,11 +1,12 @@
 ---
-layout: ../../layouts/BlogLayout.astro
 title: "The Telemetry Tale: A Journey into the Metrics of Interledger"
 description: When simple metrics are paired with complex cloud solutions and important privacy considerations, the implementation process becomes significantly more complicated.
 date: 2024-04-10
 slug: the-telemetry-tale
-authors: [Sarah Jones]
-author_urls: [https://www.linkedin.com/in/sarah-jones-ba6bb6b9]
+authors:
+  - Sarah Jones
+author_urls:
+  - https://www.linkedin.com/in/sarah-jones-ba6bb6b9
 tags:
   - Interledger
   - Telemetry
@@ -146,6 +147,6 @@ A lot of what we’ve covered in this article could be construed as scope creep.
 
 That said, we could have benefited from more time upfront for understanding and planning instead of simply diving straight in. Perhaps, our work week eagerness may have led us to jump in too quickly. It is with a great sense of accomplishment that we now have telemetry running in our development environment where we are seeing how it holds up against our test data and hope it will be used in a production environment shortly.
 
-We look forward to having a real handle on the pulse of the ILP network soon. Of course, this journey is far from its conclusion. Telemetry, by its nature, is an ever-evolving domain, requiring adaptation to meet the network's growing needs and challenges. Having laid a solid foundation, future developments should be smoother. 
+We look forward to having a real handle on the pulse of the ILP network soon. Of course, this journey is far from its conclusion. Telemetry, by its nature, is an ever-evolving domain, requiring adaptation to meet the network's growing needs and challenges. Having laid a solid foundation, future developments should be smoother.
 
 As we reflect on our path thus far, the question is: "Given our current knowledge and experiences, would we approach this project differently?" In hindsight, we would have used self-hosted Prometheus and Grafana instances from the start and avoided many of the problems we faced. This is a goal which remains on our roadmap, in order to provide us with the flexibility we seek. Some of the back and forth on our decision-making would have been smoother had we spent some more time in discussions at the start about what privacy factors to keep in mind and how public our results were intended to be.

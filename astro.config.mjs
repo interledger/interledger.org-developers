@@ -2,6 +2,8 @@ import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import starlightLinksValidator from "starlight-links-validator";
 
+import mdx from "@astrojs/mdx";
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://interledger.org",
@@ -37,18 +39,18 @@ export default defineConfig({
           },
         },
         {
-          tag: 'script',
+          tag: "script",
           attrs: {
             defer: true,
-            'data-website-id': '50d81dd1-bd02-4f82-8a55-34a09ccbbbd9',
-            src: 'https://ilf-site-analytics.netlify.app/script.js',
-            'data-domains': 'interledger.org'
-          }
-        }
+            "data-website-id": "50d81dd1-bd02-4f82-8a55-34a09ccbbbd9",
+            src: "https://ilf-site-analytics.netlify.app/script.js",
+            "data-domains": "interledger.org",
+          },
+        },
       ],
       components: {
         Header: "./src/components/Header.astro",
-        PageSidebar: './src/components/PageSidebar.astro'
+        PageSidebar: "./src/components/PageSidebar.astro",
       },
       social: {
         github: "https://github.com/interledger",
@@ -132,6 +134,7 @@ export default defineConfig({
         },
       },
     }),
+    mdx(),
   ],
   server: {
     port: 1103,
