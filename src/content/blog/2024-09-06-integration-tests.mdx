@@ -1,18 +1,19 @@
 ---
-layout: ../../layouts/BlogLayout.astro
 title: "Leveling Up Rafiki Testing: Shifting from Manual to Automated"
 description: "How we automated our manual payment flow tests."
 date: 2024-09-06
 slug: integration-tests
-authors: [Blair Currey]
-author_urls: [https://www.linkedin.com/in/blair-currey/]
+authors:
+  - Blair Currey
+author_urls:
+  - https://www.linkedin.com/in/blair-currey/
 tags:
   - Rafiki
   - Open Payments
   - Testing
 ---
 
-import LargeImg from "/src/components/pages/LargeImg.astro";
+import LargeImg from "/src/components/blog/LargeImg.astro";
 
 [Rafiki](https://rafiki.dev/) is open source software that allows an [Account Servicing Entity](https://rafiki.dev/overview/overview#more-about-account-servicing-entities) to enable Interledger functionality on its users’ accounts, so testing is really important to us. Given the critical nature of handling payments, it's essential that our tests not only validate correctness but also build confidence for our integrators.
 
@@ -118,10 +119,7 @@ Running tests from the host machine against services in Docker posed a problem w
 
 This sequence diagram illustrates how a request from the host machine resolves using the mapped hostnames.
 
-<LargeImg
-  src="/developers/img/blog/2024-09-06/url-problem.png"
-  alt="URL Problem Sequence Diagram"
-/>
+<LargeImg src="/developers/img/blog/2024-09-06/url-problem.png" alt="URL Problem Sequence Diagram" />
 
 ## Conclusion
 

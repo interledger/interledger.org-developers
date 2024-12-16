@@ -2,6 +2,7 @@
 import type { Page } from "astro";
 import { createExcerpt } from '../../utils/create-excerpt';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Pagination from '../../components/blog/Pagination.astro';
 import { getCollection } from 'astro:content';
 
 type Props = {
@@ -9,8 +10,8 @@ type Props = {
 };
 
 export async function getStaticPaths({ paginate }: any) {
-  const blogEntries = (await getCollection("blog")).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-  return paginate(blogEntries, { pageSize: 12 });
+  const blogEntries = (await getCollection("blog")).sort((a:any, b:any) => b.data.date.getTime() - a.data.date.getTime());
+  return paginate(blogEntries, { pageSize: 10 });
 }
 
 const { page } = Astro.props;
@@ -41,12 +42,19 @@ const { page } = Astro.props;
 							<time class="postlist-date" datetime={blogPostEntry.data.date.toISOString()}>
 								{blogPostEntry.data.date.toDateString()}
 							</time>
-							<a href={`/developers/blog/${blogPostEntry.slug}`} class="postlist-link heading--6">{blogPostEntry.data.title}</a>
+							<a href={`/developers/blog/${blogPostEntry.id}`} class="postlist-link heading--6">{blogPostEntry.data.title}</a>
 							<p>{blogPostEntry.data.description ? blogPostEntry.data.description : excerpt}</p>
 						</li>
 					)}
 				)}
 			</ol>
+			<Pagination length={page.lastPage}
+				currentPage={page.currentPage} 
+				firstUrl={page.url.first} 
+				prevUrl={page.url.prev}
+				nextUrl={page.url.next}
+				lastUrl={page.url.last}
+			/>
 		</div>
 	</main>
 </PageLayout>

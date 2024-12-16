@@ -1,11 +1,12 @@
 ---
-layout: ../../layouts/BlogLayout.astro
 title: "End-to-end testing the Web Monetization browser extension"
 description: "E2E testing browser extensions? It's tricky, but we've got it covered."
 date: 2024-12-03
 slug: e2e-testing-wm-browser-extension
-authors: [Sid Vishnoi]
-author_urls: [https://sidvishnoi.com?ref=ilf_engg_blog]
+authors:
+  - Sid Vishnoi
+author_urls:
+  - https://sidvishnoi.com?ref=ilf_engg_blog
 tags:
   - Web Monetization
 ---
@@ -36,11 +37,7 @@ We can launch the browser with our extension loaded using the `--load-extension=
 function loadExtension(pathToExtension: string): Promise<BrowserContext> {
   const context = await chromium.launchPersistentContext("", {
     headless: true,
-    args: [
-      `--headless=true`,
-      `--disable-extensions-except=${pathToExtension}`,
-      `--load-extension=${pathToExtension}`,
-    ],
+    args: [`--headless=true`, `--disable-extensions-except=${pathToExtension}`, `--load-extension=${pathToExtension}`],
   });
   return context;
 }
@@ -306,7 +303,7 @@ context.on("requestfinished", async function intercept(req) {
   if (!req.serviceWorker()) return; // we only care about service worker requests here
 
   if (isTheRequestWeAreAfter(req)) {
-    const json = await req.response().then(res => res.json());
+    const json = await req.response().then((res) => res.json());
     // ... use response body
 
     context.off("requestfinished", intercept); // we're responsible citizens
@@ -376,9 +373,3 @@ Let's keep an eye on Playwright's development and hope for future updates that m
 We'll level up our testing game by diving deeper into browser-specific features like Edge's split view and adding more tests to cover every corner case. We'll push the extension to its limits, simulating different user interactions and trying to break it, to build a rock-solid extension that provides a great user experience.
 
 Want to dive deeper into our testing strategy? Check out our [GitHub repo for the Web Monetization extension](https://github.com/interledger/web-monetization-extension). We're always open to feedback and contributions, so feel free to submit a pull request!
-
----
-
-As we are open source, you can easily check our work on [GitHub](https://github.com/interledger/). If the work mentioned here inspired you, we welcome your contributions. You can join our [community slack](https://communityinviter.com/apps/interledger/interledger-working-groups-slack) or participate in the next [community call](https://docs.google.com/document/u/1/d/1T_Q_eRZtL8GluJR9rVADd7fvkB8mPluMk-d96LM4vlg/edit#heading=h.ybdhwl6k5886), which takes place each second Wednesday of the month.
-
-If you want to stay updated with all open opportunities and news from the Interledger Foundation, you can subscribe to our [newsletter](https://interledger.org/subscribe).

@@ -1,11 +1,12 @@
 ---
-layout: ../../layouts/BlogLayout.astro
 title: Thoughts on Scaling Interledger Connectors
 description: Streaming payments mean that Interledger connectors need to process huge volumes of Interledger packets, but the current reference implementation is hard to run at scale.
 date: 2019-01-23
 slug: thoughts-on-scaling-interledger-connectors
-authors: [Evan Schwartz]
-author_urls: [https://www.linkedin.com/in/evanmarkschwartz/]
+authors:
+  - Evan Schwartz
+author_urls:
+  - https://www.linkedin.com/in/evanmarkschwartz/
 external_url: https://medium.com/interledger-blog/thoughts-on-scaling-interledger-connectors-7e3cad0dab7f
 tags:
   - Interledger

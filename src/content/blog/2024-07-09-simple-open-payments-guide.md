@@ -1,11 +1,12 @@
 ---
-layout: ../../layouts/BlogLayout.astro
 title: "A Simple Guide to the Open Payments Standard"
 description: Learn how the Open Payments standard makes online payments easier and more accessible for everyone.
 date: 2024-07-09
 slug: simple-open-payments-guide
-authors: [Sarah Jones]
-author_urls: [https://www.linkedin.com/in/sarah-jones-ba6bb6b9]
+authors:
+  - Sarah Jones
+author_urls:
+  - https://www.linkedin.com/in/sarah-jones-ba6bb6b9
 tags:
   - Interledger
   - Open Payments
