@@ -24,3 +24,6 @@ pnpm-debug.log*
 bun.lockb
 pnpm-lock.yaml
 package-lock.json
+
+# webstorm
+.idea/
