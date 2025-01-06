@@ -18,7 +18,7 @@ tags:
   - TigerBeetle
 ---
 
-Rafiki is an open-source platform that enables Account Servicing Entities (ASEs) like banks and digital wallet providers to integrate Interledger Protocol (ILP) functionality into their systems.
+[Rafiki](https://rafiki.dev/) is an open-source platform that enables Account Servicing Entities (ASEs) like banks and digital wallet providers to integrate [Interledger Protocol](/developers/get-started) (ILP) functionality into their systems.
 
 A critical component of Rafiki’s architecture is its accounting database, which manages financial transactions and account balances. To enhance performance and reliability, Rafiki offers the option to use TigerBeetle, a specialized financial accounting database, as its accounting backend.
 
@@ -41,7 +41,7 @@ In Rafiki, the backend service is responsible for handling business logic and ex
 For the accounting database, Rafiki provides the option to use TigerBeetle instead of PostgreSQL.
 This setup allows Rafiki to leverage TigerBeetle’s high-performance transaction processing capabilities for managing account balances and financial transactions.
 
-It’s important to note that while TigerBeetle can be used for accounting purposes, Rafiki still requires a PostgreSQL instance for the authentication services and Open Payments resources.
+It’s important to note that while TigerBeetle can be used for accounting purposes, Rafiki still requires a PostgreSQL instance for the authentication services and [Open Payments](https://openpayments.dev/) resources.
 Therefore, both databases operate in tandem within Rafiki’s infrastructure.
 
 ## Double-Entry Accounting: The Backbone of Financial Systems
@@ -84,7 +84,7 @@ Thanks to double-entry accounting, both sides of the transaction are recorded in
 Double-entry accounting is more than a bookkeeping method, it is the foundation of trust and accuracy in financial systems. By integrating TigerBeetle, which seamlessly implements this principle, Rafiki ensures that its users have a robust, reliable, and high-performing platform to manage financial operations with precision and confidence.
 
 #### Detailed Example: Sending and Receiving Rafiki instances
-Here’s a practical illustration involving sending and receiving connectors within Rafiki, and how the underlying TigerBeetle accounts are affected. In this example, a sending Rafiki (where an outgoing payment is) sends ILP packets to a peer Rafiki over ILP, (paying into an incoming payment). The peering relationship is defined using USD for simplicity in this example.
+Here’s a practical illustration involving sending and receiving connectors within Rafiki, and how the underlying TigerBeetle accounts are affected. In this example, a sending Rafiki (where an [outgoing payment](https://openpayments.dev/resources/glossary/#outgoing-payment-resource) is) sends ILP packets to a peer Rafiki over ILP, (paying into an [incoming payment](https://openpayments.dev/resources/glossary/#incoming-payment-resource)). The peering relationship is defined using USD for simplicity in this example.
 
 This process happens **for each ILP packet**, which can occur at an extremely high frequency, especially during real-time payments. TigerBeetle’s high-performance architecture is critical here, as it ensures accurate and consistent accounting for these high transaction volumes while maintaining financial integrity.
 
