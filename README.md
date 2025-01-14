@@ -105,7 +105,7 @@ Finalizing:
 * When the draft is stable, create a pull request in the [interledger.org-developers](https://github.com/interledger/interledger.org-developers) GitHub repo.
 * Include all images used in the post in the PR.
 
-Working with Visuals## 
+### Working with Visuals 
 
 * If you need an illustration, submit a design request in advance to Madalina via the #design Slack channel using the design request form.
 * Before uploading images to GitHub, run them through an image optimizer such as [TinyPNG](https://tinypng.com/).
