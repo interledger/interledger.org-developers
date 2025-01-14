@@ -104,6 +104,7 @@ Finalizing:
 
 * When the draft is stable, create a pull request in the [interledger.org-developers](https://github.com/interledger/interledger.org-developers) GitHub repo.
 * Include all images used in the post in the PR.
+* No-one is expected to know the ins and outs of Astro (the framework that powers our site), so please tag Sarah as a reviewer to ensure everything Astro-related is in order.
 
 ### Working with Visuals 
 
@@ -113,6 +114,6 @@ Finalizing:
 
 ### Publishing Your Blog Post
 
-Remember: merging the pull request will publish the blog post immediately.
-Ensure the publishing date in the blog post metadata matches the intended release date.
-Coordinating a consistent pace: Check with Ioana to confirm the publishing date and keep a consistent posting schedule. Ioana will also handle social media promotion.
+* Remember: merging the pull request will publish the blog post immediately.
+* Ensure the publishing date in the blog post metadata matches the intended release date.
+* Check with Ioana to confirm the publishing date and keep a consistent posting schedule. Ioana will also handle social media promotion.
