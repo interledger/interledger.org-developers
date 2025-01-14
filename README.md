@@ -75,7 +75,7 @@ Thank You for Contributing! We appreciate your effort to write a blog post and s
 
 **Possible Content Framework:**
 
-If yopu're unsure how to structure your writing, you can use this as a guide.
+If you're unsure how to structure your writing, you can use this as a guide.
 
 * Introduction / main point
 * Context - Interledger’s perspective / stance / commitment on the topic being written [broader categories like privacy, metrics for growth, Digital Financial Inclusion etc.]
