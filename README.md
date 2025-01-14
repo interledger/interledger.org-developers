@@ -103,6 +103,7 @@ Initial Reviews:
 Finalizing:
 
 * When the draft is stable, create a pull request in the [interledger.org-developers](https://github.com/interledger/interledger.org-developers) GitHub repo.
+* Please add links where appropriate so people can easily click to learn more about the concepts you reference.
 * Include all images used in the post in the PR.
 * No-one is expected to know the ins and outs of Astro (the framework that powers our site), so please tag Sarah as a reviewer to ensure everything Astro-related is in order.
 
