@@ -59,3 +59,60 @@ You can substitute the `bun` commands with whatever package manager of your choi
 ### 👀 Want to learn more?
 
 Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+
+Thank You for Contributing! We appreciate your effort to write a blog post and share your expertise with the community!
+
+## Writing a blog post
+
+**Goal:** Educate, drive adoption, and grow strategic influence.
+
+**Typical Target Audience:**
+
+* Technically-inclined users interested in Interledger development.
+* Technically-inclined users interested in financial services technologies, innovations, or developments.
+* Users keen on topics like APIs, data analytics, metrics, analysis, and quantitative assessment for digital networks.
+* Users interested in privacy and related technologies.
+
+**Possible Content Framework:**
+
+If yopu're unsure how to structure your writing, you can use this as a guide.
+
+* Introduction / main point
+* Context - Interledger’s perspective / stance / commitment on the topic being written [broader categories like privacy, metrics for growth, Digital Financial Inclusion etc.]
+* The Challenge (or) The Problem
+* The Solution
+* The How / implementation
+* Roadmap - short-term / long-term
+* Note: A call to action (CTA) will be included automatically at the bottom of every post.
+
+Ideal Word Count: Between 1,000 and 2,500 words, with links to relevant documents/pages for a deeper understanding.
+
+### Getting Started
+
+Discuss Ideas: Before starting, share your blog post ideas with the tech team to ensure alignment and awareness.
+
+Copy the Template: Begin your draft using [this Google Doc template](https://docs.google.com/document/d/1L7vzsYORg9xmf72ljTdmyekpq2vJ7eQZ9atM2uAXgUM/edit?usp=sharing) to maintain a consistent format.
+
+Review Process## 
+
+Initial Reviews:
+
+* Once your draft is ready, request specific reviewers or ask for feedback on the #tech-team Slack channel.
+* Incorporate feedback and refine the blog post.
+
+Finalizing:
+
+* When the draft is stable, create a pull request in the [interledger.org-developers](https://github.com/interledger/interledger.org-developers) GitHub repo.
+* Include all images used in the post in the PR.
+
+Working with Visuals## 
+
+* If you need an illustration, submit a design request in advance to Madalina via the #design Slack channel using the design request form.
+* Before uploading images to GitHub, run them through an image optimizer such as [TinyPNG](https://tinypng.com/).
+* Ensure images are appropriately sized; feel free to ask Madalina or Sarah for assistance.
+
+### Publishing Your Blog Post
+
+Remember: merging the pull request will publish the blog post immediately.
+Ensure the publishing date in the blog post metadata matches the intended release date.
+Coordinating a consistent pace: Check with Ioana to confirm the publishing date and keep a consistent posting schedule. Ioana will also handle social media promotion.
