@@ -6,7 +6,7 @@ We appreciate your interest in contributing to Interledger and welcome contribut
 
 ## Contributing to Interledger
 
-If you are new to Interledger and are not sure where your skills can be applied, we hope that the following list can help you get started. And we welcome your questions and feedback in [our Slack channel](https://communityinviter.com/apps/interledger/interledger-working-groups-slack). Many of these projects also host community calls; you can find details in their respective READMEs.
+If you are new to Interledger and are not sure where your skills can be applied, we hope that the following list can help you get started. And we welcome your questions and feedback in [our Slack channel](https://communityinviter.com/apps/interledger/interledger-working-groups-slack). Many of these projects also host community calls; you can find details in their respective GitHub repository READMEs.
 
 If you have experience maintaining and contributing to **open-source projects**, we would love to have you get involved with any of the following projects.
 
