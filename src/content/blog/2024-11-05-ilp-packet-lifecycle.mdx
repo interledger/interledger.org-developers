@@ -1,0 +1,49 @@
+---
+layout: ../../layouts/BlogLayout.astro
+title: "The Lifecycle of an Interledger Packet"
+description: 'A look under the hood of how Rafiki orchestrates an Interledger payment.'
+date: 2024-11-05
+slug: ilp-packet-lifecycle
+authors: [Nathan Lie]
+author_urls: [https://www.linkedin.com/in/nathan-lie-138a73121]
+tags:
+  - Interledger
+---
+import LargeImg from '/src/components/pages/LargeImg.astro'
+
+## Introduction
+TODO: add link to summit keynote video on packetization
+The Interledger Summit just wrapped up recently, along with its celebrations of & discussions on open standards and financial inclusion. This year, the humble Interledger Protocol (ILP for short) packet took center stage as Stefan Thomas gave a keynote on how the Interledger Protocol met a number of design requirements by introducing packetization to the protocol.
+
+TODO: link to rafiki github
+Most current and prosective integrators of the Interledger protocol are leveraging the ILP packet in their use case through Rafiki, which provides an efficient way for those integrators to participate in a network using ILP.
+This abstraction is useful for those looking to easily leverage ILP's benefits, but with fresh intrigue around Interledger's transport method, it invites an interesting exercise - connecting the high-level orchestration that Rafiki performs to the atomic, low-level concept of the ILP packet.
+
+TODO: show how ilp packets are used in quoting as well as in fulfilling outgoing payments
+### Setting the Terms (TODO: section on how quotes uses ILP)
+Before it starts sending all those ILP packets, Rafiki uses the Open Payments Standard (link here) to set the parameters of the payment. As it is, Interledger doesn't have any mechanism to negotiate payment terms, so that standard picks up the slack. 
+
+A prospective debitor will use this standard to create what Open Payment refers to as an _outgoing payment_ against the wallet address they want to charge. This outgoing payment will be created by a series of requests against the Rafiki instance hosting that wallet address that set the terms of the payment, such as how much to charge the sender and in what currency, and acquire consent from the owner of that wallet address to create that charge.
+Once that is complete, Rafiki can begin to fulfill the terms of this payment using Interledger.
+
+As an aside, ILP packets may be involved before an outgoing payment is even created. As one of the requests prior to creating an outgoing payment, the debitor may also request a _quote_ from that Rafiki instance to account for any fees or conversion rates that may be incurred. To acquire this quote, the instance will send a ILP packet accross the network to the destination. This packet will need to traverse each hop on the network as each node's fees and rates won't be visible to the sender without doing so.
+
+## TODO: intro to packet lifecycle section
+// rafiki refers to an outgoing payment when sending over ilp. send/receive amount are passed into the STREAM request.
+// Overview:
+// spsp
+// sender generates condition
+// receiver verifies condition
+// fulfill/reject
+// open payments webhooks after stream closes - send outgoing payment complete webhook
+
+### Preparing the Packet
+// SPSP
+Now that the sending Rafiki instance has an outgoing payment created against one of its wallet addresses, it can pass the terms of that payment into an Interledger payment. First, it uses the Simple Payment Setup Protocol(link) to acquire a shared secret and then generate a _condition_. A condition is a hash that can only be generated with a secret that SPSP makes available only to the receiver and the sender. Then, it constructs an ILP packet that includes that condition, the receiver, and the amount to send in that packet. Keep in mind that, in the spirit of packetization, this send amount will be a small increment of the total amount to be sent in the whole payment.
+
+### Responding with Fulfill or Reject
+// todo: include point about how the packet for quotes is unfulfillable.
+
+## TODO: OP-side post-fulfillment stuff
+
+## Conclusion
