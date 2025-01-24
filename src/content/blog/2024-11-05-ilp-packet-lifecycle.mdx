@@ -13,37 +13,47 @@ import LargeImg from '/src/components/pages/LargeImg.astro'
 
 ## Introduction
 TODO: add link to summit keynote video on packetization
+
 The Interledger Summit just wrapped up recently, along with its celebrations of & discussions on open standards and financial inclusion. This year, the humble Interledger Protocol (ILP for short) packet took center stage as Stefan Thomas gave a keynote on how the Interledger Protocol met a number of design requirements by introducing packetization to the protocol.
 
 TODO: link to rafiki github
-Most current and prosective integrators of the Interledger protocol are leveraging the ILP packet in their use case through Rafiki, which provides an efficient way for those integrators to participate in a network using ILP.
-This abstraction is useful for those looking to easily leverage ILP's benefits, but with fresh intrigue around Interledger's transport method, it invites an interesting exercise - connecting the high-level orchestration that Rafiki performs to the atomic, low-level concept of the ILP packet.
 
-TODO: show how ilp packets are used in quoting as well as in fulfilling outgoing payments
-### Setting the Terms (TODO: section on how quotes uses ILP)
-Before it starts sending all those ILP packets, Rafiki uses the Open Payments Standard (link here) to set the parameters of the payment. As it is, Interledger doesn't have any mechanism to negotiate payment terms, so that standard picks up the slack. 
+Most integrators of the Interledger protocol are leveraging the ILP packet through Rafiki, as it provides an efficient way for those integrators to participate in an ILP network.
+Though Rafiki's main purpose is to abstract this, the fresh intrigue around Interledger's transport method invites a look at the connection between Rafiki's high-level payment orchestration to ILP's atomic, low-level concept of the ILP packet.
 
-A prospective debitor will use this standard to create what Open Payment refers to as an _outgoing payment_ against the wallet address they want to charge. This outgoing payment will be created by a series of requests against the Rafiki instance hosting that wallet address that set the terms of the payment, such as how much to charge the sender and in what currency, and acquire consent from the owner of that wallet address to create that charge.
+### Setting the Terms
+Before it starts sending all those ILP packets, Rafiki uses the Open Payments Standard (link here) to set the parameters of the payment. Interledger doesn't have any mechanism to negotiate payment terms, so Open Payments picks up the slack. 
+
+A prospective debitor will use this standard to create what Open Payments refers to as an _outgoing payment_ on the Rafiki instance hosting the wallet address they want to charge, and an _incoming payment_ on Rafiki instance hosting the wallet address they want to send the payemnt to.
+The incoming and outgoing payment will be created by a series of requests against those Rafiki instances that set the terms of the payment, such as how much to charge the sender and in what currency, and in the case of the outgoing payment, acquire consent from the owner of that wallet address to create that charge.
 Once that is complete, Rafiki can begin to fulfill the terms of this payment using Interledger.
 
-As an aside, ILP packets may be involved before an outgoing payment is even created. As one of the requests prior to creating an outgoing payment, the debitor may also request a _quote_ from that Rafiki instance to account for any fees or conversion rates that may be incurred. To acquire this quote, the instance will send a ILP packet accross the network to the destination. This packet will need to traverse each hop on the network as each node's fees and rates won't be visible to the sender without doing so.
-
-## TODO: intro to packet lifecycle section
-// rafiki refers to an outgoing payment when sending over ilp. send/receive amount are passed into the STREAM request.
-// Overview:
-// spsp
-// sender generates condition
-// receiver verifies condition
-// fulfill/reject
-// open payments webhooks after stream closes - send outgoing payment complete webhook
+On a more technical point, ILP packets may be involved before an outgoing payment is even created. As one of the requests prior to creating an outgoing payment, the debitor may also request a _quote_ from that Rafiki instance to account for any fees or conversion rates that may be incurred. To acquire this quote, the instance will send a ILP packet accross the network to the destination. This packet will need to traverse each hop on the network as each node's fees and rates won't be visible to the sender without doing so.
 
 ### Preparing the Packet
-// SPSP
-Now that the sending Rafiki instance has an outgoing payment created against one of its wallet addresses, it can pass the terms of that payment into an Interledger payment. First, it uses the Simple Payment Setup Protocol(link) to acquire a shared secret and then generate a _condition_. A condition is a hash that can only be generated with a secret that SPSP makes available only to the receiver and the sender. Then, it constructs an ILP packet that includes that condition, the receiver, and the amount to send in that packet. Keep in mind that, in the spirit of packetization, this send amount will be a small increment of the total amount to be sent in the whole payment.
+Now that the sending Rafiki instance has an outgoing payment created against one of its wallet addresses, it can pass the terms of that payment into an Interledger payment. First, it uses the Simple Payment Setup Protocol(link) to acquire an ILP address for the receiver, and a shared secret that is used to generate a _condition_. A condition is a hash that can only be generated with a secret that is available only to the receiver and the sender.
+Using the receiving ILP address, the condition, the receiver, and send amount described in the outgoing payment, Rafiki creates a connection over ILP to the receiver using STREAM (link).
+STREAM is a transport-layer protocol for Interledger that is responsible for breaking a payment down into the aforementioned packets and sends them _en masse_ until the payment is fulfilled.
 
 ### Responding with Fulfill or Reject
-// todo: include point about how the packet for quotes is unfulfillable.
+In order to complete a payment, the receiver will need to handle each packet with either a fulfillment or a rejection, so that the sender knows whether or not a given packet was successfully sent or not.
+The fulfill/reject responses are analagous to how a HTTP request may receive a response or be rejected.
+Barring bad configurations or other unusual cases, the receiver will generally fulfill a packet _as long as the condition it was sent with can be generated with the receiver's copy of the shared secret, and as long as the amount received already from prior fulfilled packets is below the total expected by the receiver._
 
-## TODO: OP-side post-fulfillment stuff
+As soon as the sender receives enough fulfillments from the receiver to complete the payment, it stops sending packets over STREAM and closes the connection.
+
+On another technical point, there also exist some types of packets that cannot be fulfilled. For instance, an unfulfillable packet gets sent when an Open Payments quote is created whose purpose is to determine what the total cost of the payment will be by factoring any fees or conversion rates that may be applied.
+
+### Wrapping Things Up
+Once the STREAM connection finishes sending all of the packets and receives the corresponding fulfillments from the receiver, it closes. The sending Rafiki instance will then update its outgoing payment as being complete, and then publish a webhook to the receiving Rafiki instance to direct it to mark its corresponding incoming payment as complete as well.
 
 ## Conclusion
+The Interledger Protocol had to go through a number of important changes in order to position itself as a web-native way to send money. Packetizing Interledger payments was significant change that brought it in line with the design patterns of the modern web that it seeks to be a part of.
+These packets continue to play this role as a part of Rafiki, as it coordinates those payments with Open Payments and manages the ILP connections used to fulfill them.
+
+If this post has established the connection between Rafiki, Open Payments, and Interledger in a way that piques interest, consider delving futher into these Interledger concepts:
+
+// TODO: actual links
+- ILP v4 rfc
+- SPSP rfc
+- STREAM rfc
