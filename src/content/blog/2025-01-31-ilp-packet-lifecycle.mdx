@@ -1,0 +1,88 @@
+---
+layout: ../../layouts/BlogLayout.astro
+title: "The Lifecycle of an Interledger Packet"
+description: 'A look under the hood of how Rafiki orchestrates an Interledger payment.'
+date: 2025-01-31
+slug: ilp-packet-lifecycle
+authors: [Nathan Lie]
+author_urls: [https://www.linkedin.com/in/nathan-lie-138a73121]
+tags:
+  - Interledger
+---
+import LargeImg from '/src/components/pages/LargeImg.astro'
+
+## Introduction
+The Interledger Summit just wrapped up recently, along with its celebrations of & discussions on open standards and financial inclusion.
+This year, the humble Interledger Protocol (ILP for short) packet took center stage as Stefan Thomas [gave a keynote](https://www.youtube.com/watch?v=Djw6wMXFv1Q&t=3240s) on how the Interledger Protocol became more fast & reliable by introducing packetization to the protocol.
+With packetization breaking payments up into small amounts, sending a payment no longer had a single failure point and both parties in a payment would be able to manage risk more effectively.
+
+Most integrators of the Interledger protocol are leveraging the ILP packet through [Rafiki](https://github.com/interledger/rafiki), as it provides an efficient way for those integrators to participate in an ILP network.
+Though Rafiki's main purpose is to abstract this, the fresh intrigue around Interledger's transport method invites a look at the connection between Rafiki's high-level payment orchestration to ILP's atomic, low-level concept of the ILP packet.
+
+### Setting the Terms
+Before it starts sending all those ILP packets, Rafiki uses the [Open Payments Standard](https://openpayments.dev/introduction/overview/) to set the parameters of the payment. Interledger doesn't have any mechanism to negotiate payment terms, so Open Payments picks up the slack. 
+
+A prospective debitor will use this standard to set payment terms by first creating an _incoming payment_ on the Rafiki instance hosting the receiving wallet address, then acquiring a _quote_ from the Rafiki instance hosting the sending wallet address.
+Finally, it creates an _outgoing payment_ against the sending wallet address by acquiring consent from its owner to charge them with particular terms such as its amount and its currency.
+Once that is complete, these Rafiki instances can begin to fulfill the terms of this payment using Interledger.
+
+On a more technical point, ILP packets may be involved before an outgoing payment is even created. During the acqusition of a _quote_ from the sending Rafiki instance, it will send a ILP packet accross the network to the destination. This packet will need to traverse each hop on the network as each node's fees and rates won't be known to the sender without doing so.
+
+_For a more on Open Payments, consider reading the [Simple Open Payments Guide](https://interledger.org/developers/blog/simple-open-payments-guide/) on this blog._
+
+### Preparing the Packet
+Now that the sending Rafiki instance has an outgoing payment created against one of its wallet addresses, it can pass the terms of that payment into an Interledger payment. First, it uses the [Simple Payment Setup Protocol](https://github.com/interledger/rfcs/blob/main/0009-simple-payment-setup-protocol/0009-simple-payment-setup-protocol.md) to acquire an ILP address for the receiver, and a shared secret that is used to generate a [_condition_](https://github.com/interledger/rfcs/blob/main/0029-stream/0029-stream.md).
+A condition is a hash that can only be generated with a secret that is available only to the receiver and the sender.
+Using the receiving ILP address, the condition, the receiver, and send amount described in the outgoing payment, Rafiki creates a connection over ILP to the receiver using [STREAM](https://github.com/interledger/rfcs/blob/main/0029-stream/0029-stream.md).
+STREAM is a transport-layer protocol for Interledger that is responsible for breaking a payment down into the aforementioned packets and sends them _en masse_ until the payment is fulfilled.
+
+For each packet, STREAM handles them using a two-phase execution process that is similar to the request-response process that HTTP packets sent over the internet use.
+
+<LargeImg
+  src="/developers/img/blog/2025-01-31/2p-transfer.png"
+  alt="Two-Phase Transfer Diagram"
+/>
+
+In the first phase, the sender creates packets known as ["prepare" packets](https://github.com/interledger/rfcs/blob/main/0027-interledger-protocol-4/0027-interledger-protocol-4.md#ilp-prepare), which each contain some fraction of the total send amount, the condition generated using SPSP, the final destination of the packet in the network, and an expiration time for the packet.
+All of these packets are sent across the network to the receiver, and must be fulfilled or rejected by the receiver in the second phase in order to be considered as having reached the receiver.
+
+<LargeImg
+  src="/developers/img/blog/2025-01-31/ilp-prepare-spec.png"
+  alt="ILP Prepare Packet Specification"
+/>
+
+### Responding with Fulfill or Reject
+In the second phase of STREAM's execution process, the receiver will need to handle each "prepare" packet with either a fulfillment or a rejection, so that the sender knows whether or not a given "prepare" packet was successfully sent or not.
+The receiver fulfills a "prepare" packet by sending a ["fulfill" packet](https://github.com/interledger/rfcs/blob/main/0027-interledger-protocol-4/0027-interledger-protocol-4.md#ilp-fulfill) back to the sender with the preimage from which the "prepare" packet's condition was generated.
+
+<LargeImg
+  src="/developers/img/blog/2025-01-31/ilp-fulfill-spec.png"
+  alt="ILP Fulfill Packet Specification"
+/>
+
+Since only the receiver can provide the preimage needed to fulfill a "prepare" packet's condition, no node in the network in between it and the sender can intercept the packet and send back a fulfilled packet without it reaching the receiver first.
+As soon as the sender receives enough fulfillments from the receiver to complete the payment, it stops sending packets over STREAM and closes the connection.
+
+If the received "prepare" packet expired before it reached the receiver, the amount received already from prior packets exceeds the total, or some other error occurs, the sender will instead respond with a ["reject" packet](https://github.com/interledger/rfcs/blob/main/0027-interledger-protocol-4/0027-interledger-protocol-4.md#ilp-reject) instead.
+This "reject" packet contains an error code that describes what would have caused the rejection.
+
+<LargeImg
+  src="/developers/img/blog/2025-01-31/ilp-reject-spec.png"
+  alt="ILP Reject Packet Specification"
+/>
+
+On another technical point, there also exist some types of packets that cannot be fulfilled. For instance, an unfulfillable packet gets sent when an Open Payments quote is created whose purpose is to determine what the total cost of the payment will be by factoring any fees or conversion rates that may be applied.
+
+### Wrapping Things Up
+As "fulfill" packets arrive at the sender, it verifies that the preimage sent back in each of them does indeed fulfill the condition sent with the corresponding "prepare" packet.
+Once the STREAM connection finishes sending all of the packets and verifies the corresponding fulfillments from the receiver, it closes. The sending Rafiki instance will then update its outgoing payment as being complete, and then publish a webhook to the receiving Rafiki instance to direct it to mark its corresponding incoming payment as complete as well.
+
+## Conclusion
+The Interledger Protocol had to go through a number of important changes in order to position itself as a web-native way to send money. Packetizing Interledger payments was significant change that brought it in line with the design patterns of the modern web that it seeks to be a part of.
+These packets continue to play this role as a part of Rafiki, as it coordinates those payments with Open Payments and manages the ILP connections used to fulfill them.
+
+If this post has established the connection between Rafiki, Open Payments, and Interledger in a way that piques interest, consider delving futher into these Interledger concepts:
+
+- [ILP v4](https://github.com/interledger/rfcs/blob/main/0027-interledger-protocol-4/0027-interledger-protocol-4.md)
+- [SPSP](https://github.com/interledger/rfcs/blob/main/0009-simple-payment-setup-protocol/0009-simple-payment-setup-protocol.md)
+- [STREAM](https://github.com/interledger/rfcs/blob/main/0029-stream/0029-stream.md)
