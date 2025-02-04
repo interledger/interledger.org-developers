@@ -13,7 +13,7 @@ tags:
 
 ## Introduction
 The Interledger Summit just wrapped up recently, along with its celebrations of & discussions on open standards and financial inclusion.
-This year, a humble part of Interledger Protocol (ILP for short) history took center stage as Stefan Thomas [gave a keynote](https://www.youtube.com/watch?v=Djw6wMXFv1Q&t=3240s) on how years ago, the Interledger Protocol became more fast & reliable by introducing packetization to the protocol.
+In Cape Town last year, a humble part of Interledger Protocol (ILP for short) history took center stage as Stefan Thomas [gave a keynote](https://www.youtube.com/watch?v=Djw6wMXFv1Q&t=3240s) on how years ago, the Interledger Protocol became more fast & reliable by introducing packetization to the protocol.
 With packetization breaking payments up into small amounts, sending a payment no longer had a single failure point and both parties in a payment would be able to manage risk more effectively.
 
 Most integrators of the Interledger protocol are leveraging the ILP packet through [Rafiki](https://rafiki.dev/overview/overview/), as it provides an efficient way for those integrators to participate in an ILP network.
@@ -29,9 +29,9 @@ Finally, it creates an _outgoing payment_ against the sending wallet address by 
 The prior incoming payment (or the quote, if created), is provided during this process and becomes associated with the outgoing payment.
 Once that is complete, these Rafiki instances can begin to fulfill the terms of this payment using Interledger.
 
-On a more technical point, ILP packets may be involved before an outgoing payment is even created. During the acqusition of a _quote_ from the sending Rafiki instance, it will send a ILP packet accross the network to the destination. This packet will need to traverse each hop on the network as each node's fees and rates won't be known to the sender without doing so.
+On a more technical point, ILP packets may be involved before an outgoing payment is even created. During the acquisition of a _quote_ from the sending Rafiki instance, it will send a ILP packet across the network to the destination. This packet will need to traverse each hop on the network as each node's fees and rates won't be known to the sender without doing so.
 
-_For a more on Open Payments, consider reading the [Simple Open Payments Guide](https://interledger.org/developers/blog/simple-open-payments-guide/) on this blog._
+_For more on Open Payments, consider reading the [Simple Open Payments Guide](https://interledger.org/developers/blog/simple-open-payments-guide/) on this blog._
 
 ### Preparing the Packet
 Now that the sending Rafiki instance has an outgoing payment created against one of its wallet addresses, it can pass the terms of that payment into an Interledger payment. First, it uses the incoming payment associated with it (or the quote if it was created) to acquire an ILP address for the receiver and the shared secret, which is used to generate a [_condition_](/developers/rfcs/stream-protocol/#6-condition-and-fulfillment-generation).
