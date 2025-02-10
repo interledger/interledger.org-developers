@@ -13,7 +13,7 @@ Inside this project, you'll see the following folders and files:
 │   ├── components/
 │   ├── content/
 │   │   ├── docs/
-│   │   └── config.ts
+│   ├── content.config/
 │   ├── layouts/
 │   ├── pages/
 │   ├── styles/
