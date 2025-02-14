@@ -1,23 +1,21 @@
 ---
 const currentYear = new Date().getFullYear();
 ---
+
 <footer class="site-footer" role="contentinfo">
   <div class="connect-wrapper">
     <div class="mailing-list">
-      <h4>Join our mailing list</h4>
-      <form action="https://interledger.us1.list-manage.com/subscribe/post?u=9ced7a326efbb158ae84d30cc&amp;id=7466ff6b0c&amp;f_id=0066e3e5f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_self" novalidate="">
-        <div class="mc-field-group">
-          <label for="mce-EMAIL" class="visually-hidden">Email Address</label>
-          <input type="email" name="EMAIL" class="required email" id="mce-EMAIL" required="" value="" placeholder="Email address">
-        </div>
-        <div aria-hidden="true" style="position: absolute; left: -5000px;">
-          <input type="text" name="b_9ced7a326efbb158ae84d30cc_7466ff6b0c" tabindex="-1" value="">
-        </div>
-        <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="button" value="Subscribe">
-      </form>
+      <h3>Join our mailing list</h3>
+      <a
+        class="button subscribe-btn"
+        href="/subscribe"
+        data-umami-event="Footer link - Subscribe"
+      >
+        Subscribe
+      </a>
     </div>
     <div class="social-links">
-      <h4>Connect with us</h4>
+      <h3>Connect with us</h3>
       <ul>
         <li>
           <a href="https://www.youtube.com/@InterledgerFoundation" aria-label="Interledger's Youtube channel" data-umami-event="Footer - Youtube">
@@ -76,11 +74,11 @@ const currentYear = new Date().getFullYear();
   @media screen and (min-width: 780px) {
     .connect-wrapper {
       display: flex;
-      gap: var(--space-2xl);
+      gap: var(--space-xl);
       justify-content: center;
     }
 
-    .site-footer h4 {
+    .site-footer h3 {
       text-align: left;
     }
   }
@@ -92,26 +90,19 @@ const currentYear = new Date().getFullYear();
     padding: 0;
   }
 
-  .site-footer h4 {
-    font-size: var(--step--1);
+  .site-footer h3 {
     color: currentColor;
-    margin-block-end: var(--space-3xs);
+    margin-block-end: var(--space-2xs);
   }
 
-  .site-footer a {
-    text-decoration: underline;
-    text-decoration-style: dotted;
-    text-underline-offset: 2px;
-  }
-
-  .site-footer a:hover {
-    text-decoration: underline;
-    color: currentColor;
+  .social-links h3 {
+    margin-block-end: var(--space-2xs);
   }
 
   .social-links ul {
     gap: var(--space-s);
     margin-block-end: var(--space-s);
+    flex-wrap: wrap;
   }
 
   .social-links li {
@@ -121,60 +112,73 @@ const currentYear = new Date().getFullYear();
   .social-links svg {
     height: 2em;
     width: 2em;
+    transition: transform 200ms ease-in-out;
+  }
+
+  .social-links a:hover svg {
+    transform: scale(1.15);
   }
 
   .site-footer p {
     margin-block-end: var(--space-3xs);
   }
 
-  .site-footer form {
+  .site-footer .subscribe-btn {
     display: flex;
     margin-block-end: var(--space-s);
     justify-content: center;
-  }
-
-  .site-footer input {
-    border: 1px solid;
-    padding-inline: var(--space-2xs);
-    padding-block: var(--space-3xs);
-    background-color: var(--color-frost);
-    max-width: 100%;
-    font-size: var(--step--1);
-  }
-
-  .site-footer input[type="email"] {
-    border-start-start-radius: var(--border-radius);
-    border-end-start-radius: var(--border-radius);
-  }
-
-  .site-footer input[type="submit"] {
-    border-start-end-radius: var(--border-radius);
-    border-end-end-radius: var(--border-radius);
+    align-items: center;
+    margin-block-end: var(--space-s);
+    box-shadow: none;
+    border: 1px solid var(--color-gray);
+    max-width: 10em;
+    margin-inline: auto;
     background-color: var(--color-gray);
     color: var(--color-white);
-    border: 1px solid var(--color-gray);
+    border-radius: var(--border-radius);
+    padding-inline: var(--space-xs);
+    padding-block: var(--space-3xs);
+    font-size: var(--step--1);
     cursor: pointer;
+    text-decoration: none;
+    transition: transform 200ms ease-in-out;
+  }
+
+  .site-footer .subscribe-btn:hover {
+    transform: scale(1.15);
+  }
+
+  .mailing-list h3 {
+    margin-block-end: var(--space-2xs);
   }
 
   .footer-links a {
     padding: 0 var(--space-s);
-    white-space:nowrap;
+    white-space: nowrap;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 2px;
   }
 
-  @media screen and (min-width: 440px) {
-    .footer-links li:not(:first-of-type)::before {
-      content: "|";
-      display: inline;
-    }
+  .footer-links a:hover {
+    text-decoration-style: solid;
+    color: var(--color-black)
   }
 
-  @media screen and (max-width: 439px) {
+  @media screen and (max-width: 479px) {
     ul.footer-links {
       display: initial;
     }
 
     .footer-links li {
       margin-block-end: var(--space-2xs);
+    }
+  }
+
+  @media screen and (min-width: 480px) {
+    .footer-links li:not(:first-of-type)::before {
+      content: "|";
+      display: inline;
     }
   }
 </style>
