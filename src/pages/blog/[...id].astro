@@ -4,18 +4,17 @@ import BlogLayout from '../../layouts/BlogLayout.astro';
 import CommunityLinks from "../../components/blog/CommunityLinks.astro";
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
-  return posts.map(post => ({
-    params: { id: post.id },
-    props: { post },
+  const blogEntries = await getCollection('blog');
+  return blogEntries.map(entry => ({
+    params: { id: entry.id },
+    props: { entry },
   }));
 }
 
-const { post } = Astro.props;
-const { Content } = await render(post);
+const { entry } = Astro.props;
+const { Content } = await render(entry);
 ---
-<BlogLayout frontmatter={post.data}>
+<BlogLayout frontmatter={entry.data}>
   <Content />
   <CommunityLinks />
 </BlogLayout>
-
