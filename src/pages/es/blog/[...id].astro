@@ -1,0 +1,26 @@
+---
+import { getCollection, render } from 'astro:content';
+import BlogLayout from '../../../layouts/BlogLayout.astro';
+import CommunityLinks from "../../../components/blog/CommunityLinks.astro";
+
+export async function getStaticPaths() {
+  const blogEntries = await getCollection('blog', ({ id, data }) => {
+    console.log('DATA: ', data.title )
+    if (! id.includes('es-')) {
+      console.log(id, 'is here')
+    }
+  return id.includes('es-');
+});
+  return blogEntries.map(entry => ({
+    params: { id: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+<BlogLayout frontmatter={entry.data}>
+  <Content />
+  <CommunityLinks />
+</BlogLayout>

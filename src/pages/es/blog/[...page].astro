@@ -1,0 +1,165 @@
+---
+import type { Page } from "astro";
+import { createExcerpt } from '../../../utils/create-excerpt';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Pagination from '../../../components/blog/Pagination.astro';
+import { getCollection } from 'astro:content';
+
+type Props = {
+  page: Page<any>;
+};
+
+export async function getStaticPaths({ paginate }: any) {
+	const blogs = await getCollection("blog", ({ id }) => {
+    console.log(id)
+    if (! id.includes('es-')) {
+      console.log(id, 'is here')
+    }
+  return id.includes('es-');
+});
+  const blogEntries = blogs.sort((a:any, b:any) => b.data.date.getTime() - a.data.date.getTime());
+  return paginate(blogEntries, { pageSize: 10 });
+}
+
+const { page } = Astro.props;
+---
+<BaseLayout title="Engineering Blog" description="Hear stories and experiences from the team who is working on making Interledger, the interoperable global payments network, a reality." ogImageUrl={new URL('/developers/img/blog/og-image.png', Astro.site).href}>
+	<main>
+		<div class="content-wrapper">
+			<ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
+				<li itemprop="itemListElement" itemscope
+						itemtype="https://schema.org/ListItem">
+					<a itemprop="item" href="/developers" data-umami-event="Devs breadcrumb - Home">
+					<span itemprop="name">Developers Portal</span></a>
+					<meta itemprop="position" content="1" />
+				</li>
+			</ol>
+			<header>
+				<h1>Engineering Blog</h1>
+				<a class="cta__blog" href="/blog">
+					<p>Check out Foundation updates</p>
+					<img src="/developers/img/ernie-purple.svg" alt="Ernie holding an envelope" aria-hidden="true">
+				</a>
+			</header>
+			<ol class="postlist">
+				{((page as any).data || []).map((blogPostEntry: any) => {
+					const excerpt = `${createExcerpt(blogPostEntry.body).substring(0, 300)}...`;
+					return (
+						<li class="postlist-item">
+							<time class="postlist-date" datetime={blogPostEntry.data.date.toISOString()}>
+								{blogPostEntry.data.date.toDateString()}
+							</time>
+							<a href={`/developers/blog/${blogPostEntry.id}`} class="postlist-link heading--6">{blogPostEntry.data.title}</a>
+							<p>{blogPostEntry.data.description ? blogPostEntry.data.description : excerpt}</p>
+						</li>
+					)}
+				)}
+			</ol>
+			<Pagination length={page.lastPage}
+				currentPage={page.currentPage} 
+				firstUrl={page.url.first} 
+				prevUrl={page.url.prev}
+				nextUrl={page.url.next}
+				lastUrl={page.url.last}
+			/>
+		</div>
+	</main>
+</PageLayout>
+
+<style>
+main {
+	padding-block-start: var(--space-m);
+	padding-block-end: var(--space-xl);
+}
+
+.breadcrumbs {
+  list-style: none;
+  display: flex;
+  padding-inline-start: 0;
+  font-size: var(--step--1);
+  font-weight: 700;
+	padding-block-start: var(--space-l);
+}
+
+.breadcrumbs a {
+	color: var(--color-primary);
+	text-decoration: none;
+}
+
+ol {
+	padding: 0;
+}
+
+header {
+	padding-block-start: var(--space-s);
+	padding-block-end: var(--space-m);
+	display: flex;
+  justify-content: space-between;
+  align-items: center;
+	gap: var(--space-xs);
+}
+
+@media screen and (max-width: 730px) {
+	header {
+		flex-direction: column;
+		align-items: start;
+	}
+}
+
+.cta__blog {
+	display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  padding: var(--space-3xs) var(--space-2xs);
+  background-color: white;
+  box-shadow: var(--box-shadow);
+  border-radius: var(--border-radius);
+  font-size: var(--step--1);
+  background-image: var(--color-white);
+}
+
+.cta__blog {
+  text-decoration-color: transparent;
+	transition: text-decoration-color 300ms ease-in-out;
+}
+
+.cta__blog:hover {
+	color: currentColor;
+  text-decoration-color: currentColor;
+}
+
+.cta__blog p {
+  flex: none;
+}
+
+.cta__blog img {
+  width: 4em;
+}
+
+.post-metadata,
+.links-nextprev,
+.postlist {
+	list-style: none;
+}
+
+.postlist-item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--space-s);
+}
+
+.postlist-date {
+  font-size: var(--step--1);
+}
+
+.postlist-link {
+	font-weight: 600;
+	text-decoration-color: transparent;
+	transition: text-decoration 300ms ease-in-out, color 300ms ease-in-out;
+}
+
+.postlist-link:hover {
+  text-decoration-color: currentColor;
+}
+</style>
+
