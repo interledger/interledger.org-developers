@@ -24,15 +24,6 @@ export default defineConfig({
       title: "Interledger",
       description: "Enable seamless exchange of value across payment networks.",
       defaultLocale: 'root',
-      locales: {
-        root: {
-          label: 'English',
-          lang: 'en'
-        },
-        es: {
-          label: 'Español'
-        },
-      },
       customCss: [
         "./node_modules/@interledger/docs-design-system/src/styles/teal-theme.css",
         "./node_modules/@interledger/docs-design-system/src/styles/ilf-docs.css",
