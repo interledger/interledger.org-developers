@@ -1,15 +1,15 @@
 ---
 import { getCollection, render } from 'astro:content';
-import BlogLayout from '../../layouts/BlogLayout.astro';
-import CommunityLinks from "../../components/blog/CommunityLinks.astro";
+import BlogLayout from '../../../layouts/BlogLayout.astro';
+import CommunityLinks from "../../../components/blog/CommunityLinks.astro";
 
 export async function getStaticPaths() {
-  const blogEntries = await getCollection('blog', ({ id }) => {
-    console.log(id)
+  const blogEntries = await getCollection('blog', ({ id, data }) => {
+    console.log('DATA: ', data.title )
     if (! id.includes('es-')) {
       console.log(id, 'is here')
     }
-  return ! id.includes('es-');
+  return id.includes('es-');
 });
   return blogEntries.map(entry => ({
     params: { id: entry.id },
