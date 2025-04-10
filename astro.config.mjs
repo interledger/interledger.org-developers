@@ -23,7 +23,6 @@ export default defineConfig({
     starlight({
       title: "Interledger",
       description: "Enable seamless exchange of value across payment networks.",
-      defaultLocale: 'root',
       customCss: [
         "./node_modules/@interledger/docs-design-system/src/styles/teal-theme.css",
         "./node_modules/@interledger/docs-design-system/src/styles/ilf-docs.css",
