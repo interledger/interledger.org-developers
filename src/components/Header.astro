@@ -1,5 +1,4 @@
 ---
-import type { Props } from '@astrojs/starlight/props';
 import Search from "@astrojs/starlight/components/Search.astro";
 import SocialIcons from "@astrojs/starlight/components/SocialIcons.astro";
 import ThemeSelect from "@astrojs/starlight/components/ThemeSelect.astro";
@@ -22,11 +21,11 @@ import DevelopersLogo from "./logos/DevelopersLogo.astro";
         Interledger Foundation
       </span>
   </a>
-  <Search {...Astro.props} />
+  <Search />
   <div class="sl-hidden md:sl-flex secondary-wrap">
     
-    <SocialIcons {...Astro.props} />
-    <ThemeSelect {...Astro.props} />
+    <SocialIcons />
+    <ThemeSelect />
   </div>
 </div>
 
