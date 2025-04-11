@@ -5,14 +5,16 @@ import CommunityLinks from "../../../components/blog/CommunityLinks.astro";
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('blog');
-  const lang = 'es';
+  const defaultLang = 'en';
 
   return blogEntries
-  .filter((entry) => entry.data.lang.includes(lang))
-  .map(entry => ({
-    params: { id: entry.id },
-    props: { entry },
-  }));
+  .filter((entry) => entry.data.lang !== defaultLang) // handle the case of missing data? or is that done automatically?
+  .map((entry) => {
+    return {
+      params: { id: entry.id, lang: entry.data.lang },
+      props: { entry },
+    };
+  });
 }
 
 const { entry } = Astro.props;

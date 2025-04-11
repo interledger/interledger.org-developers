@@ -10,9 +10,8 @@ type Props = {
 };
 
 export async function getStaticPaths({ paginate }: any) {
-  const lang = 'en';
   const blogEntries = (await getCollection("blog"))
-  .filter((entry) => entry.data.lang.includes(lang))
+  .filter((entry) => entry.filePath && entry.filePath.match(/\/blog\/[^\/]+\.mdx?$/))
   .sort((a:any, b:any) => b.data.date.getTime() - a.data.date.getTime());
   return paginate(blogEntries, { pageSize: 10 });
 }

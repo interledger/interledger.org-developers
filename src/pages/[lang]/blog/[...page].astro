@@ -10,14 +10,24 @@ type Props = {
 };
 
 export async function getStaticPaths({ paginate }: any) {
-	const lang = 'es';
+  const defaultLang = 'en';
   const blogEntries = (await getCollection("blog"))
-  .filter((entry) => entry.data.lang.includes(lang))
-  .sort((a:any, b:any) => b.data.date.getTime() - a.data.date.getTime());
-  return paginate(blogEntries, { pageSize: 10 });
+  const allLangs = Array.from(new Set(blogEntries.map((entry) => entry.data.lang)));
+  const langs = allLangs.filter((lang) => lang !== defaultLang);
+  return langs.flatMap((lang) => {
+    const filteredPosts = blogEntries
+      .filter((entry) => entry.data.lang !== defaultLang && entry.data.lang === lang)
+      .sort((a:any, b:any) => b.data.date.getTime() - a.data.date.getTime());
+
+    return paginate(filteredPosts, {
+      pageSize: 10,
+      params: { lang },
+    });
+  });
 }
 
 const { page } = Astro.props;
+const { lang } = Astro.params;
 ---
 <BaseLayout title="Engineering Blog" description="Hear stories and experiences from the team who is working on making Interledger, the interoperable global payments network, a reality." ogImageUrl={new URL('/developers/img/blog/og-image.png', Astro.site).href}>
 	<main>
@@ -45,7 +55,7 @@ const { page } = Astro.props;
 							<time class="postlist-date" datetime={blogPostEntry.data.date.toISOString()}>
 								{blogPostEntry.data.date.toDateString()}
 							</time>
-							<a href={`/developers/blog/${blogPostEntry.id}`} class="postlist-link heading--6">{blogPostEntry.data.title}</a>
+							<a href={`/developers/${lang}/blog/${blogPostEntry.id}`} class="postlist-link heading--6">{blogPostEntry.data.title}</a>
 							<p>{blogPostEntry.data.description ? blogPostEntry.data.description : excerpt}</p>
 						</li>
 					)}
