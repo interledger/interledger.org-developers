@@ -1,0 +1,28 @@
+---
+import { getCollection, render } from 'astro:content';
+import BlogLayout from '../../../layouts/BlogLayout.astro';
+import CommunityLinks from "../../../components/blog/CommunityLinks.astro";
+
+export async function getStaticPaths() {
+  const blogEntries = await getCollection('blog');
+  const lang = 'es';
+
+  return blogEntries
+  .filter((entry) => entry.data.slug.startsWith('es/'))
+  .map(entry => {
+    
+    const slug = entry.data.slug.replace(/^es\//, '');
+    console.log('lang: ', lang)
+    console.log('blogId: ', slug)
+
+    return { params: { lang, id: slug }, props: {entry} };
+  });
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+<BlogLayout frontmatter={entry.data}>
+  <Content />
+  <CommunityLinks />
+</BlogLayout>
