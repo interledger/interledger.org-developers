@@ -8,15 +8,11 @@ export async function getStaticPaths() {
   const lang = 'es';
 
   return blogEntries
-  .filter((entry) => entry.data.slug.startsWith('es/'))
-  .map(entry => {
-    
-    const slug = entry.data.slug.replace(/^es\//, '');
-    console.log('lang: ', lang)
-    console.log('blogId: ', slug)
-
-    return { params: { lang, id: slug }, props: {entry} };
-  });
+  .filter((entry) => entry.data.lang.includes(lang))
+  .map(entry => ({
+    params: { id: entry.id },
+    props: { entry },
+  }));
 }
 
 const { entry } = Astro.props;

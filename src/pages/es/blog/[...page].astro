@@ -10,8 +10,9 @@ type Props = {
 };
 
 export async function getStaticPaths({ paginate }: any) {
+	const lang = 'es';
   const blogEntries = (await getCollection("blog"))
-  .filter((entry) => entry.data.slug.startsWith('es/'))
+  .filter((entry) => entry.data.lang.includes(lang))
   .sort((a:any, b:any) => b.data.date.getTime() - a.data.date.getTime());
   return paginate(blogEntries, { pageSize: 10 });
 }
