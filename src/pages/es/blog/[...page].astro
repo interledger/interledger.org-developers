@@ -1,8 +1,8 @@
 ---
 import type { Page } from "astro";
-import { createExcerpt } from '../../utils/create-excerpt';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Pagination from '../../components/blog/Pagination.astro';
+import { createExcerpt } from '../../../utils/create-excerpt';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Pagination from '../../../components/blog/Pagination.astro';
 import { getCollection } from 'astro:content';
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
 
 export async function getStaticPaths({ paginate }: any) {
   const blogEntries = (await getCollection("blog"))
-  .filter((entry) => ! entry.data.slug.startsWith('es/'))
+  .filter((entry) => entry.data.slug.startsWith('es/'))
   .sort((a:any, b:any) => b.data.date.getTime() - a.data.date.getTime());
   return paginate(blogEntries, { pageSize: 10 });
 }
@@ -59,7 +59,7 @@ const { page } = Astro.props;
 			/>
 		</div>
 	</main>
-</PageLayout>
+</BaseLayout>
 
 <style>
 main {
