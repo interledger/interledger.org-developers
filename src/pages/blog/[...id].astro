@@ -5,7 +5,11 @@ import CommunityLinks from "../../components/blog/CommunityLinks.astro";
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('blog');
-  return blogEntries.map(entry => ({
+  const lang = 'en';
+
+  return blogEntries
+  .filter((entry) => entry.data.lang.includes(lang))
+  .map(entry => ({
     params: { id: entry.id },
     props: { entry },
   }));
