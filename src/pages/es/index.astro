@@ -1,0 +1,271 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import InterledgerIcon from '../../components/logos/InterledgerIcon.astro';
+import OpenPaymentsIcon from '../../components/logos/OpenPaymentsIcon.astro';
+import RafikiIcon from '../../components/logos/RafikiIcon.astro';
+---
+<BaseLayout title="Desarrolladores">
+  <main>
+    <section class="hero">
+      <div class="content-wrapper">
+        <div class="text-wrapper">
+          <h1 class="hero__heading heading--2">Portal de Desarrolladores de Interledger</h1>
+          <p class="hero__txt">Ayuda a dar forma al futuro de los pagos interoperables y permite el intercambio fluido de valor entre redes de pago.</p>
+          <div class="hero__cta">
+            <a class="btn hero__btn" href="/developers/get-involved" data-umami-event="Devs page link - Get involved">Involúcrate</a>
+            <a class="external" href="https://github.com/interledger" target="_blank" rel="noopener noreferrer">Contribuye en GitHub</a>
+          </div>
+        </div>
+        <div class="image-wrapper">
+          <img src="/developers/img/devs.svg" alt="Ilustración de desarrolladores trabajando en una mesa" class="hero__img" />
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="content-wrapper">
+        <p class="heading--5">Agradecemos las contribuciones a nuestros repositorios de código abierto en GitHub. Si los encuentras valiosos, por favor danos una estrella. ¡Tu apoyo marca la diferencia!</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="content-wrapper cards">
+        <div class="card">
+          <h2 class="heading--6"><a href="https://github.com/interledger/open-payments" data-umami-event="Devs page link - GitHub" target="_blank" rel="noopener noreferrer"><OpenPaymentsIcon /> Repositorio de Open Payments</a> </h2>
+          <p>Open Payments es un estándar de API abierta que puede ser implementado por entidades que prestan servicios de cuenta para facilitar la interoperabilidad en la configuración y finalización de pagos para diferentes casos de uso.</p>
+        </div>
+
+        <div class="card">
+          <h2 class="heading--6"><a href="https://github.com/interledger/rafiki" data-umami-event="Devs page link - Rafiki" target="_blank" rel="noopener noreferrer"><RafikiIcon /> Repositorio de Rafiki</a> </h2>
+          <p>Rafiki es un software de código abierto que ofrece una solución eficiente para que una Entidad de Servicio de Cuenta habilite la funcionalidad Interledger en las cuentas de sus usuarios.</p>            
+        </div>
+
+        <div class="card">
+          <h2 class="heading--6"><a href="https://github.com/interledger/rfcs" data-umami-event="Devs page link - RFCs" target="_blank" rel="noopener noreferrer"><InterledgerIcon /> Repositorio de Especificaciones</a></h2>
+          <p>El <a href="/developers/rfcs/interledger-protocol/" data-umami-event="Devs page link - Read specs">Protocolo Interledger (ILP)</a> es un protocolo abierto y neutral para transferir dinero basado en TCP/IP, diseñado para enviar paquetes de dinero a través de diferentes libros contables.</p>
+        </div>
+
+        <div class="card">
+          <h2 class="heading--6"><a href="https://github.com/interledger/testnet" data-umami-event="Devs page link - Testnet" target="_blank" rel="noopener noreferrer"><InterledgerIcon /> Repositorio de Red de Pruebas</a></h2>
+          <p>La Red de Pruebas (Testnet) es una red Interledger abierta que trabaja con dinero de prueba, diseñada para que las entidades de servicio de cuenta prueben su integración con Interledger.</p>
+        </div>
+
+        <div class="card">
+          <h2 class="heading--6"><a href="https://github.com/search?q=topic%3Ahacktoberfest+org%3Ainterledger+fork%3Atrue+repo%3Awicg%2Fwebmonetization&type=repositories" data-umami-event="Devs page link - Hacktoberfest" target="_blank" rel="noopener noreferrer"><InterledgerIcon /> Hacktoberfest</a></h2>
+          <p>Únete a nosotros este octubre para colaborar en nuestros proyectos de código abierto.</p>
+        </div>
+
+        <div class="card">
+          <h2 class="heading--6">Blog de Ingeniería</h2>
+          <p>Nuestro equipo comparte sus ideas y experiencias sobre Interledger y el trabajo que estamos realizando.</p>
+          <a class="btn card__btn" href="/developers/es/blog" data-umami-event="Devs page link - Blog">Lee nuestro blog</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  main {
+    padding-block-end: var(--space-l);
+  }
+
+  section {
+    padding-block-start: var(--space-l);
+  }
+
+  section:last-child {
+    padding-block-end: var(--space-l);
+  }
+  .hero {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: bottom right;
+    background-image: linear-gradient(to right, #007777, #69BCC3);
+    background-image: linear-gradient(to right, oklch(51.54% 0.088 194.77), oklch(74.53% 0.082 202.65));
+    min-height: 60vh;
+    padding-block: var(--space-m);
+    color: var(--color-white);
+    display: flex;
+    align-items: center;
+  }
+
+  .content-wrapper {
+    display: flex;
+    gap: var(--space-m);
+  }
+
+  .text-wrapper {
+    flex: 3;
+  }
+
+  .btn {
+    border-radius: 10em;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    text-decoration-color: transparent;
+    text-underline-offset: 4px;
+    transition: text-decoration-color ease-in-out 200ms;
+  }
+
+  .btn::after {
+    content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12"><path d="M11.92 5.62a1.001 1.001 0 0 0-.21-.33l-5-5a1.004 1.004 0 0 0-1.42 1.42L8.59 5H1a1 1 0 0 0 0 2h7.59l-3.3 3.29a1.002 1.002 0 0 0 .325 1.639 1 1 0 0 0 1.095-.219l5-5a1 1 0 0 0 .21-.33 1 1 0 0 0 0-.76Z"/></svg>');
+    flex: none;
+    width: .6em;
+  }
+
+  .external {
+    text-decoration-color: transparent;
+    text-underline-offset: 4px;
+    transition: text-decoration-color ease-in-out 200ms;
+    cursor: pointer;
+  }
+
+  .external:hover {
+    color: var(--color-white);
+    text-decoration: underline;
+  }
+
+  .external::after {
+    content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18"><path stroke="hsl(180,0%,100%)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 3H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M11 1h6m0 0v6m0-6L7 11"/></svg>');
+    height: 0.75em;
+    width: 0.75em;
+    display: inline-block;
+    margin-inline: var(--space-3xs);
+  }
+
+  .hero__heading {
+    color: var(--color-white);
+    max-width: 10em;
+    line-height: 1.2;
+    font-weight: 600;
+    margin-block-end: var(--space-xs);
+  }
+
+  .hero__txt {
+    margin-block-end: var(--space-s);
+  }
+
+  .hero__cta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-s);
+  }
+
+  @media screen and (max-width: 420px) {
+    .hero__cta {
+      flex-direction: column;
+    }
+  }
+
+  .hero__btn {
+    background-color: var(--color-white);
+    color: var(--color-primary);
+    padding: var(--space-xs) var(--space-s);
+  }
+
+  .hero__btn:hover {
+    text-decoration-color: var(--color-primary);
+  }
+
+  .hero__btn::after {
+    filter: var(--filter-primary);
+  }
+  
+  .image-wrapper {
+    flex: 0 1 auto;
+    max-width: 28rem;
+  }
+
+  @media screen and (max-width: 799px) {
+    .hero {
+      padding-block: var(--space-xl);
+    }
+
+    .hero .content-wrapper {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  @media screen and (min-width: 800px){
+    .hero {
+        min-height: 70vh;
+    }
+
+    .image-wrapper {
+      align-self: end;
+    }
+  }
+  
+  .cards {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .card {
+    border-radius: var(--border-radius);
+    margin-inline: auto;
+    box-shadow: var(--box-shadow);
+    padding: var(--space-s) var(--space-s);
+    background-color: var(--color-white);
+    width: 100%;
+  }
+
+  @media screen and (min-width: 800px) {
+    .card {
+      flex: 1 1 calc(50% - var(--space-m));
+    }
+  }
+
+  .card h2 {
+    font-weight: 600;
+  }
+
+  .card h2 a {
+    display: flex;
+    gap: var(--space-2xs);
+  }
+
+  .card h2 a::after {
+    content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18"><path stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 3H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M11 1h6m0 0v6m0-6L7 11"/></svg>');
+    height: 0.75em;
+    width: 0.75em;
+    filter: var(--filter-primary);
+  }
+
+  .card h2,
+  .card p {
+    margin-block-end: var(--space-3xs);
+  }
+
+  .card h2 svg {
+    width: 1em;
+  }
+
+  .card a:not(.card__btn) {
+    text-decoration: none;
+    color: var(--color-primary);
+  }
+
+  .card a:hover {
+    text-decoration: underline;
+  }
+
+  .card__btn {
+    font-size: smaller;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    margin-block-start: var(--space-xs);
+    padding: var(--space-2xs) var(--space-xs);
+  }
+
+  .card__btn:hover {
+    color: var(--color-white);
+  }
+
+  .card__btn::after {
+    filter: var(--filter-white);
+  }
+</style>
