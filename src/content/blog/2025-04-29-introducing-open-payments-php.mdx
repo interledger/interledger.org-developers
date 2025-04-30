@@ -26,7 +26,7 @@ Today, we're excited to change that with the release of Open Payments PHP — an
 [interledger/open-payments-php](https://github.com/interledger/open-payments-php) is a modern, Composer-installable PHP package that provides full client support for the Open Payments API.
 It includes:
 
-✅ Full support for [Grants](https://openpayments.dev/introduction/grants/), [Incoming Payments](https://openpayments.dev/introduction/op-flow/#incoming-payment), [Outgoing Payments](https://openpayments.dev/introduction/op-flow/#outgoing-paymenthttps://openpayments.dev/introduction/op-flow/#outgoing-payment), [Quotes](https://openpayments.dev/introduction/op-flow/#quote), and [Token](https://openpayments.dev/snippets/token-rotate/) management.
+✅ Full support for [Grants](https://openpayments.dev/introduction/grants/), [Incoming Payments](https://openpayments.dev/introduction/op-flow/#incoming-payment), [Outgoing Payments](https://openpayments.dev/introduction/op-flow/#outgoing-paymentt), [Quotes](https://openpayments.dev/introduction/op-flow/#quote), and [Token](https://openpayments.dev/snippets/token-rotate/) management.
 
 ✅ Built for PHP 8.3+, using strict typing, PSR-4 autoloading, and Composer dependency management.
 
@@ -96,8 +96,8 @@ For example:
 
 - GrantService handles grant requests and continuations.
 - QuoteService manages the creation and retrieval of quotes.
-- IncomingPaymentService handles creation and retrieval of IncomingPayments
-- OutgoingPaymentService covers creation and retrieval of OutgoingPayments
+- IncomingPaymentService handles creation and retrieval of IncomingPayments.
+- OutgoingPaymentService covers creation and retrieval of OutgoingPayments.
 
 All these services are incorporated into the main AuthClient and can be used directly from the client like in the above examples.
 Developers interact mainly through these service classes, without worrying about low-level HTTP requests or Open Payments internal mechanics, like the [http signatures](https://openpayments.dev/introduction/http-signatures/) — the library abstracts that complexity away.
