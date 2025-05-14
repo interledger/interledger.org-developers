@@ -1,6 +1,7 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import starlightLinksValidator from "starlight-links-validator";
+import starlightFullViewMode from "starlight-fullview-mode";
 
 import mdx from "@astrojs/mdx";
 
@@ -22,6 +23,7 @@ export default defineConfig({
         starlightLinksValidator({
           exclude: ["/participation-guidelines"],
         }),
+        starlightFullViewMode({ leftSidebarEnabled: false }),
       ],
       head: [
         {
