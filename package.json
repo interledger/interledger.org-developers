@@ -11,7 +11,7 @@
   "dependencies": {
     "@astrojs/mdx": "^4.2.6",
     "@astrojs/node": "^9.2.1",
-    "@astrojs/starlight": "^0.34.3",
+    "@astrojs/starlight": "^0.33.2",
     "@interledger/docs-design-system": "^0.7.1",
     "@types/showdown": "^2.0.6",
     "astro": "^5.7.13",
