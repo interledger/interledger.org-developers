@@ -47,11 +47,10 @@ This approach lowers the technical barrier and ensures creators can focus on the
 ## Ensuring Wallet Ownership and Security
 
 To protect users and maintain integrity, wallet ownership confirmation is integrated.  
-Currently, this relies on an *interactive grant* (allows users to authorize a payment from their digital wallet) that confirms ownership without transferring any actual funds.
+Currently, this relies on an *interactive grant*, in the future, a more streamlined wallet verification mechanism will replace this process.
 
-> In the future, a more streamlined wallet verification mechanism will replace this process.
-
-This ensures that only the rightful owner of a wallet can update the configuration.
+Users are asked to confirm they own their wallets before a script tag is generated. 
+Without ownership confirmation, their customizations are not saved on the server. The validation steps help to maintain integrity, protect wallet owners, and ensure only the rightful owner of a wallet can update the configuration.
 
 ## Default Configurations
 
@@ -131,6 +130,7 @@ These features are actively in development and will soon be available:
 
 <img src="/developers/img/blog/2025-05-20/pt_example_button.png" alt="Create a button" style={{ width: "85%" }} />
 
+<br />
 
 #### Exclusive Content
 
