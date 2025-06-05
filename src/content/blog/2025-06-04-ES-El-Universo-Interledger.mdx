@@ -1,0 +1,65 @@
+    ---
+Título: El Universo Interledger
+description: "Explora el sistema abierto que conecta pagos globales con Interledger."
+date: 2025-06-04
+slug: el-universo-interledger
+authors:
+  - Marian Villa
+author_urls:
+  - https://www.linkedin.com/in/marianvilla/
+tags:
+  - Interledger
+  - Pagos Abiertos
+  - Inclusión Financiera
+---
+
+Si estás un poco abrumado por términos como el **Protocolo de Interledger, Interledger Stack, o Fundación Interledger, Estándar de Pagos Abiertos, Rafiki, La Moneda Rafiki, Dassie, Monetización Web (Extensión), STREAM, SPSP, Paquetes,etc…** Y te sientes aún un poco perdido, aquí estamos para aclararlo. Vamos a desglozar cada uno de los términos para traer a la luz el significado y de esta manera mostrar más claramente el Universo de Interledger. Empecemos con el término más obvio: 
+
+## Interledger
+
+El término **Interledger** puede dividirse en el prefijo **“Inter”** que puede entenderse como “entre” y **ledger**, que en su definición más pura en el [diccionario](https://www.merriam-webster.com/dictionary/ledger).
+, traduciría: Un libro. Un libro que contiene las cuentas donde se registran los débitos y créditos de los libros de registro contables. Si juntamos ambos conceptos, Interledger significa que el sistema de pagos puede hacerse entre múltiples libros contables, conocidos como ledgers. 
+
+**¿Qué significa esto, cómo funciona?**
+Digamos que tengo una cuenta en Alemania y quiero transferir dinero a mi amigo Allan en Sur África. ¿Qué opciones tengo? Puedo empezar una transferencia internacional desde mi cuenta bancaria a la de Allan, lo que usará será una red SWIFT para intercambiar mensajes de pago. Probablemente la transferencia va a tomar al menos 3 días para verse reflejada en la cuenta bancaria de Allan y va a costarme relativamente una gran comisión. También puedo usar un servicio como *Wise*, pero esta es una plataforma cerrada que requerirá que me registre, y Allan necesitará también crear su cuenta o diligenciar un formulario con el Banco de Reserva de Sur África antes de recibir sus fondos. 
+
+También es importante entender que este servicio es regulado, porque utiliza sotware privado, entonces como usuario no tengo una manera de entender cómo es procesada mi data, y en este caso hipotético solo queda confiar. Y el caso se complicaría si asumimos que Allan no tiene una cuenta tradicional de banco, ya que solo tiene un proveedor de dinero móvil. **¿Cómo transferiríamos  fondos a él, entonces?** 
+
+Interledger fue diseñado para ser una serie de nodos que impulsa mensajes de pago en el sistema, teniendo en cuenta la conversión de la moneda, donde la ‘moneda’ puede ser cualquiera que incluya un valor para transar, incluyendo monedas fiduciarias, criptomonedas o dinero móvil. 
+
+![Red de Pagos](/developers/img/blog/2025-06-04/network-Interledger.png)
+
+Ahora, continuando con el ejemplo, si mi cuenta bancaria está en Euros y la cuenta Móvil de Allan está en Moneda Surafricana, Rands, como vemos en el gráfico de la Red de Pagos, hay múltiples maneras de que mi dinero pueda ser enviado y enrutado a Allan. Lo que hace **Interledger** especial, es que se asegura que los paquetes lleguen con la ruta más rápida y barata, desde mi nodo de Interledger hasta el nodo de Interledger de Allan. Interledger está diseñado para ser una red encima de las redes existentes de pagos, y por esto logra interoperabilidad entre todas las capas.   
+
+## Fundación Interledger
+
+Ahora que entendimos la parte técnica, podemos introducir **la Fundación Interledger**. 
+Es una fundación constituída en Estados Unidos cuya visión es enviar dinero de manera fácil, como si enviaras un correo electrónico. 
+
+La Fundación Interledger tiene bajo su dirección y cuidado, el Protocolo Interledger y sus protocolos asociados, y se dedica a desarrollar y fomentar la inclusión financiera en sus sistemas alrededor del mundo. 
+
+La estrategia global es soportar la investigación y desarrollo de los sistemas de inclusión financiera en áreas vulnerable, fondear a través de subvenciones a poblaciones no representadas en el ecosistema financiero, cambiando el paradigma en este sistema; adicional creando una comunidad abierta e inclusiva, **la Comunidad Interledger**, que crece a través de la conversación abierta, uniendo otras voces y perspectivas, al espacio fintech.  
+
+**¿Cuáles son los protocolos que desarrolla y mantiene la fundación?**
+
+## La Arquitectura de Interledger
+
+La Arquitectura de Interledger tiene un gran parecido a la Arquitectura de Internet, consiste en múltiples capas, y esto no es una coincidencia, ya que la arquitectura de Interledger fue modelada posterior a la arquitectura de Internet. Entonces por esto, cada capa de la arquitectura de Internet tiene su equivalente en la Arquitectura de Interledger. Cada capa sirve para una función específica que interactúa con capas tanto arriba como abajo. 
+
+Exploremos cada una de las capas de la Arquitectura de Interledger desde abajo.
+
+![Infraestructura Interledger](/developers/img/blog/2025-06-04/infraestructura-Interledger-espanol.jpg)
+
+Si prefieres una versión en video de la Arquitectura de Interledger puedes ver esta presentación de la Arquitectura en [Youtube](https://youtu.be/sqGjkZKFjgo). 
+
+### Capa de Infrastructura
+
+La infraestructura por si misma no es una parte técnica de la arquitectura, pero es una parte esencial para que los protocolos funcionen. En esta capa es donde se define el valor a intercambiar entre las las partes. Este acuerdo de intercambio puede ocurrir entre monedas *Fiat, Crypto, o Dinero Móvil, o cualquier activo de valor acordado*. Aquí es donde se define el valor intercambiado entre las partes, como créditos de Starbucks o incluso granos de café físicos. 
+
+Esta capa se asegura que una vez el pago se haya liquidado, la transferencia de valor ha sido ejecutada con las partes involucradas. Usualmente, los nodos conectados, también llamados conectores, entran en un acuerdo de sincronización para definir la línea de crédito que se están extendiendo entre cada nodo para facilitar que el acuerdo se de. Esta transacción puede ocurrir en un punto predefinido o donde esté la línea de crédito, también llamada liquidación entre pares, y allí es completada.  
+
+Es importante aclarar que en caso de que se utilice una crypto para realizar el acuerdo entre los nodos, esto pasa automáticamente en el acuerdo entre pares, porque las blockchains fuerzan el acuerdo de acuerdo a sus capacidades cryptográficas y a su ejecución.
+
+
+
+
