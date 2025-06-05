@@ -344,6 +344,11 @@ a.switch-link:hover {
   .site-nav__toggle {
     display: none;
   }
+
+  .menu-item--level-1 > .is-active,  .menu-item--level-2 > .is-active{
+  text-decoration: underline currentColor 2px;
+  text-underline-offset: 8px;
+}
 }
 </style>
 
@@ -443,4 +448,15 @@ function isClickOutside(event: MouseEvent, nodeList: NodeListOf<Element>) {
   });
   return !clickedInsideTarget;
 }
+
+// Site sub-navigation highlighting parent menu item 
+const devLinks = document.querySelectorAll('.site-nav__links a[href*="/developers"]');
+const currentPath = window.location.href;
+devLinks.forEach( devLink => {
+ if(devLink.href === currentPath){
+  const parentItemLink = devLink.closest(".menu-item--level-1").children[0]
+  devLink.classList.add('is-active');
+  parentItemLink.classList.add('is-active');
+ }
+})
 </script>
