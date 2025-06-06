@@ -1,22 +1,49 @@
 ---
 import FoundationLogo from "../logos/FoundationLogo.astro";
 ---
+
 <header class="site-header" role="banner">
-  <nav class="site-nav" role="navigation" aria-labelledby="block-interledger-mainnavigation-menu" id="block-interledger-mainnavigation">
-    <h2 class="visually-hidden" id="block-interledger-mainnavigation-menu">Main navigation</h2>
-    <a href="/" class="site-logo" aria-label="Interledger Foundation" data-umami-event="Site Nav - Logo">
+  <nav
+    class="site-nav"
+    role="navigation"
+    aria-labelledby="block-interledger-mainnavigation-menu"
+    id="block-interledger-mainnavigation"
+  >
+    <h2 class="visually-hidden" id="block-interledger-mainnavigation-menu">
+      Main navigation
+    </h2>
+    <a
+      href="/"
+      class="site-logo"
+      aria-label="Interledger Foundation"
+      data-umami-event="Site Nav - Logo"
+    >
       <FoundationLogo />
     </a>
-    <div class="site-links-wrapper offscreen" data-nav-wrapper id="siteNavLinks">
+    <div
+      class="site-links-wrapper offscreen"
+      data-nav-wrapper
+      id="siteNavLinks"
+    >
       <ul class="site-nav__links menu--level-1" id="siteNavMenu">
         <li class="menu-item has-submenu menu-item--level-1">
-          <a href="/about-us" aria-expanded="false" data-umami-event="Site Nav - Foundation">Foundation</a>
+          <a
+            href="/about-us"
+            aria-expanded="false"
+            data-umami-event="Site Nav - Foundation">Foundation</a
+          >
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
-              <a href="/about-us" data-umami-event="Site Nav - About us">About Us</a>
+              <a href="/about-us" data-umami-event="Site Nav - About us"
+                >About Us</a
+              >
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href="/policy-and-advocacy" data-umami-event="Site Nav - Policy & Advocacy">Policy & Advocacy</a>
+              <a
+                href="/policy-and-advocacy"
+                data-umami-event="Site Nav - Policy & Advocacy"
+                >Policy & Advocacy</a
+              >
             </li>
             <li class="menu-item menu-item--level-2">
               <a href="/team" data-umami-event="Site Nav - Team">Team</a>
@@ -27,420 +54,515 @@ import FoundationLogo from "../logos/FoundationLogo.astro";
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
-          <a href="/developers" aria-expanded="false" data-umami-event="Site Nav - Technology">Technology</a>
+          <a
+            href="/developers"
+            aria-expanded="false"
+            data-umami-event="Site Nav - Technology">Technology</a
+          >
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
-              <a href="/open-standards" data-umami-event="Site Nav - Open Standards">Overview</a>
+              <a
+                href="/open-standards"
+                data-umami-event="Site Nav - Open Standards">Overview</a
+              >
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href="/interledger" data-umami-event="Site Nav - Interledger">Interledger</a>
-            <li class="menu-item menu-item--level-2">
-              <a href="/open-payments" data-umami-event="Site Nav - Open Payments">Open Payments</a>
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a href="/web-monetization" data-umami-event="Site Nav - Web Monetization">Web Monetization</a>
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a href="/join-network" data-umami-event="Site Nav - Join network">Join The Network</a>
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a href="/developers" data-umami-event="Site Nav - Developers Portal">Developers Portal</a>
-            </li>
-          </ul>
-        </li>
-        <li class="menu-item has-submenu menu-item--level-1">
-          <a href="/financial-services" aria-expanded="false" data-umami-event="Site Nav - Grants">Grants</a>
-          <ul class="menu--level-2">
-            <li class="menu-item menu-item--level-2">
-              <a href="/financial-services" data-umami-event="Site Nav - Financial Services">Financial Services</a>
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a href="/education" data-umami-event="Site Nav - Education">Education</a>
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a href="/ambassadors" data-umami-event="Site Nav - Ambassadors">Ambassadors</a>
-            </li>
-          </ul>
-        </li>
-        <li class="menu-item has-submenu menu-item--level-1">
-          <a href="/blog" aria-expanded="false" data-umami-event="Site Nav - Content hub">Content hub</a>
-          <ul class="menu--level-2">
-            <li class="menu-item menu-item--level-2">
-              <a href="/blog" data-umami-event="Site Nav - Blog">Foundation Blog</a>
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a href="/developers/blog" data-umami-event="Site Nav - Engineering Blog">Tech Blog</a>
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a href="/podcast" data-umami-event="Site Nav - Podcast">Podcast</a>
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a href="/art" data-umami-event="Site Nav - Art">Art</a>
+              <a href="/interledger" data-umami-event="Site Nav - Interledger"
+                >Interledger</a
+              >
+              <li class="menu-item menu-item--level-2">
+                <a
+                  href="/open-payments"
+                  data-umami-event="Site Nav - Open Payments">Open Payments</a
+                >
+              </li>
+              <li class="menu-item menu-item--level-2">
+                <a
+                  href="/web-monetization"
+                  data-umami-event="Site Nav - Web Monetization"
+                  >Web Monetization</a
+                >
+              </li>
+              <li class="menu-item menu-item--level-2">
+                <a
+                  href="/join-network"
+                  data-umami-event="Site Nav - Join network">Join The Network</a
+                >
+              </li>
+              <li class="menu-item menu-item--level-2">
+                <a
+                  href="/developers"
+                  data-umami-event="Site Nav - Developers Portal"
+                  >Developers Portal</a
+                >
+              </li>
             </li>
           </ul>
+          <li class="menu-item has-submenu menu-item--level-1">
+            <a
+              href="/financial-services"
+              aria-expanded="false"
+              data-umami-event="Site Nav - Grants">Grants</a
+            >
+            <ul class="menu--level-2">
+              <li class="menu-item menu-item--level-2">
+                <a
+                  href="/financial-services"
+                  data-umami-event="Site Nav - Financial Services"
+                  >Financial Services</a
+                >
+              </li>
+              <li class="menu-item menu-item--level-2">
+                <a href="/education" data-umami-event="Site Nav - Education"
+                  >Education</a
+                >
+              </li>
+              <li class="menu-item menu-item--level-2">
+                <a href="/ambassadors" data-umami-event="Site Nav - Ambassadors"
+                  >Ambassadors</a
+                >
+              </li>
+            </ul>
+          </li>
+          <li class="menu-item has-submenu menu-item--level-1">
+            <a
+              href="/blog"
+              aria-expanded="false"
+              data-umami-event="Site Nav - Content hub">Content hub</a
+            >
+            <ul class="menu--level-2">
+              <li class="menu-item menu-item--level-2">
+                <a href="/blog" data-umami-event="Site Nav - Blog"
+                  >Foundation Blog</a
+                >
+              </li>
+              <li class="menu-item menu-item--level-2">
+                <a
+                  href="/developers/blog"
+                  data-umami-event="Site Nav - Engineering Blog">Tech Blog</a
+                >
+              </li>
+              <li class="menu-item menu-item--level-2">
+                <a href="/podcast" data-umami-event="Site Nav - Podcast"
+                  >Podcast</a
+                >
+              </li>
+              <li class="menu-item menu-item--level-2">
+                <a href="/art" data-umami-event="Site Nav - Art">Art</a>
+              </li>
+            </ul>
+          </li>
+          <li class="menu-item has-submenu menu-item--level-1">
+            <a
+              href="/get-involved"
+              aria-expanded="false"
+              data-umami-event="Site Nav - Participate">Participate</a
+            >
+            <ul class="menu--level-2">
+              <li class="menu-item menu-item--level-2">
+                <a
+                  href="/get-involved"
+                  data-umami-event="Site Nav - Get involved">Get involved</a
+                >
+              </li>
+              <li class="menu-item menu-item--level-2">
+                <a href="/events" data-umami-event="Site Nav - Events">Events</a
+                >
+              </li>
+              <li class="menu-item menu-item--level-2">
+                <a
+                  href="/participation-guidelines"
+                  data-umami-event="Site Nav - Guidelines">Guidelines</a
+                >
+              </li>
+            </ul>
+          </li>
         </li>
-        <li class="menu-item has-submenu menu-item--level-1">
-          <a href="/get-involved" aria-expanded="false" data-umami-event="Site Nav - Participate">Participate</a>
-          <ul class="menu--level-2">
-            <li class="menu-item menu-item--level-2">
-              <a href="/get-involved" data-umami-event="Site Nav - Get involved">Get involved</a>
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a href="/events" data-umami-event="Site Nav - Events">Events</a>
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a href="/participation-guidelines" data-umami-event="Site Nav - Guidelines">Guidelines</a>
-            </li>
-          </ul>
-        </li>
+        <a
+          class="switch-link"
+          href="/summit"
+          data-umami-event="Site Nav - Summit Link">Interledger Summit</a
+        >
       </ul>
-      <a class="switch-link" href="/summit" data-umami-event="Site Nav - Summit Link">Interledger Summit</a>
+      <button
+        type="button"
+        class="site-nav__toggle"
+        aria-controls="siteNavMenu"
+        aria-label="Toggle Menu"
+        title="Toggle Menu"
+        id="siteNavToggle"
+      >
+        <div id="menuIcon" class="menu-icon">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </button>
     </div>
-    <button type="button" class="site-nav__toggle" aria-controls="siteNavMenu" aria-label="Toggle Menu" title="Toggle Menu" id="siteNavToggle">
-      <div id="menuIcon" class="menu-icon">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-    </button>
   </nav>
-</header>
 
-<style>
-.site-header {
-  background-color: var(--color-header-bg);
-  padding: 0 var(--space-m);
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  border-block-start: 2px solid var(--color-header-accent);
-  box-shadow: var(--box-shadow);
-}
-
-.site-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.site-nav ul {
-  list-style: none;
-  padding-inline-start: 0;
-  justify-content: center;
-}
-
-.site-nav a {
-  display: block;
-  color: currentColor;
-  transition: text-decoration 200ms ease-in-out;
-  white-space: nowrap;
-}
-
-.site-logo {
-  width: 11em;
-  flex: none;
-}
-
-.site-nav__links a {
-  text-decoration: none;
-  padding: var(--space-s) var(--space-2xs);
-  color: var(--color-black);
-}
-
-.site-nav__links a:hover {
-  background-color: var(--color-header-accent);
-  color: currentColor;
-}
-
-.switch-link {
-  align-self: center;
-  justify-self: end;
-  grid-area: site;
-  padding-block: var(--space-s);
-  text-decoration: none;
-}
-
-a.switch-link:hover {
-  text-decoration: underline;
-  color: currentColor;
-}
-
-@media screen and (max-width: 479px) {
-  .site-links-wrapper {
-    width: 100%;
-  }
-}
-
-@media screen and (min-width: 480px) and (max-width: 1059px) {
-  .site-links-wrapper {
-    width: max-content;
-  }
-}
-
-@media screen and (max-width: 1059px) {
-  .site-nav {
-    height: var(--site-header-height);
-  }
-  
-  .site-links-wrapper {
-    position: absolute;
-    background-color: var(--color-header-bg);
-    top: var(--site-header-height);
-    right: 0;
-    transition: transform 300ms ease-in-out;
-    border-block-start: 1px solid var(--color-header-accent);
-  }
-
-  .site-links-wrapper.offscreen {
-    transform: translateX(100%);
-  }
-
-  .site-links-wrapper a {
-    padding-inline: var(--space-s);
-  }
-
-  a[aria-expanded="false"] + .menu--level-2 {
-    display: none;
-  }
-
-  a[aria-expanded="true"] + .menu--level-2 {
-    display: block;
-  }
-
-  .menu-item--level-1 > .is-active {
-    border-inline-start: 2px solid var(--color-header-accent);
-  }
-
-  .menu-item--level-2 > .is-active {
-    text-decoration: underline;
-  }
-
-  .switch-link:hover {
-    background-color: var(--color-header-accent);
-  }
-
-  .site-nav__toggle {
-    border: 0;
-    background: initial;
-    padding: var(--space-xs) 0;
-  }
-
-  .menu-icon {
-    position: relative;
-    transform: rotate(0deg);
-    transition: 0.5s ease-in-out;
-    cursor: pointer;
-    height: 1em;
-    width: 1.5em;
-  }
-
-  .menu-icon span {
-    display: block;
-    position: absolute;
-    height: 4px;
-    width: 100%;
-    background: currentColor;
-    border-radius: 4px;
-    opacity: 1;
-    left: 0;
-    transform: rotate(0deg);
-    transition: 0.25s ease-in-out;
-  }
-
-  .menu-icon span:nth-child(1) {
-    top: 0;
-  }
-
-  .menu-icon span:nth-child(2),
-  .menu-icon span:nth-child(3) {
-    top: 50%;
-  }
-
-  .menu-icon span:nth-child(4) {
-    top: 100%;
-  }
-
-  .menu-icon.open span:nth-child(1),
-  .menu-icon.open span:nth-child(4) {
-    top: 50%;
-    width: 0%;
-    left: 50%;
-  }
-
-  .menu-icon.open span:nth-child(2) {
-    transform: rotate(45deg);
-  }
-
-  .menu-icon.open span:nth-child(3) {
-    transform: rotate(-45deg);
-  }
-
-  ul.menu--level-2 {
-    padding-inline-start: var(--space-m);
-  }
-}
-
-@media screen and (min-width: 1060px) {
-  .site-nav {
-    display: grid;
-    grid-template-columns: auto 1fr 1fr;
-    grid-template-areas: "logo links links";
-    gap: var(--space-s);
-  }
-
-  .site-logo {
-    grid-area: logo;
-    z-index: 1;
-  }
-
-  .site-links-wrapper {
-    grid-area: 1 / 1 / 2 / 4;
-    display: grid;
-    grid-template-columns: minmax(10em, 1fr) 1fr 1fr;
-    grid-template-areas: ". menu site";
-    gap: var(--space-s);
-  }
-
-  .site-nav__links {
-    grid-area: menu;
-    display: flex;
-    align-items: center;
-  }
-
-  .has-submenu {
-    position: relative;
-  }
-
-  .site-nav .menu--level-2 {
-    background-color: var(--color-header-bg);
-    position: absolute;
-    border-inline-start: 2px solid var(--color-header-accent);
-    transition: opacity 150ms ease-in;
-  }
-
-  .site-nav .menu--level-2 a {
-    padding: var(--space-2xs);
-  }
-
-  .has-submenu > a[aria-expanded="false"] + ul {
-    visibility: hidden;
-    opacity: 0;
-  }
-
-  .has-submenu > a[aria-expanded="true"] + ul,
-  .menu-item--level-1:hover > .menu--level-2,
-  .menu--level-2:hover {
-    visibility: visible;
-    opacity: 1;
-    width: max-content;
-    min-width: 100%;
-    left: 0;
-    top: calc(1.4em + var(--space-s) * 2);
-    box-shadow: 2px 3px 6px -3px hsla(0, 0%, 0%, 0.06),
-    -2px 3px 6px -3px hsla(0, 0%, 0%, 0.06);
-  }
-
-  .site-nav__toggle {
-    display: none;
-  }
-}
-</style>
-
-<script>
-const siteLinksWrapper = document.querySelector("[data-nav-wrapper]");
-const wideNavMinWidth = window.matchMedia("(min-width: 1060px)");
-wideNavMinWidth.addEventListener("change", handleNavDisplayStyles);
-
-const siteNavToggle = document.getElementById("siteNavToggle");
-const menuIcon = document.getElementById("menuIcon");
-
-if (document.contains(siteNavToggle)) {
-  siteNavToggle?.addEventListener("click", handleMobileNavToggle, false);
-}
-
-function handleMobileNavToggle() {
-  siteLinksWrapper?.classList.toggle("offscreen");
-  if (siteLinksWrapper?.getAttribute("class")?.includes("offscreen")) {
-    menuIcon?.classList.remove("open");
-  } else {
-    menuIcon?.classList.add("open");
-  }
-}
-
-function handleNavDisplayStyles(event: MediaQueryListEvent) {
-  if (event.matches) {
-    siteLinksWrapper?.classList.remove("offscreen");
-  } else {
-    if (siteLinksWrapper) {
-      flashPrevention(siteLinksWrapper);
+  <style>
+    .site-header {
+      background-color: var(--color-header-bg);
+      padding: 0 var(--space-m);
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      border-block-start: 2px solid var(--color-header-accent);
+      box-shadow: var(--box-shadow);
     }
-    siteLinksWrapper?.classList.add("offscreen");
-  }
-}
 
-function flashPrevention(element: Element) {
-  element.setAttribute("style", "display:none");
-  setTimeout(() => {
-    element.removeAttribute("style");
-  }, 10);
-}
+    .site-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-// Site sub-navigation toggle
-const siteNav = document.querySelector(".site-nav__links") as HTMLInputElement;
+    .site-nav ul {
+      list-style: none;
+      padding-inline-start: 0;
+      justify-content: center;
+    }
 
-if (document.contains(siteNav)) {
-  const subLinks = document.querySelectorAll(".has-submenu > a");
+    .site-nav a {
+      display: block;
+      color: currentColor;
+      transition: text-decoration 200ms ease-in-out;
+      white-space: nowrap;
+    }
 
-  subLinks.forEach((subLink) => {
-    subLink.setAttribute("aria-expanded", "false");
+    .site-logo {
+      width: 11em;
+      flex: none;
+    }
 
-    subLink.addEventListener("click", function (event) {
-      const clickedSubLink = event.target as Element;
-      const allSubLinks = Array.from(subLinks);
-      const notClickedLinks = allSubLinks.filter(function (otherLink) {
-        return otherLink !== clickedSubLink;
-      });
-      notClickedLinks.forEach((link) => {
-        link.setAttribute("aria-expanded", "false");
-      });
-      if (clickedSubLink?.getAttribute("aria-expanded") === "true") {
-        clickedSubLink?.setAttribute("aria-expanded", "false");
-      } else {
-        clickedSubLink?.setAttribute("aria-expanded", "true");
+    .site-nav__links a {
+      text-decoration: none;
+      padding: var(--space-s) var(--space-2xs);
+      color: var(--color-black);
+    }
+
+    .site-nav__links a:hover {
+      background-color: var(--color-header-accent);
+      color: currentColor;
+    }
+
+    .switch-link {
+      align-self: center;
+      justify-self: end;
+      grid-area: site;
+      padding-block: var(--space-s);
+      text-decoration: none;
+    }
+
+    a.switch-link:hover {
+      text-decoration: underline;
+      color: currentColor;
+    }
+
+    @media screen and (max-width: 479px) {
+      .site-links-wrapper {
+        width: 100%;
       }
-      event.preventDefault();
-      return false;
+    }
+
+    @media screen and (min-width: 480px) and (max-width: 1059px) {
+      .site-links-wrapper {
+        width: max-content;
+      }
+    }
+
+    @media screen and (max-width: 1059px) {
+      .site-nav {
+        height: var(--site-header-height);
+      }
+
+      .site-links-wrapper {
+        position: absolute;
+        background-color: var(--color-header-bg);
+        top: var(--site-header-height);
+        right: 0;
+        transition: transform 300ms ease-in-out;
+        border-block-start: 1px solid var(--color-header-accent);
+      }
+
+      .site-links-wrapper.offscreen {
+        transform: translateX(100%);
+      }
+
+      .site-links-wrapper a {
+        padding-inline: var(--space-s);
+      }
+
+      a[aria-expanded="false"] + .menu--level-2 {
+        display: none;
+      }
+
+      a[aria-expanded="true"] + .menu--level-2 {
+        display: block;
+      }
+
+      .menu-item--level-1 > .is-active {
+        border-inline-start: 2px solid var(--color-header-accent);
+      }
+
+      .menu-item--level-2 > .is-active {
+        text-decoration: underline;
+      }
+
+      .switch-link:hover {
+        background-color: var(--color-header-accent);
+      }
+
+      .site-nav__toggle {
+        border: 0;
+        background: initial;
+        padding: var(--space-xs) 0;
+      }
+
+      .menu-icon {
+        position: relative;
+        transform: rotate(0deg);
+        transition: 0.5s ease-in-out;
+        cursor: pointer;
+        height: 1em;
+        width: 1.5em;
+      }
+
+      .menu-icon span {
+        display: block;
+        position: absolute;
+        height: 4px;
+        width: 100%;
+        background: currentColor;
+        border-radius: 4px;
+        opacity: 1;
+        left: 0;
+        transform: rotate(0deg);
+        transition: 0.25s ease-in-out;
+      }
+
+      .menu-icon span:nth-child(1) {
+        top: 0;
+      }
+
+      .menu-icon span:nth-child(2),
+      .menu-icon span:nth-child(3) {
+        top: 50%;
+      }
+
+      .menu-icon span:nth-child(4) {
+        top: 100%;
+      }
+
+      .menu-icon.open span:nth-child(1),
+      .menu-icon.open span:nth-child(4) {
+        top: 50%;
+        width: 0%;
+        left: 50%;
+      }
+
+      .menu-icon.open span:nth-child(2) {
+        transform: rotate(45deg);
+      }
+
+      .menu-icon.open span:nth-child(3) {
+        transform: rotate(-45deg);
+      }
+
+      ul.menu--level-2 {
+        padding-inline-start: var(--space-m);
+      }
+    }
+
+    @media screen and (min-width: 1060px) {
+      .site-nav {
+        display: grid;
+        grid-template-columns: auto 1fr 1fr;
+        grid-template-areas: "logo links links";
+        gap: var(--space-s);
+      }
+
+      .site-logo {
+        grid-area: logo;
+        z-index: 1;
+      }
+
+      .site-links-wrapper {
+        grid-area: 1 / 1 / 2 / 4;
+        display: grid;
+        grid-template-columns: minmax(10em, 1fr) 1fr 1fr;
+        grid-template-areas: ". menu site";
+        gap: var(--space-s);
+      }
+
+      .site-nav__links {
+        grid-area: menu;
+        display: flex;
+        align-items: center;
+      }
+
+      .has-submenu {
+        position: relative;
+      }
+
+      .site-nav .menu--level-2 {
+        background-color: var(--color-header-bg);
+        position: absolute;
+        border-inline-start: 2px solid var(--color-header-accent);
+        transition: opacity 150ms ease-in;
+      }
+
+      .site-nav .menu--level-2 a {
+        padding: var(--space-2xs);
+      }
+
+      .has-submenu > a[aria-expanded="false"] + ul {
+        visibility: hidden;
+        opacity: 0;
+      }
+
+      .has-submenu > a[aria-expanded="true"] + ul,
+      .menu-item--level-1:hover > .menu--level-2,
+      .menu--level-2:hover {
+        visibility: visible;
+        opacity: 1;
+        width: max-content;
+        min-width: 100%;
+        left: 0;
+        top: calc(1.4em + var(--space-s) * 2);
+        box-shadow:
+          2px 3px 6px -3px hsla(0, 0%, 0%, 0.06),
+          -2px 3px 6px -3px hsla(0, 0%, 0%, 0.06);
+      }
+
+      .site-nav__toggle {
+        display: none;
+      }
+
+      .menu-item--level-1 > .is-active,
+      .menu-item--level-2 > .is-active {
+        text-decoration: underline currentColor 2px;
+        text-underline-offset: 8px;
+      }
+    }
+  </style>
+
+  <script>
+    const siteLinksWrapper = document.querySelector("[data-nav-wrapper]");
+    const wideNavMinWidth = window.matchMedia("(min-width: 1060px)");
+    wideNavMinWidth.addEventListener("change", handleNavDisplayStyles);
+
+    const siteNavToggle = document.getElementById("siteNavToggle");
+    const menuIcon = document.getElementById("menuIcon");
+
+    if (document.contains(siteNavToggle)) {
+      siteNavToggle?.addEventListener("click", handleMobileNavToggle, false);
+    }
+
+    function handleMobileNavToggle() {
+      siteLinksWrapper?.classList.toggle("offscreen");
+      if (siteLinksWrapper?.getAttribute("class")?.includes("offscreen")) {
+        menuIcon?.classList.remove("open");
+      } else {
+        menuIcon?.classList.add("open");
+      }
+    }
+
+    function handleNavDisplayStyles(event: MediaQueryListEvent) {
+      if (event.matches) {
+        siteLinksWrapper?.classList.remove("offscreen");
+      } else {
+        if (siteLinksWrapper) {
+          flashPrevention(siteLinksWrapper);
+        }
+        siteLinksWrapper?.classList.add("offscreen");
+      }
+    }
+
+    function flashPrevention(element: Element) {
+      element.setAttribute("style", "display:none");
+      setTimeout(() => {
+        element.removeAttribute("style");
+      }, 10);
+    }
+
+    // Site sub-navigation toggle
+    const siteNav = document.querySelector(
+      ".site-nav__links"
+    ) as HTMLInputElement;
+
+    if (document.contains(siteNav)) {
+      const subLinks = document.querySelectorAll(".has-submenu > a");
+
+      subLinks.forEach((subLink) => {
+        subLink.setAttribute("aria-expanded", "false");
+
+        subLink.addEventListener("click", function (event) {
+          const clickedSubLink = event.target as Element;
+          const allSubLinks = Array.from(subLinks);
+          const notClickedLinks = allSubLinks.filter(function (otherLink) {
+            return otherLink !== clickedSubLink;
+          });
+          notClickedLinks.forEach((link) => {
+            link.setAttribute("aria-expanded", "false");
+          });
+          if (clickedSubLink?.getAttribute("aria-expanded") === "true") {
+            clickedSubLink?.setAttribute("aria-expanded", "false");
+          } else {
+            clickedSubLink?.setAttribute("aria-expanded", "true");
+          }
+          event.preventDefault();
+          return false;
+        });
+      });
+
+      siteNav?.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          resetSubMenus();
+        }
+      });
+
+      document.addEventListener("click", function (event) {
+        if (isClickOutside(event, subLinks)) {
+          resetSubMenus();
+        }
+      });
+
+      function resetSubMenus() {
+        subLinks.forEach((subLink) => {
+          subLink.setAttribute("aria-expanded", "false");
+        });
+      }
+    }
+
+    function isClickOutside(event: MouseEvent, nodeList: NodeListOf<Element>) {
+      let clickedInsideTarget = false;
+      const eventTarget = event.target as Element;
+      Array.from(nodeList).forEach(function (element) {
+        if (element.contains(eventTarget)) {
+          clickedInsideTarget = true;
+        }
+      });
+      return !clickedInsideTarget;
+    }
+
+    // Site sub-navigation highlighting parent menu item
+    const devLinks = document.querySelectorAll(
+      ".site-nav__links .menu-item--level-2 a[href*='/developers']"
+    );
+    const currentPath = window.location.pathname;
+    devLinks.forEach((devLink) => {
+      if (
+        devLink instanceof HTMLAnchorElement &&
+        devLink.pathname === currentPath
+      ) {
+        const parentMenu = devLink.closest(".menu-item--level-1");
+        const parentMenuLink = parentMenu?.querySelector("a");
+        devLink.classList.add("is-active");
+        parentMenuLink?.classList.add("is-active");
+      }
     });
-  });
-
-  siteNav?.addEventListener("keydown", function (event) {
-    if (event.key === "Escape") {
-      resetSubMenus();
-    }
-  });
-
-  document.addEventListener("click", function (event) {
-    if (isClickOutside(event, subLinks)) {
-      resetSubMenus();
-    }
-  });
-
-  function resetSubMenus() {
-    subLinks.forEach((subLink) => {
-      subLink.setAttribute("aria-expanded", "false");
-    });
-  }
-}
-
-function isClickOutside(event: MouseEvent, nodeList: NodeListOf<Element>) {
-  let clickedInsideTarget = false;
-  const eventTarget = event.target as Element;
-  Array.from(nodeList).forEach(function (element) {
-    if (element.contains(eventTarget)) {
-      clickedInsideTarget = true;
-    }
-  });
-  return !clickedInsideTarget;
-}
-</script>
+  </script>
+</header>
