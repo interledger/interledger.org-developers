@@ -561,7 +561,9 @@ import FoundationLogo from "../logos/FoundationLogo.astro";
     devLinks.forEach((devLink) => {
       if (
         devLink instanceof HTMLAnchorElement &&
-        devLink.pathname === currentPath
+        (devLink.pathname === currentPath ||
+          (currentPath.startsWith("/developers/blog") &&
+            devLink.pathname.startsWith("/developers/blog")))
       ) {
         const parentMenu = devLink.closest(".menu-item--level-1");
         const parentMenuLink = parentMenu?.querySelector("a");
