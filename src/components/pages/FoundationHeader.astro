@@ -552,7 +552,12 @@ import FoundationLogo from "../logos/FoundationLogo.astro";
     const devLinks = document.querySelectorAll(
       ".site-nav__links .menu-item--level-2 a[href*='/developers']"
     );
-    const currentPath = window.location.pathname;
+    let currentPath = window.location.pathname;
+
+    if (currentPath.charAt(currentPath.length - 1) === "/") {
+      currentPath = currentPath.slice(0, -1);
+    }
+
     devLinks.forEach((devLink) => {
       if (
         devLink instanceof HTMLAnchorElement &&
@@ -560,6 +565,7 @@ import FoundationLogo from "../logos/FoundationLogo.astro";
       ) {
         const parentMenu = devLink.closest(".menu-item--level-1");
         const parentMenuLink = parentMenu?.querySelector("a");
+
         devLink.classList.add("is-active");
         parentMenuLink?.classList.add("is-active");
       }
