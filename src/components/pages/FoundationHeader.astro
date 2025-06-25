@@ -347,7 +347,9 @@ a.switch-link:hover {
   }
 
   .menu-item--level-1 > .is-active,  .menu-item--level-2 > .is-active{
-  text-decoration: underline currentColor 2px;
+  text-decoration: underline;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 2px;
   text-underline-offset: 8px;
 }
 }
@@ -454,16 +456,26 @@ function isClickOutside(event: MouseEvent, nodeList: NodeListOf<Element>) {
 const devLinks = document.querySelectorAll(
   ".site-nav__links .menu-item--level-2 a[href*='/developers']"
 );
-const currentPath = window.location.pathname;
+let currentPath = window.location.pathname;
+
+if (currentPath.charAt(currentPath.length - 1) === "/") {
+  currentPath = currentPath.slice(0, -1);
+}
+
 devLinks.forEach((devLink) => {
-  if (
-    devLink instanceof HTMLAnchorElement &&
-    devLink.pathname === currentPath
-  ) {
-    const parentMenu = devLink.closest(".menu-item--level-1");
-    const parentMenuLink = parentMenu?.querySelector("a");
-    devLink.classList.add("is-active");
-    parentMenuLink?.classList.add("is-active");
+  if (devLink instanceof HTMLAnchorElement) {
+    const isCurrentPage = devLink.pathname === currentPath;
+    const isBlogMatch =
+      currentPath.startsWith("/developers/blog") &&
+      devLink.pathname.startsWith("/developers/blog");
+
+    if (isCurrentPage || isBlogMatch) {
+      const parentMenu = devLink.closest(".menu-item--level-1");
+      const parentMenuLink = parentMenu?.querySelector("a");
+  
+      devLink.classList.add("is-active");
+      parentMenuLink?.classList.add("is-active");
+    }
   }
 });
 </script>
