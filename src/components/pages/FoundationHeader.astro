@@ -458,21 +458,26 @@ const devLinks = document.querySelectorAll(
 );
 let currentPath = window.location.pathname;
 
-if (currentPath.charAt(currentPath.length - 1) === "/") {
+if (currentPath.endsWith("/")) {
   currentPath = currentPath.slice(0, -1);
 }
 
+const activeSections = [
+  "/developers/blog"
+]
 devLinks.forEach((devLink) => {
   if (devLink instanceof HTMLAnchorElement) {
-    const isCurrentPage = devLink.pathname === currentPath;
-    const isBlogMatch =
-      currentPath.startsWith("/developers/blog") &&
-      devLink.pathname.startsWith("/developers/blog");
+    const linkPath = devLink.pathname;
+    const isExactMatch = linkPath === currentPath;
 
-    if (isCurrentPage || isBlogMatch) {
+    const isSectionMatch = activeSections.some((section) =>
+      currentPath.startsWith(section) && linkPath.startsWith(section)
+    );
+
+    if (isExactMatch || isSectionMatch) {
       const parentMenu = devLink.closest(".menu-item--level-1");
       const parentMenuLink = parentMenu?.querySelector("a");
-  
+
       devLink.classList.add("is-active");
       parentMenuLink?.classList.add("is-active");
     }
