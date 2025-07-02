@@ -1,6 +1,7 @@
 ---
 import FoundationLogo from "../logos/FoundationLogo.astro";
 import { getLangFromUrl, useTranslations, useTranslatedPath } from "../../i18n/utils";
+import LanguagePicker from "../LanguagePicker.astro"
 
 const lang = getLangFromUrl(Astro.url); 
 const t = useTranslations(lang); 
@@ -125,10 +126,87 @@ const translatePath = useTranslatedPath(lang);
       </div>
     </button>
   </nav>
+  <LanguagePicker lang={lang} />
 </header>
 
 <style>
-  .site-header {
+.site-header {
+  background-color: var(--color-header-bg);
+  padding: 0 var(--space-m);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  border-block-start: 2px solid var(--color-header-accent);
+  box-shadow: var(--box-shadow);
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-nav ul {
+  list-style: none;
+  padding-inline-start: 0;
+  justify-content: center;
+}
+
+.site-nav a {
+  display: block;
+  color: currentColor;
+  transition: text-decoration 200ms ease-in-out;
+  white-space: nowrap;
+}
+
+.site-logo {
+  width: 11em;
+  flex: none;
+}
+
+.site-nav__links a {
+  text-decoration: none;
+  padding: var(--space-s) var(--space-2xs);
+  color: var(--color-black);
+}
+
+.site-nav__links a:hover {
+  background-color: var(--color-header-accent);
+  color: currentColor;
+}
+
+.switch-link {
+  align-self: center;
+  justify-self: end;
+  grid-area: site;
+  padding-block: var(--space-s);
+  text-decoration: none;
+}
+
+a.switch-link:hover {
+  text-decoration: underline;
+  color: currentColor;
+}
+
+@media screen and (max-width: 479px) {
+  .site-links-wrapper {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 480px) and (max-width: 1159px) {
+  .site-links-wrapper {
+    width: max-content;
+  }
+}
+
+@media screen and (max-width: 1159px) {
+  .site-nav {
+    height: var(--site-header-height);
+  }
+
+  .site-links-wrapper {
+    position: absolute;
     background-color: var(--color-header-bg);
     padding: 0 var(--space-m);
     position: sticky;
@@ -138,23 +216,46 @@ const translatePath = useTranslatedPath(lang);
     box-shadow: var(--box-shadow);
   }
 
-  .site-nav {
+  .menu-icon span:nth-child(2),
+  .menu-icon span:nth-child(3) {
+    top: 50%;
+  }
+
+  .menu-icon span:nth-child(4) {
+    top: 100%;
+  }
+
+  .menu-icon.open span:nth-child(1),
+  .menu-icon.open span:nth-child(4) {
+    top: 50%;
+    width: 0%;
+    left: 50%;
+  }
+
+  .menu-icon.open span:nth-child(2) {
+    transform: rotate(45deg);
+  }
+
+  .menu-icon.open span:nth-child(3) {
+    transform: rotate(-45deg);
+  }
+
+  ul.menu--level-2 {
+    padding-inline-start: var(--space-m);
+  }
+}
+
+@media screen and (min-width: 1160px) {
+  .site-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
   }
-
-  .site-nav ul {
-    list-style: none;
-    padding-inline-start: 0;
-    justify-content: center;
-  }
-
-  .site-nav a {
-    display: block;
-    color: currentColor;
-    transition: text-decoration 200ms ease-in-out;
-    white-space: nowrap;
+  .site-nav {
+    display: grid;
+    grid-template-columns: auto 1fr 1fr;
+    grid-template-areas: "logo links links";
+    gap: var(--space-s);
+    flex: 1;
   }
 
   .site-logo {
@@ -381,6 +482,15 @@ const translatePath = useTranslatedPath(lang);
       text-underline-offset: 8px;
     }
   }
+}
+
+/* @media screen and (min-width: 1160px) {
+.site-header {
+    display: flex;
+    align-items: center;
+  }
+}  */
+
 </style>
 
 <script>

@@ -80,6 +80,7 @@
   --color-primary-bg-fallback: rgba(7, 121, 114, 0.1);
   --color-primary-bg: oklch(51.95% 0.089 187.7 / 0.1);
 
+  --color-nav-hover: #eee;
   --color-header-bg: var(--color-white);
   --color-header-accent: #eee;
   --color-table-stripe: #f6f7f9;

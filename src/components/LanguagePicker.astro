@@ -1,0 +1,80 @@
+---
+import { defaultLang } from "../i18n/ui";
+import { useTranslatedPath, getEnglishPathFromUrl } from "../i18n/utils";
+const { lang } = Astro.props;
+const path = getEnglishPathFromUrl(Astro.url);
+const translatePath = useTranslatedPath(defaultLang);
+---
+
+<div class="language-switcher-language-url" role="navigation">
+  <ul class="links">
+    <li
+      class:list={[lang === "en" && "is-active"]}
+      aria-current={lang === "en" ? "page" : undefined}
+    >
+      <a
+        href={translatePath(path, "en")}
+        class:list={["language-link", lang === "en" && "is-active"]}
+        hreflang="en-gb"
+        aria-current={lang === "en" ? "page" : undefined}
+      >
+        EN
+      </a>
+    </li>
+    <li
+      class:list={[lang === "es" && "is-active"]}
+      aria-current={lang === "es" ? "page" : undefined}
+    >
+      <a
+        href={translatePath(path, "es")}
+        class:list={["language-link", lang === "es" && "is-active"]}
+        hreflang="es"
+        aria-current={lang === "es" ? "page" : undefined}
+      >
+        ES
+      </a>
+    </li>
+  </ul>
+</div>
+
+<style>
+  .language-switcher-language-url {
+    flex: none;
+  }
+  
+  .language-switcher-language-url .links {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin-inline-start: var(--space-2xs);
+  }
+
+  .language-switcher-language-url .links li:first-child::after {
+    display: inline-flex;
+    content: "|";
+  }
+
+  .language-switcher-language-url .links a {
+    margin: var(--space-3xs);
+    padding: var(--space-xs) var(--space-2xs);
+    text-underline-offset: 8px;
+    text-decoration: underline 1.5px transparent;
+  }
+
+  .language-switcher-language-url .links a.is-active {
+    text-decoration-color: currentColor;
+  }
+
+  .language-switcher-language-url .links a:hover {
+    background-color: var(--color-nav-hover);
+    border-radius: var(--border-radius);
+  }
+
+  @media screen and (max-width: 1159px) {
+    .language-switcher-language-url {
+      position: absolute;
+      top: 25px;
+      right: calc(var(--space-m) + var(--space-xs) + 24px);
+    }
+  }
+</style>
