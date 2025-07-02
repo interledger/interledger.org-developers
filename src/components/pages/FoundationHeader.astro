@@ -1,6 +1,7 @@
 ---
 import FoundationLogo from "../logos/FoundationLogo.astro";
 import { getLangFromUrl, useTranslations, useTranslatedPath } from "../../i18n/utils";
+import LanguagePicker from "../LanguagePicker.astro"
 
 const lang = getLangFromUrl(Astro.url); 
 const t = useTranslations(lang); 
@@ -113,6 +114,7 @@ const translatePath = useTranslatedPath(lang);
       </div>
     </button>
   </nav>
+  <LanguagePicker lang={lang} />
 </header>
 
 <style>
@@ -180,17 +182,17 @@ a.switch-link:hover {
   }
 }
 
-@media screen and (min-width: 480px) and (max-width: 1059px) {
+@media screen and (min-width: 480px) and (max-width: 1159px) {
   .site-links-wrapper {
     width: max-content;
   }
 }
 
-@media screen and (max-width: 1059px) {
+@media screen and (max-width: 1159px) {
   .site-nav {
     height: var(--site-header-height);
   }
-  
+
   .site-links-wrapper {
     position: absolute;
     background-color: var(--color-header-bg);
@@ -289,12 +291,17 @@ a.switch-link:hover {
   }
 }
 
-@media screen and (min-width: 1060px) {
+@media screen and (min-width: 1160px) {
+  .site-header {
+    display: flex;
+    align-items: center;
+  }
   .site-nav {
     display: grid;
     grid-template-columns: auto 1fr 1fr;
     grid-template-areas: "logo links links";
     gap: var(--space-s);
+    flex: 1;
   }
 
   .site-logo {
@@ -353,6 +360,14 @@ a.switch-link:hover {
     display: none;
   }
 }
+
+/* @media screen and (min-width: 1160px) {
+.site-header {
+    display: flex;
+    align-items: center;
+  }
+}  */
+
 </style>
 
 <script>
