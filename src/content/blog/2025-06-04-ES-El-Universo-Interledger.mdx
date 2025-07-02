@@ -29,7 +29,7 @@ También es importante entender que este servicio es regulado, porque utiliza so
 
 Interledger fue diseñado para ser una serie de nodos que impulsa mensajes de pago en el sistema, teniendo en cuenta la conversión de la moneda, donde la ‘moneda’ puede ser cualquiera que incluya un valor para transar, incluyendo monedas fiduciarias, criptomonedas o dinero móvil. 
 
-![Imagen 1 - Red de Pagos](https://interledger.org/developers/img/blog/2025-06-04/network-Interledger.png)
+![Imagen 1 - Red de Pagos](/developers/img/blog/2025-06-04/network-Interledger.png)
 
 Ahora, continuando con el ejemplo, si mi cuenta bancaria está en Euros y la cuenta Móvil de Allan está en Moneda Surafricana, Rands, como vemos en el gráfico de la Red de Pagos, hay múltiples maneras de que mi dinero pueda ser enviado y enrutado a Allan. Lo que hace **Interledger** especial, es que se asegura que los paquetes lleguen con la ruta más rápida y barata, desde mi nodo de Interledger hasta el nodo de Interledger de Allan. Interledger está diseñado para ser una red encima de las redes existentes de pagos, y por esto logra interoperabilidad entre todas las capas.   
 
@@ -52,7 +52,7 @@ La Arquitectura de Interledger tiene un gran parecido a la Arquitectura de Inter
 
 Exploremos cada una de las capas de la Arquitectura de Interledger desde abajo.
 
-![Imagen 2 - Infraestructura Interledger](https://interledger.org/developers/img/blog/2025-06-04/infraestructura-Interledger-espanol.jpg)
+![Imagen 2 - Infraestructura Interledger](/developers/img/blog/2025-06-04/infraestructura-Interledger-espanol.jpg)
 
 Si prefieres una versión en video de la Arquitectura de Interledger puedes ver esta presentación de su Arquitectura en [Youtube](https://youtu.be/sqGjkZKFjgo). 
 
@@ -81,7 +81,7 @@ El core de la Arquitectura de Interledger está basado en el [Protocolo Interled
 
 Empecemos ejemplificando una **Transferencia de una Fase**. 
 
-![Imagen 3 - Transferencia de una sola fase](https://interledger.org/developers/img/blog/2025-06-04/transferencia-ILP-Interledger-Protocol-unafase.png)
+![Imagen 3 - Transferencia de una sola fase](/developers/img/blog/2025-06-04/transferencia-ILP-Interledger-Protocol-unafase.png)
 
 Alice representada a la izquierda en la imagen, es un cliente de un servicio de cuentas de Identidad (ASE) que corre sobre un nodo conector de Interledger (Nodo A).
 
@@ -97,7 +97,7 @@ Para evitar el riesgo de que la transacción falle y no llegue al usuario final,
 
 ### Transferencia de Dos Fases:
 
-![Imagen 4 - Transferencia de dos fases](https://interledger.org/developers/img/blog/2025-06-04/2p-transfer-es.jpg)
+![Imagen 4 - Transferencia de dos fases](/developers/img/blog/2025-06-04/2p-transfer-es.jpg)
 
 A través del **Protocolo Interledger ILP**, la transferencia comenzará enviando al conector (A) un paquete construido en ILP que contiene la dirección ILP del que recibe, una condición de ejecución que tendrá un monto y un tiempo de expiración. El conector que envía también incluirá información adicional como el formato que se determinará por el protocolo de más alto nivel en uso. Luego, el paquete irá al conector (B) sobre un canal autenticado, y tendrá una configuración usando una capa de enlace al protocolo. 
 
@@ -144,7 +144,7 @@ Cuando avancemos a la sección de la ***Capa de Aplicación***, volveremos sobre
 
 La Capa de Transporte construida sobre ILP provee funcionalidades adicionales por manejar la transferencia de valor. El único protocolo soportado al momento es el Protocolo [STREAM](https://interledger.org/developers/rfcs/stream-protocol/) ***(Streaming Transport for Real-time Exchange of Assets and Messages)***.
 
-![Imagen 4 - Protocolo STREAM](https://interledger.org/developers/img/blog/2025-06-04/Protocolo-STREAM.gif)
+![Imagen 4 - Protocolo STREAM](/developers/img/blog/2025-06-04/Protocolo-STREAM.gif)
 
 **STREAM** es un protocolo versátil y seguro para transportar el **Protocolo ILP**, facilitando eficientemente y de forma escalable la transmisión de dinero e información. El protocolo ofrece un rango de funcionalidades diseñadas para optimizar las transacciones basadas en ILP como:  
 
