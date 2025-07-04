@@ -5,7 +5,7 @@ import LanguagePicker from "../LanguagePicker.astro"
 
 const lang = getLangFromUrl(Astro.url); 
 const t = useTranslations(lang); 
-const translatePath = useTranslatedPath(lang);
+const translatePath = useTranslatedPath(lang, lang);
 ---
 
 <header class="site-header" role="banner">
@@ -483,13 +483,6 @@ a.switch-link:hover {
     }
   }
 }
-
-/* @media screen and (min-width: 1160px) {
-.site-header {
-    display: flex;
-    align-items: center;
-  }
-}  */
 
 </style>
 

@@ -1,9 +1,9 @@
 ---
 import { defaultLang } from "../i18n/ui";
-import { useTranslatedPath, getEnglishPathFromUrl } from "../i18n/utils";
+import { useTranslatedPath } from "../i18n/utils";
 const { lang } = Astro.props;
-const path = getEnglishPathFromUrl(Astro.url);
-const translatePath = useTranslatedPath(defaultLang);
+const path = Astro.url.pathname;
+const translatePath = useTranslatedPath(defaultLang, lang);
 ---
 
 <div class="language-switcher-language-url" role="navigation">
@@ -46,7 +46,7 @@ const translatePath = useTranslatedPath(defaultLang);
   .language-switcher-language-url {
     flex: none;
   }
-  
+
   .language-switcher-language-url .links {
     display: flex;
     list-style: none;
