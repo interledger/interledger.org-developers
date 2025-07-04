@@ -1,3 +1,6 @@
+type LanguageRoutes = Record<keyof typeof languages, Record<string, string>>;
+type LanguageUi = Record<keyof typeof languages, Record<string, string>>;
+
 export const languages = {
   en: "English",
   es: "Español",
@@ -5,7 +8,16 @@ export const languages = {
 
 export const defaultLang = "en";
 
-export const ui = {
+export const routes: LanguageRoutes = {
+  en: {
+    "first-week": "breakpoint-it-work-week",
+  },
+  es: {
+    "first-week": "primera-semana-breakpoint",
+  },
+};
+
+export const ui: LanguageUi = {
   en: {
     "nav.foundation": "Foundation",
     "nav.about": "About Us",
