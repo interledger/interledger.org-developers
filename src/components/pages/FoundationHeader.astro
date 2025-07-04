@@ -1,103 +1,109 @@
 ---
 import FoundationLogo from "../logos/FoundationLogo.astro";
+import { getLangFromUrl, useTranslations, useTranslatedPath } from "../../i18n/utils";
+import LanguagePicker from "../LanguagePicker.astro"
+
+const lang = getLangFromUrl(Astro.url); 
+const t = useTranslations(lang); 
+const translatePath = useTranslatedPath(lang, lang);
 ---
 <header class="site-header" role="banner">
   <nav class="site-nav" role="navigation" aria-labelledby="block-interledger-mainnavigation-menu" id="block-interledger-mainnavigation">
     <h2 class="visually-hidden" id="block-interledger-mainnavigation-menu">Main navigation</h2>
-    <a href="/" class="site-logo" aria-label="Interledger Foundation" data-umami-event="Site Nav - Logo">
+    <a href={translatePath("/")} class="site-logo" aria-label="Interledger Foundation" data-umami-event="Site Nav - Logo">
       <FoundationLogo />
     </a>
     <div class="site-links-wrapper offscreen" data-nav-wrapper id="siteNavLinks">
       <ul class="site-nav__links menu--level-1" id="siteNavMenu">
         <li class="menu-item has-submenu menu-item--level-1">
-          <a href="/vision" aria-expanded="false" data-umami-event="Site Nav - About us">About us</a>
+          <a href={translatePath("/about-us")} aria-expanded="false" data-umami-event="Site Nav - About us">{t("nav.about")}</a>
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
-              <a href="/vision" data-umami-event="Site Nav - Vision">Vision</a>
+              <a href={translatePath("/vision")} data-umami-event="Site Nav - Vision">Vision</a>
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href="/mission" data-umami-event="Site Nav - Mission">Mission</a>
+              <a href={translatePath("/mission")} data-umami-event="Site Nav - Mission">Mission</a>
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href="/values" data-umami-event="Site Nav - Values">Values</a>
+              <a href={translatePath("/values")} data-umami-event="Site Nav - Values">Values</a>
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href="/policy-and-advocacy" data-umami-event="Site Nav - Policy & Advocacy">Policy & Advocacy</a>
+              <a href={translatePath("/policy-and-advocacy")} data-umami-event="Site Nav - Policy & Advocacy">{t("nav.policy")}</a>
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href="/team" data-umami-event="Site Nav - Team">Team</a>
+              <a href={translatePath("/team")} data-umami-event="Site Nav - Team">{t("nav.team")}</a>
             </li>
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
-          <a href="/financial-services" aria-expanded="false" data-umami-event="Site Nav - Grants">Grants</a>
+          <a href={translatePath("/financial-services")} aria-expanded="false" data-umami-event="Site Nav - Grants">{t("nav.grants")}</a>
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
-              <a href="/financial-services" data-umami-event="Site Nav - Financial Services">Financial Services</a>
+              <a href={translatePath("/financial-services")} data-umami-event="Site Nav - Financial Services">{t("nav.financial-services")}</a>
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href="/education" data-umami-event="Site Nav - Education">Education</a>
+              <a href={translatePath("/education")} data-umami-event="Site Nav - Education">{t("nav.education")}</a>
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href="/ambassadors" data-umami-event="Site Nav - Ambassadors">Ambassadors</a>
+              <a href={translatePath("/ambassadors")} data-umami-event="Site Nav - Ambassadors">{t("nav.ambassadors")}</a>
             </li>
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
-          <a href="/developers" aria-expanded="false" data-umami-event="Site Nav - Technology">Technology</a>
+          <a href={translatePath("/developers")} aria-expanded="false" data-umami-event="Site Nav - Technology">{t("nav.technology")}</a>
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
-              <a href="/interledger" data-umami-event="Site Nav - Interledger">Interledger</a>
+              <a href={translatePath("/interledger")} data-umami-event="Site Nav - Interledger">{t("nav.interledger")}</a>
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href="/open-standards" data-umami-event="Site Nav - Open Standards">Open Standards</a>
+              <a href={translatePath("/open-standards")} data-umami-event="Site Nav - Open Standards">Open Standards</a>
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href="/developers" data-umami-event="Site Nav - Developers Portal">Developers Portal</a>
+              <a href={translatePath("/developers")} data-umami-event="Site Nav - Developers Portal">{t("nav.developers")}</a>
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href="/developers/blog" data-umami-event="Site Nav - Engineering Blog">Engineering Blog</a>
+              <a href={translatePath("/developers/blog")} data-umami-event="Site Nav - Engineering Blog">{t("nav.tech-blog")}</a>
             </li>
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
-          <a href="/podcast" aria-expanded="false" data-umami-event="Site Nav - Future | Money">Future | Money</a>
+          <a href={translatePath("/podcast")} aria-expanded="false" data-umami-event="Site Nav - Future | Money">Future | Money</a>
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
-              <a href="/podcast" data-umami-event="Site Nav - Podcast">Podcast</a>
+              <a href={translatePath("/podcast")} data-umami-event="Site Nav - Podcast">{t("nav.podcast")}</a>
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href="/art" data-umami-event="Site Nav - Art">Art</a>
+              <a href={translatePath("/art")} data-umami-event="Site Nav - Art">{t("nav.art")}</a>
             </li>
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
-          <a href="/blog" aria-expanded="false" data-umami-event="Site Nav - News">News</a>
+          <a href={translatePath("/blog")} aria-expanded="false" data-umami-event="Site Nav - News">News</a>
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
-              <a href="/blog" data-umami-event="Site Nav - Blog">Blog</a>
+              <a href={translatePath("/blog")} data-umami-event="Site Nav - Blog">{t("nav.foundation-blog")}</a>
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href="/press" data-umami-event="Site Nav - Press">Press</a>
+              <a href={translatePath("/press")} data-umami-event="Site Nav - Press">Press</a>
             </li>
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
-          <a href="/get-involved" aria-expanded="false" data-umami-event="Site Nav - Participate">Participate</a>
+          <a href={translatePath("/get-involved")} aria-expanded="false" data-umami-event="Site Nav - Participate">{t("nav.participate")}</a>
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
-              <a href="/get-involved" data-umami-event="Site Nav - Get involved">Get involved</a>
+              <a href={translatePath("/get-involved")} data-umami-event="Site Nav - Get involved">{t("nav.get-involved")}</a>
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href="/events" data-umami-event="Site Nav - Events">Events</a>
+              <a href={translatePath("/events")} data-umami-event="Site Nav - Events">{t("nav.events")}</a>
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href="/participation-guidelines" data-umami-event="Site Nav - Guidelines">Guidelines</a>
+              <a href={translatePath("/participation-guidelines")} data-umami-event="Site Nav - Guidelines">{t("nav.guidelines")}</a>
             </li>
           </ul>
         </li>
       </ul>
-      <a class="switch-link" href="/summit" data-umami-event="Site Nav - Summit Link">Interledger Summit</a>
+      <a class="switch-link" href={translatePath("/summit")} data-umami-event="Site Nav - Summit Link">{t("nav.summit")}</a>
     </div>
     <button type="button" class="site-nav__toggle" aria-controls="siteNavMenu" aria-label="Toggle Menu" title="Toggle Menu" id="siteNavToggle">
       <div id="menuIcon" class="menu-icon">
@@ -108,6 +114,7 @@ import FoundationLogo from "../logos/FoundationLogo.astro";
       </div>
     </button>
   </nav>
+  <LanguagePicker lang={lang} />
 </header>
 
 <style>
@@ -175,17 +182,17 @@ a.switch-link:hover {
   }
 }
 
-@media screen and (min-width: 480px) and (max-width: 1059px) {
+@media screen and (min-width: 480px) and (max-width: 1159px) {
   .site-links-wrapper {
     width: max-content;
   }
 }
 
-@media screen and (max-width: 1059px) {
+@media screen and (max-width: 1159px) {
   .site-nav {
     height: var(--site-header-height);
   }
-  
+
   .site-links-wrapper {
     position: absolute;
     background-color: var(--color-header-bg);
@@ -284,12 +291,17 @@ a.switch-link:hover {
   }
 }
 
-@media screen and (min-width: 1060px) {
+@media screen and (min-width: 1160px) {
+  .site-header {
+    display: flex;
+    align-items: center;
+  }
   .site-nav {
     display: grid;
     grid-template-columns: auto 1fr 1fr;
     grid-template-areas: "logo links links";
     gap: var(--space-s);
+    flex: 1;
   }
 
   .site-logo {
@@ -348,6 +360,7 @@ a.switch-link:hover {
     display: none;
   }
 }
+
 </style>
 
 <script>
