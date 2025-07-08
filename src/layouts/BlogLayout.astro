@@ -25,6 +25,11 @@ const rawHTMLString = `This article was originally published at <a href=${frontm
 					<a itemprop="item" href="/developers/blog" data-umami-event="Devs breadcrumb - Blog">
 					<span itemprop="name">Engineering Blog</span></a>
 					<meta itemprop="position" content="2" />
+					{frontmatter.lang &&
+						<span>|</span>
+						<a itemprop="item" href="/developers/blog/es" data-umami-event="Devs breadcrumb - ES blogs">
+						<span itemprop="name">Blog de Ingeniería</span></a>
+					}
 				</li>
 			</ol>
 			<h1>{frontmatter.title}</h1>
@@ -70,7 +75,6 @@ main {
   display: inline-flex;
   margin-inline-start: var(--space-3xs);
 }
-
 
 article {
 	--max-content-width: 960px;

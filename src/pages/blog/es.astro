@@ -20,6 +20,12 @@ console.log(typeof esEntries, esEntries.length, esEntries[0]?.data?.title);
 					<span itemprop="name">Developers Portal</span></a>
 					<meta itemprop="position" content="1" />
 				</li>
+				<li itemprop="itemListElement" itemscope
+						itemtype="https://schema.org/ListItem">
+					<a itemprop="item" href="/developers/blog" data-umami-event="Devs breadcrumb - Blog">
+					<span itemprop="name">Engineering Blog</span></a>
+					<meta itemprop="position" content="2" />
+				</li>
 			</ol>
 			<header>
 				<h1>Blog de Ingeniería</h1>
@@ -64,6 +70,12 @@ main {
 .breadcrumbs a {
 	color: var(--color-primary);
 	text-decoration: none;
+}
+
+.breadcrumbs li:not(:first-child)::before {
+  content: '>';
+  display: inline-flex;
+  margin-inline-start: var(--space-3xs);
 }
 
 ol {
