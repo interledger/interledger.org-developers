@@ -116,8 +116,8 @@ export default defineConfig({
               link: "https://paymentpointers.org",
               attrs: {
                 target: "_blank",
-                class: "external-link",
                 rel: "noopener noreferrer",
+                "data-icon": "external",
               },
             },
           ],
