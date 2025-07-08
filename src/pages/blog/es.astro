@@ -1,22 +1,16 @@
 ---
-import type { Page } from "astro";
+import { getCollection } from 'astro:content';
 import { createExcerpt } from '../../utils/create-excerpt';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Pagination from '../../components/blog/Pagination.astro';
-import { getCollection } from 'astro:content';
 
-type Props = {
-  page: Page<any>;
-};
 
-export async function getStaticPaths({ paginate }: any) {
-  const blogEntries = (await getCollection("blog")).sort((a:any, b:any) => b.data.date.getTime() - a.data.date.getTime());
-  return paginate(blogEntries, { pageSize: 10 });
-}
-
-const { page } = Astro.props;
+// Only return posts with `draft: true` in the frontmatter
+const esEntries = await getCollection('blog', ({ data }) => {
+  return data.lang === 'es';
+});
+console.log(typeof esEntries, esEntries.length, esEntries[0]?.data?.title);
 ---
-<BaseLayout title="Engineering Blog" description="Hear stories and experiences from the team who is working on making Interledger, the interoperable global payments network, a reality." ogImageUrl={new URL('/developers/img/blog/og-image.png', Astro.site).href}>
+<BaseLayout title="Blog de Ingeniería" description="Hear stories and experiences from the team who is working on making Interledger, the interoperable global payments network, a reality." ogImageUrl={new URL('/developers/img/blog/og-image.png', Astro.site).href}>
 	<main>
 		<div class="content-wrapper">
 			<ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
@@ -28,39 +22,26 @@ const { page } = Astro.props;
 				</li>
 			</ol>
 			<header>
-				<h1>Engineering Blog</h1>
+				<h1>Blog de Ingeniería</h1>
 				<a class="cta__blog" href="/blog">
 					<p>Check out Foundation updates</p>
 					<img src="/developers/img/ernie-purple.svg" alt="Ernie holding an envelope" aria-hidden="true">
 				</a>
 			</header>
 			<ol class="postlist">
-				{((page as any).data || []).map((blogPostEntry: any) => {
+				{(esEntries as any).map((blogPostEntry: any) => {
 					const excerpt = `${createExcerpt(blogPostEntry.body).substring(0, 300)}...`;
 					return (
 						<li class="postlist-item">
 							<time class="postlist-date" datetime={blogPostEntry.data.date.toISOString()}>
 								{blogPostEntry.data.date.toDateString()}
 							</time>
-							{blogPostEntry.data.lang ? 
-								<div class="postlist-es">
-									<a href={`/developers/blog/${blogPostEntry.id}`} class="postlist-link heading--6">{blogPostEntry.data.title}</a>
-									<a class="postlist-lang" href="/developers/blog/es">ES</a>
-								</div> :
-								<a href={`/developers/blog/${blogPostEntry.id}`} class="postlist-link heading--6">{blogPostEntry.data.title}</a>
-							}
+							<a href={`/developers/blog/${blogPostEntry.id}`} class="postlist-link heading--6">{blogPostEntry.data.title}</a>
 							<p>{blogPostEntry.data.description ? blogPostEntry.data.description : excerpt}</p>
 						</li>
 					)}
 				)}
 			</ol>
-			<Pagination length={page.lastPage}
-				currentPage={page.currentPage} 
-				firstUrl={page.url.first} 
-				prevUrl={page.url.prev}
-				nextUrl={page.url.next}
-				lastUrl={page.url.last}
-			/>
 		</div>
 	</main>
 </PageLayout>
@@ -159,22 +140,6 @@ header {
 
 .postlist-link:hover {
   text-decoration-color: currentColor;
-}
-
-.postlist-es {
-	display: flex;
-	align-items: start;
-	gap: var(--space-2xs);
-}
-
-.postlist-lang {
-	border: 1.5px solid;
-	padding-inline: 4px;
-	border-radius: var(--border-radius);
-	font-size: var(--step--1);
-	background-color: white;
-	margin-block-start: var(--space-3xs);
-	text-decoration: none;
 }
 </style>
 
