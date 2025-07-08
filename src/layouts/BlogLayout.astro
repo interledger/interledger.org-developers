@@ -205,10 +205,10 @@ article :global(.expressive-code) {
 	margin-block-end: var(--space-s);
 }
 
-article :global(code) {
+article :global(:not(pre) > code) {
 	background-color: var(--color-bg-inline-code);
 	border-radius: var(--border-radius);
-	font-size: var(--step--2);
+	font-size: var(--step--1);
 	padding: 0.125rem 0.375rem;
 	overflow-wrap: anywhere;
 }
