@@ -9,6 +9,17 @@ import mdx from "@astrojs/mdx";
 export default defineConfig({
   site: "https://interledger.org",
   base: "/developers",
+  i18n: {
+    locales: ["es", "en"],
+    defaultLocale: "en",
+    routing: {
+      prefixDefaultLocale: false,
+      fallbackType: "rewrite"
+    },
+    fallback: {
+      es: "en"
+    }
+  },
   integrations: [
     starlight({
       title: "Interledger",
