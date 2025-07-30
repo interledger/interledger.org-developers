@@ -136,6 +136,10 @@ export default defineConfig({
     }),
     mdx(),
   ],
+  redirects: {
+    '/hacktoberfest': 'https://interledger.org/hacktoberfest',
+    '/hacktoberfest-2023': 'https://interledger.org/hacktoberfest',
+  },
   server: {
     port: 1103,
   },
