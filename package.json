@@ -6,8 +6,8 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro", 
-    "format": "prettier --write .", 
+    "astro": "astro",
+    "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
   "dependencies": {
@@ -27,9 +27,9 @@
   },
   "devDependencies": {
     "prettier": "3.6.2"
-  }, 
+  },
   "prettier": {
-    "semi": false,
+    "semi": true,
     "singleQuote": true,
     "trailingComma": "none"
   }

@@ -1,5 +1,5 @@
 ---
-title: "Open Payments: The Cinderella Story of Finding a Fitting Authorization Method"
+title: 'Open Payments: The Cinderella Story of Finding a Fitting Authorization Method'
 description: A breakdown of the unique needs that an authorization method for Open Payments needs to be able to fulfill.
 date: 2024-07-30
 slug: open-payments-cinderella-story
@@ -13,7 +13,7 @@ tags:
   - GNAP
 ---
 
-import LargeImg from "/src/components/blog/LargeImg.astro";
+import LargeImg from '/src/components/blog/LargeImg.astro';
 
 ## The Internet Runs on OAuth 2.0
 
@@ -52,12 +52,15 @@ Once the user completes the flow on the identity provider, the authorization ser
 
 Let’s collect this all into a nice sequence diagram.
 
-<LargeImg src="/developers/img/blog/2024-07-30/oauth-sequence-diagram.png" alt="The OAuth 2.0 Sequence Diagram" />
+<LargeImg
+  src="/developers/img/blog/2024-07-30/oauth-sequence-diagram.png"
+  alt="The OAuth 2.0 Sequence Diagram"
+/>
 
 While extremely useful, OAuth 2.0 is best suited for delegating access to _information_. Sadly, when one is interested in delegating _control_, rather than access, the tradition of OAuth 2.0 begins to fall short. A typical OAuth 2.0 authorization is initialized when a third party client generates a link for a resource owner that contains, among other things, a “scope” value that contains a list of the items the authorization should grant access to. For example:
 
 ```js
-scope = "email,username,channels:read";
+scope = 'email,username,channels:read';
 ```
 
 In this example lifted from Slack’s OAuth API, this scope will grant access to a resource owner’s email address and username. In addition, it will allow the channels of a Slack instance to be read by the third party client.
@@ -65,7 +68,7 @@ In this example lifted from Slack’s OAuth API, this scope will grant access to
 Now, the issue with expressing access only as a string, is that it’s cumbersome to express any specifics on the access that’s being granted. Slack attempts to solve this by concatenating parts together, but for a payment, there are enough parts where it becomes really clumsy. Imagine what the scope for a payment might look like with this model, accounting for things like the transaction amount and a billing frequency of once a month:
 
 ```js
-scope = "outgoing-payment:100:USD:P1M";
+scope = 'outgoing-payment:100:USD:P1M';
 ```
 
 This approach is starting to push the boundaries of convenience and ability to parse the scope. Do we need to enforce an order in which information is added to a scope, so that it can be parsed properly? How would we handle optional parts? Should we just stringify a JSON object and call that a scope? From a development standpoint, things are starting to get out of hand.
@@ -97,7 +100,10 @@ Now we’re getting messy again. It’s immediately clear how much noise is in t
 
 Compare this sequence diagram with the previous sequence diagram and the increased complexity. There’s more interaction with the resource server just to set up the authorization flow and more work after the flow in order to initiate the payment.
 
-<LargeImg src="/developers/img/blog/2024-07-30/mandates-sequence-diagram.png" alt="The Mandates Sequence Diagram" />
+<LargeImg
+  src="/developers/img/blog/2024-07-30/mandates-sequence-diagram.png"
+  alt="The Mandates Sequence Diagram"
+/>
 
 ## A New Approach
 
@@ -168,7 +174,10 @@ There is a clear way to describe the parameters for a payment.
 
 For reference, we have a more tame sequence diagram with GNAP. It’s closer to the baseline set by the OAuth 2.0 sequence diagram and keeps the responsibilities of the resource server properly separated from the authorization flow at large.
 
-<LargeImg src="/developers/img/blog/2024-07-30/gnap-sequence-diagram.png" alt="GNAP Sequence Diagram" />
+<LargeImg
+  src="/developers/img/blog/2024-07-30/gnap-sequence-diagram.png"
+  alt="GNAP Sequence Diagram"
+/>
 
 With this in mind, it’s clear that GNAP is best suited for sending payments via Open Payments. Though the spec is not officially final, progress is steady and the future looks promising - the specifications are well on their way to becoming a proper RFC. [The core protocol](https://datatracker.ietf.org/doc/draft-ietf-gnap-core-protocol/) was recently approved by the IESG and has entered the IESG editor’s queue. [The specification for resource servers](https://datatracker.ietf.org/doc/draft-ietf-gnap-resource-servers/) is also on the cusp of being submitted to the IESG for publication.
 
