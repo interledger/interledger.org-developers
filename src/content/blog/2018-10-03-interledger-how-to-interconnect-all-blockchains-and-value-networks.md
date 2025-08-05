@@ -1,6 +1,6 @@
 ---
-title: 'Interledger: How to Interconnect All Blockchains and Value Networks'
-description: 'Interledger was born out of a project to build a blockchain-agnostic smart contracts platform. A key challenge was neutrality: how could a decentralized app buy resources like storage and computing, without being tied to a specific blockchain?'
+title: "Interledger: How to Interconnect All Blockchains and Value Networks"
+description: "Interledger was born out of a project to build a blockchain-agnostic smart contracts platform. A key challenge was neutrality: how could a decentralized app buy resources like storage and computing, without being tied to a specific blockchain?"
 date: 2018-10-03
 slug: interledger-how-to-interconnect-all-blockchains-and-value-networks
 authors:

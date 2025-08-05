@@ -1,5 +1,5 @@
 ---
-title: 'End-to-end testing the Web Monetization browser extension'
+title: "End-to-end testing the Web Monetization browser extension"
 description: "E2E testing browser extensions? It's tricky, but we've got it covered."
 date: 2024-12-03
 slug: e2e-testing-wm-browser-extension
@@ -35,7 +35,7 @@ We can launch the browser with our extension loaded using the `--load-extension=
 
 ```ts
 function loadExtension(pathToExtension: string): Promise<BrowserContext> {
-  const context = await chromium.launchPersistentContext('', {
+  const context = await chromium.launchPersistentContext("", {
     headless: true,
     args: [
       `--headless=true`,
@@ -54,7 +54,7 @@ We require access to the extension's background service worker to interact with 
 ```ts
 let background = context.serviceWorkers()[0];
 if (!background) {
-  background = await context.waitForEvent('serviceworker');
+  background = await context.waitForEvent("serviceworker");
 }
 ```
 
@@ -71,7 +71,7 @@ For instance, to verify if a user has connected their wallet to the WM extension
 
 ```ts
 const data = await background.evaluate(() => {
-  return chrome.storage.local.get(['connected']);
+  return chrome.storage.local.get(["connected"]);
 });
 expect(data.connected).toBe(true);
 ```
@@ -80,7 +80,7 @@ A nice thing with Playwright is we get TypeScript support out of the box, even i
 
 ```ts
 const { connected } = await background.evaluate(() => {
-  return chrome.storage.local.get < { connected: boolean } > ['connected'];
+  return chrome.storage.local.get < { connected: boolean } > ["connected"];
 });
 expect(connected).toBe(true);
 ```
@@ -110,9 +110,9 @@ To make this more compatible with the way the extension opens its popup, we can 
 ```ts
 async function getPopup(context: BrowserContext, popupUrl: string) {
   const page = await context.newPage();
-  const popupPromise = page.waitForEvent('popup');
+  const popupPromise = page.waitForEvent("popup");
   await page.evaluate(() => {
-    return window.open('', '', 'popup=true,width=448,height=600');
+    return window.open("", "", "popup=true,width=448,height=600");
   });
   const popup = await popupPromise;
   await page.close(); // we don't need it anymore
@@ -129,9 +129,9 @@ Note that opening the popup by clicking the extension icon is equivalent to load
 We can test the above helper functions to work well enough:
 
 ```ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test('popup has connect form', async ({ browserName }) => {
+test("popup has connect form", async ({ browserName }) => {
   const context = await loadExtension(browserName);
   const background = await getBackground(context);
   const popup = await getPopup(context, background);
@@ -141,7 +141,7 @@ test('popup has connect form', async ({ browserName }) => {
   });
   expect(connected).toBe(false);
 
-  await expect(popup.locator('form')).toBeAttached();
+  await expect(popup.locator("form")).toBeAttached();
 });
 ```
 
@@ -189,19 +189,19 @@ We then use this fixture as:
 
 ```ts
 // real tests are of course more complex
-import { test, expect } from './fixtures/base';
+import { test, expect } from "./fixtures/base";
 
-test('popup has connect form', async ({ background, popup }) => {
+test("popup has connect form", async ({ background, popup }) => {
   const { connected } = await background.evaluate(() => {
     /* ... */
   });
   expect(connected).toBe(false);
 
-  await expect(popup.locator('form')).toBeAttached();
+  await expect(popup.locator("form")).toBeAttached();
 });
 
-test('can connect to wallet', async ({ background, popup }) => {
-  await popup.getByRole('button').submit();
+test("can connect to wallet", async ({ background, popup }) => {
+  await popup.getByRole("button").submit();
 
   const { connected } = await background.evaluate(() => {
     /* ... */
@@ -209,12 +209,12 @@ test('can connect to wallet', async ({ background, popup }) => {
   expect(connected).toBe(true);
 });
 
-test('monetizes page', async ({ background, popup, page }) => {
+test("monetizes page", async ({ background, popup, page }) => {
   await connectWallet(popup);
-  await page.goto('https://example.com');
+  await page.goto("https://example.com");
 
-  await expect(popup.getByLabel('status')).toHaveText('monetizing...');
-  await expect(popup.locator('url')).toHaveText('example.com');
+  await expect(popup.getByLabel("status")).toHaveText("monetizing...");
+  await expect(popup.locator("url")).toHaveText("example.com");
 });
 ```
 
@@ -230,7 +230,7 @@ Playwright has a neat trick to scope resources per test worker, aptly named: `{ 
 
 ```ts
 // tests/e2e/fixtures/base.ts
-import { test as base } from '@playwright/test';
+import { test as base } from "@playwright/test";
 
 // created once per test
 type TestScope = { page: Page };
@@ -249,14 +249,14 @@ export const test = base.extend<TestScope, WorkerScope>({
       await use(context);
       await context.close();
     },
-    { scope: 'worker' } // yep, that's it. The default is { scope: "test" }
+    { scope: "worker" } // yep, that's it. The default is { scope: "test" }
   ],
   background: [
     async ({ persistentContext: context }, use) => {
       const background = await getBackground(context);
       await use(background);
     },
-    { scope: 'worker' }
+    { scope: "worker" }
   ],
   popup: [
     async ({ background, persistentContext: context }, use) => {
@@ -265,7 +265,7 @@ export const test = base.extend<TestScope, WorkerScope>({
       await use(popup);
       await popup.close();
     },
-    { scope: 'worker' }
+    { scope: "worker" }
   ],
 
   page: async ({ persistentContext: context }, use) => {
@@ -303,14 +303,14 @@ We can snoop on network requests on a page (like the popup or a regular webpage)
 For the Web Monetization extension, it's more useful for us to intercept requests in the background service worker. To catch these requests, we can use `context.on('request', handler)`. If we only care about the response, we can listen to `'requestfinished'` instead. Just a heads up that this service worker request interception is still experimental in Playwright, so we need to set the `PW_EXPERIMENTAL_SERVICE_WORKER_NETWORK_EVENTS=1` environment variable to enable it.
 
 ```ts
-context.on('requestfinished', async function intercept(req) {
+context.on("requestfinished", async function intercept(req) {
   if (!req.serviceWorker()) return; // we only care about service worker requests here
 
   if (isTheRequestWeAreAfter(req)) {
     const json = await req.response().then((res) => res.json());
     // ... use response body
 
-    context.off('requestfinished', intercept); // we're responsible citizens
+    context.off("requestfinished", intercept); // we're responsible citizens
   }
 });
 ```
@@ -323,13 +323,13 @@ Most of our payment tests require logging in to the [Interledger Test Wallet](ht
 
 ```ts
 // tests/e2e/auth.setup.ts
-setup('authenticate', async ({ page }) => {
-  setup.skip(existsSync(AUTH_FILE), 'Already authenticated');
+setup("authenticate", async ({ page }) => {
+  setup.skip(existsSync(AUTH_FILE), "Already authenticated");
 
   await page.goto(`${TEST_WALLET_ORIGIN}/auth/login`);
-  await page.getByLabel('E-mail').fill(TEST_WALLET_USERNAME);
-  await page.getByLabel('Password').fill(TEST_WALLET_PASSWORD);
-  await page.getByRole('button', { name: 'login' }).click();
+  await page.getByLabel("E-mail").fill(TEST_WALLET_USERNAME);
+  await page.getByLabel("Password").fill(TEST_WALLET_PASSWORD);
+  await page.getByRole("button", { name: "login" }).click();
 
   await page.context().storageState({ path: AUTH_FILE });
 });
@@ -342,7 +342,7 @@ export const test = base.extend<TestScope, WorkerScope>({
     async ({ browserName }, use, workerInfo) => {
       const context = await loadExtension(browserName);
 
-      if (workerInfo.project.name !== 'setup') {
+      if (workerInfo.project.name !== "setup") {
         const { cookies } = await readFile(AUTH_FILE).then(JSON.parse);
         await context.addCookies(cookies);
       }
@@ -350,7 +350,7 @@ export const test = base.extend<TestScope, WorkerScope>({
       await use(context);
       await context.close();
     },
-    { scope: 'worker' }
+    { scope: "worker" }
   ]
   // ...
 });

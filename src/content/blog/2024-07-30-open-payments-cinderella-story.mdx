@@ -1,5 +1,5 @@
 ---
-title: 'Open Payments: The Cinderella Story of Finding a Fitting Authorization Method'
+title: "Open Payments: The Cinderella Story of Finding a Fitting Authorization Method"
 description: A breakdown of the unique needs that an authorization method for Open Payments needs to be able to fulfill.
 date: 2024-07-30
 slug: open-payments-cinderella-story
@@ -13,7 +13,7 @@ tags:
   - GNAP
 ---
 
-import LargeImg from '/src/components/blog/LargeImg.astro';
+import LargeImg from "/src/components/blog/LargeImg.astro";
 
 ## The Internet Runs on OAuth 2.0
 
@@ -60,7 +60,7 @@ Let’s collect this all into a nice sequence diagram.
 While extremely useful, OAuth 2.0 is best suited for delegating access to _information_. Sadly, when one is interested in delegating _control_, rather than access, the tradition of OAuth 2.0 begins to fall short. A typical OAuth 2.0 authorization is initialized when a third party client generates a link for a resource owner that contains, among other things, a “scope” value that contains a list of the items the authorization should grant access to. For example:
 
 ```js
-scope = 'email,username,channels:read';
+scope = "email,username,channels:read";
 ```
 
 In this example lifted from Slack’s OAuth API, this scope will grant access to a resource owner’s email address and username. In addition, it will allow the channels of a Slack instance to be read by the third party client.
@@ -68,7 +68,7 @@ In this example lifted from Slack’s OAuth API, this scope will grant access to
 Now, the issue with expressing access only as a string, is that it’s cumbersome to express any specifics on the access that’s being granted. Slack attempts to solve this by concatenating parts together, but for a payment, there are enough parts where it becomes really clumsy. Imagine what the scope for a payment might look like with this model, accounting for things like the transaction amount and a billing frequency of once a month:
 
 ```js
-scope = 'outgoing-payment:100:USD:P1M';
+scope = "outgoing-payment:100:USD:P1M";
 ```
 
 This approach is starting to push the boundaries of convenience and ability to parse the scope. Do we need to enforce an order in which information is added to a scope, so that it can be parsed properly? How would we handle optional parts? Should we just stringify a JSON object and call that a scope? From a development standpoint, things are starting to get out of hand.

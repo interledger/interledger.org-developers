@@ -55,6 +55,7 @@ All commands are run from the root of the project, from a terminal:
 | `bun run astro -- --help` | Get help using the Astro CLI                     |
 | `bun run format`          | Format all files with Prettier                   |
 | `bun run format:check`    | Check code formatting for all files              |
+| `bun run lint`            | Verify Lint                                      |
 
 You can substitute the `bun` commands with whatever package manager of your choice uses.
 

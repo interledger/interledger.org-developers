@@ -3,19 +3,23 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 import { defineConfig, globalIgnores } from "eslint/config";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
+import eslintPluginAstro from "eslint-plugin-astro";
 
 export default defineConfig([
-  { files: ["**/*.{js,mjs,cjs,ts,mts,cts}"], plugins: { js }, extends: ["js/recommended"], languageOptions: { globals: {...globals.browser, ...globals.node} } },
+  {
+    files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
+    plugins: { js },
+    extends: ["js/recommended"],
+    languageOptions: { globals: { ...globals.browser, ...globals.node } }
+  },
   tseslint.configs.recommended,
-  globalIgnores([
-    ".astro",
-    "node_modules", 
-    "public"
-	]),
-  { 
-    "rules": {
-      "@typescript-eslint/no-unused-vars": ['warn', { argsIgnorePattern: '^_' }]
+  eslintPluginAstro.configs.recommended,
+  globalIgnores([".astro", "node_modules", "public"]),
+  {
+    rules: {
+      "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }], 
+      "@typescript-eslint/no-explicit-any": "warn"
     }
-  }, 
+  },
   eslintConfigPrettier
 ]);

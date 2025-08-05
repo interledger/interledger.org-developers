@@ -1,39 +1,39 @@
 /* Webfont import */
 @font-face {
-  font-family: 'Titillium';
-  src: url('/developers/fonts/titilliumweb-regular.woff2') format('woff2');
+  font-family: "Titillium";
+  src: url("/developers/fonts/titilliumweb-regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Titillium';
-  src: url('/developers/fonts/titilliumweb-italic.woff2') format('woff2');
+  font-family: "Titillium";
+  src: url("/developers/fonts/titilliumweb-italic.woff2") format("woff2");
   font-weight: 400;
   font-style: italic;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Titillium';
-  src: url('/developers/fonts/titilliumweb-bold.woff2') format('woff2');
+  font-family: "Titillium";
+  src: url("/developers/fonts/titilliumweb-bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Titillium';
-  src: url('/developers/fonts/titilliumweb-semibold.woff2') format('woff2');
+  font-family: "Titillium";
+  src: url("/developers/fonts/titilliumweb-semibold.woff2") format("woff2");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Titillium';
-  src: url('/developers/fonts/titilliumweb-extralight.woff2') format('woff2');
+  font-family: "Titillium";
+  src: url("/developers/fonts/titilliumweb-extralight.woff2") format("woff2");
   font-weight: 200;
   font-style: normal;
   font-display: swap;
@@ -43,8 +43,8 @@
 /* @link https://utopia.fyi/type/calculator?c=360,18,1.25,1280,24,1.25,6,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
 :root {
   --system-ui:
-    system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
-    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   --step--2: clamp(0.72rem, 0.6261rem + 0.4174vi, 0.96rem);
   --step--1: clamp(0.9rem, 0.7826rem + 0.5217vi, 1.2rem);
   --step-0: clamp(1.125rem, 0.9783rem + 0.6522vi, 1.5rem);
@@ -90,7 +90,7 @@
   --color-bg-inline-code: #edeef3;
 }
 
-[data-theme='dark'] {
+[data-theme="dark"] {
   --color-bg: var(--color-black);
   --color-text: var(--color-white);
   --option1: linear-gradient(
