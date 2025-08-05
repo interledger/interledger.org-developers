@@ -9,7 +9,7 @@
     "astro": "astro",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "lint": "eslint --ext .js,.astro src"
+    "lint": "eslint"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.0",

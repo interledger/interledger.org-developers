@@ -17,7 +17,10 @@ export default defineConfig([
   globalIgnores([".astro", "node_modules", "public"]),
   {
     rules: {
-      "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }], 
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_" }
+      ],
       "@typescript-eslint/no-explicit-any": "warn"
     }
   },
