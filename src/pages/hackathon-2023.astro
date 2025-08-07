@@ -710,9 +710,12 @@ import AnimatedSummitLogo from "../components/logos/AnimatedSummitLogo.astro";
     "click",
     (event) => {
       event.stopPropagation();
-      JSON.parse(toggle.getAttribute("aria-expanded") ?? "{}")
-        ? hide()
-        : show();
+      const isExpanded = toggle.getAttribute("aria-expanded") === "true";
+      if (isExpanded) {
+        hide();
+      } else {
+        show();
+      }
     },
     false
   );
