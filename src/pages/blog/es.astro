@@ -7,7 +7,6 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 const esEntries = await getCollection("blog", ({ data }) => {
   return data.lang === "es";
 });
-console.log(typeof esEntries, esEntries.length, esEntries[0]?.data?.title);
 ---
 
 <BaseLayout
@@ -64,7 +63,7 @@ console.log(typeof esEntries, esEntries.length, esEntries[0]?.data?.title);
       </header>
       <ol class="postlist">
         {
-          (esEntries as any).map((blogPostEntry: any) => {
+          esEntries.map((blogPostEntry) => {
             const excerpt = `${createExcerpt(blogPostEntry.body).substring(0, 300)}...`;
             return (
               <li class="postlist-item">

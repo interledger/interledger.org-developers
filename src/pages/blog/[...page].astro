@@ -1,20 +1,21 @@
 ---
 import type { Page } from "astro";
+import type { GetStaticPaths } from "astro";
 import { createExcerpt } from "../../utils/create-excerpt";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Pagination from "../../components/blog/Pagination.astro";
 import { getCollection } from "astro:content";
 
 type Props = {
-  page: Page<any>;
+  page: Page;
 };
 
-export async function getStaticPaths({ paginate }: any) {
+export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
   const blogEntries = (await getCollection("blog")).sort(
-    (a: any, b: any) => b.data.date.getTime() - a.data.date.getTime()
+    (a, b) => b.data.date.getTime() - a.data.date.getTime()
   );
   return paginate(blogEntries, { pageSize: 10 });
-}
+};
 
 const { page } = Astro.props;
 ---
@@ -59,7 +60,7 @@ const { page } = Astro.props;
       </header>
       <ol class="postlist">
         {
-          ((page as any).data || []).map((blogPostEntry: any) => {
+          (page.data || []).map((blogPostEntry) => {
             const excerpt = `${createExcerpt(blogPostEntry.body).substring(0, 300)}...`;
             return (
               <li class="postlist-item">

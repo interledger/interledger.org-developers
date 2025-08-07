@@ -702,8 +702,11 @@ import AnimatedSummitLogo from "../components/logos/AnimatedSummitLogo.astro";
     toggle?.setAttribute("aria-expanded", "false");
     sidebar?.setAttribute("aria-hidden", "true");
   };
-  const handleClosure = (event: { target: any }) =>
-    !sidebar?.contains(event.target) && hide();
+  const handleClosure = (event: Event) => {
+    if (event.target instanceof Node) {
+      return !sidebar?.contains(event.target) && hide();
+    }
+  };
   window.addEventListener("click", handleClosure);
   window.addEventListener("focusin", handleClosure);
   toggle?.addEventListener(
