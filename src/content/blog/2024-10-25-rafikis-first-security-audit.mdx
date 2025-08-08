@@ -104,6 +104,8 @@ One of the questions we wanted to ask the auditors during the assessment was, _"
 The STREAM transport protocol relies on exchanging a symmetric secret to encrypt messages out-of-band, i.e., without any cryptographic handshakes. In Rafiki, this is done through the use of Open Payments APIs, meaning that even if a bad actor were to inspect packets from the beginning of a STREAM connection, they wouldn't be able to gain any information to decrypt the messages. With this knowledge, combined with the actual observation of the STREAM packets, the auditors found that the encryption & secure data handling using the STREAM transport protocol was sound. This answered our question above: no, no useful information would be gained if one were to intercept these packets.
 
 <br />
-These were some of the findings we had as part of Rafiki's first security audit. Going forward, we will be doing annual reviews
-of this nature within Rafiki, as well as the ecosystem as a whole. It is always helpful to get an experienced, outside perspective
-about how we can continue improving - particularly when it comes to vital aspects of building software, such as security.
+These were some of the findings we had as part of Rafiki's first security audit.
+Going forward, we will be doing annual reviews of this nature within Rafiki, as
+well as the ecosystem as a whole. It is always helpful to get an experienced,
+outside perspective about how we can continue improving - particularly when it
+comes to vital aspects of building software, such as security.

@@ -9,8 +9,8 @@ export const createExcerpt = (body) => {
     selectors: [
       { selector: "a", options: { ignoreHref: true } },
       { selector: "img", format: "skip" },
-      { selector: "figure", format: "skip" },
-    ],
+      { selector: "figure", format: "skip" }
+    ]
   };
   const text = convert(html, options);
   const distilled = convert(text, options);

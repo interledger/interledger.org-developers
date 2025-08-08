@@ -1,413 +1,734 @@
 ---
-import LanderLayout from '../layouts/LanderLayout.astro';
-import Section from '../components/pages/Section.astro';
-import AnimatedSummitLogo from '../components/logos/AnimatedSummitLogo.astro';
+import LanderLayout from "../layouts/LanderLayout.astro";
+import Section from "../components/pages/Section.astro";
+import AnimatedSummitLogo from "../components/logos/AnimatedSummitLogo.astro";
 ---
 
 <LanderLayout title="Interledger Summit Hackthon 2023">
-	<main>
-		<button id="toggleNav" class="toggle-nav" aria-expanded="false" aria-controls="mobileNav">
-			<svg fill="none" viewBox="0 0 64 40"><path fill="#fff" fill-rule="evenodd" d="M41.201 39.618H3.998A3.018 3.018 0 0 1 .98 36.6v-1.2a3.018 3.018 0 0 1 3.018-3.018h37.203a3.018 3.018 0 0 1 3.018 3.018v1.2a3.018 3.018 0 0 1-3.018 3.018Zm0-16H3.998A3.018 3.018 0 0 1 .98 20.6v-1.2a3.018 3.018 0 0 1 3.018-3.018h37.203a3.018 3.018 0 0 1 3.018 3.018v1.2a3.018 3.018 0 0 1-3.018 3.018Zm0-16H3.998A3.018 3.018 0 0 1 .98 4.6V3.4A3.018 3.018 0 0 1 3.998.382h37.203A3.018 3.018 0 0 1 44.219 3.4v1.2a3.018 3.018 0 0 1-3.018 3.018Zm19.6 32h-6.003a3.018 3.018 0 0 1-3.017-3.018v-1.2a3.018 3.018 0 0 1 3.017-3.018h6.003a3.018 3.018 0 0 1 3.018 3.018v1.2a3.018 3.018 0 0 1-3.018 3.018Zm0-16h-6.003a3.018 3.018 0 0 1-3.017-3.018v-1.2a3.018 3.018 0 0 1 3.017-3.018h6.003a3.018 3.018 0 0 1 3.018 3.018v1.2a3.018 3.018 0 0 1-3.018 3.018Zm.001-16h-6.004A3.018 3.018 0 0 1 51.781 4.6V3.4A3.018 3.018 0 0 1 54.798.382h6.004A3.018 3.018 0 0 1 63.819 3.4v1.2a3.018 3.018 0 0 1-3.017 3.018Z" clip-rule="evenodd"/></svg>
-			<span>ToC</span>
-		</button>
-		<aside id="mobileNav" aria-hidden="true" aria-labelledby="toggleNav">
-			<nav>
-				<ul>
-					<li><a href="#open-payments">Open Payments</a>
-						<ul>
-							<li><a href="#opp-challenge">Challenge</a></li>
-							<li><a href="#opp-documentation">Documentation</a></li>
-							<li><a href="#opp-sdk">SDK</a></li>
-							<li><a href="#opp-code-snippets">Code Snippets</a></li>
-							<li><a href="#opp-vscode-snippets">VSCode Snippets</a></li>
-						</ul>
-					</li>
-					<li><a href="#web-monetization">Web Monetization</a>
-						<ul>
-							<li><a href="#webm-challenge">Challenge</a></li>
-							<li><a href="#webm-documentation">Documentation</a></li>
-							<li><a href="#webm-extension">Extension</a></li>
-						</ul>
-					</li>
-					<li><a href="#ilp-stack-design">ILP Stack Design</a>
-						<ul>
-							<li><a href="#ilp-challenge">Challenge</a></li>
-							<li><a href="#interledger-protocol-stack">Interledger Protocol Stack</a>
-								<ul>
-									<li><a href="#spsp">SPSP</a></li>
-									<li><a href="#stream">STREAM</a></li>
-									<li><a href="#ilpv4">ILPv4</a></li>
-									<li><a href="#btp">BTP</a></li>
-								</ul>
-							</li>
-							<li><a href="#open-payments-api">Open Payments API</a></li>
-							<li><a href="#web-monetization-api">Web Monetization API</a></li>
-						</ul>
-					</li>
-					<li><a href="#interledger-test-network">Interledger Test Network</a>
-						<ul>
-							<li><a href="#test-wallets">Test Wallets</a></li>
-							<li><a href="#rafiki-local-playground">Rafiki Local Playground</a></li>
-						</ul>
-					</li>
-					<li><a href="#tigerbeetle">TigerBeetle</a>
-						<ul>
-							<li><a href="#tb-challenge">Challenge</a></li>
-							<li><a href="#tb-documentation">Documentation</a></li>
-						</ul>
-					</li>
-				</ul>
-			</nav>
-		</aside>
+  <main>
+    <button
+      id="toggleNav"
+      class="toggle-nav"
+      aria-expanded="false"
+      aria-controls="mobileNav"
+    >
+      <svg fill="none" viewBox="0 0 64 40"
+        ><path
+          fill="#fff"
+          fill-rule="evenodd"
+          d="M41.201 39.618H3.998A3.018 3.018 0 0 1 .98 36.6v-1.2a3.018 3.018 0 0 1 3.018-3.018h37.203a3.018 3.018 0 0 1 3.018 3.018v1.2a3.018 3.018 0 0 1-3.018 3.018Zm0-16H3.998A3.018 3.018 0 0 1 .98 20.6v-1.2a3.018 3.018 0 0 1 3.018-3.018h37.203a3.018 3.018 0 0 1 3.018 3.018v1.2a3.018 3.018 0 0 1-3.018 3.018Zm0-16H3.998A3.018 3.018 0 0 1 .98 4.6V3.4A3.018 3.018 0 0 1 3.998.382h37.203A3.018 3.018 0 0 1 44.219 3.4v1.2a3.018 3.018 0 0 1-3.018 3.018Zm19.6 32h-6.003a3.018 3.018 0 0 1-3.017-3.018v-1.2a3.018 3.018 0 0 1 3.017-3.018h6.003a3.018 3.018 0 0 1 3.018 3.018v1.2a3.018 3.018 0 0 1-3.018 3.018Zm0-16h-6.003a3.018 3.018 0 0 1-3.017-3.018v-1.2a3.018 3.018 0 0 1 3.017-3.018h6.003a3.018 3.018 0 0 1 3.018 3.018v1.2a3.018 3.018 0 0 1-3.018 3.018Zm.001-16h-6.004A3.018 3.018 0 0 1 51.781 4.6V3.4A3.018 3.018 0 0 1 54.798.382h6.004A3.018 3.018 0 0 1 63.819 3.4v1.2a3.018 3.018 0 0 1-3.017 3.018Z"
+          clip-rule="evenodd"></path></svg
+      >
+      <span>ToC</span>
+    </button>
+    <aside id="mobileNav" aria-hidden="true" aria-labelledby="toggleNav">
+      <nav>
+        <ul>
+          <li>
+            <a href="#open-payments">Open Payments</a>
+            <ul>
+              <li><a href="#opp-challenge">Challenge</a></li>
+              <li><a href="#opp-documentation">Documentation</a></li>
+              <li><a href="#opp-sdk">SDK</a></li>
+              <li><a href="#opp-code-snippets">Code Snippets</a></li>
+              <li><a href="#opp-vscode-snippets">VSCode Snippets</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#web-monetization">Web Monetization</a>
+            <ul>
+              <li><a href="#webm-challenge">Challenge</a></li>
+              <li><a href="#webm-documentation">Documentation</a></li>
+              <li><a href="#webm-extension">Extension</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#ilp-stack-design">ILP Stack Design</a>
+            <ul>
+              <li><a href="#ilp-challenge">Challenge</a></li>
+              <li>
+                <a href="#interledger-protocol-stack"
+                  >Interledger Protocol Stack</a
+                >
+                <ul>
+                  <li><a href="#spsp">SPSP</a></li>
+                  <li><a href="#stream">STREAM</a></li>
+                  <li><a href="#ilpv4">ILPv4</a></li>
+                  <li><a href="#btp">BTP</a></li>
+                </ul>
+              </li>
+              <li><a href="#open-payments-api">Open Payments API</a></li>
+              <li><a href="#web-monetization-api">Web Monetization API</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#interledger-test-network">Interledger Test Network</a>
+            <ul>
+              <li><a href="#test-wallets">Test Wallets</a></li>
+              <li>
+                <a href="#rafiki-local-playground">Rafiki Local Playground</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#tigerbeetle">TigerBeetle</a>
+            <ul>
+              <li><a href="#tb-challenge">Challenge</a></li>
+              <li><a href="#tb-documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </aside>
 
-		<Section class="padding--large hero align--center">
-			<header>
-				<div class="summit-logo">
-					<AnimatedSummitLogo class="summit-logo__animate" />
-					<img src="/developers/img/lander/summit-text.svg" alt="Interledger Summit" class="summit-logo__text" />
-				</div>
-				<h1>Hackathon resources</h1>
-			</header>
-		</Section>
+    <Section class="padding--large hero align--center">
+      <header>
+        <div class="summit-logo">
+          <AnimatedSummitLogo class="summit-logo__animate" />
+          <img
+            src="/developers/img/lander/summit-text.svg"
+            alt="Interledger Summit"
+            class="summit-logo__text"
+          />
+        </div>
+        <h1>Hackathon resources</h1>
+      </header>
+    </Section>
 
-		<div class="content">
-			<Section>
-				<h2 id="open-payments">Open Payments</h2>
-				<img src="/developers/img/lander/logo-opp.svg" alt="Open Payments" class="opp-logo" />
+    <div class="content">
+      <Section>
+        <h2 id="open-payments">Open Payments</h2>
+        <img
+          src="/developers/img/lander/logo-opp.svg"
+          alt="Open Payments"
+          class="opp-logo"
+        />
 
-				<h3 id="opp-challenge">Challenge</h3>
-				<p>Use the Open Payments API to build a working PoC and demo it on stage!</p>
-				<p>If you're looking for inspiration, here are some ideas we came up with:</p>
-				<ol>
-					<li>An e-commerce application with a "pay with Open Payments" flow.</li>
-					<li>A subscription service built with Open Payments APIs.</li>
-					<li>An application that uses pay-as-you-go, and takes advantage of the Open Payments APIs grants - giving access for an application to gradually make payment from user accounts up to a limit.</li>
-					<li>Port the Open Payments SDK in another language (the current SDK was built with Node.js & TypeScript - see <a href="https://github.com/interledger/open-payments/tree/main/packages/open-payments">GitHub repo</a>).</li>
-				</ol>
+        <h3 id="opp-challenge">Challenge</h3>
+        <p>
+          Use the Open Payments API to build a working PoC and demo it on stage!
+        </p>
+        <p>
+          If you're looking for inspiration, here are some ideas we came up
+          with:
+        </p>
+        <ol>
+          <li>
+            An e-commerce application with a "pay with Open Payments" flow.
+          </li>
+          <li>A subscription service built with Open Payments APIs.</li>
+          <li>
+            An application that uses pay-as-you-go, and takes advantage of the
+            Open Payments APIs grants - giving access for an application to
+            gradually make payment from user accounts up to a limit.
+          </li>
+          <li>
+            Port the Open Payments SDK in another language (the current SDK was
+            built with Node.js & TypeScript - see <a
+              href="https://github.com/interledger/open-payments/tree/main/packages/open-payments"
+              >GitHub repo</a
+            >).
+          </li>
+        </ol>
 
-				<h3 id="opp-documentation">Documentation</h3>
-				<p>Open Payments (OP) is an open RESTful API and API standard that enables clients, such as mobile and web apps, to initiate payments from and view transaction history on their users' OP-enabled accounts. Application developers can build in payments functionality that allows users with OP-enabled accounts to transact with other OP-enabled accounts, regardless of whether the recipient uses the same application or ASE.</p>
-				<p>Visit <a href="https://openpayments.guide">https://openpayments.guide</a> for more information.</p>
-					
-				<h3 id="opp-sdk">SDK</h3>
-				<p>Open Payments consists of two OpenAPI specifications:</p>
-				<ul>
-					<li>Resource server spec - exposes an API for performing functions against the underlying accounts</li>
-					<li>Authorization server spec - exposes APIs compliant with the Grant Negotiation and Authorization Protocol (GNAP) standard for obtaining grants to access the resource server API</li>
-				</ul>
-				<p><a href="https://github.com/interledger/open-payments/tree/main/packages/open-payments">The SDK</a> provides exported TypeScript types generated directly from the Open Payments specifications and a NodeJS client that exposes the Open Payments API, signs requests, and validates responses.</p>
+        <h3 id="opp-documentation">Documentation</h3>
+        <p>
+          Open Payments (OP) is an open RESTful API and API standard that
+          enables clients, such as mobile and web apps, to initiate payments
+          from and view transaction history on their users' OP-enabled accounts.
+          Application developers can build in payments functionality that allows
+          users with OP-enabled accounts to transact with other OP-enabled
+          accounts, regardless of whether the recipient uses the same
+          application or ASE.
+        </p>
+        <p>
+          Visit <a href="https://openpayments.guide"
+            >https://openpayments.guide</a
+          > for more information.
+        </p>
 
-				<h3 id="opp-code-snippets">Code Snippets</h3>
-				<p>Our <a href="https://github.com/interledger/open-payments-snippets">TypeScript code snippets</a> allow you to build Open Payments functionality into your client, then use test wallets funded with play money to make Interledger transactions via the Open Payments API. Test wallets are set up through the Interledger Test Network, described in more detail below.</p>
-		
-				<h3 id="opp-vscode-snippets">VS Code Snippets</h3>
-				<img src="/developers/img/lander/logo-opp-snippets.svg" alt="Open Payments SDK Snippets" class="opp-snippets" />
-				<p>Our collection of VS Code snippets for the Open Payments Node SDK makes it easier for you to develop Open Payments features. The Open Payments SDK Snippets can be installed from: <a href="https://marketplace.visualstudio.com/items?itemName=InterledgerFoundation.open-payments-snippets-vscode">https://marketplace.visualstudio.com/items?itemName=InterledgerFoundation.open-payments-snippets-vscode</a>.</p>
-			</Section>
+        <h3 id="opp-sdk">SDK</h3>
+        <p>Open Payments consists of two OpenAPI specifications:</p>
+        <ul>
+          <li>
+            Resource server spec - exposes an API for performing functions
+            against the underlying accounts
+          </li>
+          <li>
+            Authorization server spec - exposes APIs compliant with the Grant
+            Negotiation and Authorization Protocol (GNAP) standard for obtaining
+            grants to access the resource server API
+          </li>
+        </ul>
+        <p>
+          <a
+            href="https://github.com/interledger/open-payments/tree/main/packages/open-payments"
+            >The SDK</a
+          > provides exported TypeScript types generated directly from the Open Payments
+          specifications and a NodeJS client that exposes the Open Payments API,
+          signs requests, and validates responses.
+        </p>
 
-			<Section>
-				<h2 id="web-monetization">Web Monetization</h2>
-				<img src="/developers/img/lander/logo-webm.svg" alt="Web Monetization" class="webm-logo" />
+        <h3 id="opp-code-snippets">Code Snippets</h3>
+        <p>
+          Our <a href="https://github.com/interledger/open-payments-snippets"
+            >TypeScript code snippets</a
+          > allow you to build Open Payments functionality into your client, then
+          use test wallets funded with play money to make Interledger transactions
+          via the Open Payments API. Test wallets are set up through the Interledger
+          Test Network, described in more detail below.
+        </p>
 
-				<h3 id="webm-challenge">Challenge</h3>
-				<p>Create tools or resources for Web Monetization and demo them on stage!</p>
-				<p>If you're looking for inspiration, here are a few ideas we came up with:</p>
-				<ol>
-					<li>Write or update the existing V1 tools to embed Web Monetization into a website.</li>
-					<li>Create a visual indicator for web-monetized creators or platforms to interact with their Web Monetization supporters (e.g. a thank you note; celebration confetti, payment counter).</li>
-					<li>Design and implement a pay-wall library that can be used by websites for one-time payments for content.</li>
-				</ol>
+        <h3 id="opp-vscode-snippets">VS Code Snippets</h3>
+        <img
+          src="/developers/img/lander/logo-opp-snippets.svg"
+          alt="Open Payments SDK Snippets"
+          class="opp-snippets"
+        />
+        <p>
+          Our collection of VS Code snippets for the Open Payments Node SDK
+          makes it easier for you to develop Open Payments features. The Open
+          Payments SDK Snippets can be installed from: <a
+            href="https://marketplace.visualstudio.com/items?itemName=InterledgerFoundation.open-payments-snippets-vscode"
+            >https://marketplace.visualstudio.com/items?itemName=InterledgerFoundation.open-payments-snippets-vscode</a
+          >.
+        </p>
+      </Section>
 
-				<h3 id="webm-documentation">Documentation</h3>
-				<p>The ability to transfer money has been a long-standing omission from the web platform. As a result, the web suffers from a flood of advertising and broken business models. Web Monetization provides an open, native, efficient, and automatic way to compensate creators, pay for content, and support crucial web infrastructure.</p>
-				<p>Visit <a href="https://webmonetization.org/docs/">https://webmonetization.org/docs/</a> for more information.</p>
+      <Section>
+        <h2 id="web-monetization">Web Monetization</h2>
+        <img
+          src="/developers/img/lander/logo-webm.svg"
+          alt="Web Monetization"
+          class="webm-logo"
+        />
 
-				<h3 id="webm-extension">Extension</h3>
-				<p>The <a href="https://github.com/interledger/web-monetization-extension">Web Monetization extension</a> is a browser extension that detects Web Monetization on websites using a browser API that allows the creation of a payment stream from the user agent to the website. This extension is built with React, TypeScript, and Vite.</p>
-                <p><a href="https://github.com/interledger/web-monetization-extension/releases/download/v0.2.3/chrome.zip">Download extension (Chrome)</a></p>
-                <h4>Installing the extension</h4>
-                <ol>
-                    <li>Extract the contents of the ZIP file to a folder on your computer</li>
-                    <li>Open Chrome, click the three dots in the top-right corner, go to "Extensions" and select "Manage extensions"</li>
-                    <li>Enable "Developer mode" using the toggle switch at the top-right of the Extensions page</li>
-                    <li>Click the "Load unpacked" button that appears after enabling Developer mode</li>
-                    <li>Choose the folder containing the extracted extension files (with the manifest.json file)</li>
-                    <li>Click on the puzzle piece icon in the top-right corner of Chrome, and pin the Web Monetization extension</li>
-                </ol>
-			</Section>
+        <h3 id="webm-challenge">Challenge</h3>
+        <p>
+          Create tools or resources for Web Monetization and demo them on stage!
+        </p>
+        <p>
+          If you're looking for inspiration, here are a few ideas we came up
+          with:
+        </p>
+        <ol>
+          <li>
+            Write or update the existing V1 tools to embed Web Monetization into
+            a website.
+          </li>
+          <li>
+            Create a visual indicator for web-monetized creators or platforms to
+            interact with their Web Monetization supporters (e.g. a thank you
+            note; celebration confetti, payment counter).
+          </li>
+          <li>
+            Design and implement a pay-wall library that can be used by websites
+            for one-time payments for content.
+          </li>
+        </ol>
 
-			<Section>
-				<h2 id="ilp-stack-design">ILP Stack Design</h2>
-				<img src="/developers/img/lander/logo-interledger.svg" alt="Interledger testnet wallet" class="interledger-logo" />
+        <h3 id="webm-documentation">Documentation</h3>
+        <p>
+          The ability to transfer money has been a long-standing omission from
+          the web platform. As a result, the web suffers from a flood of
+          advertising and broken business models. Web Monetization provides an
+          open, native, efficient, and automatic way to compensate creators, pay
+          for content, and support crucial web infrastructure.
+        </p>
+        <p>
+          Visit <a href="https://webmonetization.org/docs/"
+            >https://webmonetization.org/docs/</a
+          > for more information.
+        </p>
 
-				<h3 id="ilp-challenge">Challenge</h3>
-				<p>Improve the Interledger technology stack (e.g. ILP, Open Payments APIs, Web Monetization API), make a PR against the standards in GitHub, and walk us through it on stage!</p>
-				<ol>
-					<li>Amend the implementation or specifications to improve, simplify, or expand the architecture or elements of the tech stack.</li>
-					<li>Design alternatives to elements of the tech stack.</li>
-				</ol>
+        <h3 id="webm-extension">Extension</h3>
+        <p>
+          The <a
+            href="https://github.com/interledger/web-monetization-extension"
+            >Web Monetization extension</a
+          > is a browser extension that detects Web Monetization on websites using
+          a browser API that allows the creation of a payment stream from the user
+          agent to the website. This extension is built with React, TypeScript, and
+          Vite.
+        </p>
+        <p>
+          <a
+            href="https://github.com/interledger/web-monetization-extension/releases/download/v0.2.3/chrome.zip"
+            >Download extension (Chrome)</a
+          >
+        </p>
+        <h4>Installing the extension</h4>
+        <ol>
+          <li>
+            Extract the contents of the ZIP file to a folder on your computer
+          </li>
+          <li>
+            Open Chrome, click the three dots in the top-right corner, go to
+            "Extensions" and select "Manage extensions"
+          </li>
+          <li>
+            Enable "Developer mode" using the toggle switch at the top-right of
+            the Extensions page
+          </li>
+          <li>
+            Click the "Load unpacked" button that appears after enabling
+            Developer mode
+          </li>
+          <li>
+            Choose the folder containing the extracted extension files (with the
+            manifest.json file)
+          </li>
+          <li>
+            Click on the puzzle piece icon in the top-right corner of Chrome,
+            and pin the Web Monetization extension
+          </li>
+        </ol>
+      </Section>
 
-				<h3 id="interledger-protocol-stack">Interledger Protocol Stack</h3>
-				<p>The Interledger Protocol (ILP) is an open protocol suite for sending payments across different ledgers without being tied to any one company, currency, or payment provider. The open architecture and minimal protocol enable interoperability for any value transfer system. To find out more, visit <a href="https://interledger.org/developers/get-started/">https://interledger.org/developers/get-started/</a>.</p>
+      <Section>
+        <h2 id="ilp-stack-design">ILP Stack Design</h2>
+        <img
+          src="/developers/img/lander/logo-interledger.svg"
+          alt="Interledger testnet wallet"
+          class="interledger-logo"
+        />
 
-				<h4 id="spsp">SPSP</h4>
-				<p>Interledger’s <a href="https://interledger.org/developers/rfcs/simple-payment-setup-protocol/">Simple Payment Setup Protocol (SPSP)</a> is a minimal application-layer protocol that uses HTTPS to exchange connection information, namely the ILP address and shared secret, before an Interledger payment is initiated. The SPSP client and server then use these details to establish a STREAM connection and generate ILP packets.</p>
+        <h3 id="ilp-challenge">Challenge</h3>
+        <p>
+          Improve the Interledger technology stack (e.g. ILP, Open Payments
+          APIs, Web Monetization API), make a PR against the standards in
+          GitHub, and walk us through it on stage!
+        </p>
+        <ol>
+          <li>
+            Amend the implementation or specifications to improve, simplify, or
+            expand the architecture or elements of the tech stack.
+          </li>
+          <li>Design alternatives to elements of the tech stack.</li>
+        </ol>
 
-				<h4 id="stream">STREAM</h4>
-				<p>Interledger’s <a href="https://interledger.org/developers/rfcs/stream-protocol/">STREAM protocol</a> is a multiplexed transport-layer protocol for sending packets of money and data over ILP. STREAM uses a shared secret to authenticate and encrypt multiple packets, as well as generate the conditions and fulfillments. STREAM also enables sending packets in both directions between two endpoints and automatically determines how much money and data can be sent in each packet.</p>
+        <h3 id="interledger-protocol-stack">Interledger Protocol Stack</h3>
+        <p>
+          The Interledger Protocol (ILP) is an open protocol suite for sending
+          payments across different ledgers without being tied to any one
+          company, currency, or payment provider. The open architecture and
+          minimal protocol enable interoperability for any value transfer
+          system. To find out more, visit <a
+            href="https://interledger.org/developers/get-started/"
+            >https://interledger.org/developers/get-started/</a
+          >.
+        </p>
 
-				<h4 id="ilpv4">ILPv4</h4>
-				<p><a href="https://interledger.org/developers/rfcs/interledger-protocol/">ILPv4</a> is the current version of the Interledger protocol. It’s optimized for routing large volumes of low-value packets, also known as &quot;penny switching&quot;. ILPv4 can be integrated with any type of ledger, including those not built for interoperability, and it is designed to be used with a variety of higher-level protocols that implement features ranging from quoting to sending larger amounts of value with chunked payments.</p>
+        <h4 id="spsp">SPSP</h4>
+        <p>
+          Interledger’s <a
+            href="https://interledger.org/developers/rfcs/simple-payment-setup-protocol/"
+            >Simple Payment Setup Protocol (SPSP)</a
+          > is a minimal application-layer protocol that uses HTTPS to exchange connection
+          information, namely the ILP address and shared secret, before an Interledger
+          payment is initiated. The SPSP client and server then use these details
+          to establish a STREAM connection and generate ILP packets.
+        </p>
 
-				<h4 id="btp">BTP</h4>
-				<p>The Bilateral Transfer Protocol (BTP) is a request/response protocol for bilateral WebSocket links between Interledger connectors. When two connectors send ILP packets over HTTP POST, they each need to act as an HTTP server at times. If one connector runs behind a firewall, this may be impossible. With BTP, only one connector needs to be publicly addressable. Refer to the <a href="https://github.com/interledger/rfcs/blob/main/0023-bilateral-transfer-protocol/0023-bilateral-transfer-protocol.md">BTP 2.0 specification</a> for more information.</p>
+        <h4 id="stream">STREAM</h4>
+        <p>
+          Interledger’s <a
+            href="https://interledger.org/developers/rfcs/stream-protocol/"
+            >STREAM protocol</a
+          > is a multiplexed transport-layer protocol for sending packets of money
+          and data over ILP. STREAM uses a shared secret to authenticate and encrypt
+          multiple packets, as well as generate the conditions and fulfillments.
+          STREAM also enables sending packets in both directions between two endpoints
+          and automatically determines how much money and data can be sent in each
+          packet.
+        </p>
 
-				<h3 id="open-payments-api">Open Payments API</h3>
-				<p>The Open Payments API exposes a set of endpoints for obtaining grants to access underlying payment accounts and to perform management tasks or otherwise interact with the accounts with the account holder&#39;s consent.</p>
+        <h4 id="ilpv4">ILPv4</h4>
+        <p>
+          <a
+            href="https://interledger.org/developers/rfcs/interledger-protocol/"
+            >ILPv4</a
+          > is the current version of the Interledger protocol. It’s optimized for
+          routing large volumes of low-value packets, also known as &quot;penny switching&quot;.
+          ILPv4 can be integrated with any type of ledger, including those not built
+          for interoperability, and it is designed to be used with a variety of higher-level
+          protocols that implement features ranging from quoting to sending larger
+          amounts of value with chunked payments.
+        </p>
 
-				<h3 id="web-monetization-api">Web Monetization API</h3>
-				<p>The Web Monetization (WM) API allows websites to automatically receive payments from visitors, facilitated by the visitor’s browser and their preferred WM provider. Web Monetization leverages the Interledger suite of protocols and technologies, including Open Payments, to send and receive payments. Refer to the <a href="https://webmonetization.org/specification/">Web Monetization specification</a> for more information.</p>
-			</Section>
+        <h4 id="btp">BTP</h4>
+        <p>
+          The Bilateral Transfer Protocol (BTP) is a request/response protocol
+          for bilateral WebSocket links between Interledger connectors. When two
+          connectors send ILP packets over HTTP POST, they each need to act as
+          an HTTP server at times. If one connector runs behind a firewall, this
+          may be impossible. With BTP, only one connector needs to be publicly
+          addressable. Refer to the <a
+            href="https://github.com/interledger/rfcs/blob/main/0023-bilateral-transfer-protocol/0023-bilateral-transfer-protocol.md"
+            >BTP 2.0 specification</a
+          > for more information.
+        </p>
 
-			<Section>
-				<h2 id="interledger-test-network">Interledger Test Network</h2>
-				<p>The Interledger testnet is an open test environment that uses Rafiki. Rafiki is open-source software that bundles the full capabilities of Interledger with an Open Payments API implementation, making it easy for Account Servicing Entities to integrate ILP payments functionality with their backend systems. </p>
-				<p>The development team at the Interledger Foundation has built an example wallet application on the testnet at <a href="https://rafiki.money">https://rafiki.money</a>. However, for the hackathon, participants will use one of five Rafiki Labs instances.</p>
-				<img src="/developers/img/lander/logo-testnet.svg" alt="Interledger testnet wallet" class="testnet-logo" />
-				<p>Hackathon participants will be organized into groups and notified beforehand as to which Rafiki Labs instance to use. Participants will register with one of the links below for an Interledger Testnet wallet:</p>
-				<ul>
-					<li><a href="https://one.rafikilabs.com">https://one.rafikilabs.com</a></li>
-					<li><a href="https://two.rafikilabs.com">https://two.rafikilabs.com</a></li>
-					<li><a href="https://three.rafikilabs.com">https://three.rafikilabs.com</a></li>
-					<li><a href="https://four.rafikilabs.com">https://four.rafikilabs.com</a></li>
-					<li><a href="https://five.rafikilabs.com">https://five.rafikilabs.com</a></li>
-				</ul>
-				<p>All Rafiki Labs instances will have the latest version of Rafiki integrated, and Interledger payment pointers are available for USD currency.</p>
-				<p>These Interledger Testnet instances are peered with each other so you can make payments to and from each other.</p>
-				<p>We’re excited to see what new and innovative apps you can build on the Interledger testnet!</p>
+        <h3 id="open-payments-api">Open Payments API</h3>
+        <p>
+          The Open Payments API exposes a set of endpoints for obtaining grants
+          to access underlying payment accounts and to perform management tasks
+          or otherwise interact with the accounts with the account holder&#39;s
+          consent.
+        </p>
 
-				<h3 id="test-wallets">Test Wallets</h3>
-				<p>The Interledger testnet is comprised of several components, which include an example wallet application where you can create multiple wallets and send money between them. Get started with creating test wallets at <a href="https://rafiki.money">https://rafiki.money</a>.</p>
+        <h3 id="web-monetization-api">Web Monetization API</h3>
+        <p>
+          The Web Monetization (WM) API allows websites to automatically receive
+          payments from visitors, facilitated by the visitor’s browser and their
+          preferred WM provider. Web Monetization leverages the Interledger
+          suite of protocols and technologies, including Open Payments, to send
+          and receive payments. Refer to the <a
+            href="https://webmonetization.org/specification/"
+            >Web Monetization specification</a
+          > for more information.
+        </p>
+      </Section>
 
-				<h3 id="rafiki-local-playground">Rafiki Local Playground</h3>
-				<p>The Rafiki local playground provides the following suite of utilities that you can use to build applications and test locally.</p>
-				<ul>
-					<li>A mock Account Servicing Entity (ASE) with its Rafiki instance.</li>
-					<li>An SPSP endpoint.</li>
-					<li>An implementation of the Open Payments APIs with GNAP auth endpoints support.</li>
-					<li>A STREAM endpoint for receiving Interledger packets.</li>
-					<li>An Admin UI to view and manage the Rafiki instance.</li>
-					<li>A simple request signing service that is used by Postman to generate request signatures required by the Open Payments APIs.  </li>
-				</ul>
-				<p>Visit <a href="https://rafiki.dev/integration/playground/overview/">https://rafiki.dev/integration/playground/overview/</a> for more information.</p>
-			</Section>
+      <Section>
+        <h2 id="interledger-test-network">Interledger Test Network</h2>
+        <p>
+          The Interledger testnet is an open test environment that uses Rafiki.
+          Rafiki is open-source software that bundles the full capabilities of
+          Interledger with an Open Payments API implementation, making it easy
+          for Account Servicing Entities to integrate ILP payments functionality
+          with their backend systems.
+        </p>
+        <p>
+          The development team at the Interledger Foundation has built an
+          example wallet application on the testnet at <a
+            href="https://rafiki.money">https://rafiki.money</a
+          >. However, for the hackathon, participants will use one of five
+          Rafiki Labs instances.
+        </p>
+        <img
+          src="/developers/img/lander/logo-testnet.svg"
+          alt="Interledger testnet wallet"
+          class="testnet-logo"
+        />
+        <p>
+          Hackathon participants will be organized into groups and notified
+          beforehand as to which Rafiki Labs instance to use. Participants will
+          register with one of the links below for an Interledger Testnet
+          wallet:
+        </p>
+        <ul>
+          <li>
+            <a href="https://one.rafikilabs.com">https://one.rafikilabs.com</a>
+          </li>
+          <li>
+            <a href="https://two.rafikilabs.com">https://two.rafikilabs.com</a>
+          </li>
+          <li>
+            <a href="https://three.rafikilabs.com"
+              >https://three.rafikilabs.com</a
+            >
+          </li>
+          <li>
+            <a href="https://four.rafikilabs.com">https://four.rafikilabs.com</a
+            >
+          </li>
+          <li>
+            <a href="https://five.rafikilabs.com">https://five.rafikilabs.com</a
+            >
+          </li>
+        </ul>
+        <p>
+          All Rafiki Labs instances will have the latest version of Rafiki
+          integrated, and Interledger payment pointers are available for USD
+          currency.
+        </p>
+        <p>
+          These Interledger Testnet instances are peered with each other so you
+          can make payments to and from each other.
+        </p>
+        <p>
+          We’re excited to see what new and innovative apps you can build on the
+          Interledger testnet!
+        </p>
 
-			<Section>
-				<h2 id="tigerbeetle">TigerBeetle</h2>
-				<img src="/developers/img/lander/logo-tigerbeetle.svg" alt="TigerBeetle" class="tigerbeetle-logo" />
+        <h3 id="test-wallets">Test Wallets</h3>
+        <p>
+          The Interledger testnet is comprised of several components, which
+          include an example wallet application where you can create multiple
+          wallets and send money between them. Get started with creating test
+          wallets at <a href="https://rafiki.money">https://rafiki.money</a>.
+        </p>
 
-				<h3 id="tb-challenge">Challenge</h3>
-				<p>Choose the challenge that you’re most excited about:
-				Safety Beetle: Use TigerBeetle to improve durability and availability.
-				Performance Beetle: Use TigerBeetle to improve throughput and latency.
-				Experience Beetle: Use TigerBeetle to model business events as double-entry transfers between accounts.
-				For examples of each challenge, refer to the <a href="https://github.com/tigerbeetle/hackathon-2023">TigerBeetle hackathon README</a>.</p>
-				<h3 id="tb-documentation">Documentation</h3>
-				<p>TigerBeetle is a distributed financial accounting database designed for mission critical safety and performance to power the future of financial services. Visit the <a href="https://docs.tigerbeetle.com/">TigerBeetle documentation</a> for a quick start guide, client libraries, and other resources.</p>
-			</Section>
-		</div>
-	</main>
+        <h3 id="rafiki-local-playground">Rafiki Local Playground</h3>
+        <p>
+          The Rafiki local playground provides the following suite of utilities
+          that you can use to build applications and test locally.
+        </p>
+        <ul>
+          <li>
+            A mock Account Servicing Entity (ASE) with its Rafiki instance.
+          </li>
+          <li>An SPSP endpoint.</li>
+          <li>
+            An implementation of the Open Payments APIs with GNAP auth endpoints
+            support.
+          </li>
+          <li>A STREAM endpoint for receiving Interledger packets.</li>
+          <li>An Admin UI to view and manage the Rafiki instance.</li>
+          <li>
+            A simple request signing service that is used by Postman to generate
+            request signatures required by the Open Payments APIs.
+          </li>
+        </ul>
+        <p>
+          Visit <a href="https://rafiki.dev/integration/playground/overview/"
+            >https://rafiki.dev/integration/playground/overview/</a
+          > for more information.
+        </p>
+      </Section>
+
+      <Section>
+        <h2 id="tigerbeetle">TigerBeetle</h2>
+        <img
+          src="/developers/img/lander/logo-tigerbeetle.svg"
+          alt="TigerBeetle"
+          class="tigerbeetle-logo"
+        />
+
+        <h3 id="tb-challenge">Challenge</h3>
+        <p>
+          Choose the challenge that you’re most excited about: Safety Beetle:
+          Use TigerBeetle to improve durability and availability. Performance
+          Beetle: Use TigerBeetle to improve throughput and latency. Experience
+          Beetle: Use TigerBeetle to model business events as double-entry
+          transfers between accounts. For examples of each challenge, refer to
+          the <a href="https://github.com/tigerbeetle/hackathon-2023"
+            >TigerBeetle hackathon README</a
+          >.
+        </p>
+        <h3 id="tb-documentation">Documentation</h3>
+        <p>
+          TigerBeetle is a distributed financial accounting database designed
+          for mission critical safety and performance to power the future of
+          financial services. Visit the <a href="https://docs.tigerbeetle.com/"
+            >TigerBeetle documentation</a
+          > for a quick start guide, client libraries, and other resources.
+        </p>
+      </Section>
+    </div>
+  </main>
 </LanderLayout>
 
 <style>
-	@media screen and (min-width: 850px) {
-		main {
-			display: grid;
-			grid-template-columns: max-content 1fr;
-			grid-template-rows: auto auto;
-			grid-template-areas: 'hero hero' 'sidebar content';
-		}
+  @media screen and (min-width: 850px) {
+    main {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      grid-template-rows: auto auto;
+      grid-template-areas: "hero hero" "sidebar content";
+    }
 
-		.hero {
-			grid-area: hero;
-		}
-		.content {
-			grid-area: content;
-		}
+    .hero {
+      grid-area: hero;
+    }
+    .content {
+      grid-area: content;
+    }
 
-		aside {
-			grid-area: sidebar;
-			position: sticky;
-			top: 0;
-			align-self: start;
-			overflow-y: auto;
-			max-height: 100vh;
-			background-color: hsla(162, 86%, 12%, 1);
-		}
+    aside {
+      grid-area: sidebar;
+      position: sticky;
+      top: 0;
+      align-self: start;
+      overflow-y: auto;
+      max-height: 100vh;
+      background-color: hsla(162, 86%, 12%, 1);
+    }
 
-		.toggle-nav {
-			display: none;
-		}
-	}
+    .toggle-nav {
+      display: none;
+    }
+  }
 
-	@media screen and (max-width: 849px) {
-		.toggle-nav {
-			position: fixed;
-			top: 4em;
-			right: 0;
-			display: inline-block;
-			border: 0;
-			background-color: rgba(0, 0, 0, 0.5);
-			padding: var(--space-2xs);
-			font-size: var(--step-0);
-			color: var(--color-text);
-			cursor: pointer;
-			opacity: 0.75;
-			border-end-start-radius: var(--border-radius);
-			border-start-start-radius: var(--border-radius);
-			transition: opacity 300ms ease-in-out;
-		}
+  @media screen and (max-width: 849px) {
+    .toggle-nav {
+      position: fixed;
+      top: 4em;
+      right: 0;
+      display: inline-block;
+      border: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: var(--space-2xs);
+      font-size: var(--step-0);
+      color: var(--color-text);
+      cursor: pointer;
+      opacity: 0.75;
+      border-end-start-radius: var(--border-radius);
+      border-start-start-radius: var(--border-radius);
+      transition: opacity 300ms ease-in-out;
+    }
 
-		.toggle-nav:hover {
-			opacity: 1;
-		}
+    .toggle-nav:hover {
+      opacity: 1;
+    }
 
-		aside {
-			background-color: rgba(0, 0, 0, 0.75);
-			transform: translateX(-100%);
-			position: fixed;
-			top: 0;
-			height: 100%;
-			z-index: 1;
-		}
+    aside {
+      background-color: rgba(0, 0, 0, 0.75);
+      transform: translateX(-100%);
+      position: fixed;
+      top: 0;
+      height: 100%;
+      z-index: 1;
+    }
 
-		aside.visible {
-			transform: translateX(0);
-		}
-	}
-	aside {
-		padding: var(--space-xs);
-		font-size: var(--step--1);
-		overflow-y: auto;
-		max-height: 100vh;
-		transition: transform 300ms ease-in-out;
-		height: 100%;
-	}
+    aside.visible {
+      transform: translateX(0);
+    }
+  }
+  aside {
+    padding: var(--space-xs);
+    font-size: var(--step--1);
+    overflow-y: auto;
+    max-height: 100vh;
+    transition: transform 300ms ease-in-out;
+    height: 100%;
+  }
 
-	aside ul {
-		list-style: none;
-	}
+  aside ul {
+    list-style: none;
+  }
 
-	aside li {
-		margin-block-end: var(--space-3xs);
-	}
+  aside li {
+    margin-block-end: var(--space-3xs);
+  }
 
-	aside li ul {
-		margin-block-start:  var(--space-3xs);
-	}
+  aside li ul {
+    margin-block-start: var(--space-3xs);
+  }
 
-	aside a {
-		text-decoration: none;
-	}
+  aside a {
+    text-decoration: none;
+  }
 
-	aside nav > ul {
-		padding-inline-start: 0;
-	}
+  aside nav > ul {
+    padding-inline-start: 0;
+  }
 
-	.hero {
-		background-color: hsla(162, 86%, 12%, 1);
-	}
+  .hero {
+    background-color: hsla(162, 86%, 12%, 1);
+  }
 
-	.summit-logo {
-		display: flex;
-		gap: 1em;
-		justify-content: center;
-		margin-block-end: var(--space-m)
-	}
+  .summit-logo {
+    display: flex;
+    gap: 1em;
+    justify-content: center;
+    margin-block-end: var(--space-m);
+  }
 
-	.summit-logo__animate {
-		flex: none;
-		max-width: 5em;
-	}
+  .summit-logo__animate {
+    flex: none;
+    max-width: 5em;
+  }
 
-	.summit-logo__text {
-		max-width: 10em;
-	}
+  .summit-logo__text {
+    max-width: 10em;
+  }
 
-	h1 {
-		line-height: 1.1;
-	}
+  h1 {
+    line-height: 1.1;
+  }
 
-	.testnet-logo {
-		max-width: 10em;
-		margin-block: var(--space-s);
-	}
+  .testnet-logo {
+    max-width: 10em;
+    margin-block: var(--space-s);
+  }
 
-	.opp-snippets {
-		max-width: 15em;
-		margin-block-end: var(--space-s);
-	}
+  .opp-snippets {
+    max-width: 15em;
+    margin-block-end: var(--space-s);
+  }
 
-	.opp-logo {
-		max-width: 18em;
-		margin-block-end: var(--space-s);
-	}
+  .opp-logo {
+    max-width: 18em;
+    margin-block-end: var(--space-s);
+  }
 
-	.webm-logo {
-		max-width: 16em;
-		margin-block-end: var(--space-s);
-	}
+  .webm-logo {
+    max-width: 16em;
+    margin-block-end: var(--space-s);
+  }
 
-	.interledger-logo {
-		max-width: 12em;
-		margin-block-end: var(--space-s);
-	}
+  .interledger-logo {
+    max-width: 12em;
+    margin-block-end: var(--space-s);
+  }
 
-	.tigerbeetle-logo {
-		max-width: 12em;
-		margin-block-end: var(--space-s);
-	}
+  .tigerbeetle-logo {
+    max-width: 12em;
+    margin-block-end: var(--space-s);
+  }
 
-	.padding--large {
-		padding-block: var(--space-3xl);
-	}
+  .padding--large {
+    padding-block: var(--space-3xl);
+  }
 
-	.align--center {
-		text-align: center;
-	}
+  .align--center {
+    text-align: center;
+  }
 
-	h2, h3 {
-		margin-block-end: var(--space-s);
-	}
-	
-	p, .content ul, ol {
-		margin-block-end: var(--space-xs);
-	}
+  h2,
+  h3 {
+    margin-block-end: var(--space-s);
+  }
+
+  p,
+  .content ul,
+  ol {
+    margin-block-end: var(--space-xs);
+  }
 </style>
 
 <script>
-	const sidebar = document.getElementById('mobileNav');
-	const toggle = document.getElementById('toggleNav');
-	const show = () => {
-		sidebar?.classList.toggle('visible');
-		toggle?.setAttribute('aria-expanded', 'true')
-		sidebar?.setAttribute('aria-hidden', 'false')
-	}
-	const hide = () => {
-		sidebar?.classList.remove('visible');
-		toggle?.setAttribute('aria-expanded', 'false');
-		sidebar?.setAttribute('aria-hidden', 'true');
-	}
-	const handleClosure = (event: { target: any; }) => !sidebar?.contains(event.target) && hide();
-	window.addEventListener('click', handleClosure);
-	window.addEventListener('focusin', handleClosure);
-	toggle?.addEventListener('click', event => {
-		event.stopPropagation();
-  	JSON.parse(toggle.getAttribute('aria-expanded') ?? '{}') ? hide() : show();
-	}, false);
-	document.addEventListener('keyup', function(evt) {
-		if (evt.key == 'Escape') {
-			hide();
-		}
-	}, false);
+  const sidebar = document.getElementById("mobileNav");
+  const toggle = document.getElementById("toggleNav");
+  const show = () => {
+    sidebar?.classList.toggle("visible");
+    toggle?.setAttribute("aria-expanded", "true");
+    sidebar?.setAttribute("aria-hidden", "false");
+  };
+  const hide = () => {
+    sidebar?.classList.remove("visible");
+    toggle?.setAttribute("aria-expanded", "false");
+    sidebar?.setAttribute("aria-hidden", "true");
+  };
+  const handleClosure = (event: Event) => {
+    if (event.target instanceof Node) {
+      return !sidebar?.contains(event.target) && hide();
+    }
+  };
+  window.addEventListener("click", handleClosure);
+  window.addEventListener("focusin", handleClosure);
+  toggle?.addEventListener(
+    "click",
+    (event) => {
+      event.stopPropagation();
+      const isExpanded = toggle.getAttribute("aria-expanded") === "true";
+      if (isExpanded) {
+        hide();
+      } else {
+        show();
+      }
+    },
+    false
+  );
+  document.addEventListener(
+    "keyup",
+    function (evt) {
+      if (evt.key == "Escape") {
+        hide();
+      }
+    },
+    false
+  );
 </script>
