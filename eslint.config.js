@@ -17,12 +17,13 @@ export default defineConfig([
   globalIgnores(["dist", ".astro", "node_modules", "public", "**/*.min.js"]),
   {
     rules: {
+      "no-console": "error",
       "@typescript-eslint/no-unused-vars": [
         "error",
         { argsIgnorePattern: "^_" }
       ],
       "@typescript-eslint/no-explicit-any": "error",
-      "no-console": "error"
+      "astro/no-set-text-directive": "error"
     }
   },
   eslintConfigPrettier
