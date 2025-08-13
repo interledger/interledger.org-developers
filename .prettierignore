@@ -2,9 +2,6 @@
 .astro
 node_modules
 public
-.gitignore
-.prettierignore
-
-# Ignore artifacts:
-build
-coverage
+dist
+**/*.min.css 
+**/*.min.js

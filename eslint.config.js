@@ -14,7 +14,7 @@ export default defineConfig([
   },
   tseslint.configs.recommended,
   eslintPluginAstro.configs.recommended,
-  globalIgnores([".astro", "node_modules", "public"]),
+  globalIgnores(["dist", ".astro", "node_modules", "public", "**/*.min.js"]),
   {
     rules: {
       "@typescript-eslint/no-unused-vars": [
