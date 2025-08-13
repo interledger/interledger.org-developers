@@ -121,3 +121,4 @@ Finalizing:
 - Remember: merging the pull request will publish the blog post immediately.
 - Ensure the publishing date in the blog post metadata matches the intended release date.
 - Check with Ioana to confirm the publishing date and keep a consistent posting schedule. Ioana will also handle social media promotion.
+- Run `bun run format` and `bun run lint` to format your code and check for issues before creating a pull request.
