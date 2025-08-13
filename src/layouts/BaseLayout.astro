@@ -52,6 +52,32 @@ const {
         : new URL("/developers/img/og-image.png", Astro.site).href}
     />
     <meta property="og:url" content={canonicalURL} />
+    <meta
+      property="og:description"
+      content={description
+        ? description
+        : "Making payments as easy as sending an email"}
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content={title
+        ? `${title} | Interledger Foundation`
+        : "Interledger Foundation"}
+    />
+    <meta
+      name="twitter:image"
+      content={ogImageUrl
+        ? ogImageUrl
+        : new URL("/developers/img/og-image.png", Astro.site).href}
+    />
+    <meta
+      name="twitter:description"
+      content={description
+        ? description
+        : "Making payments as easy as sending an email"}
+    />
 
     <link rel="icon" type="image/svg+xml" href="/developers/favicon.svg" />
     <script
