@@ -37,7 +37,11 @@ We can launch the browser with our extension loaded using the `--load-extension=
 function loadExtension(pathToExtension: string): Promise<BrowserContext> {
   const context = await chromium.launchPersistentContext("", {
     headless: true,
-    args: [`--headless=true`, `--disable-extensions-except=${pathToExtension}`, `--load-extension=${pathToExtension}`],
+    args: [
+      `--headless=true`,
+      `--disable-extensions-except=${pathToExtension}`,
+      `--load-extension=${pathToExtension}`
+    ]
   });
   return context;
 }
@@ -245,14 +249,14 @@ export const test = base.extend<TestScope, WorkerScope>({
       await use(context);
       await context.close();
     },
-    { scope: "worker" }, // yep, that's it. The default is { scope: "test" }
+    { scope: "worker" } // yep, that's it. The default is { scope: "test" }
   ],
   background: [
     async ({ persistentContext: context }, use) => {
       const background = await getBackground(context);
       await use(background);
     },
-    { scope: "worker" },
+    { scope: "worker" }
   ],
   popup: [
     async ({ background, persistentContext: context }, use) => {
@@ -261,14 +265,14 @@ export const test = base.extend<TestScope, WorkerScope>({
       await use(popup);
       await popup.close();
     },
-    { scope: "worker" },
+    { scope: "worker" }
   ],
 
   page: async ({ persistentContext: context }, use) => {
     const page = await context.newPage();
     await use(page);
     await page.close();
-  },
+  }
 });
 export const expect = test.expect;
 ```
@@ -346,8 +350,8 @@ export const test = base.extend<TestScope, WorkerScope>({
       await use(context);
       await context.close();
     },
-    { scope: "worker" },
-  ],
+    { scope: "worker" }
+  ]
   // ...
 });
 ```

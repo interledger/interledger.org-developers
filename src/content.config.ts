@@ -14,12 +14,12 @@ const blogCollection = defineCollection({
     image: z.string().optional(),
     tags: z.array(z.string()),
     authors: z.array(z.string()),
-    author_urls: z.array(z.string()),
-  }),
+    author_urls: z.array(z.string())
+  })
 });
 
 export const collections = {
   docs: defineCollection({ loader: docsLoader(), schema: docsSchema() }),
   i18n: defineCollection({ loader: i18nLoader(), schema: i18nSchema() }),
-  blog: blogCollection,
+  blog: blogCollection
 };

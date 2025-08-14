@@ -1,153 +1,200 @@
 ---
-import FoundationHeader from '../components/pages/FoundationHeader.astro';
-import FoundationFooter from '../components/pages/FoundationFooter.astro';
-import '../styles/pages.css';
+import FoundationHeader from "../components/pages/FoundationHeader.astro";
+import FoundationFooter from "../components/pages/FoundationFooter.astro";
+import "../styles/pages.css";
 
 interface Props {
-	title: string;
-	description?: string;
-	gradient?: string;
-	ogType?: string;
-	ogImageUrl?: string;
-	canonicalURL?: string;
+  title: string;
+  description?: string;
+  gradient?: string;
+  ogType?: string;
+  ogImageUrl?: string;
+  canonicalURL?: string;
 }
 
-const { title, description, ogType, ogImageUrl, canonicalURL = new URL(Astro.url.pathname, Astro.site).href, } = Astro.props;
+const {
+  title,
+  description,
+  ogType,
+  ogImageUrl,
+  canonicalURL = new URL(Astro.url.pathname, Astro.site).href
+} = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en" data-theme="light">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="author" content="Interledger Foundation" />
-		<meta name="description" content={description ? description : 'Making payments as easy as sending an email'}>
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title ? `${title} | Interledger Foundation` : 'Interledger Foundation'}</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="author" content="Interledger Foundation" />
+    <meta
+      name="description"
+      content={description
+        ? description
+        : "Making payments as easy as sending an email"}
+    />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>
+      {title ? `${title} | Interledger Foundation` : "Interledger Foundation"}
+    </title>
 
-		<meta property="og:title" content={title ? `${title} | Interledger Foundation` : 'Interledger Foundation'} />
-		<meta property="og:type" content={ogType ? ogType : 'website'} />
-		<meta property="og:image" content={ogImageUrl ? ogImageUrl : new URL('/developers/img/og-image.png', Astro.site).href} />
-		<meta property="og:url" content={canonicalURL} />
-		<meta property="og:description" content={description ? description : 'Making payments as easy as sending an email'}>
+    <meta
+      property="og:title"
+      content={title
+        ? `${title} | Interledger Foundation`
+        : "Interledger Foundation"}
+    />
+    <meta property="og:type" content={ogType ? ogType : "website"} />
+    <meta
+      property="og:image"
+      content={ogImageUrl
+        ? ogImageUrl
+        : new URL("/developers/img/og-image.png", Astro.site).href}
+    />
+    <meta property="og:url" content={canonicalURL} />
+    <meta
+      property="og:description"
+      content={description
+        ? description
+        : "Making payments as easy as sending an email"}
+    />
 
-		<meta name="twitter:card" content="summary_large_image">
-		<meta name="twitter:title" content={title ? `${title} | Interledger Foundation` : 'Interledger Foundation'} />
-		<meta name="twitter:image" content={ogImageUrl ? ogImageUrl : new URL('/developers/img/og-image.png', Astro.site).href} />
-		<meta name="twitter:description" content={description ? description : 'Making payments as easy as sending an email'}>
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content={title
+        ? `${title} | Interledger Foundation`
+        : "Interledger Foundation"}
+    />
+    <meta
+      name="twitter:image"
+      content={ogImageUrl
+        ? ogImageUrl
+        : new URL("/developers/img/og-image.png", Astro.site).href}
+    />
+    <meta
+      name="twitter:description"
+      content={description
+        ? description
+        : "Making payments as easy as sending an email"}
+    />
 
-		<link rel="icon" type="image/svg+xml" href="/developers/favicon.svg" />
-		<script defer src="https://ilf-site-analytics.netlify.app/script.js" data-website-id="50d81dd1-bd02-4f82-8a55-34a09ccbbbd9" data-domains="interledger.org"></script>
-	</head>
-	
-	<body>
-		<FoundationHeader />
-		<slot />
-		<FoundationFooter />
-	</body>
+    <link rel="icon" type="image/svg+xml" href="/developers/favicon.svg" />
+    <script
+      defer
+      src="https://ilf-site-analytics.netlify.app/script.js"
+      data-website-id="50d81dd1-bd02-4f82-8a55-34a09ccbbbd9"
+      data-domains="interledger.org"></script>
+  </head>
+
+  <body>
+    <FoundationHeader />
+    <slot />
+    <FoundationFooter />
+  </body>
 </html>
 
 <style is:global>
-	html {
-		box-sizing: border-box;
-		height: 100%;
-		overflow-x: clip;
-	}
+  html {
+    box-sizing: border-box;
+    height: 100%;
+    overflow-x: clip;
+  }
 
-	body {
-		display: flex;
-		flex-direction: column;
-		min-height: 100%;
-		min-width: 360px;
-		font-family: "Titillium", Arial, sans-serif;
-		overflow-x: clip;
-	}
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    min-width: 360px;
+    font-family: "Titillium", Arial, sans-serif;
+    overflow-x: clip;
+  }
 
-	/* Background swirl */
-	body::before {
-		position: fixed;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		left: 0;
-		z-index: -1;
-		background-image: url(/developers/img/bg-swirl.svg);
-		background-repeat: repeat;
-		background-size: 150%;
-		filter: blur(150px) opacity(0.25);
-		transform: translate3d(0, 0, 0);
-		content: "";
-	}
+  /* Background swirl */
+  body::before {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    background-image: url(/developers/img/bg-swirl.svg);
+    background-repeat: repeat;
+    background-size: 150%;
+    filter: blur(150px) opacity(0.25);
+    transform: translate3d(0, 0, 0);
+    content: "";
+  }
 
-	@media screen and (max-width: 430px) {
-		body::before {
-			content: initial;
-		}
-	}
+  @media screen and (max-width: 430px) {
+    body::before {
+      content: initial;
+    }
+  }
 
-	main {
-		flex: 1;
-		font-size: var(--step-0);
-	}
+  main {
+    flex: 1;
+    font-size: var(--step-0);
+  }
 
-	.content-wrapper {
-		max-width: var(--max-content-width);
-		min-width: 360px;
-		margin: auto;
-	}
+  .content-wrapper {
+    max-width: var(--max-content-width);
+    min-width: 360px;
+    margin: auto;
+  }
 
-	@media screen and (max-width: 1324px) {
-		.content-wrapper {
-			max-width: var(--max-content-width);
-			min-width: 360px;
-			margin: auto;
-			padding-inline: 5%;
-		}
-	}
+  @media screen and (max-width: 1324px) {
+    .content-wrapper {
+      max-width: var(--max-content-width);
+      min-width: 360px;
+      margin: auto;
+      padding-inline: 5%;
+    }
+  }
 
-	.heading--1 {
-		font-size: var(--step-6);
-	}
+  .heading--1 {
+    font-size: var(--step-6);
+  }
 
-	.heading--2 {
-		font-size: var(--step-5);
-	}
+  .heading--2 {
+    font-size: var(--step-5);
+  }
 
-	.heading--3 {
-		font-size: var(--step-4);
-	}
+  .heading--3 {
+    font-size: var(--step-4);
+  }
 
-	.heading--4 {
-		font-size: var(--step-3);
-	}
+  .heading--4 {
+    font-size: var(--step-3);
+  }
 
-	.heading--5 {
-		font-size: var(--step-2);
-	}
+  .heading--5 {
+    font-size: var(--step-2);
+  }
 
-	.heading--6 {
-		font-size: var(--step-1);
-	}
+  .heading--6 {
+    font-size: var(--step-1);
+  }
 
-	strong {
-		color: var(--color-primary);
-	}
+  strong {
+    color: var(--color-primary);
+  }
 
-	a {
-		color: currentColor;
-		transition: color 300ms ease-in-out;
-	}
+  a {
+    color: currentColor;
+    transition: color 300ms ease-in-out;
+  }
 
-	a:hover {
-		color: var(--color-primary);
-	}
+  a:hover {
+    color: var(--color-primary);
+  }
 
-	.visually-hidden {
-		clip-path: inset(50%);
-		height: 1px;
-		overflow: hidden;
-		position: absolute;
-		white-space: nowrap;
-		width: 1px;
-	}
+  .visually-hidden {
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
 </style>

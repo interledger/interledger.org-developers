@@ -1,9 +1,8 @@
 ---
-// @ts-ignore
-import showdown from 'showdown';
-import { parse } from 'node-html-parser';
+import showdown from "showdown";
+import { parse } from "node-html-parser";
 
-const {source} = Astro.props;
+const { source } = Astro.props;
 
 const getApiData = async () => {
   const data = await fetch(source).then((response) => response.text());
@@ -13,8 +12,11 @@ const getApiData = async () => {
 };
 
 const specBody = await getApiData();
-const converter = new showdown.Converter({tables: true, ghCompatibleHeaderId: true});
-const html  = converter.makeHtml(specBody);
+const converter = new showdown.Converter({
+  tables: true,
+  ghCompatibleHeaderId: true
+});
+const html = converter.makeHtml(specBody);
 const output = parse(html);
 ---
 

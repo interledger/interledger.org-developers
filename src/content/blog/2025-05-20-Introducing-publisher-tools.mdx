@@ -13,7 +13,6 @@ tags:
   - publisher tools
 ---
 
-
 In a digital world where supporting content owners and publishers is becoming increasingly important, we wanted to build something that didn’t just preach the value of [Web Monetization](https://webmonetization.org/) - but made it accessible and easy for anyone to use. That’s how our [publisher tools](https://webmonetization.org/tools/) came to life.
 
 This toolset was born from a simple marketing goal: get the word out about Web Monetization. At its core, the publisher tools are a set of customizable elements that site owners can embed with just a simple script tag, designed to promote Web Monetization as a model for visitors to support their websites.
@@ -30,7 +29,7 @@ We decided early that our publisher tools would revolve around a handful of elem
 - **Button**
 - **Exclusive Content**
 
-Each element is fully customizable via a visual admin interface where users can configure text, colors, fonts, and more - with live preview support. *No coding skills needed.*
+Each element is fully customizable via a visual admin interface where users can configure text, colors, fonts, and more - with live preview support. _No coding skills needed._
 
 ![Create a banner](/developers/img/blog/2025-05-20/pt_example_banner.png)
 
@@ -47,9 +46,9 @@ This approach lowers the technical barrier and ensures creators can focus on the
 ## Ensuring Wallet Ownership and Security
 
 To protect users and maintain integrity, wallet ownership confirmation is integrated.  
-Currently, this relies on an *interactive grant*, in the future, a more streamlined wallet verification mechanism will replace this process.
+Currently, this relies on an _interactive grant_, in the future, a more streamlined wallet verification mechanism will replace this process.
 
-Users are asked to confirm they own their wallets before a script tag is generated. 
+Users are asked to confirm they own their wallets before a script tag is generated.
 Without ownership confirmation, their customizations are not saved on the server. The validation steps help to maintain integrity, protect wallet owners, and ensure only the rightful owner of a wallet can update the configuration.
 
 ## Default Configurations
@@ -86,7 +85,11 @@ In the admin interface, creators can:
 On the embed side, the script remains simple. By passing a `tag` value along with the wallet address in the script tag, the correct version is automatically selected and rendered.
 
 ```html
-<script id="wmt-init-script" type="module" src="https://cdn.webmonetization.org/init.js?wa=[user-wallet-address]&tag=blog&types=banner"></script>
+<script
+  id="wmt-init-script"
+  type="module"
+  src="https://cdn.webmonetization.org/init.js?wa=[user-wallet-address]&tag=blog&types=banner"
+></script>
 ```
 
 If no tag is provided, the default version is used - ensuring backward compatibility and quick setup for users who don't need multiple styles.
@@ -117,7 +120,11 @@ These features are actively in development and will soon be available:
 
 <br />
 
-<img src="/developers/img/blog/2025-05-20/pt_example_widget.png" alt="Widget example" style={{ width: "50%" }} />
+<img
+  src="/developers/img/blog/2025-05-20/pt_example_widget.png"
+  alt="Widget example"
+  style={{ width: "50%" }}
+/>
 
 <br />
 
@@ -127,8 +134,11 @@ These features are actively in development and will soon be available:
 - **Behavior**: Opens the same payment panel as the widget.
 - **Extras**: Has the option to add tooltips for additional explanations or calls to action.
 
-
-<img src="/developers/img/blog/2025-05-20/pt_example_button.png" alt="Create a button" style={{ width: "85%" }} />
+<img
+  src="/developers/img/blog/2025-05-20/pt_example_button.png"
+  alt="Create a button"
+  style={{ width: "85%" }}
+/>
 
 <br />
 
@@ -139,7 +149,6 @@ These features are actively in development and will soon be available:
 - **Implementation**: Entirely client-side for simplicity.
 - **Return Visitors**: Visitors who have previously paid can verify their payment and gain access without repurchasing during the set time interval.
 - **Privacy**: Publishers and content owners never see or store a visitor's personal data - privacy is fully preserved. The verification is done by matching the payment against the visitor’s transaction history, as recorded by their wallet or identity provider.
-
 
 ## What’s Next?
 

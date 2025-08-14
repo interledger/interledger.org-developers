@@ -1,64 +1,152 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import InterledgerIcon from '../components/logos/InterledgerIcon.astro';
-import OpenPaymentsIcon from '../components/logos/OpenPaymentsIcon.astro';
-import RafikiIcon from '../components/logos/RafikiIcon.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import InterledgerIcon from "../components/logos/InterledgerIcon.astro";
+import OpenPaymentsIcon from "../components/logos/OpenPaymentsIcon.astro";
+import RafikiIcon from "../components/logos/RafikiIcon.astro";
 ---
+
 <BaseLayout title="Developers">
   <main>
     <section class="hero">
       <div class="content-wrapper">
         <div class="text-wrapper">
-          <h1 class="hero__heading heading--2">Interledger Developers Portal</h1>
-          <p class="hero__txt">Help shape the future of interoperable payments and enable seamless exchange of value across payment networks.</p>
+          <h1 class="hero__heading heading--2">
+            Interledger Developers Portal
+          </h1>
+          <p class="hero__txt">
+            Help shape the future of interoperable payments and enable seamless
+            exchange of value across payment networks.
+          </p>
           <div class="hero__cta">
-            <a class="btn hero__btn" href="/developers/get-involved" data-umami-event="Devs page link - Get involved">Get involved</a>
-            <a class="external" href="https://github.com/interledger" target="_blank" rel="noopener noreferrer">Contribute on Github</a>
+            <a
+              class="btn hero__btn"
+              href="/developers/get-involved"
+              data-umami-event="Devs page link - Get involved">Get involved</a
+            >
+            <a
+              class="external"
+              href="https://github.com/interledger"
+              target="_blank"
+              rel="noopener noreferrer">Contribute on Github</a
+            >
           </div>
         </div>
         <div class="image-wrapper">
-          <img src="/developers/img/devs.svg" alt="Illustration of developers working at a table" class="hero__img" />
+          <img
+            src="/developers/img/devs.svg"
+            alt="Illustration of developers working at a table"
+            class="hero__img"
+          />
         </div>
       </div>
     </section>
 
     <section>
       <div class="content-wrapper">
-        <p class="heading--5">We welcome contributions to our open-source repositories on GitHub. If you find them valuable, please give us a star. Your support makes a difference!</p>
+        <p class="heading--5">
+          We welcome contributions to our open-source repositories on GitHub. If
+          you find them valuable, please give us a star. Your support makes a
+          difference!
+        </p>
       </div>
     </section>
 
     <section>
       <div class="content-wrapper cards">
         <div class="card">
-          <h2 class="heading--6"><a href="https://github.com/interledger/open-payments" data-umami-event="Devs page link - GitHub" target="_blank" rel="noopener noreferrer"><OpenPaymentsIcon /> Open Payments Repo</a> </h2>
-          <p>Open Payments is an open API standard that can be implemented by account servicing entities to facilitate interoperability in the setup and completion of payments for different use cases.</p>
+          <h2 class="heading--6">
+            <a
+              href="https://github.com/interledger/open-payments"
+              data-umami-event="Devs page link - GitHub"
+              target="_blank"
+              rel="noopener noreferrer"
+              ><OpenPaymentsIcon /> Open Payments Repo</a
+            >
+          </h2>
+          <p>
+            Open Payments is an open API standard that can be implemented by
+            account servicing entities to facilitate interoperability in the
+            setup and completion of payments for different use cases.
+          </p>
         </div>
 
         <div class="card">
-          <h2 class="heading--6"><a href="https://github.com/interledger/rafiki" data-umami-event="Devs page link - Rafiki" target="_blank" rel="noopener noreferrer"><RafikiIcon /> Rafiki Repo</a> </h2>
-          <p>Rafiki is open source software that provides an efficient solution for an Account Servicing Entity to enable Interledger functionality on its users' accounts.</p>            
+          <h2 class="heading--6">
+            <a
+              href="https://github.com/interledger/rafiki"
+              data-umami-event="Devs page link - Rafiki"
+              target="_blank"
+              rel="noopener noreferrer"><RafikiIcon /> Rafiki Repo</a
+            >
+          </h2>
+          <p>
+            Rafiki is open source software that provides an efficient solution
+            for an Account Servicing Entity to enable Interledger functionality
+            on its users' accounts.
+          </p>
         </div>
 
         <div class="card">
-          <h2 class="heading--6"><a href="https://github.com/interledger/rfcs" data-umami-event="Devs page link - RFCs" target="_blank" rel="noopener noreferrer"><InterledgerIcon /> Specifications Repo</a></h2>
-          <p>The <a href="/developers/rfcs/interledger-protocol/" data-umami-event="Devs page link - Read specs">Interledger Protocol (ILP)</a> is an open, neutral protocol for transferring money based on TCP/IP, designed for sending packets of money across different accounting ledgers.</p>
+          <h2 class="heading--6">
+            <a
+              href="https://github.com/interledger/rfcs"
+              data-umami-event="Devs page link - RFCs"
+              target="_blank"
+              rel="noopener noreferrer"
+              ><InterledgerIcon /> Specifications Repo</a
+            >
+          </h2>
+          <p>
+            The <a
+              href="/developers/rfcs/interledger-protocol/"
+              data-umami-event="Devs page link - Read specs"
+              >Interledger Protocol (ILP)</a
+            > is an open, neutral protocol for transferring money based on TCP/IP,
+            designed for sending packets of money across different accounting ledgers.
+          </p>
         </div>
 
         <div class="card">
-          <h2 class="heading--6"><a href="https://github.com/interledger/testnet" data-umami-event="Devs page link - Testnet" target="_blank" rel="noopener noreferrer"><InterledgerIcon /> Test Network Repo</a></h2>
-          <p>The Test Network (Testnet) is an open Interledger network working with test money designed for account servicing entities to test their Interledger integration.</p>
+          <h2 class="heading--6">
+            <a
+              href="https://github.com/interledger/testnet"
+              data-umami-event="Devs page link - Testnet"
+              target="_blank"
+              rel="noopener noreferrer"><InterledgerIcon /> Test Network Repo</a
+            >
+          </h2>
+          <p>
+            The Test Network (Testnet) is an open Interledger network working
+            with test money designed for account servicing entities to test
+            their Interledger integration.
+          </p>
         </div>
 
         <div class="card">
-          <h2 class="heading--6"><a href="https://github.com/search?q=topic%3Ahacktoberfest+org%3Ainterledger+fork%3Atrue+repo%3Awicg%2Fwebmonetization&type=repositories" data-umami-event="Devs page link - Hacktoberfest" target="_blank" rel="noopener noreferrer"><InterledgerIcon /> Hacktoberfest</a></h2>
-          <p>Join us this October to collaborate on our open source projects.</p>
+          <h2 class="heading--6">
+            <a
+              href="https://github.com/search?q=topic%3Ahacktoberfest+org%3Ainterledger+fork%3Atrue+repo%3Awicg%2Fwebmonetization&type=repositories"
+              data-umami-event="Devs page link - Hacktoberfest"
+              target="_blank"
+              rel="noopener noreferrer"><InterledgerIcon /> Hacktoberfest</a
+            >
+          </h2>
+          <p>
+            Join us this October to collaborate on our open source projects.
+          </p>
         </div>
 
         <div class="card">
           <h2 class="heading--6">Engineering Blog</h2>
-          <p>Our team shares their thoughts and experiences on Interledger and the work that we are doing.</p>
-          <a class="btn card__btn" href="/developers/blog" data-umami-event="Devs page link - Blog">Read our blog</a>
+          <p>
+            Our team shares their thoughts and experiences on Interledger and
+            the work that we are doing.
+          </p>
+          <a
+            class="btn card__btn"
+            href="/developers/blog"
+            data-umami-event="Devs page link - Blog">Read our blog</a
+          >
         </div>
       </div>
     </section>
@@ -81,8 +169,12 @@ import RafikiIcon from '../components/logos/RafikiIcon.astro';
     background-repeat: no-repeat;
     background-size: cover;
     background-position: bottom right;
-    background-image: linear-gradient(to right, #007777, #69BCC3);
-    background-image: linear-gradient(to right, oklch(51.54% 0.088 194.77), oklch(74.53% 0.082 202.65));
+    background-image: linear-gradient(to right, #007777, #69bcc3);
+    background-image: linear-gradient(
+      to right,
+      oklch(51.54% 0.088 194.77),
+      oklch(74.53% 0.082 202.65)
+    );
     min-height: 60vh;
     padding-block: var(--space-m);
     color: var(--color-white);
@@ -112,7 +204,7 @@ import RafikiIcon from '../components/logos/RafikiIcon.astro';
   .btn::after {
     content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12"><path d="M11.92 5.62a1.001 1.001 0 0 0-.21-.33l-5-5a1.004 1.004 0 0 0-1.42 1.42L8.59 5H1a1 1 0 0 0 0 2h7.59l-3.3 3.29a1.002 1.002 0 0 0 .325 1.639 1 1 0 0 0 1.095-.219l5-5a1 1 0 0 0 .21-.33 1 1 0 0 0 0-.76Z"/></svg>');
     flex: none;
-    width: .6em;
+    width: 0.6em;
   }
 
   .external {
@@ -172,7 +264,7 @@ import RafikiIcon from '../components/logos/RafikiIcon.astro';
   .hero__btn::after {
     filter: var(--filter-primary);
   }
-  
+
   .image-wrapper {
     flex: 0 1 auto;
     max-width: 28rem;
@@ -189,16 +281,16 @@ import RafikiIcon from '../components/logos/RafikiIcon.astro';
     }
   }
 
-  @media screen and (min-width: 800px){
+  @media screen and (min-width: 800px) {
     .hero {
-        min-height: 70vh;
+      min-height: 70vh;
     }
 
     .image-wrapper {
       align-self: end;
     }
   }
-  
+
   .cards {
     display: flex;
     flex-wrap: wrap;
