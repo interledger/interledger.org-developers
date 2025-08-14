@@ -1,8 +1,8 @@
 ---
 import type { Page } from "astro";
-import { createExcerpt } from '../../utils/create-excerpt';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Pagination from '../../components/blog/Pagination.astro';
+import { createExcerpt } from '../../../utils/create-excerpt';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Pagination from '../../../components/blog/Pagination.astro';
 import { getCollection } from 'astro:content';
 
 type Props = {
@@ -10,13 +10,24 @@ type Props = {
 };
 
 export async function getStaticPaths({ paginate }: any) {
+  const defaultLang = 'en';
   const blogEntries = (await getCollection("blog"))
-  .filter((entry) => entry.filePath && entry.filePath.match(/\/blog\/[^\/]+\.mdx?$/))
-  .sort((a:any, b:any) => b.data.date.getTime() - a.data.date.getTime());
-  return paginate(blogEntries, { pageSize: 10 });
+  const allLangs = Array.from(new Set(blogEntries.map((entry) => entry.data.lang)));
+  const langs = allLangs.filter((lang) => lang !== defaultLang);
+  return langs.flatMap((lang) => {
+    const filteredPosts = blogEntries
+      .filter((entry) => entry.data.lang !== defaultLang && entry.data.lang === lang)
+      .sort((a:any, b:any) => b.data.date.getTime() - a.data.date.getTime());
+
+    return paginate(filteredPosts, {
+      pageSize: 10,
+      params: { lang },
+    });
+  });
 }
 
 const { page } = Astro.props;
+const { lang } = Astro.params;
 ---
 <BaseLayout title="Engineering Blog" description="Hear stories and experiences from the team who is working on making Interledger, the interoperable global payments network, a reality." ogImageUrl={new URL('/developers/img/blog/og-image.png', Astro.site).href}>
 	<main>
@@ -44,13 +55,7 @@ const { page } = Astro.props;
 							<time class="postlist-date" datetime={blogPostEntry.data.date.toISOString()}>
 								{blogPostEntry.data.date.toDateString()}
 							</time>
-							{blogPostEntry.data.lang ? 
-								<div class="postlist-es">
-									<a href={`/developers/blog/${blogPostEntry.id}`} class="postlist-link heading--6">{blogPostEntry.data.title}</a>
-									<a class="postlist-lang" href="/developers/blog/es">ES</a>
-								</div> :
-								<a href={`/developers/blog/${blogPostEntry.id}`} class="postlist-link heading--6">{blogPostEntry.data.title}</a>
-							}
+							<a href={`/developers/${lang}/blog/${blogPostEntry.id}`} class="postlist-link heading--6">{blogPostEntry.data.title}</a>
 							<p>{blogPostEntry.data.description ? blogPostEntry.data.description : excerpt}</p>
 						</li>
 					)}
@@ -65,7 +70,7 @@ const { page } = Astro.props;
 			/>
 		</div>
 	</main>
-</PageLayout>
+</BaseLayout>
 
 <style>
 main {
@@ -161,21 +166,5 @@ header {
 
 .postlist-link:hover {
   text-decoration-color: currentColor;
-}
-
-.postlist-es {
-	display: flex;
-	align-items: start;
-	gap: var(--space-2xs);
-}
-
-.postlist-lang {
-	border: 1.5px solid;
-	padding-inline: 4px;
-	border-radius: var(--border-radius);
-	font-size: var(--step--1);
-	background-color: white;
-	margin-block-start: var(--space-3xs);
-	text-decoration: none;
 }
 </style>
