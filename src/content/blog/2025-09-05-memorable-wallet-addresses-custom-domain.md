@@ -195,7 +195,7 @@ The Web Monetization browser extension allows you to use any payment pointer or 
 
 Once you've connected using your custom payment pointer, the extension will show you both the custom payment pointer and the corresponding original wallet address on the Settings screen.
 
-Aside: The Web Monetization API doesn't allow the websites to know what payment pointer/wallet address was used by the payer, so they cannot directly correlate the payments to your identity (your domain name). The website's wallet may display information about the sender, but it'll only show the original wallet address there, not your custom alias.
+Aside: The Web Monetization API doesn't inform websites which wallet address was used by the sender, so websites cannot directly correlate the payments to your identity (your domain name). The website's wallet may display information about the sender, but the wallet itself will only know of the original Open Payments wallet address, not your custom alias.
 
 ### `MonetizationEvent`
 
