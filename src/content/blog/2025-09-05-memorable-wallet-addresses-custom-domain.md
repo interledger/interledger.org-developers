@@ -199,7 +199,7 @@ Aside: The Web Monetization API doesn't inform websites which wallet address was
 
 ### `MonetizationEvent`
 
-Let's say, instead of using a wallet address that our provider gave us, we alias it to a custom address as shown above, and add it to our webpage. This sort of indirection can also arise from using the [probabilistic revenue sharing generator](https://webmonetization.org/tools/prob-revshare/). The wallet itself can provide a wallet address alias, for example, as it's shorter or promotes the brand better.
+When we add such an aliased wallet address to our website, there's an indirection involved. This sort of indirection can also arise from using the [probabilistic revenue sharing generator](https://webmonetization.org/tools/prob-revshare/). The wallet itself can provide a wallet address alias, for example, as it's shorter or promotes the brand better.
 
 When a `monetization` event is emitted, how do we know what wallet address was actually paid? And how do we know what wallet address we originally provided? This is even more relevant if your webpage includes multiple monetization link tags.
 
