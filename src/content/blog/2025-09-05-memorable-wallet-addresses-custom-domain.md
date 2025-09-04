@@ -14,7 +14,7 @@ tags:
 
 Wallet addresses are meant to be easy to remember or identify, unless your wallet provider chooses them for you. The address might include a long subdomain or even a random series of numbers and characters. But did you know that if you own a domain, you can set your wallet address to be the same as your domain?
 
-So, instead of `https://ilp.wallet.example/12345432/usd`, you can have `$mywebsite.com` as your wallet address (well, technically, a [payment pointer](https://paymentpointers.org/))! It's as easy as pie to remember.
+So, instead of `https://ilp.wallet.example/12345432/usd`, you can have `$mywebsite.com` as your wallet address (well, technically, a [payment pointer](https://paymentpointers.org/))!
 
 ![Illustration showing turning long wallet addresses to custom domain payment pointers](/developers/img/blog/2025-09-05/memorable-wallet-addresses-on-own-domain.png)
 
@@ -45,7 +45,7 @@ For instance, let's consider Cloudflare. They have a concept of "rules" that exe
 5. In the Destination URL field, write the wallet address your wallet provider gave and type `$1` at the end.\
    E.g., if your wallet address is `https://ilp.wallet.com/abc/zyz`, enter `https://ilp.wallet.com/abc/xyz$1`.\
    The `$1` gets replaced by whatever content was there in place of `*`: `/.well-known/pay/jwks.json` will become `/abc/xyz/jwks.json`; `/.well-known/pay/` will become `/abc/xyz/`.
-6. Click Save Page Rule, and you're ready!
+6. Click Save Page Rule, and you're ready.
 
 ![Screenshot showing Cloudflare dashboard with the Page rule editor showing setup of my domain using a redirect to my GateHub wallet](/developers/img/blog/2025-09-05/cloudflare-page-rule.png)
 
@@ -76,7 +76,7 @@ location ~ /.well-known/pay(.*) {
 }
 ```
 
-You get the gist. Feel free to share solutions for your hosting providers in the comments!
+You get the idea.
 
 ### `_redirects` file
 
@@ -167,7 +167,7 @@ In case you're wondering, no, the [`http-equiv` HTML meta tag](https://stackover
    # {"id":"https://ilp.gatehub.net/981946513/eur","publicName":"981946513","assetCode":"EUR","assetScale":2,"authServer":"https://rafiki.gatehub.net","resourceServer":"https://ilp.gatehub.net"}
    ```
 
-3. Deploy your static site!
+3. Deploy your static site.
 
 Note that, given the lack of control over headers, you may face CORS issues as explained above, but it'll work with most other Open Payment uses.
 
@@ -177,7 +177,7 @@ More importantly, you will have to ensure the content of your `pay.json` matches
 
 ### The `<link>` element
 
-A payment pointer, such as `$mywebsite.com`, is convenient for many purposes. However, when you want to add your wallet address to your website as a Web Monetization receiver, you need to convert that payment pointer to the Open Payments "wallet address" format for use with the `<link>` tag ([why?](https://github.com/WICG/webmonetization/issues/19#issuecomment-705407129)). Slightly disappointing, but hey, you only need to do this once!
+A payment pointer, such as `$mywebsite.com`, is convenient for many purposes. However, when you want to add your wallet address to your website as a Web Monetization receiver, you need to convert that payment pointer to the Open Payments "wallet address" format for use with the `<link>` tag ([why?](https://github.com/WICG/webmonetization/issues/19#issuecomment-705407129)). Slightly disappointing, but hey, you only need to do this once.
 
 You can use the [link tag generator](https://webmonetization.org/tools/link-tag/) to convert the payment pointer to a valid link tag.
 
@@ -187,7 +187,7 @@ If you're using the same domain as your website, you can use the link element's 
 <link rel="monetization" href="/.well-known/pay" />
 ```
 
-Aside: During local development (i.e. with localhost or custom dev domain), if you have the Web Monetization browser extension installed and are using a CDN or host-level configuration, the extension won't resolve to your actual wallet address. No real money will be sent during regular website development, which can be very handy. And when you want to actually test Web Monetization integrations, you can resolve the URL to a different [test wallet](https://wallet.interledger-test.dev/) address!
+Aside: During local development (i.e. with localhost or custom dev domain), if you have the Web Monetization browser extension installed and are using a CDN or host-level configuration, the extension won't resolve to your actual wallet address. No real money will be sent during regular website development, which can be very handy. And when you want to actually test Web Monetization integrations, you can resolve the URL to a different [test wallet](https://wallet.interledger-test.dev/) address.
 
 ### Usage in extension
 
@@ -203,9 +203,7 @@ Let's say, instead of using a wallet address that our provider gave us, we alias
 
 When a `monetization` event is emitted, how do we know what wallet address was actually paid? And how do we know what wallet address we originally provided? This is even more relevant if your webpage includes multiple monetization link tags.
 
-Thankfully, the `MonetizationEvent` includes both these details!
-
-Let's look at the [`MonetizationEvent`](https://webmonetization.org/specification/#dom-monetizationevent) in detail.
+Thankfully, the [`MonetizationEvent`](https://webmonetization.org/specification/#dom-monetizationevent) includes both these details:
 
 ```webidl
 interface MonetizationEvent : Event {
@@ -216,7 +214,7 @@ interface MonetizationEvent : Event {
 }
 ```
 
-Here, `paymentPointer` is the resolved wallet address that was used. For example, with a custom domain payment pointer - like I've mapped `$sidvishnoi.com` to resolve to my GateHub wallet address (`https://ilp.gatehub.net/981946513/eur`) above - the `paymentPointer` will resolve to my GateHub address. When using a wallet address from the probabilistic revenue sharing tool, it'll correspond to the wallet address that was chosen randomly.
+Here, `paymentPointer` is the resolved wallet address that was paid. For example, with a custom domain payment pointer - like I've mapped `$sidvishnoi.com` to resolve to my GateHub wallet address (`https://ilp.gatehub.net/981946513/eur`) above - the `paymentPointer` will resolve to my GateHub address. When using a wallet address from the probabilistic revenue sharing tool, it'll correspond to the wallet address that was chosen randomly.
 
 And how do we get the original wallet address?
 
@@ -236,7 +234,7 @@ window.addEventListener("monetization", (event) => {
   const originalWalletAddress = linkElement.href;
   // -> https://sidvishnoi.com/.well-known/pay
 
-  const usedWalletAddress = event.paymentPointer;
+  const walletAddressThatGotPaid = event.paymentPointer;
   // -> https://ilp.gatehub.net/981946513/eur
 });
 ```
@@ -245,4 +243,4 @@ Depending on the use case, you may care about either or both of the wallet addre
 
 ## Closing words
 
-I look forward to seeing wallet addresses on your own domains! Remember, `$sidvishnoi.com` is my payment pointer 😉
+I look forward to seeing wallet addresses on your own domains. Remember, `$sidvishnoi.com` is my payment pointer 😉
