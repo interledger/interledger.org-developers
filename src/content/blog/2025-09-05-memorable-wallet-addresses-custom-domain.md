@@ -18,7 +18,7 @@ So, instead of `https://ilp.wallet.example/12345432/usd`, you can have `$mywebsi
 
 ![Illustration showing turning long wallet addresses to custom domain payment pointers](/developers/img/blog/2025-09-05/memorable-wallet-addresses-on-own-domain.png)
 
-You can change your wallet without telling anyone about a new address. And not to forget the branding that comes with your domain - you can share it with people to request money with Open Payments, and it's handy when sending someone money as well. The [Web Monetization extension](https://webmonetization.org/supporters/get-started/) also supports these custom wallet addresses.
+You can change the underlying wallet without having to share a new address. Not to forget the advantages of branding and the trust that comes with it, as people will know that this is your wallet attached to your online identity - your domain. The [Web Monetization extension](https://webmonetization.org/supporters/get-started/) also supports these custom wallet addresses.
 
 I personally use `$sidvishnoi.com` (which maps to my [GateHub wallet](https://gatehub.net/)). Feel free to send me money now that you remember the address!
 
