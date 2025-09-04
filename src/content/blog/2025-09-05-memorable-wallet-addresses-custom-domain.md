@@ -18,9 +18,9 @@ So, instead of `https://ilp.wallet.example/12345432/usd`, you can have `$mywebsi
 
 ![Illustration showing turning long wallet addresses to custom domain payment pointers](/developers/img/blog/2025-09-05/memorable-wallet-addresses-on-own-domain.png)
 
-You can change your wallet without telling anyone about a new address. And not to forget the branding that comes with your domain - you can share it with people to request money with Open Payments, and it's handy when sending someone money as well. The [Web Monetization extension](https://github.com/interledger/web-monetization-extension) also supports these custom wallet addresses.
+You can change your wallet without telling anyone about a new address. And not to forget the branding that comes with your domain - you can share it with people to request money with Open Payments, and it's handy when sending someone money as well. The [Web Monetization extension](https://webmonetization.org/supporters/get-started/) also supports these custom wallet addresses.
 
-I personally use `$sidvishnoi.com` (which maps to my GateHub wallet). Feel free to send me money now that you remember the address!
+I personally use `$sidvishnoi.com` (which maps to my [GateHub wallet](https://gatehub.net/)). Feel free to send me money now that you remember the address!
 
 Alright, so how do we get that address?
 
@@ -28,7 +28,7 @@ Alright, so how do we get that address?
 
 Having a domain is a must-have for this to work. If you don't own one, you can use a subdomain provided by your web hosting provider, but your own domain is better.
 
-I'll share a few approaches in this article, and later explain how these custom addresses relate to Web Monetization. The essential part in each approach is: you want `https://{yourdomain.com}/.well-known/pay` to either redirect or rewrite to the wallet address you want to alias.
+I'll share a few approaches in this article, and later explain how these custom addresses relate to Web Monetization. The essential part in each approach is to have `https://{yourdomain.com}/.well-known/pay` to either redirect or rewrite to the wallet address you want to alias.
 
 ### Configure in web host
 
@@ -43,7 +43,7 @@ For instance, let's consider Cloudflare. They have a concept of "rules" that exe
 3. In the URL field, enter `{yourdomain.com}/.well-known/pay*`.
 4. In settings, select "Forwarding URL" with a 302 - Temporary Redirect.
 5. In the Destination URL field, write the wallet address your wallet provider gave and type `$1` at the end.\
-   e.g., if your wallet address is `https://ilp.wallet.com/abc/zyz`, enter `https://ilp.wallet.com/abc/xyz$1`.\
+   E.g., if your wallet address is `https://ilp.wallet.com/abc/zyz`, enter `https://ilp.wallet.com/abc/xyz$1`.\
    The `$1` gets replaced by whatever content was there in place of `*`: `/.well-known/pay/jwks.json` will become `/abc/xyz/jwks.json`; `/.well-known/pay/` will become `/abc/xyz/`.
 6. Click Save Page Rule, and you're ready!
 
@@ -96,7 +96,7 @@ Static sites hosted on platforms like Netlify and Cloudflare can utilize this ap
   Access-Control-Allow-Origin: *
 ```
 
-Other providers like [Surge](https://surge.sh/help/adding-redirects), [Vercel](https://vercel.com/docs/redirects) may have their own syntax for the redirects file.
+Other providers like [Surge](https://surge.sh/help/adding-redirects) and [Vercel](https://vercel.com/docs/redirects) may have their own syntax for the redirects file.
 
 ### Dynamic rewrite/redirect from website
 
@@ -155,7 +155,7 @@ You cannot have `$mywebsite.com`, but `$mywebsite.com/pay.json` may work. It mig
 In case you're wondering, no, the [`http-equiv` HTML meta tag](https://stackoverflow.com/a/5411567) based redirect won't work. The redirects have to be at HTTP-level.
 
 1. Grab the JSON response for your original wallet address.\
-   You can use online services like [https://jsonviewer.stack.hu](https://jsonviewer.stack.hu), or [https://hoppscotch.io](https://hoppscotch.io) to view the JSON response, or use `curl` if you're into those things.\
+   You can use online services like [https://jsonviewer.stack.hu](https://jsonviewer.stack.hu) or [https://hoppscotch.io](https://hoppscotch.io) to view the JSON response, or use `curl` if you're into those things.\
    Opening the wallet address URL directly in your browser may not show you the JSON response, as some wallets use it as a landing page for others to send you money.
 2. Create a `pay.json` file (or use any other name, it just needs to have the `.json` extension), and paste in the above JSON. For example:
 
@@ -171,7 +171,7 @@ In case you're wondering, no, the [`http-equiv` HTML meta tag](https://stackover
 
 Note that, given the lack of control over headers, you may face CORS issues as explained above, but it'll work with most other Open Payment uses.
 
-More importantly, you will have to ensure the content of your `pay.json` matches the JSON response that was received from your original wallet address, in case it changes in future.
+More importantly, you will have to ensure the content of your `pay.json` matches the JSON response that was received from your original wallet address, in case the response changes in future.
 
 ## How does it work with Web Monetization
 
@@ -187,7 +187,7 @@ If you're using the same domain as your website, you can use the link element's 
 <link rel="monetization" href="/.well-known/pay" />
 ```
 
-Aside: During local development (i.e. with localhost or custom dev domain), if you have the Web Monetization browser extension installed and are using a CDN or host-level configuration, the extension won't resolve to your actual wallet address, and no real money will be sent during regular website development, which can be very handy. And when you want to actually test Web Monetization integrations, you can resolve the URL to a different [test wallet](https://wallet.interledger-test.dev/) address!
+Aside: During local development (i.e. with localhost or custom dev domain), if you have the Web Monetization browser extension installed and are using a CDN or host-level configuration, the extension won't resolve to your actual wallet address. No real money will be sent during regular website development, which can be very handy. And when you want to actually test Web Monetization integrations, you can resolve the URL to a different [test wallet](https://wallet.interledger-test.dev/) address!
 
 ### Usage in extension
 
@@ -201,7 +201,7 @@ Aside: The Web Monetization API doesn't allow the websites to know what payment 
 
 Let's say, instead of using a wallet address that our provider gave us, we alias it to a custom address as shown above, and add it to our webpage. This sort of indirection can also arise from using the [probabilistic revenue sharing generator](https://webmonetization.org/tools/prob-revshare/), or from your wallet provider may be using an aliased wallet address itself.
 
-When a `monetization` event is emitted, how do we know what wallet address was actually used? And how do we know what wallet address we originally provided? This is even more relevant if your webpage includes multiple monetization link tags.
+When a `monetization` event is emitted, how do we know what wallet address was actually paid? And how do we know what wallet address we originally provided? This is even more relevant if your webpage includes multiple monetization link tags.
 
 Thankfully, the `MonetizationEvent` includes both these details!
 
