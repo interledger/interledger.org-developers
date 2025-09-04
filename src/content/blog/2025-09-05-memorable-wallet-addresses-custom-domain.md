@@ -14,7 +14,7 @@ tags:
 
 Wallet addresses are meant to be easy to remember or identify, unless your wallet provider chooses them for you. The address might include a long subdomain or even a random series of numbers and characters. But did you know that if you own a domain, you can set your wallet address to be the same as your domain?
 
-So, instead of `https://ilp.wallet.example/12345432/usd`, you can have `$mywebsite.com` as your wallet address (well, technically, a [payment pointer](https://paymentpointers.org/))!
+So, instead of `https://ilp.wallet.example/12345432/usd`, you can have `$mywebsite.com` as your wallet address! Technically, wallet addresses with the `$` are referred to as [payment pointers](https://paymentpointers.org/) and those starting with `https://` are the actual Open Payment wallet addresses. However, we'll use both terms interchangeably in this article.
 
 ![Illustration showing turning long wallet addresses to custom domain payment pointers](/developers/img/blog/2025-09-05/memorable-wallet-addresses-on-own-domain.png)
 
