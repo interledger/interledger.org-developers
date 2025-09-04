@@ -243,4 +243,4 @@ Depending on the use case, you may care about either or both of the wallet addre
 
 ## Closing words
 
-I look forward to seeing wallet addresses on your own domains. Remember, `$sidvishnoi.com` is my payment pointer 😉
+I'm excited to see your wallet addresses on your own domains! It would be wonderful if you could share your solutions for different hosting providers and servers with our [community](https://community.interledger.org/), or even better, on your own blog. Looking forward to your contributions!
