@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import InterledgerIcon from "../components/logos/InterledgerIcon.astro";
 import OpenPaymentsIcon from "../components/logos/OpenPaymentsIcon.astro";
 import RafikiIcon from "../components/logos/RafikiIcon.astro";
+import ExternalIcon from '../../public/img/icon-external.svg'
 ---
 
 <BaseLayout title="Developers">
@@ -24,10 +25,11 @@ import RafikiIcon from "../components/logos/RafikiIcon.astro";
               data-umami-event="Devs page link - Get involved">Get involved</a
             >
             <a
-              class="external"
               href="https://github.com/interledger"
               target="_blank"
-              rel="noopener noreferrer">Contribute on Github</a
+              rel="noopener noreferrer">Contribute on Github
+              <ExternalIcon class="external"/>
+              </a
             >
           </div>
         </div>
@@ -60,7 +62,9 @@ import RafikiIcon from "../components/logos/RafikiIcon.astro";
               data-umami-event="Devs page link - GitHub"
               target="_blank"
               rel="noopener noreferrer"
-              ><OpenPaymentsIcon /> Open Payments Repo</a
+              ><OpenPaymentsIcon /> Open Payments Repo
+              <ExternalIcon class="external"/>
+            </a
             >
           </h2>
           <p>
@@ -76,7 +80,9 @@ import RafikiIcon from "../components/logos/RafikiIcon.astro";
               href="https://github.com/interledger/rafiki"
               data-umami-event="Devs page link - Rafiki"
               target="_blank"
-              rel="noopener noreferrer"><RafikiIcon /> Rafiki Repo</a
+              rel="noopener noreferrer"><RafikiIcon /> Rafiki Repo
+              <ExternalIcon class="external"/>
+              </a
             >
           </h2>
           <p>
@@ -93,7 +99,9 @@ import RafikiIcon from "../components/logos/RafikiIcon.astro";
               data-umami-event="Devs page link - RFCs"
               target="_blank"
               rel="noopener noreferrer"
-              ><InterledgerIcon /> Specifications Repo</a
+              ><InterledgerIcon /> Specifications Repo
+              <ExternalIcon class="external"/>
+              </a
             >
           </h2>
           <p>
@@ -112,7 +120,9 @@ import RafikiIcon from "../components/logos/RafikiIcon.astro";
               href="https://github.com/interledger/testnet"
               data-umami-event="Devs page link - Testnet"
               target="_blank"
-              rel="noopener noreferrer"><InterledgerIcon /> Test Network Repo</a
+              rel="noopener noreferrer"><InterledgerIcon /> Test Network Repo
+              <ExternalIcon class="external"/>
+              </a
             >
           </h2>
           <p>
@@ -206,20 +216,19 @@ import RafikiIcon from "../components/logos/RafikiIcon.astro";
     width: 0.6em;
   }
 
-  .external {
+  a {
     text-decoration-color: transparent;
     text-underline-offset: 4px;
     transition: text-decoration-color ease-in-out 200ms;
     cursor: pointer;
   }
 
-  .external:hover {
+  a:hover {
     color: var(--color-white);
     text-decoration: underline;
   }
 
-  .external::after {
-    content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18"><path stroke="hsl(180,0%,100%)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 3H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M11 1h6m0 0v6m0-6L7 11"/></svg>');
+  .external {
     height: 0.75em;
     width: 0.75em;
     display: inline-block;
@@ -317,14 +326,12 @@ import RafikiIcon from "../components/logos/RafikiIcon.astro";
   .card h2 a {
     display: flex;
     gap: var(--space-2xs);
+    align-items: center;
   }
 
-  .card h2 a::after {
-    content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18"><path stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 3H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M11 1h6m0 0v6m0-6L7 11"/></svg>');
-    height: 0.75em;
-    width: 0.75em;
-    filter: var(--filter-primary);
-  }
+    .card h2 a .external{
+      margin-inline: 0;
+    }
 
   .card h2,
   .card p {
