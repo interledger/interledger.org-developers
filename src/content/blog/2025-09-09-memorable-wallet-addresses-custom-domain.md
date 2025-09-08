@@ -1,7 +1,7 @@
 ---
 title: "Memorable wallet addresses on your own domain"
 description: "If you own a domain, you can set your Open Payments wallet address to be the same as your domain!"
-date: 2025-09-05
+date: 2025-09-09
 slug: memorable-wallet-addresses-custom-domain
 authors:
   - Sid Vishnoi
@@ -16,7 +16,7 @@ Wallet addresses are meant to be easy to remember or identify, unless your walle
 
 So, instead of `https://ilp.wallet.example/12345432/usd`, you can have `$mywebsite.com` as your wallet address! Technically, wallet addresses with the `$` are referred to as [payment pointers](https://paymentpointers.org/) and those starting with `https://` are the actual Open Payment wallet addresses. However, we'll use both terms interchangeably in this article.
 
-![Illustration showing turning long wallet addresses to custom domain payment pointers](/developers/img/blog/2025-09-05/memorable-wallet-addresses-on-own-domain.png)
+![Illustration showing turning long wallet addresses to custom domain payment pointers](/developers/img/blog/2025-09-09/memorable-wallet-addresses-on-own-domain.png)
 
 You can change the underlying wallet without having to share a new address. Not to forget the advantages of branding and the trust that comes with it, as people will know that this is your wallet attached to your online identity - your domain. The [Web Monetization extension](https://webmonetization.org/supporters/get-started/) also supports these custom wallet addresses.
 
@@ -47,7 +47,7 @@ For instance, let's consider Cloudflare. They have a concept of "rules" that exe
    The `$1` gets replaced by whatever content was there in place of `*`: `/.well-known/pay/jwks.json` will become `/abc/xyz/jwks.json`; `/.well-known/pay/` will become `/abc/xyz/`.
 6. Click Save Page Rule, and you're ready.
 
-![Screenshot showing Cloudflare dashboard with the Page rule editor showing setup of my domain using a redirect to my GateHub wallet](/developers/img/blog/2025-09-05/cloudflare-page-rule.png)
+![Screenshot showing Cloudflare dashboard with the Page rule editor showing setup of my domain using a redirect to my GateHub wallet](/developers/img/blog/2025-09-09/cloudflare-page-rule.png)
 
 There's a small catch, though. If there are tools that retrieve your payment pointer contents on the client side (for instance, [Web Monetization Publisher tools](https://webmonetization.org/tools/)), you'll need to ensure that your wallet address is set up to enable cross-origin requests, otherwise those tools may fail with a CORS error. No worries, we can easily add a new rule that lets any website access our wallet address directly from the client side.
 
@@ -62,7 +62,7 @@ There's a small catch, though. If there are tools that retrieve your payment poi
    Value: `*`
 5. Save. Now, this will enable CORS for your wallet address on any website.
 
-![Screenshot of Cloudflare dashboard with a transform rule to support CORS for our wallet address](/developers/img/blog/2025-09-05/cloudflare-transform-rule.png)
+![Screenshot of Cloudflare dashboard with a transform rule to support CORS for our wallet address](/developers/img/blog/2025-09-09/cloudflare-transform-rule.png)
 
 #### NGINX
 
