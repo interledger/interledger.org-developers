@@ -79,10 +79,6 @@
   --color-primary: oklch(51.54% 0.088 194.77);
   --color-primary-bg-fallback: rgba(7, 121, 114, 0.1);
   --color-primary-bg: oklch(51.95% 0.089 187.7 / 0.1);
-  --filter-primary: invert(18%) sepia(85%) saturate(4735%) hue-rotate(172deg)
-    brightness(93%) contrast(101%);
-  --filter-white: invert(100%) sepia(0%) saturate(2%) hue-rotate(110deg)
-    brightness(108%) contrast(101%);
 
   --color-header-bg: var(--color-white);
   --color-header-accent: #eee;

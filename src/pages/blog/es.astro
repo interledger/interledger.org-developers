@@ -149,20 +149,20 @@ const esEntries = await getCollection("blog", ({ data }) => {
     border-radius: var(--border-radius);
     font-size: var(--step--1);
     background-image: var(--color-white);
-  }
-
-  .cta__blog {
-    text-decoration-color: transparent;
-    transition: text-decoration-color 300ms ease-in-out;
-  }
-
-  .cta__blog:hover {
-    color: currentColor;
-    text-decoration-color: currentColor;
+    text-decoration: none;
   }
 
   .cta__blog p {
     flex: none;
+    text-decoration-color: transparent;
+    text-decoration-line: underline;
+    transition: text-decoration-color 300ms ease-in-out;
+  }
+
+  .cta__blog:hover p{
+    color: currentColor;
+    text-decoration-color: currentColor;
+    text-decoration-line: underline;
   }
 
   .cta__blog img {

@@ -4,6 +4,7 @@ import InterledgerIcon from "../components/logos/InterledgerIcon.astro";
 import OpenPaymentsIcon from "../components/logos/OpenPaymentsIcon.astro";
 import RafikiIcon from "../components/logos/RafikiIcon.astro";
 import ExternalIcon from "../../public/img/icon-external.svg";
+import LinkArrow from "../../public/img/icon-link-arrow.svg"; 
 ---
 
 <BaseLayout title="Developers">
@@ -22,13 +23,13 @@ import ExternalIcon from "../../public/img/icon-external.svg";
             <a
               class="btn hero__btn"
               href="/developers/get-involved"
-              data-umami-event="Devs page link - Get involved">Get involved</a
+              data-umami-event="Devs page link - Get involved"><span>Get involved</span> <LinkArrow /></a
             >
             <a
               href="https://github.com/interledger"
               target="_blank"
               rel="noopener noreferrer"
-              >Contribute on Github
+              ><span>Contribute on Github</span>
               <ExternalIcon class="external" />
             </a>
           </div>
@@ -62,7 +63,7 @@ import ExternalIcon from "../../public/img/icon-external.svg";
               data-umami-event="Devs page link - GitHub"
               target="_blank"
               rel="noopener noreferrer"
-              ><OpenPaymentsIcon /> Open Payments Repo
+              ><OpenPaymentsIcon /> <span>Open Payments Repo</span>
               <ExternalIcon class="external" />
             </a>
           </h2>
@@ -80,7 +81,7 @@ import ExternalIcon from "../../public/img/icon-external.svg";
               data-umami-event="Devs page link - Rafiki"
               target="_blank"
               rel="noopener noreferrer"
-              ><RafikiIcon /> Rafiki Repo
+              ><RafikiIcon /> <span>Rafiki Repo</span>
               <ExternalIcon class="external" />
             </a>
           </h2>
@@ -98,7 +99,7 @@ import ExternalIcon from "../../public/img/icon-external.svg";
               data-umami-event="Devs page link - RFCs"
               target="_blank"
               rel="noopener noreferrer"
-              ><InterledgerIcon /> Specifications Repo
+              ><InterledgerIcon /> <span>Specifications Repo</span>
               <ExternalIcon class="external" />
             </a>
           </h2>
@@ -119,7 +120,7 @@ import ExternalIcon from "../../public/img/icon-external.svg";
               data-umami-event="Devs page link - Testnet"
               target="_blank"
               rel="noopener noreferrer"
-              ><InterledgerIcon /> Test Network Repo
+              ><InterledgerIcon /> <span>Test Network Repo</span>
               <ExternalIcon class="external" />
             </a>
           </h2>
@@ -135,7 +136,7 @@ import ExternalIcon from "../../public/img/icon-external.svg";
             <a
               href="/hacktoberfest"
               data-umami-event="Devs page link - Hacktoberfest"
-              ><InterledgerIcon /> Hacktoberfest</a
+              ><InterledgerIcon /> <span>Hacktoberfest</span></a
             >
           </h2>
           <p>
@@ -152,7 +153,7 @@ import ExternalIcon from "../../public/img/icon-external.svg";
           <a
             class="btn card__btn"
             href="/developers/blog"
-            data-umami-event="Devs page link - Blog">Read our blog</a
+            data-umami-event="Devs page link - Blog"><span>Read our blog</span><LinkArrow /></a
           >
         </div>
       </div>
@@ -203,27 +204,32 @@ import ExternalIcon from "../../public/img/icon-external.svg";
     display: inline-flex;
     align-items: center;
     gap: var(--space-2xs);
-    text-decoration-color: transparent;
-    text-underline-offset: 4px;
-    transition: text-decoration-color ease-in-out 200ms;
+    text-decoration: none;
   }
 
-  .btn::after {
-    content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12"><path d="M11.92 5.62a1.001 1.001 0 0 0-.21-.33l-5-5a1.004 1.004 0 0 0-1.42 1.42L8.59 5H1a1 1 0 0 0 0 2h7.59l-3.3 3.29a1.002 1.002 0 0 0 .325 1.639 1 1 0 0 0 1.095-.219l5-5a1 1 0 0 0 .21-.33 1 1 0 0 0 0-.76Z"/></svg>');
-    flex: none;
+  .btn svg {
     width: 0.6em;
   }
 
   a {
+    text-underline-offset: 4px;
+    text-decoration: none; 
+    cursor: pointer;
+  }
+
+  a span {
+    text-decoration-line: underline; 
     text-decoration-color: transparent;
     text-underline-offset: 4px;
     transition: text-decoration-color ease-in-out 200ms;
-    cursor: pointer;
   }
 
   a:hover {
     color: var(--color-white);
-    text-decoration: underline;
+  }
+
+  a:hover span {
+    text-decoration-color: inherit;
   }
 
   .external {
@@ -263,13 +269,21 @@ import ExternalIcon from "../../public/img/icon-external.svg";
     padding: var(--space-xs) var(--space-s);
   }
 
+  .hero__btn span {
+    text-decoration-line: underline;
+    text-decoration-color: transparent; 
+  }
   .hero__btn:hover {
-    text-decoration-color: var(--color-primary);
+    color: var(--color-primary);
   }
 
-  .hero__btn::after {
+  /* .hero__btn:hover span {
+    text-decoration-color: red ;
+  } */
+
+  /* .hero__btn::after {
     filter: var(--filter-primary);
-  }
+  } */
 
   .image-wrapper {
     flex: 0 1 auto;
@@ -345,6 +359,14 @@ import ExternalIcon from "../../public/img/icon-external.svg";
     color: var(--color-primary);
   }
 
+  .card a:not(.card__btn) span {
+    text-decoration: none;
+  }
+
+  .card a:not(.card__btn):hover span{
+    text-decoration: underline;
+  }
+
   .card a:hover {
     text-decoration: underline;
   }
@@ -355,13 +377,5 @@ import ExternalIcon from "../../public/img/icon-external.svg";
     color: var(--color-white);
     margin-block-start: var(--space-xs);
     padding: var(--space-2xs) var(--space-xs);
-  }
-
-  .card__btn:hover {
-    color: var(--color-white);
-  }
-
-  .card__btn::after {
-    filter: var(--filter-white);
   }
 </style>
