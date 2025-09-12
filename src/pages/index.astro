@@ -4,7 +4,7 @@ import InterledgerIcon from "../components/logos/InterledgerIcon.astro";
 import OpenPaymentsIcon from "../components/logos/OpenPaymentsIcon.astro";
 import RafikiIcon from "../components/logos/RafikiIcon.astro";
 import ExternalIcon from "../../public/img/icon-external.svg";
-import LinkArrow from "../../public/img/icon-link-arrow.svg"; 
+import LinkArrow from "../../public/img/icon-link-arrow.svg";
 ---
 
 <BaseLayout title="Developers">
@@ -23,7 +23,8 @@ import LinkArrow from "../../public/img/icon-link-arrow.svg";
             <a
               class="btn hero__btn"
               href="/developers/get-involved"
-              data-umami-event="Devs page link - Get involved"><span>Get involved</span> <LinkArrow /></a
+              data-umami-event="Devs page link - Get involved"
+              ><span>Get involved</span> <LinkArrow /></a
             >
             <a
               href="https://github.com/interledger"
@@ -63,7 +64,8 @@ import LinkArrow from "../../public/img/icon-link-arrow.svg";
               data-umami-event="Devs page link - GitHub"
               target="_blank"
               rel="noopener noreferrer"
-              ><OpenPaymentsIcon /> <span>Open Payments Repo</span>
+              ><OpenPaymentsIcon />
+              <span>Open Payments Repo</span>
               <ExternalIcon class="external" />
             </a>
           </h2>
@@ -81,7 +83,8 @@ import LinkArrow from "../../public/img/icon-link-arrow.svg";
               data-umami-event="Devs page link - Rafiki"
               target="_blank"
               rel="noopener noreferrer"
-              ><RafikiIcon /> <span>Rafiki Repo</span>
+              ><RafikiIcon />
+              <span>Rafiki Repo</span>
               <ExternalIcon class="external" />
             </a>
           </h2>
@@ -99,7 +102,8 @@ import LinkArrow from "../../public/img/icon-link-arrow.svg";
               data-umami-event="Devs page link - RFCs"
               target="_blank"
               rel="noopener noreferrer"
-              ><InterledgerIcon /> <span>Specifications Repo</span>
+              ><InterledgerIcon />
+              <span>Specifications Repo</span>
               <ExternalIcon class="external" />
             </a>
           </h2>
@@ -120,7 +124,8 @@ import LinkArrow from "../../public/img/icon-link-arrow.svg";
               data-umami-event="Devs page link - Testnet"
               target="_blank"
               rel="noopener noreferrer"
-              ><InterledgerIcon /> <span>Test Network Repo</span>
+              ><InterledgerIcon />
+              <span>Test Network Repo</span>
               <ExternalIcon class="external" />
             </a>
           </h2>
@@ -153,7 +158,8 @@ import LinkArrow from "../../public/img/icon-link-arrow.svg";
           <a
             class="btn card__btn"
             href="/developers/blog"
-            data-umami-event="Devs page link - Blog"><span>Read our blog</span><LinkArrow /></a
+            data-umami-event="Devs page link - Blog"
+            ><span>Read our blog</span><LinkArrow /></a
           >
         </div>
       </div>
@@ -213,12 +219,12 @@ import LinkArrow from "../../public/img/icon-link-arrow.svg";
 
   a {
     text-underline-offset: 4px;
-    text-decoration: none; 
+    text-decoration: none;
     cursor: pointer;
   }
 
   a span {
-    text-decoration-line: underline; 
+    text-decoration-line: underline;
     text-decoration-color: transparent;
     text-underline-offset: 4px;
     transition: text-decoration-color ease-in-out 200ms;
@@ -271,19 +277,11 @@ import LinkArrow from "../../public/img/icon-link-arrow.svg";
 
   .hero__btn span {
     text-decoration-line: underline;
-    text-decoration-color: transparent; 
+    text-decoration-color: transparent;
   }
   .hero__btn:hover {
     color: var(--color-primary);
   }
-
-  /* .hero__btn:hover span {
-    text-decoration-color: red ;
-  } */
-
-  /* .hero__btn::after {
-    filter: var(--filter-primary);
-  } */
 
   .image-wrapper {
     flex: 0 1 auto;
@@ -363,7 +361,7 @@ import LinkArrow from "../../public/img/icon-link-arrow.svg";
     text-decoration: none;
   }
 
-  .card a:not(.card__btn):hover span{
+  .card a:not(.card__btn):hover span {
     text-decoration: underline;
   }
 
