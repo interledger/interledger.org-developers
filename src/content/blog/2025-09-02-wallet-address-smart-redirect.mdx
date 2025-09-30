@@ -37,7 +37,7 @@ If someone clicks that same wallet address in a browser, JSON isn't exactly a fr
 
 ## What's new?
 
-As of v1.1.2-beta, enabling **Smart Redirect**, Rafiki detects when a request is coming from a browser (Accept: text/html). Instead of showing raw JSON, the request automatically redirects to a user-friendly payment page defined in your environment settings.
+As of v1.1.2-beta, enabling **Smart Redirect**, Rafiki detects when a request is coming from a browser (using the `Accept: text/html` header). Instead of showing raw JSON, the request automatically redirects to a user-friendly payment page defined in your environment settings.
 
 For example, when opened in a browser, `https://ilp.interledger.cards/007` redirects to:
 `https://interledgerpay.com/payment-choice?receiver=https://ilp.interledger.cards/007`
