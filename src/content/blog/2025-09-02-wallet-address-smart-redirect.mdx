@@ -82,7 +82,7 @@ WALLET_ADDRESS_REDIRECT_HTML_PAGE="https://interledgerpay.com/payment-choice?rec
 
 ### Header behavior
 
-- If the request has `Accept: text/html`, Rafiki **redirects** to the URL from `WALLET_ADDRESS_REDIRECT_HTML_PAGE` (after substituting tokens below).
+- If the request has `Accept` header with `text/html`, Rafiki **redirects** to the URL from `WALLET_ADDRESS_REDIRECT_HTML_PAGE` (after substituting tokens below).
 - Otherwise, Rafiki returns the standard **JSON** response (no redirect).
 
 ### URL tokens (drop-in placeholders)
