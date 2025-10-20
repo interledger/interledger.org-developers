@@ -219,22 +219,59 @@ const t = translations[lang as keyof typeof translations] || translations.en;
 
     // Disable button while submitting
     submitBtn.disabled = true;
+    const originalText = submitBtn.textContent;
     submitBtn.textContent = submitBtn.getAttribute('data-submitting') || 'Submitting...';
 
     try {
-      // Log to console (in production, you could send to GitHub Issues API or analytics)
-      console.log('Feedback submitted:', {
-        type: selectedFeedback,
-        page: page,
-        message: feedback,
-        timestamp: new Date().toISOString()
+      // Send to GitHub Issues API with timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+      const response = await fetch('/developers/api/feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: selectedFeedback,
+          page: page,
+          message: feedback,
+        }),
+        signal: controller.signal
       });
 
-      // You can implement actual submission here:
-      // - Create a GitHub issue via API
-      // - Send to Google Forms
-      // - Send to your own API endpoint
-      // - Store in localStorage for later review
+      clearTimeout(timeoutId);
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        // If GitHub token not configured, fall back to opening GitHub issue page
+        if (result.error?.includes('not configured') || result.error?.includes('token')) {
+          const emoji = selectedFeedback === 'yes' ? '👍' : '👎';
+          const title = encodeURIComponent(`[Feedback] ${emoji} ${page}`);
+          const body = encodeURIComponent(`**Page:** ${page}
+**Feedback Type:** ${selectedFeedback === 'yes' ? 'Positive 👍' : 'Negative 👎'}
+**User Message:**
+
+${feedback || '_No additional feedback provided_'}`);
+
+          const issueUrl = `https://github.com/JonathanMatthey/ilp-docs-feedback/issues/new?title=${title}&body=${body}&labels=feedback,docs`;
+
+          window.open(issueUrl, '_blank');
+
+          feedbackForm?.classList.add('hidden');
+          feedbackSuccess?.classList.remove('hidden');
+          return;
+        }
+
+        throw new Error(result.error || 'Failed to submit feedback');
+      }
+
+      // Log success
+      console.log('Feedback submitted successfully:', {
+        issueNumber: result.issueNumber,
+        issueUrl: result.issueUrl
+      });
 
       // Show success message
       feedbackForm?.classList.add('hidden');
@@ -244,14 +281,44 @@ const t = translations[lang as keyof typeof translations] || translations.en;
       if (typeof window !== 'undefined' && (window as any).umami) {
         (window as any).umami.track('feedback', {
           type: selectedFeedback,
-          hasMessage: feedback.length > 0
+          hasMessage: feedback.length > 0,
+          success: true
         });
       }
+
     } catch (error) {
       console.error('Error submitting feedback:', error);
+
+      // Re-enable button
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Submit';
-      alert('Failed to submit feedback. Please try again.');
+      submitBtn.textContent = originalText;
+
+      // Show error message
+      const errorMsg = error instanceof Error && error.name === 'AbortError'
+        ? 'Request timed out. Opening GitHub issue page instead...'
+        : 'Failed to submit feedback. Opening GitHub issue page...';
+
+      alert(errorMsg);
+
+      // Fallback: Open GitHub issue page
+      const emoji = selectedFeedback === 'yes' ? '👍' : '👎';
+      const title = encodeURIComponent(`[Feedback] ${emoji} ${page}`);
+      const body = encodeURIComponent(`**Page:** ${page}
+**Feedback Type:** ${selectedFeedback === 'yes' ? 'Positive 👍' : 'Negative 👎'}
+**User Message:**
+
+${feedback || '_No additional feedback provided_'}`);
+
+      const issueUrl = `https://github.com/JonathanMatthey/ilp-docs-feedback/issues/new?title=${title}&body=${body}&labels=feedback,docs`;
+      window.open(issueUrl, '_blank');
+
+      // Track error with Umami if available
+      if (typeof window !== 'undefined' && (window as any).umami) {
+        (window as any).umami.track('feedback-error', {
+          type: selectedFeedback,
+          error: error instanceof Error ? error.message : 'Unknown error'
+        });
+      }
     }
   });
 </script>
