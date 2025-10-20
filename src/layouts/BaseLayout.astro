@@ -1,6 +1,8 @@
 ---
 import FoundationHeader from '../components/pages/FoundationHeader.astro';
 import FoundationFooter from '../components/pages/FoundationFooter.astro';
+import { getLangFromUrl } from '../i18n/utils';
+import { languages } from '../i18n/ui';
 import '../styles/pages.css';
 
 interface Props {
@@ -13,10 +15,31 @@ interface Props {
 }
 
 const { title, description, ogType, ogImageUrl, canonicalURL = new URL(Astro.url.pathname, Astro.site).href, } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+
+// Generate alternate URLs for hreflang
+const currentPath = Astro.url.pathname;
+const alternateUrls: Record<string, string> = {};
+
+Object.keys(languages).forEach((locale) => {
+	if (locale === 'en') {
+		// English is the default, remove /en prefix if present
+		alternateUrls[locale] = new URL(currentPath.replace(/^\/es\//, '/'), Astro.site).href;
+	} else {
+		// Add language prefix for non-default languages
+		const localizedPath = currentPath.startsWith(`/${locale}/`)
+			? currentPath
+			: `/${locale}${currentPath}`;
+		alternateUrls[locale] = new URL(localizedPath, Astro.site).href;
+	}
+});
+
+// x-default points to English version
+const defaultUrl = alternateUrls['en'];
 ---
 
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang={lang} data-theme="light">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="author" content="Interledger Foundation" />
@@ -29,6 +52,15 @@ const { title, description, ogType, ogImageUrl, canonicalURL = new URL(Astro.url
 		<meta property="og:type" content={ogType ? ogType : 'website'} />
 		<meta property="og:image" content={ogImageUrl ? ogImageUrl : new URL('/developers/img/og-image.png', Astro.site).href} />
 		<meta property="og:url" content={canonicalURL} />
+
+		<!-- Canonical URL -->
+		<link rel="canonical" href={canonicalURL} />
+
+		<!-- hreflang tags for multilingual SEO -->
+		{Object.entries(alternateUrls).map(([locale, url]) => (
+			<link rel="alternate" hreflang={locale} href={url} />
+		))}
+		<link rel="alternate" hreflang="x-default" href={defaultUrl} />
 
 		<link rel="icon" type="image/svg+xml" href="/developers/favicon.svg" />
 		<script defer src="https://ilf-site-analytics.netlify.app/script.js" data-website-id="50d81dd1-bd02-4f82-8a55-34a09ccbbbd9" data-domains="interledger.org"></script>
