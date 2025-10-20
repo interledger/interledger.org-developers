@@ -1,21 +1,26 @@
 ---
+import { getLangFromUrl, useTranslations, useTranslatedPath } from "../../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang, lang);
 const currentYear = new Date().getFullYear();
 ---
 
 <footer class="site-footer" role="contentinfo">
   <div class="connect-wrapper">
     <div class="mailing-list">
-      <h3>Join our mailing list</h3>
+      <h3>{t("footer.mailing-list")}</h3>
       <a
         class="button subscribe-btn"
-        href="/subscribe"
+        href={translatePath("/subscribe")}
         data-umami-event="Footer link - Subscribe"
       >
-        Subscribe
+        {t("footer.subscribe")}
       </a>
     </div>
     <div class="social-links">
-      <h3>Connect with us</h3>
+      <h3>{t("footer.connect")}</h3>
       <ul>
         <li>
           <a href="https://www.youtube.com/@InterledgerFoundation" aria-label="Interledger's Youtube channel" data-umami-event="Footer - Youtube">
@@ -55,11 +60,11 @@ const currentYear = new Date().getFullYear();
       </ul>
     </div>
   </div>
-  <p>&copy; 2020–{currentYear}, Interledger Foundation. All rights reserved.</p>
+  <p>&copy; 2020–{currentYear}, Interledger Foundation. {lang === 'es' ? 'Todos los derechos reservados.' : 'All rights reserved.'}</p>
   <ul class="footer-links">
-    <li><a href="https://www.iubenda.com/terms-and-conditions/88624819" data-umami-event="Footer - T&C">Terms & conditions</a></li>
-    <li><a href="https://www.iubenda.com/privacy-policy/88624819" data-umami-event="Footer - Privacy">Privacy policy</a></li>
-    <li><a href="/contact" data-umami-event="Footer - Contact">Contact us</a></li>
+    <li><a href="https://www.iubenda.com/terms-and-conditions/88624819" data-umami-event="Footer - T&C">{t("footer.terms")}</a></li>
+    <li><a href="https://www.iubenda.com/privacy-policy/88624819" data-umami-event="Footer - Privacy">{t("footer.privacy")}</a></li>
+    <li><a href={translatePath("/contact")} data-umami-event="Footer - Contact">{t("footer.contact")}</a></li>
   </ul>
 </footer>
 

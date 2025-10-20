@@ -46,6 +46,13 @@ export const ui: LanguageUi = {
     "nav.events": "Events",
     "nav.guidelines": "Guidelines",
     "nav.summit": "Interledger Summit",
+    "footer.mailing-list": "Join our mailing list",
+    "footer.subscribe": "Subscribe",
+    "footer.connect": "Connect with us",
+    "footer.copyright": "© 2020–2025, Interledger Foundation. All rights reserved.",
+    "footer.terms": "Terms of Service",
+    "footer.privacy": "Privacy Policy",
+    "footer.contact": "Contact Us",
   },
   es: {
     "nav.foundation": "Fundación",
@@ -74,6 +81,13 @@ export const ui: LanguageUi = {
     "nav.get-involved": "Involúcrate",
     "nav.events": "Eventos",
     "nav.guidelines": "Guías",
-    "nav.summit": "Cumbre Interledger"
+    "nav.summit": "Conferencia Interledger",
+    "footer.mailing-list": "Únete a nuestra lista de correo",
+    "footer.subscribe": "Suscribirse",
+    "footer.connect": "Conéctate con nosotros",
+    "footer.copyright": "© 2020–2025, Interledger Foundation. Todos los derechos reservados.",
+    "footer.terms": "Condiciones del servicio",
+    "footer.privacy": "Política de privacidad",
+    "footer.contact": "Contáctanos"
   },
 } as const;
