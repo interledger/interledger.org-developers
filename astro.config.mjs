@@ -70,7 +70,7 @@ export default defineConfig({
           icon: "github",
           label: "GitHub",
           href: "https://github.com/interledger"
-        }
+        },
       ],
       sidebar: [
         {
