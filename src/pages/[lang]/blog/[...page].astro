@@ -4,6 +4,7 @@ import { createExcerpt } from '../../../utils/create-excerpt';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Pagination from '../../../components/blog/Pagination.astro';
 import { getCollection } from 'astro:content';
+import { useTranslations, useTranslatedPath } from '../../../i18n/utils';
 
 type Props = {
   page: Page<any>;
@@ -28,22 +29,24 @@ export async function getStaticPaths({ paginate }: any) {
 
 const { page } = Astro.props;
 const { lang } = Astro.params;
+const t = useTranslations(lang as string);
+const translatePath = useTranslatedPath(lang as string, lang as string);
 ---
-<BaseLayout title="Engineering Blog" description="Hear stories and experiences from the team who is working on making Interledger, the interoperable global payments network, a reality." ogImageUrl={new URL('/developers/img/blog/og-image.png', Astro.site).href}>
+<BaseLayout title={t("nav.tech-blog")} description="Hear stories and experiences from the team who is working on making Interledger, the interoperable global payments network, a reality." ogImageUrl={new URL('/developers/img/blog/og-image.png', Astro.site).href}>
 	<main>
 		<div class="content-wrapper">
 			<ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
 				<li itemprop="itemListElement" itemscope
 						itemtype="https://schema.org/ListItem">
-					<a itemprop="item" href="/developers" data-umami-event="Devs breadcrumb - Home">
-					<span itemprop="name">Developers Portal</span></a>
+					<a itemprop="item" href={translatePath("/developers")} data-umami-event="Devs breadcrumb - Home">
+					<span itemprop="name">{t("nav.developers")}</span></a>
 					<meta itemprop="position" content="1" />
 				</li>
 			</ol>
 			<header>
-				<h1>Engineering Blog</h1>
-				<a class="cta__blog" href="/blog">
-					<p>Check out Foundation updates</p>
+				<h1>{t("nav.tech-blog")}</h1>
+				<a class="cta__blog" href={translatePath("/blog")}>
+					<p>{t("nav.foundation-blog")}</p>
 					<img src="/developers/img/ernie-purple.svg" alt="Ernie holding an envelope" aria-hidden="true">
 				</a>
 			</header>

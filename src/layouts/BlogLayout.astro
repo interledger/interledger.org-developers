@@ -1,7 +1,12 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
+import { getLangFromUrl, useTranslations, useTranslatedPath } from "../i18n/utils";
 
 const { frontmatter } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang, lang);
 
 const dateObj = new Date(frontmatter.date);
 const isoDate = dateObj.toISOString().slice(0,10);
@@ -16,14 +21,14 @@ const rawHTMLString = `This article was originally published at <a href=${frontm
 			<ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
 				<li itemprop="itemListElement" itemscope
 						itemtype="https://schema.org/ListItem">
-					<a itemprop="item" href="/developers" data-umami-event="Devs breadcrumb - Home">
-					<span itemprop="name">Developers Portal</span></a>
+					<a itemprop="item" href={translatePath("/developers")} data-umami-event="Devs breadcrumb - Home">
+					<span itemprop="name">{t("nav.developers")}</span></a>
 					<meta itemprop="position" content="1" />
 				</li>
 				<li itemprop="itemListElement" itemscope
 						itemtype="https://schema.org/ListItem">
-					<a itemprop="item" href="/developers/blog" data-umami-event="Devs breadcrumb - Blog">
-					<span itemprop="name">Engineering Blog</span></a>
+					<a itemprop="item" href={translatePath("/developers/blog")} data-umami-event="Devs breadcrumb - Blog">
+					<span itemprop="name">{t("nav.tech-blog")}</span></a>
 					<meta itemprop="position" content="2" />
 				</li>
 			</ol>
