@@ -63,13 +63,7 @@ export default defineConfig({
         Header: "./src/components/Header.astro",
         PageSidebar: "./src/components/PageSidebar.astro",
       },
-      social: [
-        {
-          icon: "github",
-          label: "GitHub",
-          href: "https://github.com/interledger"
-        },
-      ],
+      social:{},
       sidebar: [
         {
           label: "Overview",
