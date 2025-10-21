@@ -6,6 +6,7 @@ import mdx from "@astrojs/mdx";
 
 // https://astro.build/config
 export default defineConfig({
+  output: 'server',
   site: "https://interledger.org",
   base: "/developers",
   i18n: {
@@ -62,6 +63,7 @@ export default defineConfig({
       components: {
         Header: "./src/components/Header.astro",
         PageSidebar: "./src/components/PageSidebar.astro",
+        Footer: "./src/components/Footer.astro",
       },
       social: {
         github: "https://github.com/interledger",
