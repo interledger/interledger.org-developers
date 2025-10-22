@@ -243,6 +243,23 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
     flex: none;
   }
 
+  .site-nav__links .has-submenu > a::after {
+    content: url(/public/img/arrow-menu.svg);
+    display: inline-block;
+    width: 9px;
+    margin-left: 0.5rem;
+    transition: transform 0.5s ease-in-out;
+    @media (prefers-reduced-motion) {
+      transition: transform 0s;
+    }
+  }
+
+  .site-nav__links .has-submenu > a[aria-expanded="true"]::after,
+  .site-nav__links .has-submenu > a:hover::after,
+  .site-nav__links .has-submenu:has(a:hover) > a::after {
+    transform: translateY(30%) rotate(180deg);
+  }
+
   .site-nav__links a {
     text-decoration: none;
     padding: var(--space-s) var(--space-2xs);
