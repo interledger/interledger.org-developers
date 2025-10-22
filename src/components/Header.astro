@@ -4,6 +4,10 @@ import Search from "@astrojs/starlight/components/Search.astro";
 import SocialIcons from "@astrojs/starlight/components/SocialIcons.astro";
 import ThemeSelect from "@astrojs/starlight/components/ThemeSelect.astro";
 import DevelopersLogo from "./logos/DevelopersLogo.astro";
+import LanguagePicker from "./LanguagePicker.astro";
+import { getLangFromUrl } from "../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
 ---
 
 <div class="header sl-flex">
@@ -24,10 +28,10 @@ import DevelopersLogo from "./logos/DevelopersLogo.astro";
   </a>
   <Search {...Astro.props} />
   <div class="sl-hidden md:sl-flex secondary-wrap">
-    
     <SocialIcons {...Astro.props} />
     <ThemeSelect {...Astro.props} />
   </div>
+  <LanguagePicker lang={lang} />
 </div>
 
 <style>
