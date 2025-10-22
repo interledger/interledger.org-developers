@@ -278,6 +278,8 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
     .menu-item--level-2 > .is-active {
       text-decoration: underline;
       text-decoration-color: currentColor;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 8px;
     }
 
   @media screen and (max-width: 479px) {
@@ -320,12 +322,6 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
 
     a[aria-expanded="true"] + .menu--level-2 {
       display: block;
-    }
-
-    .menu-item--level-1 > .is-active,
-    .menu-item--level-2 > .is-active {
-      text-decoration-thickness: 1.5px;
-      text-underline-offset: 5px;
     }
 
     .switch-link:hover {
@@ -458,11 +454,6 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
       display: none;
     }
 
-    .menu-item--level-1 > .is-active,
-    .menu-item--level-2 > .is-active {
-      text-decoration-thickness: 2px;
-      text-underline-offset: 8px;
-    }
   }
 </style>
 
