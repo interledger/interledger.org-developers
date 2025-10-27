@@ -1,8 +1,8 @@
 ---
-title: "How the Redesigned Publisher Tools Work: A Technical Dive"
+title: "How the Redesigned Publisher Tools Work: A Technical Guide"
 description: "A technical exploration of the architecture details behind the redesigned Publisher Tools"
 date: 2025-10-23
-slug: redesigned-publisher-tools-technical-dive
+slug: redesigned-publisher-tools-technical-guide
 authors:
   - Darian Avasan
 author_urls:
@@ -21,16 +21,7 @@ The Publisher Tools have been completely redesigned with a focus on simplicity, 
 
 ### From Script Tag to Rendered Component: The Complete Flow
 
-![Configuration flow](/developers/img/blog/2025-10-17/tools-flowpng.png)
-
-**Key flow steps:**
-
-1. Publisher customizes through the interface (the `frontend` module) → Configuration stored as JSON (keyed by wallet address + preset tag e.g., ($ilp.link/your-wallet)", "version1").
-2. Visitor loads page with embed script → Script loads from `cdn` module
-3. Script fetches configuration → `api` retrieves stored JSON and returns it
-4. Script renders the Tool → Instantiates Web Component from `components` with fetched configuration
-
-This system cleanly separates responsibilities: publishers customize through the interface (the `frontend` module), and visitors consume the configuration at WebPage runtime. The `frontend` and visitor-facing flow never interact directly, they're connected only through stored configuration.
+The new system cleanly separates responsibilities, starting with tools profile creation: publishers customize through the [interface](https://webmonetization.org/tools) (the `frontend` module), and visitors consume the configuration at website runtime. The `frontend` and visitor-facing flow never interact directly, they're connected only through stored configuration.
 
 ### The Publisher Embeds the Script
 
@@ -47,28 +38,14 @@ This system cleanly separates responsibilities: publishers customize through the
 **Why we need a `cdn` module**
 
 Publishers embed this script on their sites, so it must load quickly. The `cdn` module bundles the component source code, optimizes it for production, and serves it from Cloudflare's global network.\
+Each interactive tools is a Lit web component class that can then be imported by the **`cdn`** script.
 The CDN's role is pure delivery: take the source code from `components` module, bundle it and serve it.
 
 ### Configuration Fetch from API
 
-The embedded script makes an HTTP request to fetch the interactive tool's configuration:
-
-```typescript
-async function fetchConfig<T extends Tool>(
-  apiUrl: string,
-  tool: T,
-  params: ReturnType<typeof getScriptParams>
-): Promise<ToolConfig<T>> {
-  const url = new URL(`config/${tool}`, apiUrl)
-  url.searchParams.set('wa', params.walletAddressId)
-  url.searchParams.set('preset', params.presetId)
-  await fetch(url)
-  ...
-}
-```
-
-Looking at the URL above, it includes the wallet address and preset tag retrieved as `data-*` attributes via the `dataset` property from the script element, hence the `params`.\
-The API looks up the stored configuration and returns it as JSON.
+The embedded script makes an HTTP request to fetch the interactive tool's configuration.\
+It includes the wallet address and preset tag retrieved as `data-*` attributes via the `dataset` property from the script element, hence the `params`.\
+The API looks up the stored configuration for the `wallet-address` and returns the right profile settings as JSON.
 
 **Why we need an `api` module**
 
@@ -78,12 +55,25 @@ The **`api`** provides a service that retrieves configuration and later can hand
 1. **Configuration delivery:** Fetch stored settings and serve them to embedded widgets
 2. **Payment proxy:** Handle the Open Payments protocol flow (quote generation, grant authorization, payment finalization)
 
+Based on what we’ve established so far, we can draw the following:
+![Configuration flow](/developers/img/blog/2025-10-17/tools-flow.png)
+
+**Key flow steps:**
+
+1. Publisher customizes through the interface (the `frontend` module) → Configuration stored as JSON (keyed by wallet address + preset tag e.g., ($ilp.link/your-wallet)", "version1").
+2. Visitor loads page with embed script → Script loads from `cdn` module
+3. Script fetches configuration → `api` retrieves stored JSON and returns it
+4. Script renders the Tool → Instantiates Web Component from `components` with fetched configuration
+
 ### Tool Rendering
 
 All our Interactive Tools are built as custom Web component elements within Shadow DOM to prevent host page CSS from affecting the Tool and vice versa.\
 With the configuration fetched, the script creates and renders the web component:
 
 ```typescript
+import { PaymentWidget } from "@tools/components";
+customElements.define("wm-payment-widget", PaymentWidget);
+
 fetchConfig(API_URL, "widget", params).then((config) => {
   const element = document.createElement("wm-payment-widget");
   element.config = {
