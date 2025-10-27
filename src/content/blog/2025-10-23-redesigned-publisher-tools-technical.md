@@ -6,7 +6,7 @@ slug: redesigned-publisher-tools-technical-guide
 authors:
   - Darian Avasan
 author_urls:
-  - https://www.linkedin.com/in/darian-avasan/
+  - https://darianm.xyz/
 tags:
   - Interledger
   - Web Monetization
