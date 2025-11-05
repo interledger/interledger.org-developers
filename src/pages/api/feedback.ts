@@ -10,7 +10,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     // Get GitHub token from environment variable
     const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN;
-    const GITHUB_REPO = 'JonathanMatthey/ilp-docs-feedback';
+    const GITHUB_REPO = 'interledger/documentation-feedback';
 
     if (!GITHUB_TOKEN) {
       console.error('GITHUB_TOKEN not configured');
