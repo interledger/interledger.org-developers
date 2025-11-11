@@ -1,0 +1,77 @@
+---
+interface Props {
+  allTags: string[];
+  selectedTag?: string;
+}
+
+const { allTags, selectedTag } = Astro.props;
+---
+
+<div class="tag-filter">
+  <div class="tag-filter-label">Filter by tag:</div>
+  <div class="tag-filter-buttons">
+    <a
+      href="/developers/blog"
+      class:list={["tag-button", { active: !selectedTag }]}
+      data-umami-event="Blog tag filter - All"
+    >
+      All
+    </a>
+    {
+      allTags.map((tag) => (
+        <a
+          href={`/developers/blog/tag/${tag.toLowerCase().replace(/\s+/g, "-")}`}
+          class:list={["tag-button", { active: selectedTag === tag }]}
+          data-umami-event={`Blog tag filter - ${tag}`}
+        >
+          {tag}
+        </a>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .tag-filter {
+    margin-block-end: var(--space-m);
+    background-color: var(--color-background-light);
+    border-radius: var(--border-radius);
+  }
+
+  .tag-filter-label {
+    font-weight: 600;
+    margin-block-end: var(--space-3xs);
+    font-size: var(--step--1);
+  }
+
+  .tag-filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3xs);
+  }
+
+  .tag-button {
+    padding: var(--space-3xs) var(--space-2xs);
+    background-color: white;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--border-radius);
+    font-size: var(--step--1);
+    text-decoration: none;
+    color: var(--color-text);
+    transition:
+      background-color 200ms ease-in-out,
+      color 200ms ease-in-out,
+      border-color 200ms ease-in-out;
+  }
+
+  .tag-button:hover {
+    background-color: var(--color-primary-light);
+    border-color: var(--color-primary);
+  }
+
+  .tag-button.active {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+</style>

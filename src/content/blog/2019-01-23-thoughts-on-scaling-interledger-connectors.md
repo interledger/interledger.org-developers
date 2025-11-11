@@ -9,11 +9,9 @@ author_urls:
   - https://www.linkedin.com/in/evanmarkschwartz/
 external_url: https://medium.com/interledger-blog/thoughts-on-scaling-interledger-connectors-7e3cad0dab7f
 tags:
+  - Concepts
   - Interledger
-  - Connector
-  - Scaling
-  - Streaming Payments
-  - Internet Of Value
+  - Technical
 ---
 
 Streaming payments mean that Interledger connectors need to process huge volumes of Interledger packets, but the current reference implementation is hard to run at scale. My hypothesis is that we should make the connector completely stateless using an HTTP-based bilateral communication protocol.

@@ -9,7 +9,6 @@ author_urls:
   - https://sidvishnoi.com?ref=ilf_engg_blog
 tags:
   - Open Payments
-  - Web Monetization
 ---
 
 Wallet addresses are meant to be easy to remember or identify, unless your wallet provider chooses them for you. The address might include a long subdomain or even a random series of numbers and characters. But did you know that if you own a domain, you can set your wallet address to be the same as your domain?

@@ -1,37 +1,48 @@
 ---
-import type { GetStaticPaths, Page } from 'astro'
-import { createExcerpt } from "../../utils/create-excerpt";
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import Pagination from "../../components/blog/Pagination.astro";
-import TagFilter from "../../components/blog/TagFilter.astro";
+import type { Page } from "astro";
+import type { GetStaticPaths } from "astro";
+import { createExcerpt } from "../../../../utils/create-excerpt";
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import Pagination from "../../../../components/blog/Pagination.astro";
+import TagFilter from "../../../../components/blog/TagFilter.astro";
 import { getCollection } from "astro:content";
 
 type Props = {
   page: Page;
   allTags: string[];
+  selectedTag: string;
 };
 
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
-  const blogEntries = (await getCollection('blog')).sort(
+  const blogEntries = (await getCollection("blog")).sort(
     (a, b) => b.data.date.getTime() - a.data.date.getTime()
   );
 
   // Collect all unique tags
   const allTags = [...new Set(blogEntries.flatMap((entry) => entry.data.tags))].sort();
 
-  return paginate(blogEntries, {
-    pageSize: 10,
-    props: { allTags }
+  // Create pages for each tag
+  return allTags.flatMap((tag) => {
+    const tagSlug = tag.toLowerCase().replace(/\s+/g, "-");
+    const filteredEntries = blogEntries.filter((entry) =>
+      entry.data.tags.includes(tag)
+    );
+
+    return paginate(filteredEntries, {
+      params: { tag: tagSlug },
+      pageSize: 10,
+      props: { allTags, selectedTag: tag }
+    });
   });
 };
 
-const { page, allTags } = Astro.props;
+const { page, allTags, selectedTag } = Astro.props;
 ---
 
 <BaseLayout
-  title="Engineering Blog"
-  description="Hear stories and experiences from the team who is working on making Interledger, the interoperable global payments network, a reality."
-  ogImageUrl={new URL('/developers/img/blog/og-image.png', Astro.site).href}
+  title={`Engineering Blog - ${selectedTag}`}
+  description={`Blog posts tagged with ${selectedTag}`}
+  ogImageUrl={new URL("/developers/img/blog/og-image.png", Astro.site).href}
 >
   <main>
     <div class="content-wrapper">
@@ -54,6 +65,20 @@ const { page, allTags } = Astro.props;
           >
           <meta itemprop="position" content="1" />
         </li>
+        <li
+          itemprop="itemListElement"
+          itemscope
+          itemtype="https://schema.org/ListItem"
+        >
+          <a
+            itemprop="item"
+            href="/developers/blog"
+            data-umami-event="Devs breadcrumb - Blog"
+          >
+            <span itemprop="name">Engineering Blog</span></a
+          >
+          <meta itemprop="position" content="2" />
+        </li>
       </ol>
       <header>
         <h1>Engineering Blog</h1>
@@ -66,11 +91,11 @@ const { page, allTags } = Astro.props;
           />
         </a>
       </header>
-      <TagFilter allTags={allTags} />
+      <TagFilter allTags={allTags} selectedTag={selectedTag} />
       <ol class="postlist">
         {
           (page.data || []).map((blogPostEntry) => {
-            const excerpt = `${createExcerpt(blogPostEntry.body).substring(0, 300)}...`
+            const excerpt = `${createExcerpt(blogPostEntry.body).substring(0, 300)}...`;
             return (
               <li class="postlist-item">
                 <time
@@ -105,7 +130,7 @@ const { page, allTags } = Astro.props;
                     : excerpt}
                 </p>
               </li>
-            )
+            );
           })
         }
       </ol>
