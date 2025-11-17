@@ -161,6 +161,12 @@ const { page, allTags, selectedTag } = Astro.props;
     padding-block-start: var(--space-l);
   }
 
+  .breadcrumbs li:not(:first-child)::before {
+    content: ">";
+    display: inline-flex;
+    margin-inline-start: var(--space-3xs);
+  }
+  
   .breadcrumbs a {
     color: var(--color-primary);
     text-decoration: none;
