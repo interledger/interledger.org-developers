@@ -19,7 +19,9 @@ export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
   );
 
   // Collect all unique tags
-  const allTags = [...new Set(blogEntries.flatMap((entry) => entry.data.tags))].sort();
+  const allTags = [
+    ...new Set(blogEntries.flatMap((entry) => entry.data.tags))
+  ].sort();
 
   // Create pages for each tag
   return allTags.flatMap((tag) => {
