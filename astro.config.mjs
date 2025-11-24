@@ -53,7 +53,9 @@ export default defineConfig({
       components: {
         Header: "./src/components/Header.astro",
         PageSidebar: "./src/components/PageSidebar.astro",
-        Pagination: "./src/components/starlight/Pagination.astro"
+        Pagination: "./src/components/starlight/Pagination.astro",
+        TableOfContents: "./src/components/starlight/TableOfContents.astro",
+        MobileTableOfContents: "./src/components/starlight/MobileTableOfContents.astro"
       },
       social: [
         {

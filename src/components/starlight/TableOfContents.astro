@@ -1,0 +1,23 @@
+---
+import TableOfContentsList from "./TableOfContentsList.astro";
+
+const { toc, entry } = Astro.locals.starlightRoute;
+
+const trackingBase =
+  (entry?.data?.title && String(entry.data.title).trim()) ||
+  "Interledger Developers Docs";
+---
+
+{
+  toc && (
+    <starlight-toc data-min-h={toc.minHeadingLevel} data-max-h={toc.maxHeadingLevel}>
+      <nav aria-labelledby="starlight__on-this-page">
+        <h2 id="starlight__on-this-page">{Astro.locals.t("tableOfContents.onThisPage")}</h2>
+        <TableOfContentsList toc={toc.items} trackingBase={trackingBase} />
+      </nav>
+    </starlight-toc>
+  )
+}
+
+<script src="./TableOfContents/starlight-toc.ts"></script>
+
