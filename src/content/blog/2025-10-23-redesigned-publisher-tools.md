@@ -61,7 +61,7 @@ Based on what we’ve established so far, we can draw the following:
 **Key flow steps:**
 
 1. Publisher customizes through the interface (the `frontend` module) → Configuration stored as JSON (keyed by wallet address + preset tag e.g., ($ilp.link/your-wallet)", "version1").
-2. Publisher pastes the generated embed script into into the page `<body />`
+2. Publisher pastes the generated embed script into the page `<body />`
 3. Visitor loads page with embed script → Script loads from `cdn` module
 4. Script fetches configuration → `api` retrieves stored JSON and returns it
 5. Script renders the Tool → Instantiates Web Component from `components` with fetched configuration
