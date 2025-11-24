@@ -1,14 +1,39 @@
 ---
-const { length, currentPage, firstUrl, prevUrl, nextUrl, lastUrl } =
+const { length, currentPage, firstUrl, prevUrl, nextUrl, lastUrl, pageTitle } =
   Astro.props;
 
 const paginationList = Array.from({ length }, (_, i) => i + 1);
+
+const formatSegment = (segment: string) =>
+  segment
+    .split("-")
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+
+const inferTitleFromPath = () => {
+  const pathname = Astro.url?.pathname ?? "";
+  if (!pathname) return "InterledgerDevelopers";
+
+  const segments = pathname
+    .split("/")
+    .filter(Boolean)
+    .filter((segment) => segment !== "developers");
+
+  if (!segments.length) return "Developers";
+
+  return segments.map((segment) => formatSegment(segment)).join(" / ");
+};
+
+// Determine the title for tracking
+const titleForTracking =
+  (typeof pageTitle === "string" && pageTitle.trim()) || inferTitleFromPath();
 ---
 
 <nav aria-label="Blog pages" class="pagination">
   {
     firstUrl ? (
-      <a href={`${firstUrl}`} class="pagination__link">
+      <a href={`${firstUrl}`} class="pagination__link" data-umami-event={`${titleForTracking} - First Page`}>
         &#171;
       </a>
     ) : (
@@ -18,7 +43,7 @@ const paginationList = Array.from({ length }, (_, i) => i + 1);
 
   {
     prevUrl ? (
-      <a href={`${prevUrl}`} class="pagination__link">
+      <a href={`${prevUrl}`} class="pagination__link" data-umami-event={`${titleForTracking} - Previous Page`}>
         &#8249;
       </a>
     ) : (
@@ -31,6 +56,7 @@ const paginationList = Array.from({ length }, (_, i) => i + 1);
       <a
         href={`/developers/blog${num == 1 ? "" : "/" + num}`}
         class={`pagination__link ${currentPage == num ? "disabled active" : ""}`}
+        data-umami-event={`${titleForTracking} - Page ${num}`}
       >
         {num}
       </a>
@@ -41,7 +67,7 @@ const paginationList = Array.from({ length }, (_, i) => i + 1);
     !nextUrl ? (
       <span class="pagination__link disabled">&#8250;</span>
     ) : (
-      <a href={`${nextUrl}`} class="pagination__link">
+      <a href={`${nextUrl}`} class="pagination__link" data-umami-event={`${titleForTracking} - Next Page`}>
         &#8250;
       </a>
     )
@@ -49,7 +75,7 @@ const paginationList = Array.from({ length }, (_, i) => i + 1);
 
   {
     lastUrl ? (
-      <a href={`${lastUrl}`} class="pagination__link">
+      <a href={`${lastUrl}`} class="pagination__link" data-umami-event={`${titleForTracking} - Last Page`}>
         &#187;
       </a>
     ) : (
