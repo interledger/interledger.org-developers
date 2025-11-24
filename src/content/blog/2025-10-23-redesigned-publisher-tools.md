@@ -61,9 +61,10 @@ Based on what we’ve established so far, we can draw the following:
 **Key flow steps:**
 
 1. Publisher customizes through the interface (the `frontend` module) → Configuration stored as JSON (keyed by wallet address + preset tag e.g., ($ilp.link/your-wallet)", "version1").
-2. Visitor loads page with embed script → Script loads from `cdn` module
-3. Script fetches configuration → `api` retrieves stored JSON and returns it
-4. Script renders the Tool → Instantiates Web Component from `components` with fetched configuration
+2. Publisher pastes the generated embed script into into the page `<body />`
+3. Visitor loads page with embed script → Script loads from `cdn` module
+4. Script fetches configuration → `api` retrieves stored JSON and returns it
+5. Script renders the Tool → Instantiates Web Component from `components` with fetched configuration
 
 ### Tool Rendering
 
@@ -86,7 +87,7 @@ fetchConfig(API_URL, "widget", params).then((config) => {
 
 The `<wm-payment-widget>` element is one of our interactive tools defined in the `components` module. The script creates an instance, passes the configuration as properties, and appends it to the DOM, using Shadow DOM for style encapsulation.
 
-Lastly, also adds a monetization `<link>` tag to the `<head>`, using the wallet address used through the `frontend` interface. That means your site becomes Web Monetized automatically. You are welcome!
+Lastly, it also adds a monetization `<link>` tag to the `<head>`, using the wallet address used through the `frontend` interface. That means your site becomes Web Monetized automatically. You are welcome!
 
 ```typescript
 function appendMonetizationLink(walletAddressUrl: string) {
@@ -103,7 +104,7 @@ That’s all the embedded script does, nothing hidden or extra complexity, but d
 
 **Why we need a `components` module**
 
-The UI logic for widgets needs to live somewhere separate from the embed script, hence `components` module contains the actual Web Component implementations: the rendering logic, event handlers, state management, and UI interactions.
+The UI logic for widgets needs to live somewhere separate from the embed script, hence the `components` module contains the actual Web Component implementations: the rendering logic, event handlers, state management, and UI interactions.
 
 By keeping components as standalone source code, they can be consumed in multiple ways:
 
@@ -113,7 +114,7 @@ By keeping components as standalone source code, they can be consumed in multipl
 
 ### Runtime Payment Operations
 
-Beyond the new architecture, the Publisher Tools also handle payments using [Open Payments protocol](https://openpayments.dev/overview/getting-started/). Every step of the payment flow is proxied through our `api` module. For example, when a visitor interacts with the widget wanting to make a one time donation (entering an amount, clicking "Pay"), the component makes API requests:
+Beyond the new architecture, the Publisher Tools also handle payments using [Open Payments](https://openpayments.dev/overview/getting-started/). Every step of the payment flow is proxied through our `api` module. For example, when a visitor interacts with the widget wanting to make a one time donation (entering an amount, clicking "Pay"), the component makes API requests:
 
 ```typescript
 // Generate a quote
@@ -133,21 +134,21 @@ await fetch(`${apiUrl}/payment/grant`, { method: "POST", body: "..." });
 await fetch(`${apiUrl}/payment/finalize`, { method: "POST", body: "..." });
 ```
 
-The API manages all interactions with Open Payments SDK handling grant authorization, creating outgoing payments, and coordinating with the component to complete the full protocol flow for the payment.
+The API manages all interactions with the Open Payments SDK handling grant authorization, creating outgoing payments, and coordinating with the component to complete the full flow for the payment.
 
 **Key flow steps:**
 
 1. Visitor interacts with widget (from `components`) → Enters wallet address and desired amount
 2. Component requests quote → `api` proxies to Open Payments infrastructure to handle the amount
 3. Component initializes interactive grant → `api` returns authorization URL
-4. Visitor authenticate and authorizes in popup → Wallet provider redirects back with interaction reference
+4. Visitor authenticates and authorizes in popup → Wallet provider redirects back with interaction reference
 5. Component finalizes payment → `api` creates outgoing payment on Interledger network
 
 ## What's Next?
 
 The redesigned Publisher Tools establish a foundation for future enhancements:
 
-**More tools** We plan to add new interactive tools with new ways of visitors to interact and sponsor your website's content through open payments.
+**More tools** We plan to add new interactive tools with new ways for visitors to interact and sponsor your website's content through Open Payments.
 
 **Analytics integration** We want to give publishers insight into how visitors engage with their tools: how often users interact and how revenue breaks down per page.
 
