@@ -4,7 +4,10 @@ title: ILP Over HTTP
 
 import Rfc from "/src/components/Rfc.astro";
 
-<Rfc source="https://raw.githubusercontent.com/interledger/rfcs/master/0035-ilp-over-http/0035-ilp-over-http.md">
+<Rfc
+  pageTitle={frontmatter.title}
+  source="https://raw.githubusercontent.com/interledger/rfcs/master/0035-ilp-over-http/0035-ilp-over-http.md"
+>
 
 ## Motivation
 
