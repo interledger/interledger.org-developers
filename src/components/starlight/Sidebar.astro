@@ -1,0 +1,34 @@
+---
+import DefaultSidebar from "@astrojs/starlight/components/Sidebar.astro";
+import type { SidebarEntry } from "@astrojs/starlight/utils/routing/types";
+
+const { sidebar = [], entry } = Astro.locals.starlightRoute;
+
+const trackingBase =
+  (entry?.data?.title && String(entry.data.title).trim()) ||
+  "Interledger Developers Docs";
+
+const formatEventName = (labels: string[]) => {
+  const labelPath = labels.filter(Boolean).join(" / ") || "Root";
+  return `${trackingBase} - Sidebar - ${labelPath}`;
+};
+
+const addTracking = (entries: SidebarEntry[], parentLabels: string[] = []) => {
+  entries.forEach((item) => {
+    if (item.type === "link") {
+      const labelChain = [...parentLabels, item.label];
+      item.attrs = {
+        ...item.attrs,
+        "data-umami-event": formatEventName(labelChain)
+      };
+    } else {
+      addTracking(item.entries, [...parentLabels, item.label]);
+    }
+  });
+};
+
+addTracking(sidebar);
+---
+
+<DefaultSidebar />
+
