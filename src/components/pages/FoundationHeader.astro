@@ -28,7 +28,9 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
     >
       <ul class="site-nav__links menu--level-1" id="siteNavMenu">
         <li class="menu-item has-submenu menu-item--level-1">
-          <button aria-expanded="false">Foundation</button>
+          <button aria-expanded="false" data-umami-event="Site Nav - Foundation"
+            >Foundation</button
+          >
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
               <a href="/about-us" data-umami-event="Site Nav - About us"
@@ -51,7 +53,9 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
-          <button aria-expanded="false">Technology</button>
+          <button aria-expanded="false" data-umami-event="Site Nav - Technology"
+            >Technology</button
+          >
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
               <a
@@ -92,7 +96,9 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
-          <button aria-expanded="false">Grants</button>
+          <button aria-expanded="false" data-umami-event="Site Nav - Grants"
+            >Grants</button
+          >
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
               <a
@@ -114,7 +120,10 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
-          <button aria-expanded="false">Content hub</button>
+          <button
+            aria-expanded="false"
+            data-umami-event="Site Nav - Content hub">Content hub</button
+          >
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
               <a href="/blog" data-umami-event="Site Nav - Blog"
@@ -145,7 +154,10 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
-          <button aria-expanded="false">Participate</button>
+          <button
+            aria-expanded="false"
+            data-umami-event="Site Nav - Participate">Participate</button
+          >
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
               <a href="/get-involved" data-umami-event="Site Nav - Get involved"
@@ -513,7 +525,7 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
       submenuButton.setAttribute("aria-expanded", "false");
 
       submenuButton.addEventListener("click", function (event) {
-        const clickedSubmenuButton = event.target as Element;
+        const clickedSubmenuButton = event.target;
         const allSubmenuButtons = Array.from(submenuButtons);
         const notClickedSubmenuButtons = allSubmenuButtons.filter(
           function (otherSubmenuButton) {
@@ -523,10 +535,12 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
         notClickedSubmenuButtons.forEach((button) => {
           button.setAttribute("aria-expanded", "false");
         });
-        if (clickedSubmenuButton?.getAttribute("aria-expanded") === "true") {
-          clickedSubmenuButton?.setAttribute("aria-expanded", "false");
-        } else {
-          clickedSubmenuButton?.setAttribute("aria-expanded", "true");
+        if (clickedSubmenuButton instanceof HTMLElement) {
+          if (clickedSubmenuButton?.getAttribute("aria-expanded") === "true") {
+            clickedSubmenuButton?.setAttribute("aria-expanded", "false");
+          } else {
+            clickedSubmenuButton?.setAttribute("aria-expanded", "true");
+          }
         }
       });
     });
