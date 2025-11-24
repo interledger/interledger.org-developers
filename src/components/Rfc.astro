@@ -2,7 +2,7 @@
 import showdown from "showdown";
 import { parse } from "node-html-parser";
 
-const { source } = Astro.props;
+const { source, pageTitle } = Astro.props;
 
 const getApiData = async () => {
   const data = await fetch(source).then((response) => response.text());
@@ -18,6 +18,23 @@ const converter = new showdown.Converter({
 });
 const html = converter.makeHtml(specBody);
 const output = parse(html);
+
+// Add Umami tracking to all links
+const titleForTracking =
+  pageTitle ||
+  output.querySelector("h1")?.text?.trim() ||
+  output.querySelector("h2")?.text?.trim() ||
+  "InterledgerDevelopers - ";
+const links = output.querySelectorAll("a");
+links.forEach((link) => {
+  const href = link.getAttribute("href");
+  if (href) {
+    const linkTitle = link.text?.trim() || href;
+    const linkType = href.startsWith("http") ? "ext" : "int";
+    const eventName = `${titleForTracking} - ${linkTitle} - ${linkType}`;
+    link.setAttribute("data-umami-event", eventName);
+  }
+});
 ---
 
 {output}
