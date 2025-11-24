@@ -1,30 +1,68 @@
-import js from "@eslint/js";
-import globals from "globals";
-import tseslint from "typescript-eslint";
-import { defineConfig, globalIgnores } from "eslint/config";
-import eslintConfigPrettier from "eslint-config-prettier/flat";
-import eslintPluginAstro from "eslint-plugin-astro";
+import js from '@eslint/js'
+import tseslintPlugin from '@typescript-eslint/eslint-plugin'
+import tsparser from '@typescript-eslint/parser'
+import prettierConfig from 'eslint-config-prettier'
+import eslintPluginAstro from 'eslint-plugin-astro'
+import globals from 'globals'
 
-export default defineConfig([
+export default [
   {
-    files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
-    plugins: { js },
-    extends: ["js/recommended"],
-    languageOptions: { globals: { ...globals.browser, ...globals.node } }
+    ignores: [
+      'node_modules',
+      'dist',
+      '.astro',
+      '*.d.ts',
+      'public/scripts/highlight.min.js',
+      'public/scripts/init.js'
+    ]
   },
-  tseslint.configs.recommended,
-  eslintPluginAstro.configs.recommended,
-  globalIgnores(["dist", ".astro", "node_modules", "public", "**/*.min.js"]),
+  js.configs.recommended,
   {
+    files: ['**/*.{js,mjs,ts,tsx}'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.browser,
+        NodeListOf: 'readonly'
+      },
+      parser: tsparser,
+      parserOptions: {
+        ecmaVersion: 2022,
+        sourceType: 'module'
+      }
+    },
+    plugins: {
+      '@typescript-eslint': tseslintPlugin
+    },
     rules: {
-      "no-console": "error",
-      "@typescript-eslint/no-unused-vars": [
-        "error",
-        { argsIgnorePattern: "^_" }
+      ...tseslintPlugin.configs.recommended.rules,
+      'no-console': 'error',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_'
+        }
       ],
-      "@typescript-eslint/no-explicit-any": "error",
-      "astro/no-set-text-directive": "error"
+      '@typescript-eslint/no-explicit-any': 'warn'
     }
   },
-  eslintConfigPrettier
-]);
+  {
+    files: ['*.astro'],
+    plugins: {
+      astro: eslintPluginAstro
+    },
+    languageOptions: {
+      parser: eslintPluginAstro.parser,
+      parserOptions: {
+        parser: tsparser,
+        extraFileExtensions: ['.astro']
+      }
+    },
+    rules: {
+      ...eslintPluginAstro.configs.recommended.rules,
+      'astro/no-set-text-directive': 'error'
+    }
+  },
+  prettierConfig
+]

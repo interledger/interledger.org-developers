@@ -1,15 +1,15 @@
 ---
-import FoundationHeader from "../components/pages/FoundationHeader.astro";
-import FoundationFooter from "../components/pages/FoundationFooter.astro";
-import "../styles/pages.css";
+import FoundationFooter from '../components/pages/FoundationFooter.astro'
+import FoundationHeader from '../components/pages/FoundationHeader.astro'
+import '../styles/pages.css'
 
 interface Props {
-  title: string;
-  description?: string;
-  gradient?: string;
-  ogType?: string;
-  ogImageUrl?: string;
-  canonicalURL?: string;
+  title: string
+  description?: string
+  gradient?: string
+  ogType?: string
+  ogImageUrl?: string
+  canonicalURL?: string
 }
 
 const {
@@ -18,7 +18,7 @@ const {
   ogType,
   ogImageUrl,
   canonicalURL = new URL(Astro.url.pathname, Astro.site).href
-} = Astro.props;
+} = Astro.props
 ---
 
 <!doctype html>
@@ -30,33 +30,33 @@ const {
       name="description"
       content={description
         ? description
-        : "Making payments as easy as sending an email"}
+        : 'Making payments as easy as sending an email'}
     />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>
-      {title ? `${title} | Interledger Foundation` : "Interledger Foundation"}
+      {title ? `${title} | Interledger Foundation` : 'Interledger Foundation'}
     </title>
 
     <meta
       property="og:title"
       content={title
         ? `${title} | Interledger Foundation`
-        : "Interledger Foundation"}
+        : 'Interledger Foundation'}
     />
-    <meta property="og:type" content={ogType ? ogType : "website"} />
+    <meta property="og:type" content={ogType ? ogType : 'website'} />
     <meta
       property="og:image"
       content={ogImageUrl
         ? ogImageUrl
-        : new URL("/developers/img/og-image.png", Astro.site).href}
+        : new URL('/developers/img/og-image.png', Astro.site).href}
     />
     <meta property="og:url" content={canonicalURL} />
     <meta
       property="og:description"
       content={description
         ? description
-        : "Making payments as easy as sending an email"}
+        : 'Making payments as easy as sending an email'}
     />
 
     <meta name="twitter:card" content="summary_large_image" />
@@ -64,19 +64,19 @@ const {
       name="twitter:title"
       content={title
         ? `${title} | Interledger Foundation`
-        : "Interledger Foundation"}
+        : 'Interledger Foundation'}
     />
     <meta
       name="twitter:image"
       content={ogImageUrl
         ? ogImageUrl
-        : new URL("/developers/img/og-image.png", Astro.site).href}
+        : new URL('/developers/img/og-image.png', Astro.site).href}
     />
     <meta
       name="twitter:description"
       content={description
         ? description
-        : "Making payments as easy as sending an email"}
+        : 'Making payments as easy as sending an email'}
     />
 
     <link rel="icon" type="image/svg+xml" href="/developers/favicon.svg" />
@@ -106,7 +106,7 @@ const {
     flex-direction: column;
     min-height: 100%;
     min-width: 360px;
-    font-family: "Titillium", Arial, sans-serif;
+    font-family: 'Titillium', Arial, sans-serif;
     overflow-x: clip;
   }
 
@@ -123,7 +123,7 @@ const {
     background-size: 150%;
     filter: blur(150px) opacity(0.25);
     transform: translate3d(0, 0, 0);
-    content: "";
+    content: '';
   }
 
   @media screen and (max-width: 430px) {

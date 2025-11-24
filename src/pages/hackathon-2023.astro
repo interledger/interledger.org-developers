@@ -1,7 +1,7 @@
 ---
-import LanderLayout from "../layouts/LanderLayout.astro";
-import Section from "../components/pages/Section.astro";
-import AnimatedSummitLogo from "../components/logos/AnimatedSummitLogo.astro";
+import AnimatedSummitLogo from '../components/logos/AnimatedSummitLogo.astro'
+import Section from '../components/pages/Section.astro'
+import LanderLayout from '../layouts/LanderLayout.astro'
 ---
 
 <LanderLayout title="Interledger Summit Hackthon 2023">
@@ -526,7 +526,7 @@ import AnimatedSummitLogo from "../components/logos/AnimatedSummitLogo.astro";
       display: grid;
       grid-template-columns: max-content 1fr;
       grid-template-rows: auto auto;
-      grid-template-areas: "hero hero" "sidebar content";
+      grid-template-areas: 'hero hero' 'sidebar content';
     }
 
     .hero {
@@ -690,45 +690,45 @@ import AnimatedSummitLogo from "../components/logos/AnimatedSummitLogo.astro";
 </style>
 
 <script>
-  const sidebar = document.getElementById("mobileNav");
-  const toggle = document.getElementById("toggleNav");
+  const sidebar = document.getElementById('mobileNav')
+  const toggle = document.getElementById('toggleNav')
   const show = () => {
-    sidebar?.classList.toggle("visible");
-    toggle?.setAttribute("aria-expanded", "true");
-    sidebar?.setAttribute("aria-hidden", "false");
-  };
+    sidebar?.classList.toggle('visible')
+    toggle?.setAttribute('aria-expanded', 'true')
+    sidebar?.setAttribute('aria-hidden', 'false')
+  }
   const hide = () => {
-    sidebar?.classList.remove("visible");
-    toggle?.setAttribute("aria-expanded", "false");
-    sidebar?.setAttribute("aria-hidden", "true");
-  };
+    sidebar?.classList.remove('visible')
+    toggle?.setAttribute('aria-expanded', 'false')
+    sidebar?.setAttribute('aria-hidden', 'true')
+  }
   const handleClosure = (event: Event) => {
     if (event.target instanceof Node) {
-      return !sidebar?.contains(event.target) && hide();
+      return !sidebar?.contains(event.target) && hide()
     }
-  };
-  window.addEventListener("click", handleClosure);
-  window.addEventListener("focusin", handleClosure);
+  }
+  window.addEventListener('click', handleClosure)
+  window.addEventListener('focusin', handleClosure)
   toggle?.addEventListener(
-    "click",
+    'click',
     (event) => {
-      event.stopPropagation();
-      const isExpanded = toggle.getAttribute("aria-expanded") === "true";
+      event.stopPropagation()
+      const isExpanded = toggle.getAttribute('aria-expanded') === 'true'
       if (isExpanded) {
-        hide();
+        hide()
       } else {
-        show();
+        show()
       }
     },
     false
-  );
+  )
   document.addEventListener(
-    "keyup",
+    'keyup',
     function (evt) {
-      if (evt.key == "Escape") {
-        hide();
+      if (evt.key == 'Escape') {
+        hide()
       }
     },
     false
-  );
+  )
 </script>
