@@ -517,35 +517,31 @@ import FoundationLogo from '../logos/FoundationLogo.astro'
   const siteNav = document.querySelector('.site-nav__links') as HTMLInputElement
 
   if (document.contains(siteNav)) {
-    const subLinks = document.querySelectorAll('.has-submenu > a')
+    const submenuButtons = document.querySelectorAll('.has-submenu > button')
 
-    subLinks.forEach((subLink) => {
-      subLink.setAttribute('aria-expanded', 'false')
+    submenuButtons.forEach((submenuButton) => {
+      submenuButton.setAttribute('aria-expanded', 'false')
 
-      subLink.addEventListener('click', function (event) {
-        const clickedSubLink = event.target as Element
-        const allSubLinks = Array.from(subLinks)
-        const notClickedLinks = allSubLinks.filter(function (otherLink) {
-          return otherLink !== clickedSubLink
+      submenuButton.addEventListener('click', function (event) {
+        const clickedSubmenuButton = event.target
+        const allSubmenuButtons = Array.from(submenuButtons)
+        const notClickedSubmenuButtons = allSubmenuButtons.filter(
+          function (otherSubmenuButton) {
+            return otherSubmenuButton !== clickedSubmenuButton
+          }
+        )
+        notClickedSubmenuButtons.forEach((button) => {
+          button.setAttribute('aria-expanded', 'false')
         })
-        notClickedLinks.forEach((link) => {
-          link.setAttribute('aria-expanded', 'false')
-        })
-        if (clickedSubLink?.getAttribute('aria-expanded') === 'true') {
-          clickedSubLink?.setAttribute('aria-expanded', 'false')
-        } else {
-          clickedSubLink?.setAttribute('aria-expanded', 'true')
+        if (clickedSubmenuButton instanceof HTMLElement) {
+          if (clickedSubmenuButton?.getAttribute('aria-expanded') === 'true') {
+            clickedSubmenuButton?.setAttribute('aria-expanded', 'false')
+          } else {
+            clickedSubmenuButton?.setAttribute('aria-expanded', 'true')
+          }
         }
-        event.preventDefault()
-        return false
       })
     })
-
-    const resetSubMenus = () => {
-      subLinks.forEach((subLink) => {
-        subLink.setAttribute('aria-expanded', 'false')
-      })
-    }
 
     siteNav?.addEventListener('keydown', function (event) {
       if (event.key === 'Escape') {
@@ -554,10 +550,16 @@ import FoundationLogo from '../logos/FoundationLogo.astro'
     })
 
     document.addEventListener('click', function (event) {
-      if (isClickOutside(event, subLinks)) {
+      if (isClickOutside(event, submenuButtons)) {
         resetSubMenus()
       }
     })
+
+    function resetSubMenus() {
+      submenuButtons.forEach((submenuButton) => {
+        submenuButton.setAttribute('aria-expanded', 'false')
+      })
+    }
   }
 
   function isClickOutside(
