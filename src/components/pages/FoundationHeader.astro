@@ -253,7 +253,7 @@ import FoundationLogo from '../logos/FoundationLogo.astro'
     }
   }
 
-  .site-nav__links .has-submenu > button[aria-expanded="true"]::after,
+  .site-nav__links .has-submenu > button[aria-expanded='true']::after,
   .site-nav__links .has-submenu > button:hover::after,
   .site-nav__links .has-submenu:has(a:hover) > button::after {
     transform: translateY(30%) rotate(180deg);
@@ -334,11 +334,11 @@ import FoundationLogo from '../logos/FoundationLogo.astro'
       padding-inline: var(--space-s);
     }
 
-    a[aria-expanded='false'] + .menu--level-2 {
+    button[aria-expanded='false'] + .menu--level-2 {
       display: none;
     }
 
-    a[aria-expanded='true'] + .menu--level-2 {
+    button[aria-expanded='true'] + .menu--level-2 {
       display: block;
     }
 
@@ -449,12 +449,12 @@ import FoundationLogo from '../logos/FoundationLogo.astro'
       padding: var(--space-2xs);
     }
 
-    .has-submenu > a[aria-expanded='false'] + ul {
+    .has-submenu > button[aria-expanded='false'] + ul {
       visibility: hidden;
       opacity: 0;
     }
 
-    .has-submenu > a[aria-expanded='true'] + ul,
+    .has-submenu > button[aria-expanded='true'] + ul,
     .menu-item--level-1:hover > .menu--level-2,
     .menu--level-2:hover {
       visibility: visible;
