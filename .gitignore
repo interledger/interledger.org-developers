@@ -22,6 +22,7 @@ pnpm-debug.log*
 
 # lock files
 bun.lock
+bun.lockb
 pnpm-lock.yaml
 package-lock.json
 
