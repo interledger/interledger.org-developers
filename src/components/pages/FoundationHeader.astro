@@ -599,7 +599,7 @@ import FoundationLogo from '../logos/FoundationLogo.astro'
 
       if (isExactMatch || isSectionMatch) {
         const parentMenu = devLink.closest('.menu-item--level-1')
-        const parentMenuLink = parentMenu?.querySelector('a')
+        const parentMenuLink = parentMenu?.querySelector('button')
 
         devLink.classList.add('is-active')
         parentMenuLink?.classList.add('is-active')
