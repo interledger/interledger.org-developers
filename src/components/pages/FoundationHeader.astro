@@ -28,10 +28,8 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
     >
       <ul class="site-nav__links menu--level-1" id="siteNavMenu">
         <li class="menu-item has-submenu menu-item--level-1">
-          <a
-            href="/about-us"
-            aria-expanded="false"
-            data-umami-event="Site Nav - Foundation">Foundation</a
+          <button aria-expanded="false" data-umami-event="Site Nav - Foundation"
+            >Foundation</button
           >
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
@@ -55,10 +53,8 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
-          <a
-            href="/developers"
-            aria-expanded="false"
-            data-umami-event="Site Nav - Technology">Technology</a
+          <button aria-expanded="false" data-umami-event="Site Nav - Technology"
+            >Technology</button
           >
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
@@ -100,10 +96,8 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
-          <a
-            href="/financial-services"
-            aria-expanded="false"
-            data-umami-event="Site Nav - Grants">Grants</a
+          <button aria-expanded="false" data-umami-event="Site Nav - Grants"
+            >Grants</button
           >
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
@@ -126,10 +120,9 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
-          <a
-            href="/blog"
+          <button
             aria-expanded="false"
-            data-umami-event="Site Nav - Content hub">Content hub</a
+            data-umami-event="Site Nav - Content hub">Content hub</button
           >
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
@@ -161,10 +154,9 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
-          <a
-            href="/get-involved"
+          <button
             aria-expanded="false"
-            data-umami-event="Site Nav - Participate">Participate</a
+            data-umami-event="Site Nav - Participate">Participate</button
           >
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
@@ -231,11 +223,18 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
     justify-content: center;
   }
 
-  .site-nav a {
+  .site-nav a,
+  .site-nav__links button {
     display: block;
     color: currentColor;
     transition: text-decoration 200ms ease-in-out;
     white-space: nowrap;
+  }
+
+  .site-nav__links button {
+    padding: var(--space-s) var(--space-2xs);
+    border: none;
+    background-color: transparent;
   }
 
   .site-logo {
@@ -243,7 +242,7 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
     flex: none;
   }
 
-  .site-nav__links .has-submenu > a::after {
+  .site-nav__links .has-submenu > button::after {
     content: url(/public/img/arrow-menu.svg);
     display: inline-block;
     width: 9px;
@@ -254,9 +253,9 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
     }
   }
 
-  .site-nav__links .has-submenu > a[aria-expanded="true"]::after,
-  .site-nav__links .has-submenu > a:hover::after,
-  .site-nav__links .has-submenu:has(a:hover) > a::after {
+  .site-nav__links .has-submenu > button[aria-expanded="true"]::after,
+  .site-nav__links .has-submenu > button:hover::after,
+  .site-nav__links .has-submenu:has(a:hover) > button::after {
     transform: translateY(30%) rotate(180deg);
   }
 
@@ -266,7 +265,8 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
     color: var(--color-black);
   }
 
-  .site-nav__links a:hover {
+  .site-nav__links a:hover,
+  .site-nav__links button:hover {
     background-color: var(--color-header-accent);
     color: currentColor;
   }
@@ -329,15 +329,16 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
       transform: translateX(100%);
     }
 
-    .site-links-wrapper a {
+    .site-links-wrapper a,
+    .site-nav__links button {
       padding-inline: var(--space-s);
     }
 
-    a[aria-expanded="false"] + .menu--level-2 {
+    button[aria-expanded="false"] + .menu--level-2 {
       display: none;
     }
 
-    a[aria-expanded="true"] + .menu--level-2 {
+    button[aria-expanded="true"] + .menu--level-2 {
       display: block;
     }
 
@@ -448,12 +449,12 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
       padding: var(--space-2xs);
     }
 
-    .has-submenu > a[aria-expanded="false"] + ul {
+    .has-submenu > button[aria-expanded="false"] + ul {
       visibility: hidden;
       opacity: 0;
     }
 
-    .has-submenu > a[aria-expanded="true"] + ul,
+    .has-submenu > button[aria-expanded="true"] + ul,
     .menu-item--level-1:hover > .menu--level-2,
     .menu--level-2:hover {
       visibility: visible;
@@ -518,27 +519,29 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
   ) as HTMLInputElement;
 
   if (document.contains(siteNav)) {
-    const subLinks = document.querySelectorAll(".has-submenu > a");
+    const submenuButtons = document.querySelectorAll(".has-submenu > button");
 
-    subLinks.forEach((subLink) => {
-      subLink.setAttribute("aria-expanded", "false");
+    submenuButtons.forEach((submenuButton) => {
+      submenuButton.setAttribute("aria-expanded", "false");
 
-      subLink.addEventListener("click", function (event) {
-        const clickedSubLink = event.target as Element;
-        const allSubLinks = Array.from(subLinks);
-        const notClickedLinks = allSubLinks.filter(function (otherLink) {
-          return otherLink !== clickedSubLink;
+      submenuButton.addEventListener("click", function (event) {
+        const clickedSubmenuButton = event.target;
+        const allSubmenuButtons = Array.from(submenuButtons);
+        const notClickedSubmenuButtons = allSubmenuButtons.filter(
+          function (otherSubmenuButton) {
+            return otherSubmenuButton !== clickedSubmenuButton;
+          }
+        );
+        notClickedSubmenuButtons.forEach((button) => {
+          button.setAttribute("aria-expanded", "false");
         });
-        notClickedLinks.forEach((link) => {
-          link.setAttribute("aria-expanded", "false");
-        });
-        if (clickedSubLink?.getAttribute("aria-expanded") === "true") {
-          clickedSubLink?.setAttribute("aria-expanded", "false");
-        } else {
-          clickedSubLink?.setAttribute("aria-expanded", "true");
+        if (clickedSubmenuButton instanceof HTMLElement) {
+          if (clickedSubmenuButton?.getAttribute("aria-expanded") === "true") {
+            clickedSubmenuButton?.setAttribute("aria-expanded", "false");
+          } else {
+            clickedSubmenuButton?.setAttribute("aria-expanded", "true");
+          }
         }
-        event.preventDefault();
-        return false;
       });
     });
 
@@ -549,14 +552,14 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
     });
 
     document.addEventListener("click", function (event) {
-      if (isClickOutside(event, subLinks)) {
+      if (isClickOutside(event, submenuButtons)) {
         resetSubMenus();
       }
     });
 
     function resetSubMenus() {
-      subLinks.forEach((subLink) => {
-        subLink.setAttribute("aria-expanded", "false");
+      submenuButtons.forEach((submenuButton) => {
+        submenuButton.setAttribute("aria-expanded", "false");
       });
     }
   }
@@ -595,7 +598,7 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
 
       if (isExactMatch || isSectionMatch) {
         const parentMenu = devLink.closest(".menu-item--level-1");
-        const parentMenuLink = parentMenu?.querySelector("a");
+        const parentMenuLink = parentMenu?.querySelector("button");
 
         devLink.classList.add("is-active");
         parentMenuLink?.classList.add("is-active");
