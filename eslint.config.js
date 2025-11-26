@@ -12,7 +12,7 @@ export default [
       'dist',
       '.astro',
       '*.d.ts',
-      'public/scripts/highlight.min.js',
+      '**/*.min.js',
       'public/scripts/init.js'
     ]
   },
