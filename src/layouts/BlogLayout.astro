@@ -1,13 +1,13 @@
 ---
-import BaseLayout from "./BaseLayout.astro";
+import BaseLayout from './BaseLayout.astro'
 
-const { frontmatter } = Astro.props;
+const { frontmatter } = Astro.props
 
-const dateObj = new Date(frontmatter.date);
-const isoDate = dateObj.toISOString().slice(0, 10);
-const longDate = dateObj.toDateString().substring(4);
+const dateObj = new Date(frontmatter.date)
+const isoDate = dateObj.toISOString().slice(0, 10)
+const longDate = dateObj.toDateString().substring(4)
 
-const rawHTMLString = `This article was originally published at <a href=${frontmatter.external_url}>${frontmatter.external_url}</a>.`;
+const rawHTMLString = `This article was originally published at <a href=${frontmatter.external_url}>${frontmatter.external_url}</a>.`
 ---
 
 <BaseLayout
@@ -16,7 +16,7 @@ const rawHTMLString = `This article was originally published at <a href=${frontm
   ogType="article"
   ogImageUrl={frontmatter.ogImageUrl
     ? new URL(frontmatter.ogImageUrl, Astro.site).href
-    : new URL("/developers/img/blog/og-image.png", Astro.site).href}
+    : new URL('/developers/img/blog/og-image.png', Astro.site).href}
 >
   <main>
     <article
@@ -83,7 +83,7 @@ const rawHTMLString = `This article was originally published at <a href=${frontm
               ) : (
                 author
               )}
-              {index < frontmatter.authors.length - 1 ? ", " : ""}
+              {index < frontmatter.authors.length - 1 ? ', ' : ''}
             </span>
           ))
         }
@@ -92,7 +92,7 @@ const rawHTMLString = `This article was originally published at <a href=${frontm
         frontmatter.external_url ? (
           <div class="note" set:html={rawHTMLString} />
         ) : (
-          ""
+          ''
         )
       }
       <slot />
@@ -119,7 +119,7 @@ const rawHTMLString = `This article was originally published at <a href=${frontm
   }
 
   .breadcrumbs li:not(:first-child)::before {
-    content: ">";
+    content: '>';
     display: inline-flex;
     margin-inline-start: var(--space-3xs);
   }
@@ -159,7 +159,7 @@ const rawHTMLString = `This article was originally published at <a href=${frontm
   }
 
   .note::before {
-    content: "";
+    content: '';
     position: absolute;
     width: 100%;
     height: 100%;

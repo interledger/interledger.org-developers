@@ -1,15 +1,15 @@
 ---
-import LanderHeader from "../components/pages/LanderHeader.astro";
-import Footer from "../components/pages/Footer.astro";
-import "../styles/pages.css";
+import Footer from '../components/pages/Footer.astro'
+import LanderHeader from '../components/pages/LanderHeader.astro'
+import '../styles/pages.css'
 
 interface Props {
-  title: string;
-  description?: string;
-  gradient?: string;
+  title: string
+  description?: string
+  gradient?: string
 }
 
-const { title, description, gradient = "option1" } = Astro.props;
+const { title, description, gradient = 'option1' } = Astro.props
 ---
 
 <!doctype html>
@@ -21,12 +21,12 @@ const { title, description, gradient = "option1" } = Astro.props;
       name="description"
       content={description
         ? description
-        : "Making payments as easy as sending an email"}
+        : 'Making payments as easy as sending an email'}
     />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>
-      {title ? `${title} | Interledger Foundation` : "Interledger Foundation"}
+      {title ? `${title} | Interledger Foundation` : 'Interledger Foundation'}
     </title>
     <link rel="icon" type="image/svg+xml" href="/developers/favicon.svg" />
     <script
@@ -56,7 +56,7 @@ const { title, description, gradient = "option1" } = Astro.props;
     min-width: 360px;
     color: var(--color-text);
     font-size: var(--step-0);
-    font-family: "Titillium", Arial, sans-serif;
+    font-family: 'Titillium', Arial, sans-serif;
     background-image: var(--gradient);
     background-repeat: no-repeat;
     background-attachment: fixed;

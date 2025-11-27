@@ -1,6 +1,6 @@
 ---
-import FoundationLogo from "../logos/FoundationLogo.astro";
-import ExternalIcon from "../../../public/img/icon-external.svg";
+import ExternalIcon from '../../../public/img/icon-external.svg'
+import FoundationLogo from '../logos/FoundationLogo.astro'
 ---
 
 <header class="site-header" role="banner">
@@ -253,7 +253,7 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
     }
   }
 
-  .site-nav__links .has-submenu > button[aria-expanded="true"]::after,
+  .site-nav__links .has-submenu > button[aria-expanded='true']::after,
   .site-nav__links .has-submenu > button:hover::after,
   .site-nav__links .has-submenu:has(a:hover) > button::after {
     transform: translateY(30%) rotate(180deg);
@@ -334,11 +334,11 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
       padding-inline: var(--space-s);
     }
 
-    button[aria-expanded="false"] + .menu--level-2 {
+    button[aria-expanded='false'] + .menu--level-2 {
       display: none;
     }
 
-    button[aria-expanded="true"] + .menu--level-2 {
+    button[aria-expanded='true'] + .menu--level-2 {
       display: block;
     }
 
@@ -411,7 +411,7 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
     .site-nav {
       display: grid;
       grid-template-columns: auto 1fr 1fr;
-      grid-template-areas: "logo links links";
+      grid-template-areas: 'logo links links';
       gap: var(--space-s);
     }
 
@@ -424,7 +424,7 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
       grid-area: 1 / 1 / 2 / 4;
       display: grid;
       grid-template-columns: minmax(10em, 1fr) 1fr 1fr;
-      grid-template-areas: ". menu site";
+      grid-template-areas: '. menu site';
       gap: var(--space-s);
     }
 
@@ -449,12 +449,12 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
       padding: var(--space-2xs);
     }
 
-    .has-submenu > button[aria-expanded="false"] + ul {
+    .has-submenu > button[aria-expanded='false'] + ul {
       visibility: hidden;
       opacity: 0;
     }
 
-    .has-submenu > button[aria-expanded="true"] + ul,
+    .has-submenu > button[aria-expanded='true'] + ul,
     .menu-item--level-1:hover > .menu--level-2,
     .menu--level-2:hover {
       visibility: visible;
@@ -475,134 +475,135 @@ import ExternalIcon from "../../../public/img/icon-external.svg";
 </style>
 
 <script>
-  const siteLinksWrapper = document.querySelector("[data-nav-wrapper]");
-  const wideNavMinWidth = window.matchMedia("(min-width: 1060px)");
-  wideNavMinWidth.addEventListener("change", handleNavDisplayStyles);
+  const siteLinksWrapper = document.querySelector('[data-nav-wrapper]')
+  const wideNavMinWidth = window.matchMedia('(min-width: 1060px)')
+  wideNavMinWidth.addEventListener('change', handleNavDisplayStyles)
 
-  const siteNavToggle = document.getElementById("siteNavToggle");
-  const menuIcon = document.getElementById("menuIcon");
+  const siteNavToggle = document.getElementById('siteNavToggle')
+  const menuIcon = document.getElementById('menuIcon')
 
   if (document.contains(siteNavToggle)) {
-    siteNavToggle?.addEventListener("click", handleMobileNavToggle, false);
+    siteNavToggle?.addEventListener('click', handleMobileNavToggle, false)
   }
 
   function handleMobileNavToggle() {
-    siteLinksWrapper?.classList.toggle("offscreen");
-    if (siteLinksWrapper?.getAttribute("class")?.includes("offscreen")) {
-      menuIcon?.classList.remove("open");
+    siteLinksWrapper?.classList.toggle('offscreen')
+    if (siteLinksWrapper?.getAttribute('class')?.includes('offscreen')) {
+      menuIcon?.classList.remove('open')
     } else {
-      menuIcon?.classList.add("open");
+      menuIcon?.classList.add('open')
     }
   }
 
   function handleNavDisplayStyles(event: MediaQueryListEvent) {
     if (event.matches) {
-      siteLinksWrapper?.classList.remove("offscreen");
+      siteLinksWrapper?.classList.remove('offscreen')
     } else {
       if (siteLinksWrapper) {
-        flashPrevention(siteLinksWrapper);
+        flashPrevention(siteLinksWrapper)
       }
-      siteLinksWrapper?.classList.add("offscreen");
+      siteLinksWrapper?.classList.add('offscreen')
     }
   }
 
   function flashPrevention(element: Element) {
-    element.setAttribute("style", "display:none");
+    element.setAttribute('style', 'display:none')
     setTimeout(() => {
-      element.removeAttribute("style");
-    }, 10);
+      element.removeAttribute('style')
+    }, 10)
   }
 
   // Site sub-navigation toggle
-  const siteNav = document.querySelector(
-    ".site-nav__links"
-  ) as HTMLInputElement;
+  const siteNav = document.querySelector('.site-nav__links') as HTMLInputElement
 
   if (document.contains(siteNav)) {
-    const submenuButtons = document.querySelectorAll(".has-submenu > button");
+    const submenuButtons = document.querySelectorAll('.has-submenu > button')
 
     submenuButtons.forEach((submenuButton) => {
-      submenuButton.setAttribute("aria-expanded", "false");
+      submenuButton.setAttribute('aria-expanded', 'false')
 
-      submenuButton.addEventListener("click", function (event) {
-        const clickedSubmenuButton = event.target;
-        const allSubmenuButtons = Array.from(submenuButtons);
+      submenuButton.addEventListener('click', function (event) {
+        const clickedSubmenuButton = event.target
+        const allSubmenuButtons = Array.from(submenuButtons)
         const notClickedSubmenuButtons = allSubmenuButtons.filter(
           function (otherSubmenuButton) {
-            return otherSubmenuButton !== clickedSubmenuButton;
+            return otherSubmenuButton !== clickedSubmenuButton
           }
-        );
+        )
         notClickedSubmenuButtons.forEach((button) => {
-          button.setAttribute("aria-expanded", "false");
-        });
+          button.setAttribute('aria-expanded', 'false')
+        })
         if (clickedSubmenuButton instanceof HTMLElement) {
-          if (clickedSubmenuButton?.getAttribute("aria-expanded") === "true") {
-            clickedSubmenuButton?.setAttribute("aria-expanded", "false");
+          if (clickedSubmenuButton?.getAttribute('aria-expanded') === 'true') {
+            clickedSubmenuButton?.setAttribute('aria-expanded', 'false')
           } else {
-            clickedSubmenuButton?.setAttribute("aria-expanded", "true");
+            clickedSubmenuButton?.setAttribute('aria-expanded', 'true')
           }
         }
-      });
-    });
+      })
+    })
 
-    siteNav?.addEventListener("keydown", function (event) {
-      if (event.key === "Escape") {
-        resetSubMenus();
+    siteNav?.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
+        resetSubMenus()
       }
-    });
+    })
 
-    document.addEventListener("click", function (event) {
+    document.addEventListener('click', function (event) {
       if (isClickOutside(event, submenuButtons)) {
-        resetSubMenus();
+        resetSubMenus()
       }
-    });
+    })
 
     function resetSubMenus() {
       submenuButtons.forEach((submenuButton) => {
-        submenuButton.setAttribute("aria-expanded", "false");
-      });
+        submenuButton.setAttribute('aria-expanded', 'false')
+      })
     }
   }
 
-  function isClickOutside(event: MouseEvent, nodeList: NodeListOf<Element>) {
-    let clickedInsideTarget = false;
-    const eventTarget = event.target as Element;
+  function isClickOutside(
+    event: MouseEvent,
+    nodeList: NodeListOf<Element>
+  ): boolean {
+    let clickedInsideTarget = false
+    const eventTarget = event.target as Element
     Array.from(nodeList).forEach(function (element) {
       if (element.contains(eventTarget)) {
-        clickedInsideTarget = true;
+        clickedInsideTarget = true
       }
-    });
-    return !clickedInsideTarget;
+    })
+    return !clickedInsideTarget
   }
 
   // Site sub-navigation highlighting parent menu item
   const devLinks = document.querySelectorAll(
     ".site-nav__links .menu-item--level-2 a[href*='/developers']"
-  );
-  let currentPath = window.location.pathname;
+  )
+  let currentPath = window.location.pathname
 
-  if (currentPath.endsWith("/")) {
-    currentPath = currentPath.slice(0, -1);
+  if (currentPath.endsWith('/')) {
+    currentPath = currentPath.slice(0, -1)
   }
 
-  const activeSections = ["/developers/blog"];
+  const activeSections = ['/developers/blog']
   devLinks.forEach((devLink) => {
     if (devLink instanceof HTMLAnchorElement) {
-      const linkPath = devLink.pathname;
-      const isExactMatch = linkPath === currentPath;
+      const linkPath = devLink.pathname
+      const isExactMatch = linkPath === currentPath
 
       const isSectionMatch = activeSections.some(
         (section) =>
           currentPath.startsWith(section) && linkPath.startsWith(section)
-      );
+      )
 
       if (isExactMatch || isSectionMatch) {
-        const parentMenu = devLink.closest(".menu-item--level-1");
-        const parentMenuLink = parentMenu?.querySelector("button");
+        const parentMenu = devLink.closest('.menu-item--level-1')
+        const parentMenuLink = parentMenu?.querySelector('button')
 
-        devLink.classList.add("is-active");
-        parentMenuLink?.classList.add("is-active");
+        devLink.classList.add('is-active')
+        parentMenuLink?.classList.add('is-active')
       }
     }
-  });
+  })
 </script>

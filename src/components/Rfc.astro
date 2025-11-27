@@ -1,23 +1,23 @@
 ---
-import showdown from "showdown";
-import { parse } from "node-html-parser";
+import { parse } from 'node-html-parser'
+import showdown from 'showdown'
 
-const { source } = Astro.props;
+const { source } = Astro.props
 
 const getApiData = async () => {
-  const data = await fetch(source).then((response) => response.text());
-  const frontMatterPos = data.indexOf("---", 1) + 3;
-  const specBody = data.slice(frontMatterPos);
-  return specBody;
-};
+  const data = await fetch(source).then((response) => response.text())
+  const frontMatterPos = data.indexOf('---', 1) + 3
+  const specBody = data.slice(frontMatterPos)
+  return specBody
+}
 
-const specBody = await getApiData();
+const specBody = await getApiData()
 const converter = new showdown.Converter({
   tables: true,
   ghCompatibleHeaderId: true
-});
-const html = converter.makeHtml(specBody);
-const output = parse(html);
+})
+const html = converter.makeHtml(specBody)
+const output = parse(html)
 ---
 
 {output}
