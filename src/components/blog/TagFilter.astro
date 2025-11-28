@@ -1,10 +1,10 @@
 ---
 interface Props {
-  allTags: string[];
-  selectedTag?: string;
+  allTags: string[]
+  selectedTag?: string
 }
 
-const { allTags, selectedTag } = Astro.props;
+const { allTags, selectedTag } = Astro.props
 ---
 
 <div class="tag-filter">
@@ -12,7 +12,7 @@ const { allTags, selectedTag } = Astro.props;
   <div class="tag-filter-buttons">
     <a
       href="/developers/blog"
-      class:list={["tag-button", { active: !selectedTag }]}
+      class:list={['tag-button', { active: !selectedTag }]}
       data-umami-event="Blog tag filter - All"
     >
       All
@@ -20,8 +20,8 @@ const { allTags, selectedTag } = Astro.props;
     {
       allTags.map((tag) => (
         <a
-          href={`/developers/blog/tag/${tag.toLowerCase().replace(/\s+/g, "-")}`}
-          class:list={["tag-button", { active: selectedTag === tag }]}
+          href={`/developers/blog/tag/${tag.toLowerCase().replace(/\s+/g, '-')}`}
+          class:list={['tag-button', { active: selectedTag === tag }]}
           data-umami-event={`Blog tag filter - ${tag}`}
         >
           {tag}
