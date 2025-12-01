@@ -64,12 +64,15 @@ const { allTags, selectedTag } = Astro.props
     transition:
       background-color 200ms ease-in-out,
       color 200ms ease-in-out,
-      border-color 200ms ease-in-out;
+      border-color 200ms ease-in-out,
+      text-decoration 200ms ease-in-out;
   }
 
   .tag-button:hover {
-    background-color: var(--color-primary-light);
+    background-color: white;
     border-color: var(--color-primary);
+    color: var(--color-text);
+    text-decoration: underline;
   }
 
   .tag-button.active {
