@@ -32,7 +32,7 @@ const { lang } = Astro.params;
 const t = useTranslations(lang as string);
 const translatePath = useTranslatedPath(lang as string, lang as string);
 ---
-<BaseLayout title={t("nav.tech-blog")} description="Hear stories and experiences from the team who is working on making Interledger, the interoperable global payments network, a reality." ogImageUrl={new URL('/developers/img/blog/og-image.png', Astro.site).href}>
+<BaseLayout title={t("nav.tech-blog")} description={t("nav.tech-blog-description")} ogImageUrl={new URL('/developers/img/blog/og-image.png', Astro.site).href}>
 	<main>
 		<div class="content-wrapper">
 			<ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
