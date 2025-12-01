@@ -57,7 +57,7 @@ export const ui: LanguageUi = {
   es: {
     "nav.foundation": "Fundación",
     "nav.about": "Sobre Nosotros",
-    "nav.policy": "Política y Defensa",
+    "nav.policy": "Políticas y defensa pública",
     "nav.team": "Equipo",
     "nav.media": "Medios",
     "nav.technology": "Tecnología",
