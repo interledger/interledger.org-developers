@@ -40,3 +40,28 @@ jobs:
 
       - name: Deploy to GCS
         run: gsutil -m rsync -r -d ./dist/ gs://${{ secrets.GCS_BUCKET }}/developers
+
+      - name: Build nginx container
+        run: |
+          cd ci/nginx-rewrite
+          gcloud builds submit --tag gcr.io/interledger-websites/nginx-rewrite:latest .
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy nginx-rewrite \
+            --image gcr.io/interledger-websites/nginx-rewrite:latest \
+            --platform managed \
+            --region us-central1 \
+            --allow-unauthenticated \
+            --port 8080 \
+            --memory 512Mi \
+            --cpu 1 \
+            --min-instances 0 \
+            --max-instances 10 \
+            --quiet
+
+      - name: Invalidate CDN cache
+        run: |
+          gcloud compute url-maps invalidate-cdn-cache interledger-org \
+            --path "/developers/*" \
+            --async
