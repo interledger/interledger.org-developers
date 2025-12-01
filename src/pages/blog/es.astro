@@ -1,18 +1,18 @@
 ---
-import { getCollection } from "astro:content";
-import { createExcerpt } from "../../utils/create-excerpt";
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from 'astro:content'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { createExcerpt } from '../../utils/create-excerpt'
 
 // Only return posts with `draft: true` in the frontmatter
-const esEntries = await getCollection("blog", ({ data }) => {
-  return data.lang === "es";
-});
+const esEntries = await getCollection('blog', ({ data }) => {
+  return data.lang === 'es'
+})
 ---
 
 <BaseLayout
   title="Blog de Ingeniería"
   description="Hear stories and experiences from the team who is working on making Interledger, the interoperable global payments network, a reality."
-  ogImageUrl={new URL("/developers/img/blog/og-image.png", Astro.site).href}
+  ogImageUrl={new URL('/developers/img/blog/og-image.png', Astro.site).href}
 >
   <main>
     <div class="content-wrapper">
@@ -64,7 +64,7 @@ const esEntries = await getCollection("blog", ({ data }) => {
       <ol class="postlist">
         {
           esEntries.map((blogPostEntry) => {
-            const excerpt = `${createExcerpt(blogPostEntry.body).substring(0, 300)}...`;
+            const excerpt = `${createExcerpt(blogPostEntry.body).substring(0, 300)}...`
             return (
               <li class="postlist-item">
                 <time
@@ -85,7 +85,7 @@ const esEntries = await getCollection("blog", ({ data }) => {
                     : excerpt}
                 </p>
               </li>
-            );
+            )
           })
         }
       </ol>
@@ -114,7 +114,7 @@ const esEntries = await getCollection("blog", ({ data }) => {
   }
 
   .breadcrumbs li:not(:first-child)::before {
-    content: ">";
+    content: '>';
     display: inline-flex;
     margin-inline-start: var(--space-3xs);
   }

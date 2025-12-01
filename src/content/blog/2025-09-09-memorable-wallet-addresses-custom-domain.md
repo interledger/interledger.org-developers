@@ -1,6 +1,6 @@
 ---
-title: "Memorable wallet addresses on your own domain"
-description: "If you own a domain, you can set your Open Payments wallet address to be the same as your domain!"
+title: 'Memorable wallet addresses on your own domain'
+description: 'If you own a domain, you can set your Open Payments wallet address to be the same as your domain!'
 date: 2025-09-09
 slug: memorable-wallet-addresses-custom-domain
 authors:
@@ -127,19 +127,19 @@ Even if you don't host your entire website on Cloudflare, you can create a worke
 
 ```javascript
 // index.js
-const WALLET_ADDRESS = "https://ilp.wallet.com/abc/xyz";
+const WALLET_ADDRESS = 'https://ilp.wallet.com/abc/xyz'
 
 export default {
   async fetch(request) {
-    const url = new URL(req.url);
-    if (url.pathname === "/.well-known/pay") {
-      const json = await fetch(WALLET_ADDRESS).then((r) => r.json());
-      return Response.json(json);
+    const url = new URL(req.url)
+    if (url.pathname === '/.well-known/pay') {
+      const json = await fetch(WALLET_ADDRESS).then((r) => r.json())
+      return Response.json(json)
     }
     // ... handle other requests, or by default, return error
     // return new Response('not found', { status: 404 })
   }
-};
+}
 ```
 
 #### Wordpress
@@ -229,14 +229,14 @@ If you look closely, the `MonetizationEvent` inherits the `Event` interface. So,
 ```
 
 ```ts
-window.addEventListener("monetization", (event) => {
-  const linkElement: HTMLLinkElement = event.target;
-  const originalWalletAddress = linkElement.href;
+window.addEventListener('monetization', (event) => {
+  const linkElement: HTMLLinkElement = event.target
+  const originalWalletAddress = linkElement.href
   // -> https://sidvishnoi.com/.well-known/pay
 
-  const walletAddressThatGotPaid = event.paymentPointer;
+  const walletAddressThatGotPaid = event.paymentPointer
   // -> https://ilp.gatehub.net/981946513/eur
-});
+})
 ```
 
 Depending on the use case, you may care about either or both of the wallet addresses. I hope it was helpful for you to know how to get each.
