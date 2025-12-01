@@ -6,7 +6,7 @@ Source code for the /developer-tools portion of [Interledger.org](https://interl
 
 Inside this project, you'll see the following folders and files:
 
-```
+```text
 .
 ├── public/
 ├── src/
@@ -106,12 +106,12 @@ Please **only use the existing, approved tags** unless you have aligned with the
 
 **Current tags:**
 
-- Concepts
-- Interledger
+- Interledger Protocol
 - Open Payments
-- Rafiki
-- Technical
 - Web Monetization
+- Rafiki
+- Updates
+- Releases
 
 If you believe your post needs a new tag, propose it in your PR description or in the `#tech-team` Slack channel so we can decide whether to add it and update this list.
 
