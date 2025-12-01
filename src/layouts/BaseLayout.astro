@@ -1,8 +1,8 @@
 ---
 import FoundationHeader from '../components/pages/FoundationHeader.astro';
 import FoundationFooter from '../components/pages/FoundationFooter.astro';
-import { getLangFromUrl } from '../i18n/utils';
-import { languages } from '../i18n/ui';
+import { getLangFromUrl, useTranslatedPath } from '../i18n/utils';
+import { languages, defaultLang } from '../i18n/ui';
 import '../styles/pages.css';
 
 interface Props {
@@ -18,24 +18,26 @@ const { title, description, ogType, ogImageUrl, canonicalURL = new URL(Astro.url
 const lang = getLangFromUrl(Astro.url);
 
 // Generate alternate URLs for hreflang
-const currentPath = Astro.url.pathname;
+const translatePath = useTranslatedPath(defaultLang, lang);
 const alternateUrls: Record<string, string> = {};
 
+// Normalize path by removing existing language segment
+const pathSegments = Astro.url.pathname.split("/");
+const isDevelopersPath = Astro.url.pathname.includes("/developers");
+const langIndex = isDevelopersPath ? 2 : 1;
+
+if (pathSegments[langIndex] && pathSegments[langIndex] in languages) {
+	pathSegments.splice(langIndex, 1);
+}
+const normalizedPath = pathSegments.join("/") || (isDevelopersPath ? "/developers" : "/");
+
 Object.keys(languages).forEach((locale) => {
-	if (locale === 'en') {
-		// English is the default, remove /en prefix if present
-		alternateUrls[locale] = new URL(currentPath.replace(/^\/es\//, '/'), Astro.site).href;
-	} else {
-		// Add language prefix for non-default languages
-		const localizedPath = currentPath.startsWith(`/${locale}/`)
-			? currentPath
-			: `/${locale}${currentPath}`;
-		alternateUrls[locale] = new URL(localizedPath, Astro.site).href;
-	}
+	const translatedPath = translatePath(normalizedPath, locale as keyof typeof languages);
+	alternateUrls[locale] = new URL(translatedPath, Astro.site).href;
 });
 
 // x-default points to English version
-const defaultUrl = alternateUrls['en'];
+const defaultUrl = alternateUrls[defaultLang];
 ---
 
 <!doctype html>
