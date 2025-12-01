@@ -2,6 +2,10 @@
 
 Simple nginx-based static file server for the developers portal under the `/developers` path.
 
+## Background
+
+Previously, this content was served from an AWS S3 bucket through AWS CloudFront CDN. After migrating to GCS, we encountered a significant limitation: the GCS CDN lacks CloudFront's intelligent URL rewriting capabilities, and automatic `index.html` serving doesn't come out of the box. The simplest solution was to host the content through nginx and handle all rewrite rules at the server level.
+
 ## What it does
 
 - Serves static files from the GCS bucket `gs://interledger-org-developers-portal/developers`
