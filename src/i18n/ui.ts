@@ -61,7 +61,7 @@ export const ui: LanguageUi = {
     "nav.team": "Equipo",
     "nav.media": "Medios",
     "nav.technology": "Tecnología",
-    "nav.overview": "Visión General",
+    "nav.overview": "Estándares abiertos",
     "nav.interledger": "Interledger",
     "nav.open-payments": "Pagos Abiertos",
     "nav.web-monetization": "Monetización Web",
