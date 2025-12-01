@@ -81,7 +81,7 @@ export const ui: LanguageUi = {
     "nav.get-involved": "Involúcrate",
     "nav.events": "Eventos",
     "nav.guidelines": "Guías",
-    "nav.summit": "Conferencia Interledger",
+    "nav.summit": "Cumbre Interledger",
     "footer.mailing-list": "Únete a nuestra lista de correo",
     "footer.subscribe": "Suscribirse",
     "footer.connect": "Conéctate con nosotros",
