@@ -2,6 +2,7 @@
 import type { Page } from 'astro'
 import type { GetStaticPaths } from 'astro'
 import { createExcerpt } from '../../../../utils/create-excerpt'
+import { getTagSlug } from '../../../../utils/tag-url'
 import BaseLayout from '../../../../layouts/BaseLayout.astro'
 import Pagination from '../../../../components/blog/Pagination.astro'
 import TagFilter from '../../../../components/blog/TagFilter.astro'
@@ -25,7 +26,7 @@ export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
 
   // Create pages for each tag
   return allTags.flatMap((tag) => {
-    const tagSlug = tag.toLowerCase().replace(/\s+/g, '-')
+    const tagSlug = getTagSlug(tag)
     const filteredEntries = blogEntries.filter((entry) =>
       entry.data.tags.includes(tag)
     )

@@ -1,4 +1,6 @@
 ---
+import { getTagUrl } from '../../utils/tag-url'
+
 interface Props {
   allTags: string[]
   selectedTag?: string
@@ -20,7 +22,7 @@ const { allTags, selectedTag } = Astro.props
     {
       allTags.map((tag) => (
         <a
-          href={`/developers/blog/tag/${tag.toLowerCase().replace(/\s+/g, '-')}`}
+          href={getTagUrl(tag)}
           class:list={['tag-button', { active: selectedTag === tag }]}
           data-umami-event={`Blog tag filter - ${tag}`}
         >
@@ -58,6 +60,7 @@ const { allTags, selectedTag } = Astro.props
     font-size: var(--step--1);
     text-decoration: none;
     color: var(--color-text);
+    box-shadow: var(--box-shadow);
     transition:
       background-color 200ms ease-in-out,
       color 200ms ease-in-out,
