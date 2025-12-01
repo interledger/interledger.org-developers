@@ -77,7 +77,7 @@ export const ui: LanguageUi = {
     "nav.podcast": "Podcast",
     "nav.art": "Arte",
     "nav.community-forem": "Community Forem",
-    "nav.participate": "Participar",
+    "nav.participate": "Participa",
     "nav.get-involved": "Involúcrate",
     "nav.events": "Eventos",
     "nav.guidelines": "Guías",
