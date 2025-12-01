@@ -29,9 +29,9 @@ const lang = getLangFromUrl(Astro.url);
   <Search {...Astro.props} />
   <div class="sl-hidden md:sl-flex secondary-wrap">
     <SocialIcons {...Astro.props} />
-    <ThemeSelect {...Astro.props} />
+    <div class="theme-select-wrapper"><ThemeSelect {...Astro.props} /></div>
+    <LanguagePicker lang={lang} />
   </div>
-  <LanguagePicker lang={lang} />
 </div>
 
 <style>
@@ -99,10 +99,13 @@ const lang = getLangFromUrl(Astro.url);
 
   .secondary-wrap {
     align-items: center;
-    gap: var(--space-s);
   }
 
   :global(site-search > button[data-open-modal]) {
     width: auto;
+  }
+
+  .theme-select-wrapper {
+    padding-inline-start: var(--space-s);
   }
 </style>
