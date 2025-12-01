@@ -76,7 +76,7 @@ export const ui: LanguageUi = {
     "nav.tech-blog": "Blog Técnico",
     "nav.podcast": "Podcast",
     "nav.art": "Arte",
-    "nav.community-forem": "Foro de la Comunidad",
+    "nav.community-forem": "Community Forem",
     "nav.participate": "Participar",
     "nav.get-involved": "Involúcrate",
     "nav.events": "Eventos",
