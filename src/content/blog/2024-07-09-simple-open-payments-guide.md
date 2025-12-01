@@ -9,6 +9,7 @@ author_urls:
   - https://www.linkedin.com/in/sarah-jones-ba6bb6b9
 tags:
   - Open Payments
+  - Interledger Protocol
 ---
 
 ## The Current Digital Payments Landscape

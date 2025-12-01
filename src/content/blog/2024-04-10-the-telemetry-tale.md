@@ -8,8 +8,8 @@ authors:
 author_urls:
   - https://www.linkedin.com/in/sarah-jones-ba6bb6b9
 tags:
-  - Interledger
-  - Technical
+  - Interledger Protocol
+  - Updates
 ---
 
 ## Charting the Course

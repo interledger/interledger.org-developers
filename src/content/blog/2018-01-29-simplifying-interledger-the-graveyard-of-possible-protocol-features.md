@@ -9,8 +9,7 @@ author_urls:
   - https://www.linkedin.com/in/evanmarkschwartz/
 external_url: https://medium.com/interledger-blog/simplifying-interledger-the-graveyard-of-possible-protocol-features-b35bf67439be
 tags:
-  - Concepts
-  - Interledger
+  - Interledger Protocol
 ---
 
 As the development of the [Interledger Protocol](https://interledger.org/) (ILP) nears completion, I thought we should take a moment to remember some of the many core protocol features we’ve killed off along the way.

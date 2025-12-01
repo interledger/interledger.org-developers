@@ -9,8 +9,7 @@ author_urls:
   - https://www.linkedin.com/in/evanmarkschwartz/
 external_url: https://medium.com/xpring/interledger-how-to-interconnect-all-blockchains-and-value-networks-74f432e64543
 tags:
-  - Interledger
-  - Technical
+  - Interledger Protocol
 ---
 
 *By* [_Evan Schwartz_](https://www.linkedin.com/in/evanmarkschwartz/) *and* [_Vanessa Pestritto_](https://www.linkedin.com/in/vanessaalexandra/)
