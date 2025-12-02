@@ -29,8 +29,8 @@ export async function getStaticPaths({ paginate }: any) {
 
 const { page } = Astro.props;
 const { lang } = Astro.params;
-const t = useTranslations(lang as string);
-const translatePath = useTranslatedPath(lang as string, lang as string);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang, lang);
 ---
 <BaseLayout title={t("nav.tech-blog")} description={t("nav.tech-blog-description")} ogImageUrl={new URL('/developers/img/blog/og-image.png', Astro.site).href}>
 	<main>
