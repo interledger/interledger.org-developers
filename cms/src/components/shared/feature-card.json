@@ -1,0 +1,34 @@
+{
+  "collectionName": "components_shared_feature_cards",
+  "info": {
+    "displayName": "Feature Card",
+    "description": "A card component with title, description, icon and optional link"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "icon": {
+      "type": "enumeration",
+      "enum": ["open-payments", "rafiki", "interledger", "custom"],
+      "default": "interledger"
+    },
+    "linkUrl": {
+      "type": "string"
+    },
+    "linkLabel": {
+      "type": "string"
+    },
+    "isExternal": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}
+

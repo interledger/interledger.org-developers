@@ -5,40 +5,137 @@ import InterledgerIcon from '../components/logos/InterledgerIcon.astro'
 import OpenPaymentsIcon from '../components/logos/OpenPaymentsIcon.astro'
 import RafikiIcon from '../components/logos/RafikiIcon.astro'
 import BaseLayout from '../layouts/BaseLayout.astro'
+
+// Strapi API configuration
+const STRAPI_URL = import.meta.env.STRAPI_URL || 'http://localhost:1337';
+
+// Fetch content from Strapi with fallback
+let cmsContent = null;
+try {
+  const response = await fetch(`${STRAPI_URL}/api/developers-portal?populate=*`);
+  if (response.ok) {
+    const data = await response.json();
+    cmsContent = data.data;
+  }
+} catch (error) {
+  console.warn('Could not fetch CMS content, using defaults:', error);
+}
+
+// Default/fallback content
+const defaults = {
+  heroHeading: 'Interledger Developers Portal',
+  heroText: 'Help shape the future of interoperable payments and enable seamless exchange of value across payment networks.',
+  heroImageAlt: 'Illustration of developers working at a table',
+  ctaPrimaryLabel: 'Get involved',
+  ctaPrimaryUrl: '/developers/get-involved',
+  ctaSecondaryLabel: 'Contribute on Github',
+  ctaSecondaryUrl: 'https://github.com/interledger',
+  introText: 'We welcome contributions to our open-source repositories on GitHub. If you find them valuable, please give us a star. Your support makes a difference!',
+  seoTitle: 'Developers',
+};
+
+// Use CMS content if available, otherwise use defaults
+const content = {
+  heroHeading: cmsContent?.heroHeading || defaults.heroHeading,
+  heroText: cmsContent?.heroText || defaults.heroText,
+  heroImageAlt: cmsContent?.heroImageAlt || defaults.heroImageAlt,
+  ctaPrimaryLabel: cmsContent?.ctaPrimaryLabel || defaults.ctaPrimaryLabel,
+  ctaPrimaryUrl: cmsContent?.ctaPrimaryUrl || defaults.ctaPrimaryUrl,
+  ctaSecondaryLabel: cmsContent?.ctaSecondaryLabel || defaults.ctaSecondaryLabel,
+  ctaSecondaryUrl: cmsContent?.ctaSecondaryUrl || defaults.ctaSecondaryUrl,
+  introText: cmsContent?.introText || defaults.introText,
+  seoTitle: cmsContent?.seoTitle || defaults.seoTitle,
+  cards: cmsContent?.cards || null,
+};
+
+// Helper to get icon component based on icon type
+const iconMap: Record<string, any> = {
+  'open-payments': OpenPaymentsIcon,
+  'rafiki': RafikiIcon,
+  'interledger': InterledgerIcon,
+};
+
+// Default cards if CMS doesn't have any
+const defaultCards = [
+  {
+    title: 'Open Payments Repo',
+    description: 'Open Payments is an open API standard that can be implemented by account servicing entities to facilitate interoperability in the setup and completion of payments for different use cases.',
+    icon: 'open-payments',
+    linkUrl: 'https://github.com/interledger/open-payments',
+    isExternal: true,
+  },
+  {
+    title: 'Rafiki Repo',
+    description: 'Rafiki is open source software that provides an efficient solution for an Account Servicing Entity to enable Interledger functionality on its users\' accounts.',
+    icon: 'rafiki',
+    linkUrl: 'https://github.com/interledger/rafiki',
+    isExternal: true,
+  },
+  {
+    title: 'Specifications Repo',
+    description: 'The Interledger Protocol (ILP) is an open, neutral protocol for transferring money based on TCP/IP, designed for sending packets of money across different accounting ledgers.',
+    icon: 'interledger',
+    linkUrl: 'https://github.com/interledger/rfcs',
+    isExternal: true,
+  },
+  {
+    title: 'Test Network Repo',
+    description: 'The Test Network (Testnet) is an open Interledger network working with test money designed for account servicing entities to test their Interledger integration.',
+    icon: 'interledger',
+    linkUrl: 'https://github.com/interledger/testnet',
+    isExternal: true,
+  },
+  {
+    title: 'Hacktoberfest',
+    description: 'Join us this October to collaborate on our open source projects.',
+    icon: 'interledger',
+    linkUrl: '/hacktoberfest',
+    isExternal: false,
+  },
+  {
+    title: 'Engineering Blog',
+    description: 'Our team shares their thoughts and experiences on Interledger and the work that we are doing.',
+    icon: null,
+    linkUrl: '/developers/blog',
+    linkLabel: 'Read our blog',
+    isExternal: false,
+  },
+];
+
+const cards = content.cards || defaultCards;
 ---
 
-<BaseLayout title="Developers">
+<BaseLayout title={content.seoTitle}>
   <main>
     <section class="hero">
       <div class="content-wrapper">
         <div class="text-wrapper">
           <h1 class="hero__heading heading--2">
-            Interledger Developers Portal
+            {content.heroHeading}
           </h1>
           <p class="hero__txt">
-            Help shape the future of interoperable payments and enable seamless
-            exchange of value across payment networks.
+            {content.heroText}
           </p>
           <div class="hero__cta">
             <a
               class="btn hero__btn"
-              href="/developers/get-involved"
+              href={content.ctaPrimaryUrl}
               data-umami-event="Devs page link - Get involved"
-              ><span>Get involved</span> <LinkArrow /></a
+              ><span>{content.ctaPrimaryLabel}</span> <LinkArrow /></a
             >
             <a
-              href="https://github.com/interledger"
-              target="_blank"
-              rel="noopener noreferrer"
-              ><span>Contribute on Github</span>
-              <ExternalIcon class="external" />
+              href={content.ctaSecondaryUrl}
+              target={content.ctaSecondaryUrl.startsWith('http') ? '_blank' : undefined}
+              rel={content.ctaSecondaryUrl.startsWith('http') ? 'noopener noreferrer' : undefined}
+              ><span>{content.ctaSecondaryLabel}</span>
+              {content.ctaSecondaryUrl.startsWith('http') && <ExternalIcon class="external" />}
             </a>
           </div>
         </div>
         <div class="image-wrapper">
           <img
             src="/developers/img/devs.svg"
-            alt="Illustration of developers working at a table"
+            alt={content.heroImageAlt}
             class="hero__img"
           />
         </div>
@@ -48,120 +145,51 @@ import BaseLayout from '../layouts/BaseLayout.astro'
     <section>
       <div class="content-wrapper">
         <p class="heading--5">
-          We welcome contributions to our open-source repositories on GitHub. If
-          you find them valuable, please give us a star. Your support makes a
-          difference!
+          {content.introText}
         </p>
       </div>
     </section>
 
     <section>
       <div class="content-wrapper cards">
-        <div class="card">
-          <h2 class="heading--6">
-            <a
-              href="https://github.com/interledger/open-payments"
-              data-umami-event="Devs page link - GitHub"
-              target="_blank"
-              rel="noopener noreferrer"
-              ><OpenPaymentsIcon />
-              Open Payments Repo
-              <ExternalIcon class="external" />
-            </a>
-          </h2>
-          <p>
-            Open Payments is an open API standard that can be implemented by
-            account servicing entities to facilitate interoperability in the
-            setup and completion of payments for different use cases.
-          </p>
-        </div>
-
-        <div class="card">
-          <h2 class="heading--6">
-            <a
-              href="https://github.com/interledger/rafiki"
-              data-umami-event="Devs page link - Rafiki"
-              target="_blank"
-              rel="noopener noreferrer"
-              ><RafikiIcon />
-              Rafiki Repo
-              <ExternalIcon class="external" />
-            </a>
-          </h2>
-          <p>
-            Rafiki is open source software that provides an efficient solution
-            for an Account Servicing Entity to enable Interledger functionality
-            on its users' accounts.
-          </p>
-        </div>
-
-        <div class="card">
-          <h2 class="heading--6">
-            <a
-              href="https://github.com/interledger/rfcs"
-              data-umami-event="Devs page link - RFCs"
-              target="_blank"
-              rel="noopener noreferrer"
-              ><InterledgerIcon />
-              Specifications Repo
-              <ExternalIcon class="external" />
-            </a>
-          </h2>
-          <p>
-            The <a
-              href="/developers/rfcs/interledger-protocol/"
-              data-umami-event="Devs page link - Read specs"
-              >Interledger Protocol (ILP)</a
-            > is an open, neutral protocol for transferring money based on TCP/IP,
-            designed for sending packets of money across different accounting ledgers.
-          </p>
-        </div>
-
-        <div class="card">
-          <h2 class="heading--6">
-            <a
-              href="https://github.com/interledger/testnet"
-              data-umami-event="Devs page link - Testnet"
-              target="_blank"
-              rel="noopener noreferrer"
-              ><InterledgerIcon />
-              Test Network Repo
-              <ExternalIcon class="external" />
-            </a>
-          </h2>
-          <p>
-            The Test Network (Testnet) is an open Interledger network working
-            with test money designed for account servicing entities to test
-            their Interledger integration.
-          </p>
-        </div>
-
-        <div class="card">
-          <h2 class="heading--6">
-            <a
-              href="/hacktoberfest"
-              data-umami-event="Devs page link - Hacktoberfest"
-              ><InterledgerIcon /> Hacktoberfest</a
-            >
-          </h2>
-          <p>
-            Join us this October to collaborate on our open source projects.
-          </p>
-        </div>
-
-        <div class="card">
-          <h2 class="heading--6">Engineering Blog</h2>
-          <p>
-            Our team shares their thoughts and experiences on Interledger and
-            the work that we are doing.
-          </p>
-          <a
-            class="btn card__btn"
-            href="/developers/blog"
-            data-umami-event="Devs page link - Blog"
-            >Read our blog<LinkArrow /></a
-          >
-        </div>
+        {cards.map((card: any) => {
+          const IconComponent = card.icon ? iconMap[card.icon] : null;
+          const hasButtonLink = card.linkLabel && card.linkUrl;
+          const hasTitleLink = card.linkUrl && !card.linkLabel;
+          
+          return (
+            <div class="card">
+              <h2 class="heading--6">
+                {hasTitleLink ? (
+                  <a
+                    href={card.linkUrl}
+                    target={card.isExternal ? '_blank' : undefined}
+                    rel={card.isExternal ? 'noopener noreferrer' : undefined}
+                  >
+                    {IconComponent && <IconComponent />}
+                    {card.title}
+                    {card.isExternal && <ExternalIcon class="external" />}
+                  </a>
+                ) : (
+                  <>
+                    {IconComponent && <IconComponent />}
+                    {card.title}
+                  </>
+                )}
+              </h2>
+              <p>{card.description}</p>
+              {hasButtonLink && (
+                <a
+                  class="btn card__btn"
+                  href={card.linkUrl}
+                  data-umami-event={`Devs page link - ${card.title}`}
+                >
+                  {card.linkLabel}<LinkArrow />
+                </a>
+              )}
+            </div>
+          );
+        })}
       </div>
     </section>
   </main>

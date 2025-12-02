@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_shared_benefit_items",
+  "info": {
+    "displayName": "Benefit Item",
+    "description": "A simple text item for lists of benefits or features"
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "text",
+      "required": true
+    }
+  }
+}
+
