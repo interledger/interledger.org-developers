@@ -4,7 +4,7 @@ import { createExcerpt } from '../../utils/create-excerpt';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Pagination from '../../components/blog/Pagination.astro';
 import { getCollection } from 'astro:content';
-import { useTranslations } from '../../i18n/utils';
+import { useTranslations, getLangFromUrl} from '../../i18n/utils';
 
 type Props = {
   page: Page<any>;
@@ -17,9 +17,10 @@ export async function getStaticPaths({ paginate }: any) {
   return paginate(blogEntries, { pageSize: 10 });
 }
 
-const { lang } = Astro.params;
+const lang = getLangFromUrl(Astro.url);
 const { page } = Astro.props;
-const t = useTranslations(lang as string);
+const t = useTranslations(lang);
+
 ---
 <BaseLayout title={t("nav.tech-blog")} description={t("nav.tech-blog-description")} ogImageUrl={new URL('/developers/img/blog/og-image.png', Astro.site).href}>
 	<main>
