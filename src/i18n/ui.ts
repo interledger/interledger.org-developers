@@ -50,7 +50,7 @@ export const ui: LanguageUi = {
     "footer.mailing-list": "Join our mailing list",
     "footer.subscribe": "Subscribe",
     "footer.connect": "Connect with us",
-    "footer.copyright": "© 2020–2025, Interledger Foundation. All rights reserved.",
+    "footer.copyright": "All rights reserved.",
     "footer.terms": "Terms of Service",
     "footer.privacy": "Privacy Policy",
     "footer.contact": "Contact Us",
