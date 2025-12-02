@@ -87,7 +87,7 @@ export const ui: LanguageUi = {
     "footer.mailing-list": "Únete a nuestra lista de correo",
     "footer.subscribe": "Suscribirse",
     "footer.connect": "Conéctate con nosotros",
-    "footer.copyright": "© 2020–2025, Interledger Foundation. Todos los derechos reservados.",
+    "footer.copyright": "Todos los derechos reservados.",
     "footer.terms": "Condiciones del servicio",
     "footer.privacy": "Política de privacidad",
     "footer.contact": "Contáctanos"
