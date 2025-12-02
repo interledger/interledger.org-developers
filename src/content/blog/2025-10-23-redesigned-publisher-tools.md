@@ -1,6 +1,6 @@
 ---
-title: "How the Redesigned Publisher Tools Work: A Technical Guide"
-description: "A technical exploration of the architecture details behind the redesigned Publisher Tools"
+title: 'How the Redesigned Publisher Tools Work: A Technical Guide'
+description: 'A technical exploration of the architecture details behind the redesigned Publisher Tools'
 date: 2025-10-23
 slug: redesigned-publisher-tools-technical-guide
 authors:
@@ -8,11 +8,9 @@ authors:
 author_urls:
   - https://darianm.xyz/
 tags:
-  - Interledger
+  - Interledger Protocol
   - Web Monetization
-  - Publisher Tools
-  - Technical
-  - Architecture
+  - Open Payments
 ---
 
 If you haven’t heard of Publisher Tools yet, you’re missing out on a simple way to monetize your content! Don’t worry, you can catch up on the details [here](https://webmonetization.org/publishers/). Today, we’ll focus on the redesign.
@@ -72,17 +70,17 @@ All our Interactive Tools are built as custom Web component elements within Shad
 With the configuration fetched, the script creates and renders the web component:
 
 ```typescript
-import { PaymentWidget } from "@tools/components";
-customElements.define("wm-payment-widget", PaymentWidget);
+import { PaymentWidget } from '@tools/components'
+customElements.define('wm-payment-widget', PaymentWidget)
 
-fetchConfig(API_URL, "widget", params).then((config) => {
-  const element = document.createElement("wm-payment-widget");
+fetchConfig(API_URL, 'widget', params).then((config) => {
+  const element = document.createElement('wm-payment-widget')
   element.config = {
     receiverAddress: walletAddress,
     ...config
-  };
-  document.body.appendChild(element);
-});
+  }
+  document.body.appendChild(element)
+})
 ```
 
 The `<wm-payment-widget>` element is one of our interactive tools defined in the `components` module. The script creates an instance, passes the configuration as properties, and appends it to the DOM, using Shadow DOM for style encapsulation.
@@ -91,10 +89,10 @@ Lastly, it also adds a monetization `<link>` tag to the `<head>`, using the wall
 
 ```typescript
 function appendMonetizationLink(walletAddressUrl: string) {
-  const monetizationElement = document.createElement("link");
-  monetizationElement.rel = "monetization";
-  monetizationElement.href = walletAddressUrl;
-  document.head.appendChild(monetizationElement);
+  const monetizationElement = document.createElement('link')
+  monetizationElement.rel = 'monetization'
+  monetizationElement.href = walletAddressUrl
+  document.head.appendChild(monetizationElement)
 }
 ```
 
@@ -119,19 +117,19 @@ Beyond the new architecture, the Publisher Tools also handle payments using [Ope
 ```typescript
 // Generate a quote
 await fetch(`${apiUrl}/payment/quote`, {
-  method: "POST",
+  method: 'POST',
   body: JSON.stringify({
     senderWalletAddress,
     receiverWalletAddress,
     amount
   })
-});
+})
 
 // Initialize grant authorization
-await fetch(`${apiUrl}/payment/grant`, { method: "POST", body: "..." });
+await fetch(`${apiUrl}/payment/grant`, { method: 'POST', body: '...' })
 
 // Finalize payment after authorization
-await fetch(`${apiUrl}/payment/finalize`, { method: "POST", body: "..." });
+await fetch(`${apiUrl}/payment/finalize`, { method: 'POST', body: '...' })
 ```
 
 The API manages all interactions with the Open Payments SDK handling grant authorization, creating outgoing payments, and coordinating with the component to complete the full flow for the payment.
@@ -157,12 +155,5 @@ The redesigned Publisher Tools establish a foundation for future enhancements:
 ## Try It Yourself
 
 The redesigned **Publisher Tools are live** at [webmonetization.org/tools](https://webmonetization.org/tools).\
-Check out the open source at [github.com/interledger/publisher-tools](https://github.com/interledger/publisher-tools).
-
-## Resources
-
-**Web Monetization Documentation:** [webmonetization.org/docs](https://webmonetization.org/docs/)
-
----
-
-_Questions or feedback about the technical implementation? Open an issue or discussion on [GitHub](https://github.com/interledger/web-monetization-tools) or connect with the Interledger developer community._
+Check out the open source at [GitHub repository](https://github.com/interledger/publisher-tools).\
+_Questions or feedback about the technical implementation? Open an issue or discussion on [GitHub](https://github.com/interledger/publisher-tools) or connect with the Interledger developer community._
