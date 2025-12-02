@@ -4,6 +4,7 @@ import { createExcerpt } from '../../utils/create-excerpt';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Pagination from '../../components/blog/Pagination.astro';
 import { getCollection } from 'astro:content';
+import { useTranslations, getLangFromUrl} from '../../i18n/utils';
 
 type Props = {
   page: Page<any>;
@@ -16,9 +17,12 @@ export async function getStaticPaths({ paginate }: any) {
   return paginate(blogEntries, { pageSize: 10 });
 }
 
+const lang = getLangFromUrl(Astro.url);
 const { page } = Astro.props;
+const t = useTranslations(lang);
+
 ---
-<BaseLayout title="Engineering Blog" description="Hear stories and experiences from the team who is working on making Interledger, the interoperable global payments network, a reality." ogImageUrl={new URL('/developers/img/blog/og-image.png', Astro.site).href}>
+<BaseLayout title={t("nav.tech-blog")} description={t("nav.tech-blog-description")} ogImageUrl={new URL('/developers/img/blog/og-image.png', Astro.site).href}>
 	<main>
 		<div class="content-wrapper">
 			<ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
