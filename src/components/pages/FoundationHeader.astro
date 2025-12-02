@@ -112,7 +112,9 @@ const translatePath = useTranslatedPath(lang, lang);
       </div>
     </button>
   </nav>
-  <LanguagePicker lang={lang} />
+  <div class="foundation-language-picker">
+    <LanguagePicker lang={lang} />
+  </div>
 </header>
 
 <style>
@@ -297,7 +299,15 @@ a.switch-link:hover {
   }
 }
 
+.foundation-language-picker {
+  display: none;
+}
+
 @media screen and (min-width: 1160px) {
+  .foundation-language-picker {
+    display: block;
+  }
+
   .site-header {
     display: flex;
     align-items: center;
