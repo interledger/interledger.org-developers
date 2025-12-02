@@ -1,0 +1,68 @@
+{
+  "collectionName": "blog_posts",
+  "info": {
+    "singularName": "blog-post",
+    "pluralName": "blog-posts",
+    "displayName": "Blog post",
+    "description": "Long-form articles surfaced on the developer portal"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "content-type-builder": {
+      "visible": true
+    }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "body": {
+      "type": "richtext",
+      "required": true
+    },
+    "language": {
+      "type": "enumeration",
+      "enum": ["en", "es"],
+      "default": "en"
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "heroImageAlt": {
+      "type": "string"
+    },
+    "authors": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.author-link",
+      "required": true,
+      "min": 1
+    },
+    "tags": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::tag.tag",
+      "inversedBy": "posts"
+    },
+    "callToActionUrl": {
+      "type": "string"
+    },
+    "callToActionLabel": {
+      "type": "string"
+    }
+  }
+}
+

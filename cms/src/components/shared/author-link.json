@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_shared_author_links",
+  "info": {
+    "displayName": "Author link",
+    "description": "Name and optional profile URL for blog authors"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "url": {
+      "type": "string"
+    }
+  }
+}
+
