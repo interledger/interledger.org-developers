@@ -1,9 +1,9 @@
 ---
 import { getCollection } from 'astro:content'
 import BaseLayout from '../../layouts/BaseLayout.astro'
-import { createExcerpt } from '../../utils/create-excerpt'
+import BlogIndex from '../../components/blog/BlogIndex.astro'
 
-// Only return posts with `draft: true` in the frontmatter
+// Only return posts with `lang: 'es'` in the frontmatter
 const esEntries = await getCollection('blog', ({ data }) => {
   return data.lang === 'es'
 })
@@ -14,190 +14,20 @@ const esEntries = await getCollection('blog', ({ data }) => {
   description="Hear stories and experiences from the team who is working on making Interledger, the interoperable global payments network, a reality."
   ogImageUrl={new URL('/developers/img/blog/og-image.png', Astro.site).href}
 >
-  <main>
-    <div class="content-wrapper">
-      <ol
-        class="breadcrumbs"
-        itemscope
-        itemtype="https://schema.org/BreadcrumbList"
-      >
-        <li
-          itemprop="itemListElement"
-          itemscope
-          itemtype="https://schema.org/ListItem"
-        >
-          <a
-            itemprop="item"
-            href="/developers"
-            data-umami-event="Devs breadcrumb - Home"
-          >
-            <span itemprop="name">Developers Portal</span></a
-          >
-          <meta itemprop="position" content="1" />
-        </li>
-        <li
-          itemprop="itemListElement"
-          itemscope
-          itemtype="https://schema.org/ListItem"
-        >
-          <a
-            itemprop="item"
-            href="/developers/blog"
-            data-umami-event="Devs breadcrumb - Blog"
-          >
-            <span itemprop="name">Engineering Blog</span></a
-          >
-          <meta itemprop="position" content="2" />
-        </li>
-      </ol>
-      <header>
-        <h1>Blog de Ingeniería</h1>
-        <a class="cta__blog" href="/blog">
-          <p>Check out Foundation updates</p>
-          <img
-            src="/developers/img/ernie-purple.svg"
-            alt="Ernie holding an envelope"
-            aria-hidden="true"
-          />
-        </a>
-      </header>
-      <ol class="postlist">
-        {
-          esEntries.map((blogPostEntry) => {
-            const excerpt = `${createExcerpt(blogPostEntry.body).substring(0, 300)}...`
-            return (
-              <li class="postlist-item">
-                <time
-                  class="postlist-date"
-                  datetime={blogPostEntry.data.date.toISOString()}
-                >
-                  {blogPostEntry.data.date.toDateString()}
-                </time>
-                <a
-                  href={`/developers/blog/${blogPostEntry.id}`}
-                  class="postlist-link heading--6"
-                >
-                  {blogPostEntry.data.title}
-                </a>
-                <p>
-                  {blogPostEntry.data.description
-                    ? blogPostEntry.data.description
-                    : excerpt}
-                </p>
-              </li>
-            )
-          })
-        }
-      </ol>
-    </div>
-  </main>
+  <BlogIndex
+    title="Blog de Ingeniería"
+    posts={esEntries}
+    breadcrumbs={[
+      {
+        name: 'Developers Portal',
+        href: '/developers',
+        umamiEvent: 'Devs breadcrumb - Home'
+      },
+      {
+        name: 'Engineering Blog',
+        href: '/developers/blog',
+        umamiEvent: 'Devs breadcrumb - Blog'
+      }
+    ]}
+  />
 </BaseLayout>
-
-<style>
-  main {
-    padding-block-start: var(--space-m);
-    padding-block-end: var(--space-xl);
-  }
-
-  .breadcrumbs {
-    list-style: none;
-    display: flex;
-    padding-inline-start: 0;
-    font-size: var(--step--1);
-    font-weight: 700;
-    padding-block-start: var(--space-l);
-  }
-
-  .breadcrumbs a {
-    color: var(--color-primary);
-    text-decoration: none;
-  }
-
-  .breadcrumbs li:not(:first-child)::before {
-    content: '>';
-    display: inline-flex;
-    margin-inline-start: var(--space-3xs);
-  }
-
-  ol {
-    padding: 0;
-  }
-
-  header {
-    padding-block-start: var(--space-s);
-    padding-block-end: var(--space-m);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: var(--space-xs);
-  }
-
-  @media screen and (max-width: 730px) {
-    header {
-      flex-direction: column;
-      align-items: start;
-    }
-  }
-
-  .cta__blog {
-    display: flex;
-    align-items: center;
-    gap: var(--space-s);
-    padding: var(--space-3xs) var(--space-2xs);
-    background-color: white;
-    box-shadow: var(--box-shadow);
-    border-radius: var(--border-radius);
-    font-size: var(--step--1);
-    background-image: var(--color-white);
-    text-decoration: none;
-  }
-
-  .cta__blog p {
-    flex: none;
-    text-decoration-color: transparent;
-    text-decoration-line: underline;
-    transition: text-decoration-color 300ms ease-in-out;
-  }
-
-  .cta__blog:hover {
-    color: inherit;
-  }
-
-  .cta__blog:hover p {
-    color: currentColor;
-    text-decoration-color: currentColor;
-    text-decoration-line: underline;
-  }
-
-  .cta__blog img {
-    width: 4em;
-  }
-
-  .post-metadata,
-  .links-nextprev,
-  .postlist {
-    list-style: none;
-  }
-
-  .postlist-item {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: var(--space-s);
-  }
-
-  .postlist-date {
-    font-size: var(--step--1);
-  }
-
-  .postlist-link {
-    font-weight: 600;
-    text-decoration-color: transparent;
-    transition:
-      text-decoration 300ms ease-in-out,
-      color 300ms ease-in-out;
-  }
-
-  .postlist-link:hover {
-    text-decoration-color: currentColor;
-  }
-</style>

@@ -6,7 +6,7 @@ Source code for the /developer-tools portion of [Interledger.org](https://interl
 
 Inside this project, you'll see the following folders and files:
 
-```
+```text
 .
 ├── public/
 ├── src/
@@ -97,6 +97,23 @@ If you're unsure how to structure your writing, you can use this as a guide.
 - Note: A call to action (CTA) will be included automatically at the bottom of every post.
 
 Ideal Word Count: Between 1,000 and 2,500 words, with links to relevant documents/pages for a deeper understanding.
+
+### Blog metadata and tags
+
+Each blog post includes frontmatter at the top of the file (title, description, date, authors, etc.), including a `tags` field used for filtering on the blog index.
+
+Please **only use the existing, approved tags** unless you have aligned with the tech + comms team on adding a new one. This helps keep the tag filter focused and avoids fragmentation.
+
+**Current tags:**
+
+- Interledger Protocol
+- Open Payments
+- Web Monetization
+- Rafiki
+- Updates
+- Releases
+
+If you believe your post needs a new tag, propose it in your PR description or in the `#tech-team` Slack channel so we can decide whether to add it and update this list.
 
 ### Getting Started
 

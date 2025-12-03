@@ -1,0 +1,262 @@
+---
+import { createExcerpt } from '../../utils/create-excerpt'
+import TagFilter from './TagFilter.astro'
+import Pagination from './Pagination.astro'
+import type { CollectionEntry } from 'astro:content'
+
+interface BreadcrumbItem {
+  name: string
+  href: string
+  umamiEvent: string
+}
+
+interface Props {
+  title: string
+  posts: CollectionEntry<'blog'>[]
+  breadcrumbs?: BreadcrumbItem[]
+  allTags?: string[]
+  selectedTag?: string
+  showTagFilter?: boolean
+  showPagination?: boolean
+  paginationProps?: {
+    length: number
+    currentPage: number
+    firstUrl: string | undefined
+    prevUrl: string | undefined
+    nextUrl: string | undefined
+    lastUrl: string | undefined
+  }
+}
+
+const {
+  title,
+  posts,
+  breadcrumbs = [],
+  allTags = [],
+  selectedTag,
+  showTagFilter = false,
+  showPagination = false,
+  paginationProps
+} = Astro.props
+---
+
+<main>
+  <div class="content-wrapper">
+    {
+      breadcrumbs.length > 0 && (
+        <ol
+          class="breadcrumbs"
+          itemscope
+          itemtype="https://schema.org/BreadcrumbList"
+        >
+          {breadcrumbs.map((crumb, index) => (
+            <li
+              itemprop="itemListElement"
+              itemscope
+              itemtype="https://schema.org/ListItem"
+            >
+              <a
+                itemprop="item"
+                href={crumb.href}
+                data-umami-event={crumb.umamiEvent}
+              >
+                <span itemprop="name">{crumb.name}</span>
+              </a>
+              <meta itemprop="position" content={String(index + 1)} />
+            </li>
+          ))}
+        </ol>
+      )
+    }
+    <header>
+      <h1>{title}</h1>
+      <a class="cta__blog" href="/blog">
+        <p>Check out Foundation updates</p>
+        <img
+          src="/developers/img/ernie-purple.svg"
+          alt="Ernie holding an envelope"
+          aria-hidden="true"
+        />
+      </a>
+    </header>
+    {showTagFilter && <TagFilter allTags={allTags} selectedTag={selectedTag} />}
+    <ol class="postlist">
+      {
+        posts.map((blogPostEntry) => {
+          const excerpt = `${createExcerpt(blogPostEntry.body).substring(0, 300)}...`
+          return (
+            <li class="postlist-item">
+              <time
+                class="postlist-date"
+                datetime={blogPostEntry.data.date.toISOString()}
+              >
+                {blogPostEntry.data.date.toDateString()}
+              </time>
+              {blogPostEntry.data.lang ? (
+                <div class="postlist-es">
+                  <a
+                    href={`/developers/blog/${blogPostEntry.id}`}
+                    class="postlist-link heading--6"
+                  >
+                    {blogPostEntry.data.title}
+                  </a>
+                  <a class="postlist-lang" href="/developers/blog/es">
+                    ES
+                  </a>
+                </div>
+              ) : (
+                <a
+                  href={`/developers/blog/${blogPostEntry.id}`}
+                  class="postlist-link heading--6"
+                >
+                  {blogPostEntry.data.title}
+                </a>
+              )}
+              <p>
+                {blogPostEntry.data.description
+                  ? blogPostEntry.data.description
+                  : excerpt}
+              </p>
+            </li>
+          )
+        })
+      }
+    </ol>
+    {
+      showPagination && paginationProps && (
+        <Pagination
+          length={paginationProps.length}
+          currentPage={paginationProps.currentPage}
+          firstUrl={paginationProps.firstUrl}
+          prevUrl={paginationProps.prevUrl}
+          nextUrl={paginationProps.nextUrl}
+          lastUrl={paginationProps.lastUrl}
+        />
+      )
+    }
+  </div>
+</main>
+
+<style>
+  main {
+    padding-block-start: var(--space-m);
+    padding-block-end: var(--space-xl);
+  }
+
+  .breadcrumbs {
+    list-style: none;
+    display: flex;
+    padding-inline-start: 0;
+    font-size: var(--step--1);
+    font-weight: 700;
+    padding-block-start: var(--space-l);
+  }
+
+  .breadcrumbs li:not(:first-child)::before {
+    content: '>';
+    display: inline-flex;
+    margin-inline-start: var(--space-3xs);
+  }
+
+  .breadcrumbs a {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  ol {
+    padding: 0;
+  }
+
+  header {
+    padding-block-start: var(--space-s);
+    padding-block-end: var(--space-m);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+
+  @media screen and (max-width: 730px) {
+    header {
+      flex-direction: column;
+      align-items: start;
+    }
+  }
+
+  .cta__blog {
+    display: flex;
+    align-items: center;
+    gap: var(--space-s);
+    padding: var(--space-3xs) var(--space-2xs);
+    background-color: white;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+    font-size: var(--step--1);
+    background-image: var(--color-white);
+    text-decoration: none;
+  }
+
+  .cta__blog p {
+    flex: none;
+    text-decoration-color: transparent;
+    text-decoration-line: underline;
+    transition: text-decoration-color 300ms ease-in-out;
+  }
+
+  .cta__blog:hover {
+    color: inherit;
+  }
+
+  .cta__blog:hover p {
+    color: currentColor;
+    text-decoration-color: currentColor;
+  }
+
+  .cta__blog img {
+    width: 4em;
+  }
+
+  .post-metadata,
+  .links-nextprev,
+  .postlist {
+    list-style: none;
+  }
+
+  .postlist-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--space-s);
+  }
+
+  .postlist-date {
+    font-size: var(--step--1);
+  }
+
+  .postlist-link {
+    font-weight: 600;
+    text-decoration-color: transparent;
+    transition:
+      text-decoration 300ms ease-in-out,
+      color 300ms ease-in-out;
+  }
+
+  .postlist-link:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .postlist-es {
+    display: flex;
+    align-items: start;
+    gap: var(--space-2xs);
+  }
+
+  .postlist-lang {
+    border: 1.5px solid;
+    padding-inline: 4px;
+    border-radius: var(--border-radius);
+    font-size: var(--step--1);
+    background-color: white;
+    margin-block-start: var(--space-3xs);
+    text-decoration: none;
+  }
+</style>
