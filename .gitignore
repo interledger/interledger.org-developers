@@ -20,6 +20,13 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 
+# Strapi admin
+cms/.cache/
+cms/.tmp/
+cms/build/
+cms/database/*.db
+cms/public/uploads/
+
 # lock files
 bun.lock
 bun.lockb

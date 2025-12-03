@@ -1,0 +1,58 @@
+{
+  "kind": "collectionType",
+  "collectionName": "press_items",
+  "info": {
+    "singularName": "press",
+    "pluralName": "presses",
+    "displayName": "Press Item",
+    "description": "Announcements and media coverage"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "summary": {
+      "type": "text",
+      "required": true
+    },
+    "url": {
+      "type": "string",
+      "required": true
+    },
+    "source": {
+      "type": "string",
+      "required": true
+    },
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "tags": {
+      "type": "json",
+      "default": []
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "body": {
+      "type": "richtext"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

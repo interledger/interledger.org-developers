@@ -3,6 +3,21 @@ import { docsLoader, i18nLoader } from '@astrojs/starlight/loaders'
 import { docsSchema, i18nSchema } from '@astrojs/starlight/schema'
 import { glob } from 'astro/loaders'
 
+const pressCollection = defineCollection({
+  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/press' }),
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+    summary: z.string(),
+    url: z.string().url(),
+    source: z.string(),
+    date: z.date(),
+    tags: z.array(z.string()).optional(),
+    image: z.string().optional(),
+    featured: z.boolean().optional()
+  })
+})
+
 const blogCollection = defineCollection({
   loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/blog' }),
   schema: z.object({
@@ -21,5 +36,6 @@ const blogCollection = defineCollection({
 export const collections = {
   docs: defineCollection({ loader: docsLoader(), schema: docsSchema() }),
   i18n: defineCollection({ loader: i18nLoader(), schema: i18nSchema() }),
-  blog: blogCollection
+  blog: blogCollection,
+  press: pressCollection
 }

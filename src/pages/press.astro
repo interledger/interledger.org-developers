@@ -1,0 +1,444 @@
+---
+import { getCollection } from 'astro:content'
+import ExternalIcon from '../../public/img/icon-external.svg'
+import LinkArrow from '../../public/img/icon-link-arrow.svg'
+import BaseLayout from '../layouts/BaseLayout.astro'
+
+const pressItems = (await getCollection('press')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+)
+const featured = pressItems.filter((item) => item.data.featured)
+const highlight = featured.length ? featured : pressItems.slice(0, 2)
+
+const formatDate = (date: Date) =>
+  new Intl.DateTimeFormat('en', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  }).format(date)
+---
+
+<BaseLayout
+  title="Press"
+  description="News, announcements, and coverage from the Interledger ecosystem."
+>
+  <main>
+    <section class="hero">
+      <div class="content-wrapper hero__grid">
+        <div class="hero__text">
+          <p class="eyebrow">Press</p>
+          <h1 class="heading--2">Interledger in the news</h1>
+          <p class="lede">
+            Find the latest announcements, coverage, and resources for the
+            Interledger Foundation and the Open Payments ecosystem.
+          </p>
+          <div class="hero__actions">
+            <a class="btn hero__btn" href="mailto:press@interledger.org">
+              <span>Press contact</span>
+              <LinkArrow />
+            </a>
+            <a
+              class="btn hero__btn hero__btn--ghost"
+              href="/developers/documents/interledger.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>Download fact sheet</span>
+              <ExternalIcon class="external" />
+            </a>
+          </div>
+        </div>
+        <div class="hero__panel">
+          <div class="panel__section">
+            <p class="panel__eyebrow">Media resources</p>
+            <h2 class="heading--5">Need logos or guidance?</h2>
+            <p>
+              Request the brand kit and usage guidelines for events, articles,
+              and product launches.
+            </p>
+            <a
+              class="chip"
+              href="mailto:press@interledger.org?subject=Brand%20assets%20request"
+            >
+              <span>Request brand assets</span>
+              <LinkArrow />
+            </a>
+          </div>
+          <div class="panel__section">
+            <p class="panel__eyebrow">Fact sheet</p>
+            <p>
+              Download an overview of the Interledger Foundation, Open Payments,
+              and how to get involved.
+            </p>
+            <a
+              class="chip"
+              href="/developers/documents/interledger.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>Open PDF</span>
+              <ExternalIcon class="external" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="featured">
+      <div class="content-wrapper">
+        <div class="section-header">
+          <p class="eyebrow">Highlights</p>
+          <h2 class="heading--3">Featured coverage</h2>
+          <p class="section-copy">
+            A quick snapshot of the most recent or notable stories. Everything
+            else lives in the archive below.
+          </p>
+        </div>
+        {highlight.length ? (
+          <div class="card-grid">
+            {highlight.map((item) => (
+              <article class="press-card">
+                <div class="press-card__meta">
+                  <span class="press-card__source">{item.data.source}</span>
+                  <time datetime={item.data.date.toISOString()}>
+                    {formatDate(item.data.date)}
+                  </time>
+                </div>
+                <h3 class="heading--5">
+                  <a
+                    href={item.data.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-umami-event="Press link - Featured"
+                  >
+                    {item.data.title}
+                    <ExternalIcon class="external" />
+                  </a>
+                </h3>
+                <p>{item.data.summary}</p>
+                {item.data.tags && item.data.tags.length > 0 ? (
+                  <div class="tag-row">
+                    {item.data.tags.map((tag) => (
+                      <span class="tag">{tag}</span>
+                    ))}
+                  </div>
+                ) : null}
+              </article>
+            ))}
+          </div>
+        ) : (
+          <p class="empty-state">Press coverage will appear here when published.</p>
+        )}
+      </div>
+    </section>
+
+    <section class="archive">
+      <div class="content-wrapper">
+        <div class="section-header section-header--row">
+          <div>
+            <p class="eyebrow">Press releases &amp; coverage</p>
+            <h2 class="heading--4">Archive</h2>
+          </div>
+          <p class="section-copy">
+            Filterable via Strapi: publish updates to automatically create MDX
+            files that power this list.
+          </p>
+        </div>
+        <ol class="press-list">
+          {pressItems.length ? (
+            pressItems.map((item) => (
+              <li class="press-list__item">
+                <div class="press-list__meta">
+                  <span class="press-list__source">{item.data.source}</span>
+                  <time datetime={item.data.date.toISOString()}>
+                    {formatDate(item.data.date)}
+                  </time>
+                </div>
+                <div class="press-list__content">
+                  <a
+                    class="press-list__title heading--6"
+                    href={item.data.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-umami-event="Press link - Archive"
+                  >
+                    {item.data.title}
+                    <ExternalIcon class="external" />
+                  </a>
+                  <p>{item.data.summary}</p>
+                </div>
+              </li>
+            ))
+          ) : (
+            <li class="press-list__item">
+              <p class="empty-state">
+                No press releases yet. Publish in Strapi to generate MDX files.
+              </p>
+            </li>
+          )}
+        </ol>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  main {
+    padding-block-end: var(--space-xl);
+  }
+
+  section {
+    padding-block-start: var(--space-xl);
+  }
+
+  .hero {
+    background-image: linear-gradient(
+      135deg,
+      oklch(49% 0.091 196),
+      oklch(68% 0.072 210)
+    );
+    color: var(--color-white);
+    padding-block: var(--space-xl);
+  }
+
+  .hero__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-l);
+    align-items: center;
+  }
+
+  .hero__text h1 {
+    margin-block: var(--space-2xs);
+  }
+
+  .lede {
+    max-width: 36ch;
+    margin-bottom: var(--space-s);
+  }
+
+  .hero__actions {
+    display: flex;
+    gap: var(--space-s);
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding: var(--space-2xs) var(--space-s);
+    text-decoration: none;
+  }
+
+  .hero__btn {
+    background-color: var(--color-white);
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+
+  .hero__btn span {
+    text-decoration-line: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 4px;
+  }
+
+  .hero__btn:hover span {
+    text-decoration-color: currentColor;
+  }
+
+  .hero__btn svg {
+    width: 0.9em;
+  }
+
+  .hero__btn--ghost {
+    background-color: rgba(255, 255, 255, 0.12);
+    color: var(--color-white);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .hero__panel {
+    display: grid;
+    gap: var(--space-s);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius);
+    padding: var(--space-m);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(6px);
+    box-shadow: var(--box-shadow);
+  }
+
+  .panel__section {
+    display: grid;
+    gap: var(--space-3xs);
+  }
+
+  .panel__eyebrow {
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: var(--step--1);
+    opacity: 0.8;
+  }
+
+  .eyebrow {
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: var(--step--1);
+    color: var(--color-primary);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding: var(--space-3xs) var(--space-xs);
+    border-radius: 999px;
+    text-decoration: none;
+    background: var(--color-white);
+    color: var(--color-primary);
+    font-weight: 700;
+    width: fit-content;
+    border: 1px solid transparent;
+  }
+
+  .chip:hover {
+    border-color: currentColor;
+  }
+
+  .section-header {
+    display: grid;
+    gap: var(--space-3xs);
+    margin-bottom: var(--space-m);
+  }
+
+  .section-header--row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-s);
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+
+  .section-copy {
+    max-width: 54ch;
+    color: var(--color-gray);
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-m);
+  }
+
+  .press-card {
+    background: var(--color-white);
+    border-radius: var(--border-radius);
+    padding: var(--space-m);
+    box-shadow: var(--box-shadow);
+    display: grid;
+    gap: var(--space-2xs);
+  }
+
+  .press-card__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    color: var(--color-gray);
+    font-size: var(--step--1);
+  }
+
+  .press-card__source {
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+
+  .press-card h3 a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    text-decoration: none;
+  }
+
+  .press-card h3 a:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  .external {
+    height: 0.9em;
+    width: 0.9em;
+  }
+
+  .tag-row {
+    display: flex;
+    gap: var(--space-3xs);
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    background: var(--color-primary-bg);
+    color: var(--color-primary);
+    border-radius: 999px;
+    padding: 0.2rem 0.75rem;
+    font-size: var(--step--1);
+  }
+
+  .press-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-s);
+  }
+
+  .press-list__item {
+    background: var(--color-white);
+    border-radius: var(--border-radius);
+    padding: var(--space-m);
+    box-shadow: var(--box-shadow);
+  }
+
+  .press-list__meta {
+    display: flex;
+    justify-content: space-between;
+    color: var(--color-gray);
+    font-size: var(--step--1);
+    margin-bottom: var(--space-3xs);
+  }
+
+  .press-list__source {
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+
+  .press-list__title {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .press-list__title:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  .press-list__content p {
+    margin-top: var(--space-3xs);
+    color: var(--color-gray);
+  }
+
+  .empty-state {
+    color: var(--color-gray);
+  }
+
+  @media screen and (max-width: 720px) {
+    .section-header--row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
