@@ -5,8 +5,7 @@ date: 2025-10-23
 slug: redesigned-publisher-tools-guide
 authors:
   - Darian Avasan
-author_urls:
-  - https://www.linkedin.com/in/darianavasan/
+author_urls: []
 tags:
   - Web Monetization
   - Open Payments
