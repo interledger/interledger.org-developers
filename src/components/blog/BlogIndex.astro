@@ -42,30 +42,32 @@ const {
 
 <main>
   <div class="content-wrapper">
-    {breadcrumbs.length > 0 && (
-      <ol
-        class="breadcrumbs"
-        itemscope
-        itemtype="https://schema.org/BreadcrumbList"
-      >
-        {breadcrumbs.map((crumb, index) => (
-          <li
-            itemprop="itemListElement"
-            itemscope
-            itemtype="https://schema.org/ListItem"
-          >
-            <a
-              itemprop="item"
-              href={crumb.href}
-              data-umami-event={crumb.umamiEvent}
+    {
+      breadcrumbs.length > 0 && (
+        <ol
+          class="breadcrumbs"
+          itemscope
+          itemtype="https://schema.org/BreadcrumbList"
+        >
+          {breadcrumbs.map((crumb, index) => (
+            <li
+              itemprop="itemListElement"
+              itemscope
+              itemtype="https://schema.org/ListItem"
             >
-              <span itemprop="name">{crumb.name}</span>
-            </a>
-            <meta itemprop="position" content={String(index + 1)} />
-          </li>
-        ))}
-      </ol>
-    )}
+              <a
+                itemprop="item"
+                href={crumb.href}
+                data-umami-event={crumb.umamiEvent}
+              >
+                <span itemprop="name">{crumb.name}</span>
+              </a>
+              <meta itemprop="position" content={String(index + 1)} />
+            </li>
+          ))}
+        </ol>
+      )
+    }
     <header>
       <h1>{title}</h1>
       <a class="cta__blog" href="/blog">
@@ -79,55 +81,59 @@ const {
     </header>
     {showTagFilter && <TagFilter allTags={allTags} selectedTag={selectedTag} />}
     <ol class="postlist">
-      {posts.map((blogPostEntry) => {
-        const excerpt = `${createExcerpt(blogPostEntry.body).substring(0, 300)}...`
-        return (
-          <li class="postlist-item">
-            <time
-              class="postlist-date"
-              datetime={blogPostEntry.data.date.toISOString()}
-            >
-              {blogPostEntry.data.date.toDateString()}
-            </time>
-            {blogPostEntry.data.lang ? (
-              <div class="postlist-es">
+      {
+        posts.map((blogPostEntry) => {
+          const excerpt = `${createExcerpt(blogPostEntry.body).substring(0, 300)}...`
+          return (
+            <li class="postlist-item">
+              <time
+                class="postlist-date"
+                datetime={blogPostEntry.data.date.toISOString()}
+              >
+                {blogPostEntry.data.date.toDateString()}
+              </time>
+              {blogPostEntry.data.lang ? (
+                <div class="postlist-es">
+                  <a
+                    href={`/developers/blog/${blogPostEntry.id}`}
+                    class="postlist-link heading--6"
+                  >
+                    {blogPostEntry.data.title}
+                  </a>
+                  <a class="postlist-lang" href="/developers/blog/es">
+                    ES
+                  </a>
+                </div>
+              ) : (
                 <a
                   href={`/developers/blog/${blogPostEntry.id}`}
                   class="postlist-link heading--6"
                 >
                   {blogPostEntry.data.title}
                 </a>
-                <a class="postlist-lang" href="/developers/blog/es">
-                  ES
-                </a>
-              </div>
-            ) : (
-              <a
-                href={`/developers/blog/${blogPostEntry.id}`}
-                class="postlist-link heading--6"
-              >
-                {blogPostEntry.data.title}
-              </a>
-            )}
-            <p>
-              {blogPostEntry.data.description
-                ? blogPostEntry.data.description
-                : excerpt}
-            </p>
-          </li>
-        )
-      })}
+              )}
+              <p>
+                {blogPostEntry.data.description
+                  ? blogPostEntry.data.description
+                  : excerpt}
+              </p>
+            </li>
+          )
+        })
+      }
     </ol>
-    {showPagination && paginationProps && (
-      <Pagination
-        length={paginationProps.length}
-        currentPage={paginationProps.currentPage}
-        firstUrl={paginationProps.firstUrl}
-        prevUrl={paginationProps.prevUrl}
-        nextUrl={paginationProps.nextUrl}
-        lastUrl={paginationProps.lastUrl}
-      />
-    )}
+    {
+      showPagination && paginationProps && (
+        <Pagination
+          length={paginationProps.length}
+          currentPage={paginationProps.currentPage}
+          firstUrl={paginationProps.firstUrl}
+          prevUrl={paginationProps.prevUrl}
+          nextUrl={paginationProps.nextUrl}
+          lastUrl={paginationProps.lastUrl}
+        />
+      )
+    }
   </div>
 </main>
 
@@ -254,4 +260,3 @@ const {
     text-decoration: none;
   }
 </style>
-

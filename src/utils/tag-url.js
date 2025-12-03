@@ -16,4 +16,3 @@ export function getTagUrl(tag) {
 export function getTagSlug(tag) {
   return tag.toLowerCase().replace(/\s+/g, '-')
 }
-
