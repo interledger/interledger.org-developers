@@ -1,25 +1,22 @@
 ---
 title: 'How the Redesigned Publisher Tools Work: A Technical Guide'
-description: 'A technical exploration of the architecture details behind the redesigned Publisher Tools'
+description: 'A exploration of the architecture details behind the redesigned Web Monetization Publisher Tools'
 date: 2025-10-23
 slug: redesigned-publisher-tools-guide
 authors:
   - Darian Avasan
-author_urls:
-  - https://darianm.xyz/
 tags:
-  - Interledger Protocol
   - Web Monetization
   - Open Payments
 ---
 
-If you haven’t heard of Publisher Tools yet, you’re missing out on a simple way to monetize your content! Don’t worry, you can catch up on the details [here](https://webmonetization.org/publishers/). Today, we’ll focus on the redesign.
+If you haven’t heard of our Web Monetization Publisher Tools yet, you’re missing out on a simple way to monetize your content! Don’t worry, you can catch up on the details [here](https://webmonetization.org/publishers/). Today, we’ll focus on the redesign.
 
 The Publisher Tools have been completely redesigned with a focus on simplicity, but there’s a lot happening behind that simplicity. Let's find out how things work after the embed script tag gets added to a website.
 
 ### From Script Tag to Rendered Component: The Complete Flow
 
-The new system cleanly separates responsibilities, starting with tools profile creation: publishers customize through the [interface](https://webmonetization.org/tools) (the `frontend` module), and visitors consume the configuration at website runtime. The `frontend` and visitor-facing flow never interact directly, they're connected only through stored configuration.
+The new system cleanly separates responsibilities. Publishers create a tools profile and use the [interface](https://webmonetization.org/tools) to customize how their tools look. The interface is referred to as the `frontend` module. Visitors then consume the configuration at website runtime by experiencing the custom tools on the web monetized site they are viewing. The `frontend` and visitor-facing flow never interact directly, they're connected only through stored configuration.
 
 ### The Publisher Embeds the Script
 
@@ -98,7 +95,7 @@ function appendMonetizationLink(walletAddressUrl: string) {
 
 That's it!
 
-That’s all the embedded script does, nothing hidden or extra complexity, but don’t just take my word for it: you can always check the source code yourself. We’re open source, after all!
+That’s all the embedded script does, nothing hidden or extra complexity, but don’t just take my word for it: you can always check the [source code](https://github.com/interledger/publisher-tools) yourself. We’re open source, after all!
 
 **Why we need a `components` module**
 
