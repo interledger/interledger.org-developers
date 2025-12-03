@@ -1,6 +1,6 @@
 ---
 title: 'How the Redesigned Publisher Tools Work: A Technical Guide'
-description: 'A exploration of the architecture details behind the redesigned Web Monetization Publisher Tools'
+description: 'A technical dive into the architecture behind the redesigned Web Monetization Publisher Tools'
 date: 2025-10-23
 slug: redesigned-publisher-tools-guide
 authors:
