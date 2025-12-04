@@ -33,21 +33,6 @@ import FoundationLogo from '../logos/FoundationLogo.astro'
           >
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
-              <a href="/about-us" data-umami-event="Site Nav - About us"
-                >About Us</a
-              >
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a
-                href="/policy-and-advocacy"
-                data-umami-event="Site Nav - Policy & Advocacy"
-                >Policy & Advocacy</a
-              >
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a href="/team" data-umami-event="Site Nav - Team">Team</a>
-            </li>
-            <li class="menu-item menu-item--level-2">
               <a href="/press" data-umami-event="Site Nav - Press">Media</a>
             </li>
           </ul>
@@ -59,36 +44,7 @@ import FoundationLogo from '../logos/FoundationLogo.astro'
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
               <a
-                href="/open-standards"
-                data-umami-event="Site Nav - Open Standards">Overview</a
-              >
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a href="/interledger" data-umami-event="Site Nav - Interledger"
-                >Interledger</a
-              >
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a
-                href="/open-payments"
-                data-umami-event="Site Nav - Open Payments">Open Payments</a
-              >
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a
-                href="/web-monetization"
-                data-umami-event="Site Nav - Web Monetization"
-                >Web Monetization</a
-              >
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a href="/join-network" data-umami-event="Site Nav - Join network"
-                >Join The Network</a
-              >
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a
-                href="/developers"
+                href="/"
                 data-umami-event="Site Nav - Developers Portal"
                 >Developers Portal</a
               >
@@ -107,16 +63,6 @@ import FoundationLogo from '../logos/FoundationLogo.astro'
                 >Financial Services</a
               >
             </li>
-            <li class="menu-item menu-item--level-2">
-              <a href="/education" data-umami-event="Site Nav - Education"
-                >Education</a
-              >
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a href="/ambassadors" data-umami-event="Site Nav - Ambassadors"
-                >Ambassadors</a
-              >
-            </li>
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
@@ -126,30 +72,10 @@ import FoundationLogo from '../logos/FoundationLogo.astro'
           >
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
-              <a href="/blog" data-umami-event="Site Nav - Blog"
-                >Foundation Blog</a
-              >
-            </li>
-            <li class="menu-item menu-item--level-2">
               <a
-                href="/developers/blog"
-                data-umami-event="Site Nav - Engineering Blog">Tech Blog</a
+                href="/blog"
+                data-umami-event="Site Nav - Engineering Blog">Blog</a
               >
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a href="/podcast" data-umami-event="Site Nav - Podcast"
-                >Podcast</a
-              >
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a
-                href="https://community.interledger.org/"
-                data-umami-event="Site Nav - Community Forem"
-                rel="noopener noreferrer"
-                target="_blank"
-                >Community Forem
-                <ExternalIcon class="external" />
-              </a>
             </li>
           </ul>
         </li>
@@ -586,7 +512,7 @@ import FoundationLogo from '../logos/FoundationLogo.astro'
     currentPath = currentPath.slice(0, -1)
   }
 
-  const activeSections = ['/developers/blog']
+  const activeSections = ['/blog']
   devLinks.forEach((devLink) => {
     if (devLink instanceof HTMLAnchorElement) {
       const linkPath = devLink.pathname

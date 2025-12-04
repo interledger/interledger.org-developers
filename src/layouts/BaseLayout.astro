@@ -49,7 +49,7 @@ const {
       property="og:image"
       content={ogImageUrl
         ? ogImageUrl
-        : new URL('/developers/img/og-image.png', Astro.site).href}
+        : new URL('/img/og-image.png', Astro.site).href}
     />
     <meta property="og:url" content={canonicalURL} />
     <meta
@@ -70,7 +70,7 @@ const {
       name="twitter:image"
       content={ogImageUrl
         ? ogImageUrl
-        : new URL('/developers/img/og-image.png', Astro.site).href}
+        : new URL('/img/og-image.png', Astro.site).href}
     />
     <meta
       name="twitter:description"
@@ -79,7 +79,7 @@ const {
         : 'Making payments as easy as sending an email'}
     />
 
-    <link rel="icon" type="image/svg+xml" href="/developers/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <script
       defer
       src="https://ilf-site-analytics.netlify.app/script.js"
@@ -118,7 +118,7 @@ const {
     top: 0;
     left: 0;
     z-index: -1;
-    background-image: url(/developers/img/bg-swirl.svg);
+    background-image: url(/img/bg-swirl.svg);
     background-repeat: repeat;
     background-size: 150%;
     filter: blur(150px) opacity(0.25);

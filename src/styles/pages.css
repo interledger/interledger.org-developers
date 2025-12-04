@@ -1,7 +1,7 @@
 /* Webfont import */
 @font-face {
   font-family: "Titillium";
-  src: url("/developers/fonts/titilliumweb-regular.woff2") format("woff2");
+  src: url("/fonts/titilliumweb-regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -9,7 +9,7 @@
 
 @font-face {
   font-family: "Titillium";
-  src: url("/developers/fonts/titilliumweb-italic.woff2") format("woff2");
+  src: url("/fonts/titilliumweb-italic.woff2") format("woff2");
   font-weight: 400;
   font-style: italic;
   font-display: swap;
@@ -17,7 +17,7 @@
 
 @font-face {
   font-family: "Titillium";
-  src: url("/developers/fonts/titilliumweb-bold.woff2") format("woff2");
+  src: url("/fonts/titilliumweb-bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -25,7 +25,7 @@
 
 @font-face {
   font-family: "Titillium";
-  src: url("/developers/fonts/titilliumweb-semibold.woff2") format("woff2");
+  src: url("/fonts/titilliumweb-semibold.woff2") format("woff2");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -33,7 +33,7 @@
 
 @font-face {
   font-family: "Titillium";
-  src: url("/developers/fonts/titilliumweb-extralight.woff2") format("woff2");
+  src: url("/fonts/titilliumweb-extralight.woff2") format("woff2");
   font-weight: 200;
   font-style: normal;
   font-display: swap;

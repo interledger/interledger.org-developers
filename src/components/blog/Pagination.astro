@@ -28,7 +28,7 @@ const paginationList = Array.from({ length }, (_, i) => i + 1)
   {
     paginationList.map((num) => (
       <a
-        href={`/developers/blog${num == 1 ? '' : '/' + num}`}
+        href={`/blog${num == 1 ? '' : '/' + num}`}
         class={`pagination__link ${currentPage == num ? 'disabled active' : ''}`}
       >
         {num}

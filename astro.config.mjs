@@ -8,7 +8,6 @@ import mdx from '@astrojs/mdx'
 // https://astro.build/config
 export default defineConfig({
   site: 'https://interledger.org',
-  base: '/developers',
   integrations: [
     starlight({
       title: 'Interledger',
@@ -29,14 +28,14 @@ export default defineConfig({
         {
           tag: 'script',
           attrs: {
-            src: '/developers/scripts/highlight.min.js',
+            src: '/scripts/highlight.min.js',
             defer: true
           }
         },
         {
           tag: 'script',
           attrs: {
-            src: '/developers/scripts/init.js',
+            src: '/scripts/init.js',
             defer: true
           }
         },

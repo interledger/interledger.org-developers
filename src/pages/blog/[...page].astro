@@ -22,7 +22,7 @@ const { page } = Astro.props
 <BaseLayout
   title="Engineering Blog"
   description="Hear stories and experiences from the team who is working on making Interledger, the interoperable global payments network, a reality."
-  ogImageUrl={new URL('/developers/img/blog/og-image.png', Astro.site).href}
+  ogImageUrl={new URL('/img/blog/og-image.png', Astro.site).href}
 >
   <main>
     <div class="content-wrapper">
@@ -38,7 +38,7 @@ const { page } = Astro.props
         >
           <a
             itemprop="item"
-            href="/developers"
+            href="/"
             data-umami-event="Devs breadcrumb - Home"
           >
             <span itemprop="name">Developers Portal</span></a
@@ -51,7 +51,7 @@ const { page } = Astro.props
         <a class="cta__blog" href="/blog">
           <p>Check out Foundation updates</p>
           <img
-            src="/developers/img/ernie-purple.svg"
+            src="/img/ernie-purple.svg"
             alt="Ernie holding an envelope"
             aria-hidden="true"
           />
@@ -72,18 +72,18 @@ const { page } = Astro.props
                 {blogPostEntry.data.lang ? (
                   <div class="postlist-es">
                     <a
-                      href={`/developers/blog/${blogPostEntry.id}`}
+                      href={`/blog/${blogPostEntry.id}`}
                       class="postlist-link heading--6"
                     >
                       {blogPostEntry.data.title}
                     </a>
-                    <a class="postlist-lang" href="/developers/blog/es">
+                    <a class="postlist-lang" href="/blog/es">
                       ES
                     </a>
                   </div>
                 ) : (
                   <a
-                    href={`/developers/blog/${blogPostEntry.id}`}
+                    href={`/blog/${blogPostEntry.id}`}
                     class="postlist-link heading--6"
                   >
                     {blogPostEntry.data.title}
