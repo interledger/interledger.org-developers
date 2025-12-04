@@ -12,7 +12,7 @@ tags:
   - Web Monetization
 ---
 
-In the previous article, we discussed how the [Web Monetization extension connects to your wallet](/developers/web-monetization-open-payments-part-1-connecting-wallet) using the Open Payments API. This article will explore the next steps for sending money: discovering the receiving wallet addresses on websites and setting up the necessary payment sessions.
+In the previous article, we discussed how the [Web Monetization extension connects to your wallet](/developers/blog/web-monetization-open-payments-part-1-connecting-wallet) using the Open Payments API. This article will explore the next steps for sending money: discovering the receiving wallet addresses on websites and setting up the necessary payment sessions.
 
 ## Finding receiving wallet addresses
 
