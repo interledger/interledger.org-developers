@@ -174,4 +174,4 @@ If you believe your tokens are compromised, you can revoke the extension's grant
 
 ## Next up: Sending money
 
-With your wallet connected and access tokens handy, the next article will focus on the payment session setup, followed by a detailed look at the core function: precisely how, when, and where the extension triggers the payments through your wallet.
+With your wallet connected and access tokens handy, the [next article](./web-monetization-open-payments-part-2-payment-sessions) will focus on the payment session setup, followed by a detailed look at the core function: precisely how, when, and where the extension triggers the payments through your wallet.
