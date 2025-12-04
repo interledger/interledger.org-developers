@@ -1,0 +1,66 @@
+{
+  "kind": "collectionType",
+  "collectionName": "press_items",
+  "info": {
+    "singularName": "press-item",
+    "pluralName": "press-items",
+    "displayName": "Press Item",
+    "description": "Press releases and media mentions"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 255
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "publishDate": {
+      "type": "date",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "publication": {
+      "type": "string",
+      "required": false,
+      "maxLength": 255
+    },
+    "publicationLogo": {
+      "type": "string",
+      "required": false
+    },
+    "externalUrl": {
+      "type": "string",
+      "required": false
+    },
+    "content": {
+      "type": "richtext",
+      "required": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      },
+      "customField": "plugin::ckeditor.CKEditor"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": ["press-release", "media-mention", "announcement"],
+      "default": "media-mention"
+    }
+  }
+}

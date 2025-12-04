@@ -1,0 +1,44 @@
+{
+  "kind": "singleType",
+  "collectionName": "financial_services_page",
+  "info": {
+    "singularName": "financial-services-page",
+    "pluralName": "financial-services-pages",
+    "displayName": "Financial Services Page",
+    "description": "Manage the Financial Services landing page content"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "heroTitle": {
+      "type": "string",
+      "required": true,
+      "default": "Unlock payment potential"
+    },
+    "heroDescription": {
+      "type": "text",
+      "required": true
+    },
+    "introText": {
+      "type": "text",
+      "required": true
+    },
+    "ctaTitle": {
+      "type": "string",
+      "default": "Ready to Apply?"
+    },
+    "ctaDescription": {
+      "type": "text"
+    },
+    "ctaEmailLabel": {
+      "type": "string",
+      "default": "Contact Us"
+    },
+    "ctaSubscribeLabel": {
+      "type": "string",
+      "default": "Subscribe for Updates"
+    }
+  }
+}

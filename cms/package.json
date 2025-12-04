@@ -1,0 +1,33 @@
+{
+  "name": "interledger-cms",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Strapi CMS for Interledger developer portal",
+  "scripts": {
+    "develop": "strapi develop",
+    "start": "strapi start",
+    "build": "strapi build",
+    "strapi": "strapi"
+  },
+  "strapi": {
+    "uuid": "d5c8f4e2-9a1b-4c3d-8e7f-6a5b4c3d2e1f"
+  },
+  "dependencies": {
+    "@ckeditor/strapi-plugin-ckeditor": "^1.1.1",
+    "@strapi/strapi": "5.31.3",
+    "better-sqlite3": "11.5.0",
+    "esbuild": "0.25.11",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.2",
+    "styled-components": "^6.1.19"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18.0.0 <=22.x.x",
+    "npm": ">=6.0.0"
+  }
+}

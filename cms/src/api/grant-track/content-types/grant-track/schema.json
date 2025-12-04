@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "grant_tracks",
+  "info": {
+    "singularName": "grant-track",
+    "pluralName": "grant-tracks",
+    "displayName": "Grant Track",
+    "description": "Individual grant programs"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "amount": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "richtext",
+      "required": true
+    },
+    "order": {
+      "type": "integer",
+      "default": 0
+    }
+  }
+}

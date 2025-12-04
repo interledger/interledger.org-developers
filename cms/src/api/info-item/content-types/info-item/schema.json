@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "info_items",
+  "info": {
+    "singularName": "info-item",
+    "pluralName": "info-items",
+    "displayName": "Info Item",
+    "description": "Information sections for the financial services page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "content": {
+      "type": "text",
+      "required": true
+    },
+    "order": {
+      "type": "integer",
+      "default": 0
+    }
+  }
+}
