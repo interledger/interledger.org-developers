@@ -1,3 +1,4 @@
+# NOTE THAT THIS SCRIPT WILL BE DEPRECATED SOON. PLEASE USE THE NEW WORKFLOW IN `.github/workflows/deploy-aws.yml` INSTEAD.
 name: Deploy to AWS
 
 on:
