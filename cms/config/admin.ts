@@ -1,12 +1,12 @@
-const getPreviewPathname = (uid, { document }): string => {
-  const { slug } = document;
-  
-  // Handle blog articles
-  if( uid === "api::blog-post.blog-post") {
-    if (!slug) {
-      return "/blog"; // Blog listing page
+
+const getPreviewPathname = (uid: string, { document }): string => {
+  // Handle blog posts
+  if (uid === "api::blog-post.blog-post") {
+    if (!document?.id) {
+      return "/blog";
     }
-    return `/blog/preview?${slug}`; // Individual article page
+
+    return `/blog/preview?slug=${document.documentId}`;
   }
   return null;
 };
@@ -34,7 +34,7 @@ export default ({ env }) => {
     enabled: true,
     config: {
       allowedOrigins: clientUrl,
-      async handler(uid, { documentId, status }) {
+      async handler(uid, { documentId }) {
         // Fetch the complete document from Strapi
         const document = await strapi.documents(uid).findOne({ documentId });
         
@@ -47,11 +47,12 @@ export default ({ env }) => {
         }
 
         // Use Next.js draft mode passing it a secret key and the content-type status - do we want to use secret key?
-        const urlSearchParams = new URLSearchParams({
-          url: pathname,
-          status 
-        });
-        return `${clientUrl}/${urlSearchParams}`;
+        // const urlSearchParams = new URLSearchParams({
+        //   url: pathname,
+        //   status 
+        // });
+        // return `${clientUrl}/${urlSearchParams}`;
+        return `${clientUrl}${pathname}`;
       },
     }
   }
