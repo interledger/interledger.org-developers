@@ -1,0 +1,40 @@
+---
+import BlogLayout from "../../layouts/BlogLayout.astro";
+import CommunityLinks from "../../components/blog/CommunityLinks.astro";
+import { fetchStrapi } from "../../utils/fetchStrapi";
+import { marked } from 'marked';
+
+// Get the documentId from the query string
+export const prerender = false;
+const documentId = Astro.url.searchParams.get("slug");
+if (!documentId) {
+  throw new Error("Missing documentId in preview URL");
+}
+
+// Always fetch draft content for preview? - in progress
+const preview = true;
+
+const response = await fetchStrapi(
+  `api/blog-posts/${documentId}`,
+  preview
+);
+
+const article = response?.data
+
+if (!article) {
+  throw new Error(`Preview: No article found for documentId "${documentId}"`);
+}
+
+// Map Strapi fields to your BlogLayout frontmatter
+const frontmatter = {
+  title: article.title,
+  description: article.description,
+  date: article.publishedAt,
+};
+
+const bodyHtml = marked.parse(article.content); 
+---
+<BlogLayout frontmatter={frontmatter}>
+  <article set:html={bodyHtml} />
+  <CommunityLinks />
+</BlogLayout>
