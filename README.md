@@ -81,7 +81,7 @@ Every pull request automatically generates a preview deployment on Netlify at `h
 
 ### Production Deployments (Google Cloud Storage)
 
-The real production deployment is served through Google Cloud Platform (GCS) at `https://interledger.org/developers/` as part of the main Interledger website. This is a transparent proxy configuration - the developers portal is hosted separately but appears as part of the main domain.
+The real production deployment is served through Google Cloud Storage (GCS) at `https://interledger.org/developers/` as part of the main Interledger website. This is a transparent proxy configuration - the developers portal is hosted separately but appears as part of the main domain.
 
 When a PR is merged to the `main` branch, the `.github/workflows/deploy_gcs.yml` GitHub Actions workflow automatically:
 

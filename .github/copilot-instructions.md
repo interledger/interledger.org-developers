@@ -4,7 +4,7 @@
 
 This is the Interledger Developers Portal, a documentation site built with [Astro](https://astro.build/) and [Starlight](https://starlight.astro.build/). It serves as the `/developers` section of [interledger.org](https://interledger.org/).
 
-**⚠️ Important**: When deployment configuration, build processes, or new gotchas are discovered, please update this file to keep it accurate. This helps AI agents and future contributors understand the project correctly.
+**⚠️ Important**: When a deployment configuration, build process, or new gotcha is discovered, please update this file to keep it accurate. This helps AI agents and future contributors understand the project correctly.
 
 ## Architecture
 
