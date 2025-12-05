@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@_sh/strapi-plugin-ckeditor": "^6.0.3",
-    "@ckeditor/strapi-plugin-ckeditor": "^1.1.1",
     "@strapi/strapi": "5.31.3",
     "better-sqlite3": "11.5.0",
     "esbuild": "0.25.11",
