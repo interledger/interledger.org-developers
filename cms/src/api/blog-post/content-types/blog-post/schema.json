@@ -14,8 +14,8 @@
   "attributes": {
     "title": {
       "type": "string",
-      "required": true,
-      "maxLength": 255
+      "maxLength": 255,
+      "required": true
     },
     "description": {
       "type": "text",
@@ -30,10 +30,6 @@
       "type": "date",
       "required": true
     },
-    "content": {
-      "type": "richtext",
-      "required": true
-    },
     "lang": {
       "type": "string",
       "maxLength": 10
@@ -45,6 +41,13 @@
     "ogImageUrl": {
       "type": "string",
       "maxLength": 255
+    },
+    "content": {
+      "type": "customField",
+      "customField": "plugin::ckeditor5.CKEditor",
+      "options": {
+        "preset": "defaultMarkdown"
+      }
     }
   }
 }
