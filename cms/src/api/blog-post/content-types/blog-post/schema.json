@@ -34,9 +34,11 @@
       "type": "string",
       "maxLength": 10
     },
-    "image": {
-      "type": "string",
-      "maxLength": 255
+    "featuredImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
     },
     "ogImageUrl": {
       "type": "string",

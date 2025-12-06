@@ -8,6 +8,21 @@ import fs from 'fs';
 import path from 'path';
 import { exec } from 'child_process';
 
+interface MediaFile {
+  id: number;
+  url: string;
+  alternativeText?: string;
+  name?: string;
+  width?: number;
+  height?: number;
+  formats?: {
+    thumbnail?: { url: string };
+    small?: { url: string };
+    medium?: { url: string };
+    large?: { url: string };
+  };
+}
+
 interface BlogPost {
   id: number;
   title: string;
@@ -15,7 +30,7 @@ interface BlogPost {
   slug: string;
   date: string;
   content: string;
-  image?: string;
+  featuredImage?: MediaFile;
   lang?: string;
   ogImageUrl?: string;
   publishedAt?: string;
@@ -77,7 +92,27 @@ function generateFilename(post: BlogPost): string {
   return `${prefix}${post.slug}.mdx`;
 }
 
+/**
+ * Gets the image URL from a media field
+ * Prefers the uploads path for local files, or uses the full URL for external
+ */
+function getImageUrl(media: MediaFile | undefined): string | undefined {
+  if (!media?.url) return undefined;
+  
+  // If it's a relative URL (starts with /), convert to the blog image path format
+  if (media.url.startsWith('/uploads/')) {
+    // Convert /uploads/filename.jpg to /img/blog/filename.jpg for the static site
+    const filename = media.url.split('/').pop();
+    return `/img/blog/${filename}`;
+  }
+  
+  // Return the full URL for external images
+  return media.url;
+}
+
 function generateMDX(post: BlogPost): string {
+  const imageUrl = getImageUrl(post.featuredImage);
+  
   const frontmatterLines = [
     `title: "${escapeQuotes(post.title)}"`,
     `description: "${escapeQuotes(post.description)}"`,
@@ -85,7 +120,7 @@ function generateMDX(post: BlogPost): string {
     `date: ${formatDate(post.date)}`,
     `slug: ${post.slug}`,
     post.lang ? `lang: "${escapeQuotes(post.lang)}"` : undefined,
-    post.image ? `image: "${escapeQuotes(post.image)}"` : undefined,
+    imageUrl ? `image: "${escapeQuotes(imageUrl)}"` : undefined,
   ].filter(Boolean) as string[];
 
   const frontmatter = frontmatterLines.join('\n');

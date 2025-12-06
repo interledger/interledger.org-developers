@@ -454,10 +454,7 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private
     date: Schema.Attribute.Date & Schema.Attribute.Required
     description: Schema.Attribute.Text & Schema.Attribute.Required
-    image: Schema.Attribute.String &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 255
-      }>
+    featuredImage: Schema.Attribute.Media<'images'>
     lang: Schema.Attribute.String &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 10
@@ -498,6 +495,7 @@ export interface ApiFinancialServicesPageFinancialServicesPage
     draftAndPublish: true
   }
   attributes: {
+    applicationNotice: Schema.Attribute.Text
     createdAt: Schema.Attribute.DateTime
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private
