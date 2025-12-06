@@ -556,30 +556,37 @@ export interface ApiGrantTrackGrantTrack extends Struct.CollectionTypeSchema {
   }
 }
 
-export interface ApiInfoItemInfoItem extends Struct.CollectionTypeSchema {
-  collectionName: 'info_items'
+export interface ApiNewsEventNewsEvent extends Struct.CollectionTypeSchema {
+  collectionName: 'news_events'
   info: {
-    description: 'Information sections for the financial services page'
-    displayName: 'Info Item'
-    pluralName: 'info-items'
-    singularName: 'info-item'
+    description: 'News and events content that syncs to MDX'
+    displayName: 'News Event'
+    pluralName: 'news-events'
+    singularName: 'news-event'
   }
   options: {
     draftAndPublish: true
   }
   attributes: {
-    content: Schema.Attribute.Text & Schema.Attribute.Required
+    content: Schema.Attribute.RichText &
+      Schema.Attribute.CustomField<
+        'plugin::ckeditor5.CKEditor',
+        {
+          preset: 'defaultMarkdown'
+        }
+      >
     createdAt: Schema.Attribute.DateTime
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private
     locale: Schema.Attribute.String & Schema.Attribute.Private
     localizations: Schema.Attribute.Relation<
       'oneToMany',
-      'api::info-item.info-item'
+      'api::news-event.news-event'
     > &
       Schema.Attribute.Private
     order: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>
     publishedAt: Schema.Attribute.DateTime
+    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required
     title: Schema.Attribute.String & Schema.Attribute.Required
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -1002,7 +1009,7 @@ declare module '@strapi/strapi' {
       'api::blog-post.blog-post': ApiBlogPostBlogPost
       'api::financial-services-page.financial-services-page': ApiFinancialServicesPageFinancialServicesPage
       'api::grant-track.grant-track': ApiGrantTrackGrantTrack
-      'api::info-item.info-item': ApiInfoItemInfoItem
+      'api::news-event.news-event': ApiNewsEventNewsEvent
       'api::press-item.press-item': ApiPressItemPressItem
       'plugin::content-releases.release': PluginContentReleasesRelease
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction
