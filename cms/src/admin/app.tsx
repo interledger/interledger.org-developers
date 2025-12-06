@@ -19,7 +19,27 @@ const myPluginConfig: PluginConfig = {
 };
 
 export default {
-  register() {
+  register(app: any) {
     setPluginConfig(myPluginConfig);
+  },
+
+  bootstrap(app: any) {
+    // Override button labels using DOM manipulation
+    const interval = setInterval(() => {
+      // Find all buttons in the admin panel
+      const buttons = document.querySelectorAll('button');
+      buttons.forEach((button) => {
+        const span = button.querySelector('span');
+        if (span && span.textContent === 'Save') {
+          span.textContent = 'Save as Draft';
+        }
+        if (span && span.textContent === 'Publish') {
+          span.textContent = 'Publish to Netlify';
+        }
+      });
+    }, 100);
+
+    // Store interval for cleanup if needed
+    (window as any).__strapiButtonInterval = interval;
   },
 };
