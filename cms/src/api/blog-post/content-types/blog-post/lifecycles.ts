@@ -94,19 +94,18 @@ function generateFilename(post: BlogPost): string {
 
 /**
  * Gets the image URL from a media field
- * Prefers the uploads path for local files, or uses the full URL for external
+ * Returns the full Strapi URL for local files, or the full URL for external
  */
 function getImageUrl(media: MediaFile | undefined): string | undefined {
   if (!media?.url) return undefined;
-  
-  // If it's a relative URL (starts with /), convert to the blog image path format
+
+  // If it's a relative URL (starts with /uploads/), prepend the Strapi server URL
   if (media.url.startsWith('/uploads/')) {
-    // Convert /uploads/filename.jpg to /img/blog/filename.jpg for the static site
-    const filename = media.url.split('/').pop();
-    return `/img/blog/${filename}`;
+    const strapiUrl = process.env.STRAPI_URL || 'http://localhost:1337';
+    return `${strapiUrl}${media.url}`;
   }
-  
-  // Return the full URL for external images
+
+  // Return the URL as-is for external images
   return media.url;
 }
 
