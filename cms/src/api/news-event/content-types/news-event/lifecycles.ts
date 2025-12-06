@@ -1,5 +1,5 @@
 /**
- * Lifecycle callbacks for news-event
+ * Lifecycle callbacks for event
  * Generates MDX files that match the events content format used on the site
  * Then commits and pushes to trigger Netlify preview builds
  */
@@ -90,7 +90,7 @@ async function writeMDXFile(event: NewsEvent): Promise<void> {
   const mdxContent = generateMDX(event);
 
   fs.writeFileSync(filepath, mdxContent, 'utf-8');
-  console.log(`✅ Generated News Event MDX file: ${filepath}`);
+  console.log(`✅ Generated Event MDX file: ${filepath}`);
 }
 
 async function deleteMDXFile(event: NewsEvent): Promise<void> {
@@ -102,7 +102,7 @@ async function deleteMDXFile(event: NewsEvent): Promise<void> {
 
   if (fs.existsSync(filepath)) {
     fs.unlinkSync(filepath);
-    console.log(`🗑️  Deleted News Event MDX file: ${filepath}`);
+    console.log(`🗑️  Deleted Event MDX file: ${filepath}`);
   }
 }
 

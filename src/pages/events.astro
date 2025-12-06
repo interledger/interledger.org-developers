@@ -1,9 +1,17 @@
 ---
-import { getCollection } from 'astro:content'
+import { getCollection, render } from 'astro:content'
 import BaseLayout from '../layouts/BaseLayout.astro'
 
 const events = await getCollection('events')
 const sortedEvents = events.sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
+
+// Render all events to get their Content components
+const renderedEvents = await Promise.all(
+  sortedEvents.map(async (event) => ({
+    ...event,
+    Content: (await render(event)).Content
+  }))
+)
 ---
 
 <BaseLayout title="Events - Interledger Foundation" description="Create space to be inspired">
@@ -19,14 +27,11 @@ const sortedEvents = events.sort((a, b) => (a.data.order || 0) - (b.data.order |
     <!-- Events Content Section -->
     <section class="events-content">
       <div class="content-wrapper">
-        {sortedEvents.map((event) => (
-          <article class="event-section">
-            <h2 class="event-title">{event.data.title}</h2>
-            <div class="event-content">
-              <event.Content />
-            </div>
-          </article>
-        ))}
+        <div class="event-content">
+          {renderedEvents.map((event) => (
+            <event.Content />
+          ))}
+        </div>
       </div>
     </section>
   </main>
@@ -67,24 +72,6 @@ const sortedEvents = events.sort((a, b) => (a.data.order || 0) - (b.data.order |
   /* Events Content */
   .events-content {
     padding-block: var(--space-xl);
-  }
-
-  .event-section {
-    margin-block-end: var(--space-2xl);
-    padding-block-end: var(--space-xl);
-    border-bottom: 1px solid #ddd;
-  }
-
-  .event-section:last-child {
-    border-bottom: none;
-  }
-
-  .event-title {
-    color: #b33a2b;
-    font-size: var(--step-3);
-    font-weight: 400;
-    font-style: italic;
-    margin-block-end: var(--space-m);
   }
 
   .event-content {

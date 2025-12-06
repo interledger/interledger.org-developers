@@ -559,8 +559,8 @@ export interface ApiGrantTrackGrantTrack extends Struct.CollectionTypeSchema {
 export interface ApiNewsEventNewsEvent extends Struct.CollectionTypeSchema {
   collectionName: 'news_events'
   info: {
-    description: 'News and events content that syncs to MDX'
-    displayName: 'News Event'
+    description: 'Events content that syncs to MDX'
+    displayName: 'Event'
     pluralName: 'news-events'
     singularName: 'news-event'
   }

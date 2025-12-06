@@ -4,8 +4,8 @@
   "info": {
     "singularName": "news-event",
     "pluralName": "news-events",
-    "displayName": "News Event",
-    "description": "News and events content that syncs to MDX"
+    "displayName": "Event",
+    "description": "Events content that syncs to MDX"
   },
   "options": {
     "draftAndPublish": true
