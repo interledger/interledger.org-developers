@@ -117,7 +117,7 @@ I hope this clarifies the importance of the minimum sendable amount. Give yourse
 
 Before creating the outgoing payment with our previously acquired tokens, the Open Payments API requires us to set up a receiving channel.
 
-The process begins by creating an incoming payment grant on the receiver's wallet. This grant is non-interactive, meaning the user does not need to manually approve each incoming payment, which would be very cumbersome. Once we obtain the permission, we can proceed with creating the actual incoming payment.
+The process begins by creating an incoming payment grant on the receiver's wallet. This grant is non-interactive, meaning the user does not need to manually authorize each incoming payment, which would be very cumbersome. Once we obtain the grant, we can proceed with creating the actual incoming payment.
 
 The incoming payment serves as a dedicated "bucket" into which we can stream micro-payments throughout the entire browsing session. Instead of specifying a set amount to receive, we provide an expiration time, after which we will need to create a new bucket. When the incoming payment expires, the receiving wallet can start settling the amount in the background.
 
