@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config'
+import netlify from '@astrojs/netlify'
 import starlight from '@astrojs/starlight'
 import starlightLinksValidator from 'starlight-links-validator'
 import starlightFullViewMode from 'starlight-fullview-mode'
@@ -8,6 +9,8 @@ import mdx from '@astrojs/mdx'
 // https://astro.build/config
 export default defineConfig({
   site: 'https://interledger.org',
+  output: 'hybrid',
+  adapter: netlify(),
   integrations: [
     starlight({
       title: 'Interledger',
