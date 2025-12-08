@@ -16,7 +16,6 @@ const renderedEvents = await Promise.all(
 
 <BaseLayout title="Events - Interledger Foundation" description="Create space to be inspired">
   <main>
-    <!-- Hero Section -->
     <section class="hero">
       <div class="content-wrapper">
         <h1 class="hero__title">Events</h1>
@@ -24,13 +23,29 @@ const renderedEvents = await Promise.all(
       </div>
     </section>
 
-    <!-- Events Content Section -->
-    <section class="events-content">
+    <section class="events-section">
       <div class="content-wrapper">
-        <div class="event-content">
-          {renderedEvents.map((event) => (
-            <event.Content />
-          ))}
+        <div class="events-grid">
+          {renderedEvents.map((event, index) => {
+            const hasImage = Boolean(event.data.featuredImage)
+            return (
+              <article
+                class={`event-card ${index % 2 === 1 ? 'event-card--reverse' : ''} ${!hasImage ? 'event-card--no-image' : ''}`}
+              >
+                <div class="event-copy">
+                  <h2 class="event-title">{event.data.title}</h2>
+                  <div class="event-body">
+                    <event.Content />
+                  </div>
+                </div>
+                {hasImage && (
+                  <div class="event-image">
+                    <img src={event.data.featuredImage} alt={event.data.title} loading="lazy" />
+                  </div>
+                )}
+              </article>
+            )
+          })}
         </div>
       </div>
     </section>
@@ -42,7 +57,6 @@ const renderedEvents = await Promise.all(
     padding-block-end: var(--space-xl);
   }
 
-  /* Hero Section */
   .hero {
     background: linear-gradient(135deg,
       oklch(35% 0.12 200) 0%,
@@ -69,61 +83,100 @@ const renderedEvents = await Promise.all(
     opacity: 0.95;
   }
 
-  /* Events Content */
-  .events-content {
+  .events-section {
+    background: radial-gradient(circle at 30% 20%, rgba(255, 148, 128, 0.25), transparent 45%),
+      radial-gradient(circle at 80% 10%, rgba(111, 181, 255, 0.3), transparent 40%),
+      linear-gradient(180deg, #f7f8fb 0%, #f1f7f8 50%, #f7f8fb 100%);
     padding-block: var(--space-xl);
   }
 
-  .event-content {
-    font-size: var(--step-0);
-    line-height: 1.8;
+  .events-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-l);
   }
 
-  .event-content :global(p) {
+  .event-card {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: var(--space-l);
+    align-items: center;
+    padding: var(--space-l);
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 18px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+  }
+
+  .event-card--reverse .event-copy {
+    order: 2;
+  }
+
+  .event-card--reverse .event-image {
+    order: 1;
+  }
+
+  .event-card--no-image {
+    grid-template-columns: 1fr;
+  }
+
+  .event-title {
+    font-size: var(--step-4);
     margin-block-end: var(--space-s);
   }
 
-  .event-content :global(h3) {
-    font-size: var(--step-1);
-    font-weight: 600;
-    margin-block: var(--space-m) var(--space-2xs);
+  .event-body {
+    font-size: var(--step-0);
+    line-height: 1.8;
     color: var(--color-black);
   }
 
-  .event-content :global(ul),
-  .event-content :global(ol) {
+  .event-body :global(p) {
+    margin-block-end: var(--space-s);
+  }
+
+  .event-body :global(h3) {
+    font-size: var(--step-1);
+    font-weight: 600;
+    margin-block: var(--space-m) var(--space-2xs);
+  }
+
+  .event-body :global(ul),
+  .event-body :global(ol) {
     margin-block: var(--space-s);
     padding-inline-start: var(--space-m);
   }
 
-  .event-content :global(li) {
+  .event-body :global(li) {
     margin-block-end: var(--space-2xs);
   }
 
-  .event-content :global(a) {
+  .event-body :global(a) {
     color: var(--color-primary);
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    font-weight: 600;
   }
 
-  .event-content :global(a:hover) {
-    text-decoration-thickness: 2px;
-  }
-
-  .event-content :global(strong) {
+  .event-body :global(strong) {
     color: inherit;
     font-weight: 700;
   }
 
-  .event-content :global(code) {
-    background-color: rgba(0, 0, 0, 0.05);
-    padding: 0.2em 0.4em;
-    border-radius: var(--border-radius);
-    font-family: 'Courier New', monospace;
-    font-size: 0.9em;
+  .event-body :global(em) {
+    color: inherit;
   }
 
-  /* Responsive */
+  .event-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 14px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+  }
+
+  .event-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
   @media screen and (max-width: 799px) {
     .hero {
       padding: var(--space-l) 0;
@@ -135,6 +188,29 @@ const renderedEvents = await Promise.all(
 
     .hero__subtitle {
       font-size: var(--step-0);
+    }
+
+    .events-section {
+      padding-block: var(--space-l);
+    }
+
+    .event-card {
+      grid-template-columns: 1fr;
+      gap: var(--space-m);
+      padding: var(--space-m);
+    }
+
+    .event-card--reverse .event-copy,
+    .event-card--reverse .event-image {
+      order: unset;
+    }
+
+    .event-image {
+      max-height: 280px;
+    }
+
+    .event-title {
+      font-size: var(--step-3);
     }
   }
 </style>

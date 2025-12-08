@@ -61,7 +61,8 @@ const eventsCollection = defineCollection({
   loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/events' }),
   schema: z.object({
     title: z.string(),
-    order: z.number().default(0)
+    order: z.number().default(0),
+    featuredImage: z.string().optional()
   })
 })
 
