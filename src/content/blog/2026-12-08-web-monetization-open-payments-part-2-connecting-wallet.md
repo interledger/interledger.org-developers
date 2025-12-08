@@ -92,9 +92,9 @@ However, for wallets that do not use the latest implementation, we need to emplo
 
 ### Manually finding minimum sendable amount
 
-We use a probing method to find the minimum sendable amount. For example, if we try to send MX$0.01, we receive a "non-positive receive amount" error. We note this error and then attempt MX$0.02, which also fails.
+We use a probing method to find the minimum sendable amount. For example, if we try to create a quote for sending MX$0.01, we receive a "non-positive receive amount" error. We note this error and then attempt with MX$0.02, which also fails. To be clear, with these quote requests, we're not sending money - we're only probing to find an amount that can be safely sent (and received) taking currency exchange rates and any fee into account.
 
-We can continue testing currency amounts starting from MX$0.03 up to MX$0.18, which would require 18 separate quote requests to find the right amount. To optimize this process, we can change the increment to an exponential scale by testing MX$0.02, MX$0.04, MX$0.08, MX$0.16, and so on. This leads to far fewer requests - especially with greater currency exchange rates (e.g., 1 USD ~ 88 INR - imagine how many requests it can take without the exponential approach).
+We can continue testing amounts from MX$0.01 up to MX$0.18, which would require 18 separate quote requests to find the right amount. To optimize this process, we can change the increment to an exponential scale by testing MX$0.02, MX$0.04, MX$0.08, MX$0.16, and so on. This leads to far fewer requests - especially with greater currency exchange rates (e.g., 1 USD ~ 88 INR - imagine how many requests it can take without the exponential approach).
 
 Now, we can't send MX$0.16 either, but MX$0.32 is sendable. But it’s not the minimum sendable amount. Why does that matter? MX$0.32 is equal to US$0.017. The wallet can only receive US$0.010, so where does the remaining US$0.007 go? That’s up to the wallet's implementation. They could round up the amount to US$0.02, losing US$0.003 each transaction, or give the receiver US$0.01, keeping a profit of US$0.007 each time. They could also find a balance to maintain liquidity for currency conversion differences.
 
