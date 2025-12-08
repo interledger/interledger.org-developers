@@ -101,7 +101,7 @@ function getImageUrl(media: MediaFile | undefined): string | undefined {
 
   // If it's a relative URL (starts with /uploads/), prepend the Strapi server URL
   if (media.url.startsWith('/uploads/')) {
-    const strapiUrl = process.env.STRAPI_URL || 'http://localhost:1337';
+    const strapiUrl = process.env.STRAPI_URL || 'http://35.196.192.48:18080';
     return `${strapiUrl}${media.url}`;
   }
 
