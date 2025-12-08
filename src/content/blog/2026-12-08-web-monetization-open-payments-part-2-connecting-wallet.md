@@ -12,7 +12,7 @@ tags:
   - Web Monetization
 ---
 
-In the previous article, we discussed how the [Web Monetization extension connects to your wallet](/developers/blog/web-monetization-open-payments-part-1-connecting-wallet) using the Open Payments API. This article will explore the next steps for sending money: discovering the receiving wallet addresses on websites and setting up the necessary payment sessions.
+In the previous article, we discussed how the [Web Monetization extension connects to your wallet](/developers/blog/web-monetization-open-payments-part-1-connecting-wallet) using the Open Payments API. This article will explore the next steps for sending money: discovering the receiving wallet addresses on websites and setting up the necessary payment sessions. Like the previous article, we'll assume a conceptual understanding of [Web Monetization](https://webmonetization.org/) and [Open Payments API](https://openpayments.dev/).
 
 ## Finding receiving wallet addresses
 
@@ -22,7 +22,9 @@ As part of the Web Monetization API, websites declare the wallet address where t
 <link rel="monetization" href="https://example-wallet.com/my-wallet" />
 ```
 
-The extension's background script and pop-up cannot access this HTML from a webpage directly due to browser security restrictions. This is where the content scripts come into play.
+Websites can add multiple link elements to a page to specify multiple wallet addresses - the extension will send payments to each of them sequentially, while respecting user's choice of payment rate. If user's wallet cannot send payments to a wallet address, the extension will skip that address and move on to the next one.
+
+The extension's background script and pop-up cannot access this HTML from a webpage directly due to browser security restrictions. This is where the content scripts come into play. The [extension injects a content script](https://github.com/interledger/web-monetization-extension/tree/09078c695e42532035e9dd800a95d1fe28ca4c8c/src/content) into each webpage, allowing it to read and modify the page's content.
 
 The content script is the primary interface between the extension and the web page content. It operates directly within the context of web pages, including content inside iframes. In the context of the Web Monetization extension, its primary responsibility is the discovery, validation, and lifecycle management of every potential monetization link element on the site (precisely, within a `Document`).
 
@@ -49,7 +51,7 @@ function documentMutationCallback() {
   addedLinkElements.forEach((elem) => {
     const id = assignId(elem)
     const walletAddressInfo = await validateAndFetch(elem.href)
-    dispatch('start_monetization', { walletAddressInfo, id })
+    dispatch('setup_monetization', { walletAddressInfo, id })
   })
 
   removedLinkElements.forEach((elem) => {
@@ -63,11 +65,11 @@ All of these state changes — discovery, modification, and removal — are comm
 
 ## Payment session
 
-A payment session in the background script acts as the operational counterpart for a monetization link element. It uses the unique ID from the content script to maintain a link between the element in the DOM and its background representation. When a new payment session is initiated, it must undergo a series of checks.
+A payment session in the extension's background script acts as the operational counterpart for a monetization link element. It uses the unique ID from the content script to maintain a link between the element in the DOM and its background representation. When a new payment session is initiated, it must undergo a series of checks.
 
-First, it verifies whether the user's connected wallet address is authorized to send payments to the specified wallet address. The extension sends a “[create quote](https://openpayments.dev/apis/resource-server/operations/create-quote/)” request to the receiver’s resource server endpoint. If this request results in an "invalid receiver" error, it means the two wallets are not "peered" or connected. This may occur due to legal or technical reasons. For example, a wallet on the test namespace (e.g., [Interledger Test Wallet](https://wallet.interledger-test.dev/)) using _fake money_ cannot send a payment involving real money to a production wallet (e.g. [Interledger Wallet](https://interledger.app/) or GateHub). Consequently, we mark this payment session as "invalid", and no payments can proceed during the browsing session for this wallet address.
+First, it verifies whether the user's connected wallet address is authorized to send payments to the specified wallet address. The extension sends a “[create quote](https://openpayments.dev/apis/resource-server/operations/create-quote/)” request to the receiver’s resource server endpoint. If this request results in an "invalid receiver" error, it means the two wallets are not "peered" or connected. This may occur due to legal or technical reasons. For example, a wallet on the test namespace (e.g., [Interledger Test Wallet](https://wallet.interledger-test.dev/)) using _fake money_ cannot send a payment involving real money to a production wallet (e.g. [Interledger Wallet](https://interledger.app/) or [GateHub](https://gatehub.net/)). Consequently, we mark this payment session as "invalid", and no payments can proceed during the browsing session for this wallet address.
 
-The Payment Session object also has some helper methods to manage the payments effectively: it includes a method to send a specified amount of money, a method for dispatching `MonetizationEvent` to corresponding link elements (next article), and helpers to check if a wallet address is disabled, paused or payable, ensuring the recipient's status is constantly confirmed to prevent failed payments or unnecessary transactions.
+The payment session object also has some helper methods to manage the payments effectively: it includes a method to send a specified amount of money, a method for dispatching `MonetizationEvent` to corresponding link elements (next article), and helpers to check if a wallet address is disabled, paused or payable, ensuring the recipient's status is constantly confirmed to prevent failed payments or unnecessary transactions.
 
 It also needs to find a minimum sendable amount, which I’ll explain next.
 
