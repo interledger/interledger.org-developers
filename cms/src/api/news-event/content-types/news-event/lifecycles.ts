@@ -6,7 +6,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { exec } from 'child_process';
+import { gitCommitAndPush } from '../../../../utils/gitSync';
 
 interface NewsEvent {
   id: number;
@@ -104,57 +104,6 @@ async function deleteMDXFile(event: NewsEvent): Promise<void> {
     fs.unlinkSync(filepath);
     console.log(`🗑️  Deleted Event MDX file: ${filepath}`);
   }
-}
-
-/**
- * Escapes a string for safe use in shell commands (single-quoted context)
- */
-function escapeForShell(str: string): string {
-  // For single-quoted strings, we only need to handle single quotes
-  // Replace ' with '\'' (end quote, escaped quote, start quote)
-  return str.replace(/'/g, "'\\''");
-}
-
-/**
- * Commits and pushes changes to git to trigger Netlify preview builds
- */
-async function gitCommitAndPush(filepath: string, message: string): Promise<void> {
-  // Skip git operations if disabled via env var
-  if (process.env.STRAPI_DISABLE_GIT_SYNC === 'true') {
-    console.log('⏭️  Git sync disabled via STRAPI_DISABLE_GIT_SYNC');
-    return;
-  }
-
-  // Get the project root (where .git lives)
-  const projectRoot = path.resolve(__dirname, '../../../../../../');
-
-  // Escape the message for shell (handles quotes and special chars)
-  const safeMessage = escapeForShell(message);
-  const safeFilepath = escapeForShell(filepath);
-
-  return new Promise((resolve, reject) => {
-    // Stage the specific file, commit, and push
-    // Use single quotes to avoid issues with double quotes in titles
-    const commands = [
-      `git add '${safeFilepath}'`,
-      `git commit -m '${safeMessage}'`,
-      `git push`
-    ].join(' && ');
-
-    exec(commands, { cwd: projectRoot }, (error, stdout, stderr) => {
-      if (error) {
-        // Don't fail the lifecycle if git operations fail
-        // This allows content to still be saved even if git has issues
-        console.error(`⚠️  Git sync failed: ${error.message}`);
-        console.error(`stderr: ${stderr}`);
-        resolve(); // Resolve anyway to not block Strapi
-        return;
-      }
-      console.log(`✅ Git sync complete: ${message}`);
-      if (stdout) console.log(stdout);
-      resolve();
-    });
-  });
 }
 
 export default {
