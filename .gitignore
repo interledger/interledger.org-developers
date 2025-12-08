@@ -31,3 +31,6 @@ package-lock.json
 
 # webstorm
 .idea/
+
+# Local Netlify folder
+.netlify
