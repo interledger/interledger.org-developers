@@ -22,7 +22,7 @@ As part of the Web Monetization API, websites declare the wallet address where t
 <link rel="monetization" href="https://example-wallet.com/my-wallet" />
 ```
 
-The extension's background script and pop-up cannot access this HTML from webpage directly due to browser security restrictions. This is where the content scripts come into play.
+The extension's background script and pop-up cannot access this HTML from a webpage directly due to browser security restrictions. This is where the content scripts come into play.
 
 The content script is the primary interface between the extension and the web page content. It operates directly within the context of web pages, including content inside iframes. In the context of the Web Monetization extension, its primary responsibility is the discovery, validation, and lifecycle management of every potential monetization link element on the site (precisely, within a `Document`).
 
@@ -34,7 +34,7 @@ function getLinkElements() {
 }
 ```
 
-When a new such link element is discovered, the content script's first critical action is to assign it a unique ID. This ID creates a map between the live DOM element and its representation in the background script.
+When a new link element is discovered, the content script's first critical action is to assign the element a unique ID. This ID creates a map between the live DOM element and its representation in the background script.
 
 The script proceeds by validating the link element, ensuring its `href` attribute contains a valid wallet address URL. If the address successfully loads with a valid wallet address response, a `load` event is immediately fired on the element, signaling to the web page that the link element is viable for upcoming payments. Conversely, any invalid or malformed address triggers an `error` event, excluding the element from the monetization pool.
 
@@ -59,15 +59,15 @@ function documentMutationCallback() {
 }
 ```
 
-All of these state changes — discovery, modification, and removal — are communicated via message passing to the background script. This ensures the background script, which manages the actual payment logic, is always perfectly synchronized with the live state of the web page. This synchronization ultimately feeds the pop-up to display accurate, real-time monetization status to the user.
+All of these state changes — discovery, modification, and removal — are communicated by passing messages to the background script. This ensures the background script, which manages the actual payment logic, is always perfectly synchronized with the live state of the web page. This synchronization ultimately feeds the pop-up to display accurate, real-time monetization status to the user.
 
-## Payment Session
+## Payment session
 
-A Payment Session in the background script acts as the operational counterpart for a monetization link element. It uses the unique ID from the content script to maintain a link between the element in the DOM and its background representation. When a new payment session is initiated, it must undergo a series of checks.
+A payment session in the background script acts as the operational counterpart for a monetization link element. It uses the unique ID from the content script to maintain a link between the element in the DOM and its background representation. When a new payment session is initiated, it must undergo a series of checks.
 
-First, it verifies whether the user's connected wallet address is authorized to send payments to the specified wallet address. The extension sends a “[create quote](https://openpayments.dev/apis/resource-server/operations/create-quote/)” request to the receiver’s resource server endpoint. If this request results in an "invalid receiver" error, it means the two wallets are not "peered" or connected. This may occur due to legal or technical reasons. For example, a wallet on the test namespace (e.g., [Interledger Test Wallet](https://wallet.interledger-test.dev/)) _fake money_ cannot send a payment involving real money to a production wallet (e.g. [Interledger Wallet](https://interledger.app/) or GateHub). Consequently, we mark this payment session as "invalid", and no payments can proceed during the browsing session for this wallet address.
+First, it verifies whether the user's connected wallet address is authorized to send payments to the specified wallet address. The extension sends a “[create quote](https://openpayments.dev/apis/resource-server/operations/create-quote/)” request to the receiver’s resource server endpoint. If this request results in an "invalid receiver" error, it means the two wallets are not "peered" or connected. This may occur due to legal or technical reasons. For example, a wallet on the test namespace (e.g., [Interledger Test Wallet](https://wallet.interledger-test.dev/)) using _fake money_ cannot send a payment involving real money to a production wallet (e.g. [Interledger Wallet](https://interledger.app/) or GateHub). Consequently, we mark this payment session as "invalid", and no payments can proceed during the browsing session for this wallet address.
 
-The Payment Session object also has some helper methods to manage the payments effectively: it includes a method to send a specified amount of money, a method for dispatching `MonetizationEvent` to corresponding link elements (next article), and helpers to check if wallet address is disabled, paused or payable, ensuring the recipient's status is constantly confirmed to prevent failed payments or unnecessary transactions.
+The Payment Session object also has some helper methods to manage the payments effectively: it includes a method to send a specified amount of money, a method for dispatching `MonetizationEvent` to corresponding link elements (next article), and helpers to check if a wallet address is disabled, paused or payable, ensuring the recipient's status is constantly confirmed to prevent failed payments or unnecessary transactions.
 
 It also needs to find a minimum sendable amount, which I’ll explain next.
 
@@ -83,7 +83,7 @@ When transferring funds across currencies (e.g., from a USD wallet to an MXN wal
 
 But what if we were sending from an MXN wallet to a USD wallet? Can we send MX$0.01 to a USD wallet? If so, how much will the USD wallet receive - ignoring any transaction fees? Ideally, it would be US$0.00054, but an asset scale of 2 implies the minimum receivable amount is constrained to US$0.01. To ensure supporters send only what receivers can actually receive, we must determine an appropriate amount to send.
 
-When using Open Payments, attempting to create an outgoing payment quote of MX$0.01 to a USD wallet will result in a "non-positive receive amount" error. This is because MX$0.01 translates to a USD amount of US$0.00 - not a positive amount (any value greater than zero is considered positive here; let's steer clear of [positive and negative zeroes](https://math.stackexchange.com/a/26708) for now!).
+When using Open Payments, attempting to create an outgoing payment quote of MX$0.01 to a USD wallet will result in a "non-positive receive amount" error. This is because MX$0.01 translates to a USD amount of US$0.00 - not a positive amount (any value greater than zero is considered positive here).
 
 In the newer implementations, the Open Payments API will provide us with the minimum sendable amount along with the aforementioned error.
 However, for wallets that do not use the latest implementation, we need to employ a workaround to determine that amount. It's time for some math and algorithm work!
