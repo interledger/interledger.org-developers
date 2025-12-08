@@ -105,6 +105,8 @@ In the extension, we chose fairness by sending only amounts that can be properly
 We observed that MX$0.16 was not sendable, while MX$0.32 was sendable. Therefore, the minimum sendable amount lies somewhere in between. This is a textbook use-case of the binary search algorithm!
 The midpoint between the two amounts is MX$0.24, which is sendable, but it is still above the minimum sendable amount. When we find the midpoint of MX$0.16 and MX$0.24, we get MX$0.20, which is also not the minimum sendable. After some back and forth, we determine that MX$0.17 isn’t sendable, but MX$0.18 is, concluding that MX$0.18 must be the minimum sendable amount.
 
+It may seem the extension inadvertently increased the amount that will be paid. However, your rate of pay remains the same. The larger single payment simply implies a longer delay before the next payment is sent, as we will explore in the next article.
+
 Each test to determine whether an amount is sendable or not costs us one create quote request, which can add up significantly and delay the time it takes to send money to the recipient. To optimize this process, we can utilize currency exchange rates. Instead of starting our tests from MX$0.01, MX$0.02, MX$0.04, and so on up to MX$0.32, we can begin at MX$0.18. This way, we’ve trimmed our search space by a considerable margin. We still need to confirm whether the amount is sendable, as there may be associated fees, and to verify if it is indeed the minimum sendable amount. However, we have minimized the number of unnecessary requests.
 
 As I mentioned earlier, newer implementations of the Open Payments API provide us with a minimum sendable amount directly, and we won’t need this probing in the clients in future.
