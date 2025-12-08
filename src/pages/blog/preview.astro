@@ -15,7 +15,7 @@ if (!documentId) {
 const preview = true;
 
 const response = await fetchStrapi(
-  `api/blog-posts/${documentId}`,
+  `api/blog-posts/${documentId}?status=draft`,
   preview
 );
 
@@ -32,7 +32,7 @@ const frontmatter = {
   date: article.publishedAt,
 };
 
-const bodyHtml = marked.parse(article.content); 
+const bodyHtml = marked.parse(article.content ? article.content : ''); 
 ---
 <BlogLayout frontmatter={frontmatter}>
   <article set:html={bodyHtml} />
