@@ -11,6 +11,31 @@ const myCustomPreset: Preset = {
         (option) => option.model !== 'heading1'
       ),
     },
+    extraPlugins: [
+      function cleanGoogleDocsOnPaste(editor: any) {
+        const clipboardPlugin = editor.plugins.get('ClipboardPipeline');
+        
+        clipboardPlugin.on('contentInsertion', (evt: any, data: any) => {
+          const htmlContent = data.dataTransfer.getData('text/html');
+          
+          if (htmlContent && (htmlContent.includes('docs-internal-guid') || htmlContent.includes('google-docs'))) {
+            const cleanedHtml = htmlContent
+              // Remove only the Google Docs wrapper <b> tag with font-weight:normal - is this too fragile? 
+              .replace(/<b[^>]*font-weight:\s*normal[^>]*>/gi, '') 
+              .replace(/<\/b>(?=<br class="Apple-interchange-newline">)/gi, '')
+              // Remove meta tags
+              .replace(/<meta[^>]*>/gi, '');
+            
+            // Parse the cleaned HTML and insert it
+            const viewFragment = editor.data.processor.toView(cleanedHtml);
+            const modelFragment = editor.data.toModel(viewFragment);
+            
+            // Replace the content that would be inserted
+            data.content = modelFragment;
+          }
+        }, { priority: 'high' });
+      },
+    ],
   },
 };
 
