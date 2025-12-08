@@ -1,8 +1,6 @@
-export async function fetchStrapi(endpoint: string, preview = true) {
+export async function fetchStrapi(endpoint: string) {
   const base = import.meta.env.STRAPI_URL; 
-  const token = preview
-    ? import.meta.env.STRAPI_PREVIEW_TOKEN // full draft access
-    : import.meta.env.STRAPI_PUBLIC_TOKEN; // published-only or public
+  const token = import.meta.env.STRAPI_PREVIEW_TOKEN;
 
   // Ensure no double slashes
   const url = endpoint.startsWith("http") ? endpoint : `${base.replace(/\/$/, "")}/${endpoint.replace(/^\//, "")}`;

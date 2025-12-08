@@ -11,13 +11,8 @@ if (!documentId) {
   throw new Error("Missing documentId in preview URL");
 }
 
-// Always fetch draft content for preview? - in progress
-const preview = true;
-
-const response = await fetchStrapi(
-  `api/blog-posts/${documentId}?status=draft`,
-  preview
-);
+// Always fetch draft content for preview
+const response = await fetchStrapi(`api/blog-posts/${documentId}?status=draft`);
 
 const article = response?.data
 

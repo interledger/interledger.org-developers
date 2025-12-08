@@ -46,12 +46,6 @@ export default ({ env }) => {
           return null;
         }
 
-        // Use Next.js draft mode passing it a secret key and the content-type status - do we want to use secret key?
-        // const urlSearchParams = new URLSearchParams({
-        //   url: pathname,
-        //   status 
-        // });
-        // return `${clientUrl}/${urlSearchParams}`;
         return `${clientUrl}${pathname}`;
       },
     }
