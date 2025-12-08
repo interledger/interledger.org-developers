@@ -21,9 +21,9 @@ export async function gitCommitAndPush(filepath: string, message: string): Promi
 
   return new Promise((resolve) => {
     const commands = [
-      'git pull --rebase',
       `git add '${safeFilepath}'`,
       `git commit -m '${safeMessage}'`,
+      'git pull --rebase',
       'git push',
     ].join(' && ');
 
