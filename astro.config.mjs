@@ -9,7 +9,10 @@ import mdx from '@astrojs/mdx'
 // https://astro.build/config
 export default defineConfig({
   site: 'https://interledger.org',
-  output: 'hybrid',
+  output: 'server',
+  prerender: {
+    default: true
+  },
   adapter: netlify(),
   integrations: [
     starlight({
