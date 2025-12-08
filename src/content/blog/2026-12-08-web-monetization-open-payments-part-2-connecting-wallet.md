@@ -85,7 +85,7 @@ When transferring funds across currencies (e.g., from a USD wallet to an MXN wal
 
 But what if we were sending from an MXN wallet to a USD wallet? Can we send MX$0.01 to a USD wallet? If so, how much will the USD wallet receive - ignoring any transaction fees? Ideally, it would be US$0.00054, but an asset scale of 2 implies the minimum receivable amount is constrained to US$0.01. To ensure supporters send only what receivers can actually receive, we must determine an appropriate amount to send.
 
-When using Open Payments, attempting to create an outgoing payment quote of MX$0.01 to a USD wallet will result in a "non-positive receive amount" error. This is because MX$0.01 translates to a USD amount of US$0.00 - not a positive amount (any value greater than zero is considered positive here).
+When using Open Payments, attempting to [create a payment quote](https://openpayments.dev/apis/resource-server/operations/create-quote/) of MX$0.01 to a USD wallet will result in a "non-positive receive amount" error. This is because MX$0.01 translates to a USD amount of US$0.00 - not a positive amount (any value greater than zero is considered positive here).
 
 In the newer implementations, the Open Payments API will provide us with the minimum sendable amount along with the aforementioned error.
 However, for wallets that do not use the latest implementation, we need to employ a workaround to determine that amount. It's time for some math and algorithm work!
