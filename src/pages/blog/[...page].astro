@@ -63,37 +63,57 @@ const { page } = Astro.props
             const excerpt = `${createExcerpt(blogPostEntry.body).substring(0, 300)}...`
             return (
               <li class="postlist-item">
-                <time
-                  class="postlist-date"
-                  datetime={blogPostEntry.data.date.toISOString()}
-                >
-                  {blogPostEntry.data.date.toDateString()}
-                </time>
-                {blogPostEntry.data.lang ? (
-                  <div class="postlist-es">
-                    <a
-                      href={`/blog/${blogPostEntry.id}`}
-                      class="postlist-link heading--6"
-                    >
-                      {blogPostEntry.data.title}
-                    </a>
-                    <a class="postlist-lang" href="/blog/es">
-                      ES
-                    </a>
-                  </div>
-                ) : (
-                  <a
-                    href={`/blog/${blogPostEntry.id}`}
-                    class="postlist-link heading--6"
+                <div class="postlist-image">
+                  {blogPostEntry.data.image && (
+                    <img
+                      loading="lazy"
+                      src={blogPostEntry.data.image}
+                      width="250"
+                      height="250"
+                      alt={blogPostEntry.data.title}
+                    />
+                  )}
+                </div>
+                <div class="postlist-content">
+                  {blogPostEntry.data.lang ? (
+                    <div class="postlist-es">
+                      <h2>
+                        <a
+                          href={`/blog/${blogPostEntry.id}`}
+                          class="postlist-link"
+                        >
+                          {blogPostEntry.data.title}
+                        </a>
+                      </h2>
+                      <a class="postlist-lang" href="/blog/es">
+                        ES
+                      </a>
+                    </div>
+                  ) : (
+                    <h2>
+                      <a
+                        href={`/blog/${blogPostEntry.id}`}
+                        class="postlist-link"
+                      >
+                        {blogPostEntry.data.title}
+                      </a>
+                    </h2>
+                  )}
+                  <time
+                    class="postlist-date"
+                    datetime={blogPostEntry.data.date.toISOString()}
                   >
-                    {blogPostEntry.data.title}
+                    {blogPostEntry.data.date.toDateString().substring(4)}
+                  </time>
+                  <p>
+                    {blogPostEntry.data.description
+                      ? blogPostEntry.data.description
+                      : excerpt}
+                  </p>
+                  <a href={`/blog/${blogPostEntry.id}`} class="postlist-readmore">
+                    Read more →
                   </a>
-                )}
-                <p>
-                  {blogPostEntry.data.description
-                    ? blogPostEntry.data.description
-                    : excerpt}
-                </p>
+                </div>
               </li>
             )
           })
@@ -192,24 +212,82 @@ const { page } = Astro.props
 
   .postlist-item {
     display: flex;
+    flex-direction: row;
+    gap: var(--space-m);
+    margin-bottom: var(--space-m);
+    padding: var(--space-m);
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+  }
+
+  @media screen and (max-width: 768px) {
+    .postlist-item {
+      flex-direction: column;
+    }
+  }
+
+  .postlist-image {
+    flex-shrink: 0;
+  }
+
+  .postlist-image img {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+  }
+
+  @media screen and (max-width: 768px) {
+    .postlist-image img {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .postlist-content {
+    display: flex;
     flex-direction: column;
-    margin-bottom: var(--space-s);
+    flex: 1;
+  }
+
+  .postlist-content h2 {
+    margin: 0;
+    margin-bottom: var(--space-3xs);
   }
 
   .postlist-date {
     font-size: var(--step--1);
+    margin-bottom: var(--space-2xs);
+    display: block;
   }
 
   .postlist-link {
+    color: var(--color-primary);
     font-weight: 600;
-    text-decoration-color: transparent;
-    transition:
-      text-decoration 300ms ease-in-out,
-      color 300ms ease-in-out;
+    text-decoration: none;
+    transition: color 300ms ease-in-out;
   }
 
   .postlist-link:hover {
-    text-decoration-color: currentColor;
+    text-decoration: underline;
+  }
+
+  .postlist-content p {
+    margin-bottom: var(--space-2xs);
+    flex-grow: 1;
+  }
+
+  .postlist-readmore {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 600;
+    align-self: flex-start;
+    transition: opacity 300ms ease-in-out;
+  }
+
+  .postlist-readmore:hover {
+    opacity: 0.8;
   }
 
   .postlist-es {

@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "news_events",
+  "info": {
+    "singularName": "news-event",
+    "pluralName": "news-events",
+    "displayName": "Event",
+    "description": "Events content that syncs to MDX"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "order": {
+      "type": "integer",
+      "default": 0,
+      "required": false
+    },
+    "content": {
+      "type": "customField",
+      "customField": "plugin::ckeditor5.CKEditor",
+      "options": {
+        "preset": "defaultMarkdown"
+      }
+    }
+  }
+}

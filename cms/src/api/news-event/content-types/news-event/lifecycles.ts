@@ -1,6 +1,6 @@
 /**
- * Lifecycle callbacks for blog-post
- * Generates MDX files that match the blog post format used on the site
+ * Lifecycle callbacks for event
+ * Generates MDX files that match the events content format used on the site
  * Then commits and pushes to trigger Netlify preview builds
  */
 
@@ -8,36 +8,17 @@ import fs from 'fs';
 import path from 'path';
 import { exec } from 'child_process';
 
-interface MediaFile {
-  id: number;
-  url: string;
-  alternativeText?: string;
-  name?: string;
-  width?: number;
-  height?: number;
-  formats?: {
-    thumbnail?: { url: string };
-    small?: { url: string };
-    medium?: { url: string };
-    large?: { url: string };
-  };
-}
-
-interface BlogPost {
+interface NewsEvent {
   id: number;
   title: string;
-  description: string;
   slug: string;
-  date: string;
+  order: number;
   content: string;
-  featuredImage?: MediaFile;
-  lang?: string;
-  ogImageUrl?: string;
   publishedAt?: string;
 }
 
 interface Event {
-  result?: BlogPost;
+  result?: NewsEvent;
 }
 
 /**
@@ -79,82 +60,49 @@ function escapeQuotes(value: string): string {
   return value.replace(/"/g, '\\"');
 }
 
-function formatDate(dateString: string): string {
-  if (!dateString) return '';
-  const date = new Date(dateString);
-  if (isNaN(date.getTime())) return dateString;
-  return date.toISOString().split('T')[0];
+function generateFilename(event: NewsEvent): string {
+  return `${event.slug}.mdx`;
 }
 
-function generateFilename(post: BlogPost): string {
-  const date = formatDate(post.date);
-  const prefix = date ? `${date}-` : '';
-  return `${prefix}${post.slug}.mdx`;
-}
-
-/**
- * Gets the image URL from a media field
- * Returns the full Strapi URL for local files, or the full URL for external
- */
-function getImageUrl(media: MediaFile | undefined): string | undefined {
-  if (!media?.url) return undefined;
-
-  // If it's a relative URL (starts with /uploads/), prepend the Strapi server URL
-  if (media.url.startsWith('/uploads/')) {
-    const strapiUrl = process.env.STRAPI_URL || 'http://localhost:1337';
-    return `${strapiUrl}${media.url}`;
-  }
-
-  // Return the URL as-is for external images
-  return media.url;
-}
-
-function generateMDX(post: BlogPost): string {
-  const imageUrl = getImageUrl(post.featuredImage);
-  
+function generateMDX(event: NewsEvent): string {
   const frontmatterLines = [
-    `title: "${escapeQuotes(post.title)}"`,
-    `description: "${escapeQuotes(post.description)}"`,
-    post.ogImageUrl ? `ogImageUrl: "${escapeQuotes(post.ogImageUrl)}"` : undefined,
-    `date: ${formatDate(post.date)}`,
-    `slug: ${post.slug}`,
-    post.lang ? `lang: "${escapeQuotes(post.lang)}"` : undefined,
-    imageUrl ? `image: "${escapeQuotes(imageUrl)}"` : undefined,
+    `title: "${escapeQuotes(event.title)}"`,
+    `order: ${event.order || 0}`,
   ].filter(Boolean) as string[];
 
   const frontmatter = frontmatterLines.join('\n');
-  const content = post.content ? htmlToMarkdown(post.content) : '';
+  const content = event.content ? htmlToMarkdown(event.content) : '';
 
   return `---\n${frontmatter}\n---\n\n${content}\n`;
 }
 
-async function writeMDXFile(post: BlogPost): Promise<void> {
-  const outputPath = process.env.BLOG_MDX_OUTPUT_PATH || '../src/content/blog';
-  // Resolve from dist/src/api/blog-post/content-types/blog-post/ up to cms root then project root
+async function writeMDXFile(event: NewsEvent): Promise<void> {
+  const outputPath = process.env.EVENTS_MDX_OUTPUT_PATH || '../src/content/events';
+  // Resolve from dist/src/api/news-event/content-types/news-event/ up to cms root then project root
   const baseDir = path.resolve(__dirname, '../../../../../../', outputPath);
 
   if (!fs.existsSync(baseDir)) {
     fs.mkdirSync(baseDir, { recursive: true });
   }
 
-  const filename = generateFilename(post);
+  const filename = generateFilename(event);
   const filepath = path.join(baseDir, filename);
-  const mdxContent = generateMDX(post);
+  const mdxContent = generateMDX(event);
 
   fs.writeFileSync(filepath, mdxContent, 'utf-8');
-  console.log(`✅ Generated Blog Post MDX file: ${filepath}`);
+  console.log(`✅ Generated Event MDX file: ${filepath}`);
 }
 
-async function deleteMDXFile(post: BlogPost): Promise<void> {
-  const outputPath = process.env.BLOG_MDX_OUTPUT_PATH || '../src/content/blog';
-  // Resolve from dist/src/api/blog-post/content-types/blog-post/ up to cms root then project root
+async function deleteMDXFile(event: NewsEvent): Promise<void> {
+  const outputPath = process.env.EVENTS_MDX_OUTPUT_PATH || '../src/content/events';
+  // Resolve from dist/src/api/news-event/content-types/news-event/ up to cms root then project root
   const baseDir = path.resolve(__dirname, '../../../../../../', outputPath);
-  const filename = generateFilename(post);
+  const filename = generateFilename(event);
   const filepath = path.join(baseDir, filename);
 
   if (fs.existsSync(filepath)) {
     fs.unlinkSync(filepath);
-    console.log(`🗑️  Deleted Blog Post MDX file: ${filepath}`);
+    console.log(`🗑️  Deleted Event MDX file: ${filepath}`);
   }
 }
 
@@ -179,11 +127,11 @@ async function gitCommitAndPush(filepath: string, message: string): Promise<void
 
   // Get the project root (where .git lives)
   const projectRoot = path.resolve(__dirname, '../../../../../../');
-  
+
   // Escape the message for shell (handles quotes and special chars)
   const safeMessage = escapeForShell(message);
   const safeFilepath = escapeForShell(filepath);
-  
+
   return new Promise((resolve, reject) => {
     // Stage the specific file, commit, and push
     // Use single quotes to avoid issues with double quotes in titles
@@ -215,10 +163,10 @@ export default {
     if (result && result.publishedAt) {
       await writeMDXFile(result);
       const filename = generateFilename(result);
-      const outputPath = process.env.BLOG_MDX_OUTPUT_PATH || '../src/content/blog';
+      const outputPath = process.env.EVENTS_MDX_OUTPUT_PATH || '../src/content/events';
       const baseDir = path.resolve(__dirname, '../../../../../../', outputPath);
       const filepath = path.join(baseDir, filename);
-      await gitCommitAndPush(filepath, `blog: add "${result.title}"`);
+      await gitCommitAndPush(filepath, `events: add "${result.title}"`);
     }
   },
 
@@ -226,16 +174,16 @@ export default {
     const { result } = event;
     if (result) {
       const filename = generateFilename(result);
-      const outputPath = process.env.BLOG_MDX_OUTPUT_PATH || '../src/content/blog';
+      const outputPath = process.env.EVENTS_MDX_OUTPUT_PATH || '../src/content/events';
       const baseDir = path.resolve(__dirname, '../../../../../../', outputPath);
       const filepath = path.join(baseDir, filename);
-      
+
       if (result.publishedAt) {
         await writeMDXFile(result);
-        await gitCommitAndPush(filepath, `blog: update "${result.title}"`);
+        await gitCommitAndPush(filepath, `events: update "${result.title}"`);
       } else {
         await deleteMDXFile(result);
-        await gitCommitAndPush(filepath, `blog: unpublish "${result.title}"`);
+        await gitCommitAndPush(filepath, `events: unpublish "${result.title}"`);
       }
     }
   },
@@ -245,10 +193,10 @@ export default {
     if (result) {
       await deleteMDXFile(result);
       const filename = generateFilename(result);
-      const outputPath = process.env.BLOG_MDX_OUTPUT_PATH || '../src/content/blog';
+      const outputPath = process.env.EVENTS_MDX_OUTPUT_PATH || '../src/content/events';
       const baseDir = path.resolve(__dirname, '../../../../../../', outputPath);
       const filepath = path.join(baseDir, filename);
-      await gitCommitAndPush(filepath, `blog: delete "${result.title}"`);
+      await gitCommitAndPush(filepath, `events: delete "${result.title}"`);
     }
   },
 };

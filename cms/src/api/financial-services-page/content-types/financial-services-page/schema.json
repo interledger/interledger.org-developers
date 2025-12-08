@@ -25,6 +25,9 @@
       "type": "text",
       "required": true
     },
+    "applicationNotice": {
+      "type": "text"
+    },
     "ctaTitle": {
       "type": "string",
       "default": "Ready to Apply?"

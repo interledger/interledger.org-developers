@@ -59,19 +59,13 @@ const defaultInfoItems = [
 
 const [pageContentEntry] = await getCollection('financial-services')
 const grantTracks = await getCollection('grant-tracks')
-const infoItemsData = await getCollection('info-items')
 
 const pageContent = pageContentEntry?.data || defaultContent
 const grants =
   grantTracks.length > 0
     ? grantTracks.sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0)).map((entry) => entry.data)
     : defaultGrants
-const infoItems =
-  infoItemsData.length > 0
-    ? infoItemsData
-        .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0))
-        .map((entry) => entry.data)
-    : defaultInfoItems
+const infoItems = defaultInfoItems
 ---
 
 <BaseLayout title="Financial Services - Interledger Foundation">

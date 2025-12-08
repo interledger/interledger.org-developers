@@ -1,0 +1,140 @@
+---
+import { getCollection, render } from 'astro:content'
+import BaseLayout from '../layouts/BaseLayout.astro'
+
+const events = await getCollection('events')
+const sortedEvents = events.sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
+
+// Render all events to get their Content components
+const renderedEvents = await Promise.all(
+  sortedEvents.map(async (event) => ({
+    ...event,
+    Content: (await render(event)).Content
+  }))
+)
+---
+
+<BaseLayout title="Events - Interledger Foundation" description="Create space to be inspired">
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="content-wrapper">
+        <h1 class="hero__title">Events</h1>
+        <p class="hero__subtitle">Create space to be inspired</p>
+      </div>
+    </section>
+
+    <!-- Events Content Section -->
+    <section class="events-content">
+      <div class="content-wrapper">
+        <div class="event-content">
+          {renderedEvents.map((event) => (
+            <event.Content />
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  main {
+    padding-block-end: var(--space-xl);
+  }
+
+  /* Hero Section */
+  .hero {
+    background: linear-gradient(135deg,
+      oklch(35% 0.12 200) 0%,
+      oklch(45% 0.10 190) 30%,
+      oklch(50% 0.08 180) 60%,
+      oklch(55% 0.06 170) 100%
+    );
+    padding: var(--space-xl) 0;
+    color: var(--color-white);
+    text-align: center;
+  }
+
+  .hero__title {
+    font-size: var(--step-6);
+    font-weight: 700;
+    margin-block-end: var(--space-xs);
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .hero__subtitle {
+    font-size: var(--step-2);
+    font-weight: 300;
+    font-style: italic;
+    opacity: 0.95;
+  }
+
+  /* Events Content */
+  .events-content {
+    padding-block: var(--space-xl);
+  }
+
+  .event-content {
+    font-size: var(--step-0);
+    line-height: 1.8;
+  }
+
+  .event-content :global(p) {
+    margin-block-end: var(--space-s);
+  }
+
+  .event-content :global(h3) {
+    font-size: var(--step-1);
+    font-weight: 600;
+    margin-block: var(--space-m) var(--space-2xs);
+    color: var(--color-black);
+  }
+
+  .event-content :global(ul),
+  .event-content :global(ol) {
+    margin-block: var(--space-s);
+    padding-inline-start: var(--space-m);
+  }
+
+  .event-content :global(li) {
+    margin-block-end: var(--space-2xs);
+  }
+
+  .event-content :global(a) {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .event-content :global(a:hover) {
+    text-decoration-thickness: 2px;
+  }
+
+  .event-content :global(strong) {
+    color: inherit;
+    font-weight: 700;
+  }
+
+  .event-content :global(code) {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 0.2em 0.4em;
+    border-radius: var(--border-radius);
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+  }
+
+  /* Responsive */
+  @media screen and (max-width: 799px) {
+    .hero {
+      padding: var(--space-l) 0;
+    }
+
+    .hero__title {
+      font-size: var(--step-4);
+    }
+
+    .hero__subtitle {
+      font-size: var(--step-0);
+    }
+  }
+</style>

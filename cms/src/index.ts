@@ -32,6 +32,129 @@ function copySchemas() {
   }
 }
 
+/**
+ * Configure pretty labels for field names in the admin panel.
+ * This updates the content-manager metadata stored in the database.
+ */
+async function configureFieldLabels(strapi: any) {
+  // Map of content type UIDs to their field label configurations
+  // All fields get human-readable labels for better UX
+  const labelConfigs: Record<string, Record<string, string>> = {
+    'api::blog-post.blog-post': {
+      title: 'Title',
+      description: 'Description',
+      slug: 'URL Slug',
+      date: 'Publish Date',
+      lang: 'Language',
+      featuredImage: 'Featured Image',
+      ogImageUrl: 'OG Image URL',
+      content: 'Content',
+      createdAt: 'Created At',
+      updatedAt: 'Updated At',
+      publishedAt: 'Published At',
+    },
+    'api::press-item.press-item': {
+      title: 'Title',
+      description: 'Description',
+      publishDate: 'Publish Date',
+      slug: 'URL Slug',
+      publication: 'Publication Name',
+      publicationLogo: 'Publication Logo URL',
+      externalUrl: 'External URL',
+      content: 'Content',
+      featured: 'Featured',
+      category: 'Category',
+      createdAt: 'Created At',
+      updatedAt: 'Updated At',
+      publishedAt: 'Published At',
+    },
+    'api::grant-track.grant-track': {
+      name: 'Grant Name',
+      amount: 'Grant Amount',
+      description: 'Description',
+      order: 'Display Order',
+      createdAt: 'Created At',
+      updatedAt: 'Updated At',
+      publishedAt: 'Published At',
+    },
+    'api::info-item.info-item': {
+      title: 'Title',
+      content: 'Content',
+      order: 'Display Order',
+      createdAt: 'Created At',
+      updatedAt: 'Updated At',
+      publishedAt: 'Published At',
+    },
+    'api::financial-services-page.financial-services-page': {
+      heroTitle: 'Hero Title',
+      heroDescription: 'Hero Description',
+      introText: 'Introduction Text',
+      applicationNotice: 'Application Notice',
+      ctaTitle: 'CTA Title',
+      ctaDescription: 'CTA Description',
+      ctaEmailLabel: 'Email Button Label',
+      ctaSubscribeLabel: 'Subscribe Button Label',
+      createdAt: 'Created At',
+      updatedAt: 'Updated At',
+      publishedAt: 'Published At',
+    },
+  };
+
+  for (const [uid, labels] of Object.entries(labelConfigs)) {
+    if (Object.keys(labels).length === 0) continue;
+
+    try {
+      // Get the content-manager plugin service
+      const contentManagerService = strapi.plugin('content-manager')?.service('content-types');
+      if (!contentManagerService) continue;
+
+      // Get current configuration
+      const configuration = await contentManagerService.findConfiguration({ uid });
+      if (!configuration?.metadatas) continue;
+
+      let needsUpdate = false;
+      const updatedMetadatas = { ...configuration.metadatas };
+
+      for (const [fieldName, label] of Object.entries(labels)) {
+        if (updatedMetadatas[fieldName]) {
+          const currentEditLabel = updatedMetadatas[fieldName]?.edit?.label;
+
+          // Update if label is default (same as field name, case-insensitive), empty, or not set
+          const isDefaultLabel = !currentEditLabel || 
+            currentEditLabel === fieldName ||
+            currentEditLabel.toLowerCase() === fieldName.toLowerCase();
+
+          if (isDefaultLabel && currentEditLabel !== label) {
+            updatedMetadatas[fieldName] = {
+              ...updatedMetadatas[fieldName],
+              edit: {
+                ...updatedMetadatas[fieldName]?.edit,
+                label,
+              },
+              list: {
+                ...updatedMetadatas[fieldName]?.list,
+                label,
+              },
+            };
+            needsUpdate = true;
+          }
+        }
+      }
+
+      if (needsUpdate) {
+        await contentManagerService.updateConfiguration(
+          { uid },
+          { metadatas: updatedMetadatas }
+        );
+        strapi.log.info(`✅ Updated field labels for ${uid}`);
+      }
+    } catch (error) {
+      // Log but don't fail - configuration might not exist yet
+      strapi.log.debug(`Could not update labels for ${uid}: ${error.message}`);
+    }
+  }
+}
+
 export default {
   /**
    * An asynchronous register function that runs before
@@ -75,5 +198,8 @@ export default {
         // Ignore permission errors if we can't change them
       }
     }
+
+    // Configure pretty field labels for the admin panel
+    await configureFieldLabels(strapi);
   },
 };
