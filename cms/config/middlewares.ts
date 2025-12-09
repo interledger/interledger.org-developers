@@ -24,7 +24,7 @@ export default [
     name: 'strapi::cors',
     config: {
       enabled: true,
-      origin: ['http://localhost:1103', 'http://127.0.0.1:1103'],
+      origin: ['http://localhost:1103', 'http://127.0.0.1:1103', 'https://deploy-preview-175--developers-preview.netlify.app'],
     },
   },
   'strapi::poweredBy',
