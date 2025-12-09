@@ -97,12 +97,12 @@ function generateFilename(post: BlogPost): string {
  * Returns the full Strapi URL for local files, or the full URL for external
  */
 function getImageUrl(media: MediaFile | undefined): string | undefined {
-  if (!media?.url) return undefined;
+ if (!media?.url) return undefined;
 
-  // If it's a relative URL (starts with /uploads/), prepend the Strapi server URL
+  // If it's a relative URL (starts with /uploads/), allow an optional base URL override, otherwise keep it relative
   if (media.url.startsWith('/uploads/')) {
-    const strapiUrl = process.env.STRAPI_URL || 'http://35.196.192.48:18080';
-    return `${strapiUrl}${media.url}`;
+    const uploadsBase = process.env.STRAPI_UPLOADS_BASE_URL;
+    return uploadsBase ? `${uploadsBase.replace(/\/$/, '')}${media.url}` : media.url;
   }
 
   // Return the URL as-is for external images
