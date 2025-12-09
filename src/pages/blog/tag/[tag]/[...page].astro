@@ -1,12 +1,15 @@
 ---
-import type { GetStaticPaths, Page } from 'astro'
-import BaseLayout from '../../layouts/BaseLayout.astro'
-import BlogIndex from '../../components/blog/BlogIndex.astro'
+import type { Page } from 'astro'
+import type { GetStaticPaths } from 'astro'
+import { getTagSlug } from '../../../../utils/tag-url'
+import BaseLayout from '../../../../layouts/BaseLayout.astro'
+import BlogIndex from '../../../../components/blog/BlogIndex.astro'
 import { getCollection } from 'astro:content'
 
 type Props = {
   page: Page
   allTags: string[]
+  selectedTag: string
 }
 
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
@@ -19,18 +22,27 @@ export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
     ...new Set(blogEntries.flatMap((entry) => entry.data.tags))
   ].sort()
 
-  return paginate(blogEntries, {
-    pageSize: 10,
-    props: { allTags }
+  // Create pages for each tag
+  return allTags.flatMap((tag) => {
+    const tagSlug = getTagSlug(tag)
+    const filteredEntries = blogEntries.filter((entry) =>
+      entry.data.tags.includes(tag)
+    )
+
+    return paginate(filteredEntries, {
+      params: { tag: tagSlug },
+      pageSize: 10,
+      props: { allTags, selectedTag: tag }
+    })
   })
 }
 
-const { page, allTags } = Astro.props
+const { page, allTags, selectedTag } = Astro.props
 ---
 
 <BaseLayout
-  title="Engineering Blog"
-  description="Hear stories and experiences from the team who is working on making Interledger, the interoperable global payments network, a reality."
+  title={`Engineering Blog - ${selectedTag}`}
+  description={`Blog posts tagged with ${selectedTag}`}
   ogImageUrl={new URL('/developers/img/blog/og-image.png', Astro.site).href}
 >
   <BlogIndex
@@ -41,9 +53,15 @@ const { page, allTags } = Astro.props
         name: 'Developers Portal',
         href: '/developers',
         umamiEvent: 'Devs breadcrumb - Home'
+      },
+      {
+        name: 'Engineering Blog',
+        href: '/developers/blog',
+        umamiEvent: 'Devs breadcrumb - Blog'
       }
     ]}
     allTags={allTags}
+    selectedTag={selectedTag}
     showTagFilter={true}
     showPagination={true}
     paginationProps={{

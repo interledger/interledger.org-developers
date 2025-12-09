@@ -6,7 +6,7 @@ Source code for the /developer-tools portion of [Interledger.org](https://interl
 
 Inside this project, you'll see the following folders and files:
 
-```
+```text
 .
 ├── public/
 ├── src/
@@ -69,7 +69,30 @@ ESLint is configured to work with TypeScript and Astro files. The configuration 
 
 ### 👀 Want to learn more?
 
-Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+Check out [Starlight's docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+
+## Deployment Notes
+
+This project has two deployment mechanisms:
+
+### Preview Deployments (Netlify)
+
+Every pull request automatically generates a preview deployment on Netlify at `https://deploy-preview-{PR_NUMBER}--developers-preview.netlify.app/developers/`. This allows reviewers to see changes before they're merged. The Netlify configuration is defined in `netlify.toml`.
+
+### Production Deployments (Google Cloud Storage)
+
+The real production deployment is served through Google Cloud Storage (GCS) at `https://interledger.org/developers/` as part of the main Interledger website. This is a transparent proxy configuration - the developers portal is hosted separately but appears as part of the main domain.
+
+When a PR is merged to the `main` branch, the `.github/workflows/deploy_gcs.yml` GitHub Actions workflow automatically:
+
+1. Builds the site using Bun
+2. Deploys the built files to Google Cloud Storage (`gs://interledger-websites-public/developers`)
+3. Rebuilds and deploys the nginx-rewrite Cloud Run service (which handles the `/developers` proxy routing)
+4. Invalidates the CDN cache to ensure new content is served immediately
+
+**Note:** There is a legacy `deploy.yaml` workflow in `.github/workflows/` which is being deprecated. New deployments should use `deploy_gcs.yml`.
+
+For more information about the main Interledger.org infrastructure and deployment pipeline, see the [`interledger.org-v4`](https://github.com/interledger/interledger.org-v4) repository.
 
 Thank You for Contributing! We appreciate your effort to write a blog post and share your expertise with the community!
 
@@ -97,6 +120,23 @@ If you're unsure how to structure your writing, you can use this as a guide.
 - Note: A call to action (CTA) will be included automatically at the bottom of every post.
 
 Ideal Word Count: Between 1,000 and 2,500 words, with links to relevant documents/pages for a deeper understanding.
+
+### Blog metadata and tags
+
+Each blog post includes frontmatter at the top of the file (title, description, date, authors, etc.), including a `tags` field used for filtering on the blog index.
+
+Please **only use the existing, approved tags** unless you have aligned with the tech + comms team on adding a new one. This helps keep the tag filter focused and avoids fragmentation.
+
+**Current tags:**
+
+- Interledger Protocol
+- Open Payments
+- Web Monetization
+- Rafiki
+- Updates
+- Releases
+
+If you believe your post needs a new tag, propose it in your PR description or in the `#tech-team` Slack channel so we can decide whether to add it and update this list.
 
 ### Getting Started
 
