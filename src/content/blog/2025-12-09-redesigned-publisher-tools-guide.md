@@ -1,7 +1,7 @@
 ---
 title: 'How the Redesigned Publisher Tools Work: A Technical Guide'
 description: 'A technical dive into the architecture behind the redesigned Web Monetization Publisher Tools'
-date: 2025-10-23
+date: 2025-12-09
 slug: redesigned-publisher-tools-guide
 authors:
   - Darian Avasan
@@ -52,7 +52,7 @@ The **`api`** provides a service that retrieves configuration and later can hand
 2. **Payment proxy:** Handle the Open Payments flow (quote generation, grant authorization, payment finalization)
 
 Based on what we’ve established so far, we can draw the following:
-![Configuration flow](/developers/img/blog/2025-10-17/publisher-tools-schema.png)
+![Configuration flow](/developers/img/blog/2025-12-09/publisher-tools-schema.png)
 
 **Key flow steps:**
 
