@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_shared_hero_sections",
+  "info": {
+    "displayName": "hero section"
+  },
+  "options": {},
+  "attributes": {
+    "hero_title": {
+      "type": "text"
+    },
+    "hero_content": {
+      "type": "text"
+    },
+    "hero_cta": {
+      "type": "component",
+      "component": "shared.cta-link",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

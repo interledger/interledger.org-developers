@@ -1,0 +1,52 @@
+---
+const { href, style, umami, external, text } = Astro.props;
+---
+
+<a
+  href={href}
+  class={`btn-${style}`}
+  data-umami-event={umami}
+  {...(external && {
+    target: "_blank",
+    rel: "noopener noreferrer"
+  })}
+  >{text}
+  {external && (
+    <svg class="external" fill="none"  viewBox="0 0 18 18"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 3H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M11 1h6m0 0v6m0-6L7 11"/></svg>
+  )}
+</a>
+
+<style>
+  .btn-primary, .btn-secondary {
+    display: inline-block; 
+    padding: 1.5rem 2rem;
+    width: fit-content;
+    border-radius: 1rem;
+    text-decoration: none;
+  }
+
+  .external {
+    display: inline-block;
+    height: 0.75em;
+    width: 0.75em;
+  }
+
+  .btn-primary {
+    background-color: #007777;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background-color: #0c9b9b;
+    color: white;
+  }
+
+  .btn-secondary {
+    background-color: rgba(255, 255, 255, 0.725);
+    color: #007777;
+  }
+
+  .btn-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.927);
+  }
+</style>

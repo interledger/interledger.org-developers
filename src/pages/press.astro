@@ -1,180 +1,45 @@
 ---
-import { getCollection } from 'astro:content'
-import ExternalIcon from '../../public/img/icon-external.svg'
+import { marked } from 'marked'
 import BaseLayout from '../layouts/BaseLayout.astro'
+import Link from '../components/shared/Link.astro'
+import HeroSection from '../components/shared/HeroSection.astro'
+const token = import.meta.env.STRAPI_PREVIEW_TOKEN
 
-// Fetch all press items
-const pressItems = await getCollection('press')
+async function getMediaFromStrapi() {
+  const response = await fetch(
+    'http://localhost:1337/api/media-page?populate[media_hero][populate][hero_cta]=true&populate[media_cta]=true',
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    }
+  )
+  const data = await response.json()
+  return data.data
+}
 
-// Sort by publish date (newest first)
-const sortedPressItems = pressItems.sort((a, b) => {
-  const dateA = new Date(a.data.publishDate)
-  const dateB = new Date(b.data.publishDate)
-  return dateB.getTime() - dateA.getTime()
-})
-
-// Separate featured items and regular items
-const featuredItems = sortedPressItems.filter((item) => item.data.featured)
-const regularItems = sortedPressItems.filter((item) => !item.data.featured)
-
-// Get unique publications for "Featured In" section
-const publications = [
-  ...new Set(
-    pressItems
-      .filter((item) => item.data.publication && item.data.publicationLogo)
-      .map((item) => ({
-        name: item.data.publication,
-        logo: item.data.publicationLogo,
-      }))
-  ),
-]
+const mediaData = await getMediaFromStrapi()
 ---
 
 <BaseLayout title="Press - Interledger Developers">
   <main>
-    <section class="hero">
-      <div class="content-wrapper">
-        <div class="text-wrapper">
-          <h1 class="hero__heading heading--2">Insights and updates</h1>
-          <p class="hero__txt">
-            We share stories about open-source, digital financial inclusion,
-            and how we are revolutionizing digital payments. We are committed
-            to amplifying the voices of those within underrepresented
-            communities.
-          </p>
-        </div>
-      </div>
-    </section>
+    <HeroSection title={mediaData.media_hero.hero_title} content={mediaData.media_hero.hero_content} ctas={mediaData.media_hero.hero_cta} />
 
     <section class="press-intro">
+      <div class="content-wrapper" set:html={mediaData.media_content ? marked.parse(mediaData.media_content) : ''} />
+    </section>
+    <section>
       <div class="content-wrapper">
-        <p class="intro-text">
-          For media inquiries and interview requests, please contact us at{' '}
-          <a href="mailto:press@interledger.org">press@interledger.org</a>
-        </p>
+        <Link
+          href={mediaData.media_cta.href}
+          style={mediaData.media_cta.style}
+          umami={mediaData.media_cta.umami}
+          external={mediaData.media_cta.external}
+          text={mediaData.media_cta.text}
+        />
       </div>
     </section>
-
-    {
-      featuredItems.length > 0 && (
-        <section class="featured-section">
-          <div class="content-wrapper">
-            <h2 class="heading--4">Featured</h2>
-            <div class="press-grid">
-              {featuredItems.map((item) => (
-                <article class="press-card featured">
-                  <div class="press-card__content">
-                    {item.data.publication && (
-                      <span class="press-card__publication">
-                        {item.data.publication}
-                      </span>
-                    )}
-                    <h3 class="press-card__title heading--6">
-                      {item.data.externalUrl ? (
-                        <a
-                          href={item.data.externalUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {item.data.title}
-                          <ExternalIcon class="external" />
-                        </a>
-                      ) : (
-                        <a href={`/press/${item.slug}`}>
-                          {item.data.title}
-                        </a>
-                      )}
-                    </h3>
-                    <p class="press-card__description">{item.data.description}</p>
-                    <time
-                      class="press-card__date"
-                      datetime={item.data.publishDate}
-                    >
-                      {new Date(item.data.publishDate).toLocaleDateString(
-                        'en-US',
-                        {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                        }
-                      )}
-                    </time>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-      )
-    }
-
-    <section class="press-list-section">
-      <div class="content-wrapper">
-        <h2 class="heading--4">In the Press</h2>
-        <div class="press-list">
-          {
-            regularItems.map((item) => (
-              <article class="press-item">
-                <div class="press-item__content">
-                  {item.data.publication && (
-                    <span class="press-item__publication">
-                      {item.data.publication}
-                    </span>
-                  )}
-                  <h3 class="press-item__title">
-                    {item.data.externalUrl ? (
-                      <a
-                        href={item.data.externalUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {item.data.title}
-                        <ExternalIcon class="external" />
-                      </a>
-                    ) : (
-                      <a href={`/press/${item.slug}`}>
-                        {item.data.title}
-                      </a>
-                    )}
-                  </h3>
-                  <p class="press-item__description">{item.data.description}</p>
-                </div>
-                <time class="press-item__date" datetime={item.data.publishDate}>
-                  {new Date(item.data.publishDate).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </time>
-              </article>
-            ))
-          }
-        </div>
-      </div>
-    </section>
-
-    {
-      publications.length > 0 && (
-        <section class="featured-in-section">
-          <div class="content-wrapper">
-            <h2 class="heading--4">Featured In</h2>
-            <div class="publication-logos">
-              {publications.map((pub) => (
-                <div class="publication-logo">
-                  {pub.logo && (
-                    <img
-                      src={pub.logo}
-                      alt={pub.name}
-                      loading="lazy"
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )
-    }
   </main>
 </BaseLayout>
 
@@ -191,45 +56,10 @@ const publications = [
     padding-block-end: var(--space-l);
   }
 
-  .hero {
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: bottom right;
-    background-image: linear-gradient(to right, #007777, #69bcc3);
-    background-image: linear-gradient(
-      to right,
-      oklch(51.54% 0.088 194.77),
-      oklch(74.53% 0.082 202.65)
-    );
-    min-height: 40vh;
-    padding-block: var(--space-m);
-    color: var(--color-white);
-    display: flex;
-    align-items: center;
-  }
-
   .content-wrapper {
     display: flex;
     flex-direction: column;
     gap: var(--space-m);
-  }
-
-  .text-wrapper {
-    flex: 1;
-  }
-
-  .hero__heading {
-    color: var(--color-white);
-    max-width: 15em;
-    line-height: 1.2;
-    font-weight: 600;
-    margin-block-end: var(--space-xs);
-  }
-
-  .hero__txt {
-    max-width: 50em;
-    font-size: 1.125rem;
-    line-height: 1.6;
   }
 
   .press-intro {
@@ -237,217 +67,4 @@ const publications = [
     padding-block: var(--space-m);
   }
 
-  .intro-text {
-    font-size: 1.125rem;
-    line-height: 1.6;
-    text-align: center;
-    max-width: 50em;
-    margin-inline: auto;
-  }
-
-  .intro-text a {
-    color: var(--color-primary);
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-
-  .intro-text a:hover {
-    text-decoration-thickness: 2px;
-  }
-
-  .featured-section,
-  .press-list-section,
-  .featured-in-section {
-    padding-block: var(--space-l);
-  }
-
-  .heading--4 {
-    margin-block-end: var(--space-m);
-    font-weight: 600;
-  }
-
-  .press-grid {
-    display: grid;
-    gap: var(--space-m);
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 350px), 1fr));
-  }
-
-  .press-card {
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    padding: var(--space-m);
-    background-color: var(--color-white);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  .press-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  }
-
-  .press-card.featured {
-    border-top: 4px solid var(--color-primary);
-  }
-
-  .press-card__publication {
-    display: inline-block;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--color-primary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-block-end: var(--space-2xs);
-  }
-
-  .press-card__title {
-    margin-block-end: var(--space-xs);
-    font-weight: 600;
-  }
-
-  .press-card__title a {
-    color: inherit;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: var(--space-2xs);
-  }
-
-  .press-card__title a:hover {
-    color: var(--color-primary);
-  }
-
-  .press-card__description {
-    color: var(--color-text-secondary);
-    line-height: 1.6;
-    margin-block-end: var(--space-xs);
-  }
-
-  .press-card__date {
-    display: block;
-    font-size: 0.875rem;
-    color: var(--color-text-muted);
-  }
-
-  .press-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-m);
-  }
-
-  .press-item {
-    border-bottom: 1px solid var(--color-border);
-    padding-block-end: var(--space-m);
-    display: flex;
-    justify-content: space-between;
-    gap: var(--space-m);
-  }
-
-  .press-item:last-child {
-    border-bottom: none;
-  }
-
-  .press-item__content {
-    flex: 1;
-  }
-
-  .press-item__publication {
-    display: inline-block;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--color-primary);
-    margin-block-end: var(--space-3xs);
-  }
-
-  .press-item__title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-block-end: var(--space-2xs);
-  }
-
-  .press-item__title a {
-    color: inherit;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2xs);
-  }
-
-  .press-item__title a:hover {
-    color: var(--color-primary);
-  }
-
-  .press-item__description {
-    color: var(--color-text-secondary);
-    line-height: 1.6;
-  }
-
-  .press-item__date {
-    flex-shrink: 0;
-    font-size: 0.875rem;
-    color: var(--color-text-muted);
-    white-space: nowrap;
-  }
-
-  .external {
-    height: 0.75em;
-    width: 0.75em;
-    display: inline-block;
-  }
-
-  .publication-logos {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: var(--space-m);
-    align-items: center;
-  }
-
-  .publication-logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-s);
-    background-color: var(--color-white);
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    min-height: 80px;
-  }
-
-  .publication-logo img {
-    max-width: 100%;
-    max-height: 60px;
-    object-fit: contain;
-    filter: grayscale(100%);
-    opacity: 0.7;
-    transition: all 0.3s ease;
-  }
-
-  .publication-logo:hover img {
-    filter: grayscale(0%);
-    opacity: 1;
-  }
-
-  @media screen and (max-width: 799px) {
-    .hero {
-      min-height: 30vh;
-    }
-
-    .press-item {
-      flex-direction: column;
-      gap: var(--space-xs);
-    }
-
-    .press-item__date {
-      white-space: normal;
-    }
-
-    .publication-logos {
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    }
-  }
-
-  @media screen and (min-width: 800px) {
-    .hero {
-      min-height: 50vh;
-    }
-  }
 </style>

@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_shared_cta_links",
+  "info": {
+    "displayName": "Cta Link"
+  },
+  "options": {},
+  "attributes": {
+    "href": {
+      "type": "string"
+    },
+    "umami": {
+      "type": "string"
+    },
+    "text": {
+      "type": "string"
+    },
+    "style": {
+      "type": "enumeration",
+      "enum": [
+        "primary",
+        "secondary"
+      ]
+    },
+    "external": {
+      "type": "boolean"
+    }
+  },
+  "config": {}
+}
