@@ -4,10 +4,10 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 import Link from '../components/shared/Link.astro'
 import HeroSection from '../components/shared/HeroSection.astro'
 const token = import.meta.env.STRAPI_PREVIEW_TOKEN
-
+const fetch_url = import.meta.env.STRAPI_URL
 async function getMediaFromStrapi() {
   const response = await fetch(
-    'http://localhost:1337/api/media-page?populate[media_hero][populate][hero_cta]=true&populate[media_cta]=true',
+    `${fetch_url}/api/media-page?populate[media_hero][populate][hero_cta]=true&populate[media_cta]=true`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
