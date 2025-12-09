@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 import { exec } from 'child_process';
 
@@ -19,9 +20,17 @@ export async function gitCommitAndPush(filepath: string, message: string): Promi
   const safeMessage = escapeForShell(message);
   const safeFilepath = escapeForShell(filepath);
 
+  // Always include public/uploads if it exists so media changes are committed
+  const uploadsDir = path.join(projectRoot, 'public', 'uploads');
+  const addPaths = [safeFilepath];
+  if (fs.existsSync(uploadsDir)) {
+    const uploadsRelative = escapeForShell(path.relative(projectRoot, uploadsDir));
+    addPaths.push(uploadsRelative);
+  }
+
   return new Promise((resolve) => {
     const commands = [
-      `git add '${safeFilepath}'`,
+      `git add ${addPaths.map((p) => `'${p}'`).join(' ')}`,
       `git commit -m '${safeMessage}'`,
       'git pull --rebase',
       'git push',
