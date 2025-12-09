@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_shared_sections",
+  "info": {
+    "displayName": "section"
+  },
+  "options": {},
+  "attributes": {
+    "text_block": {
+      "type": "blocks"
+    }
+  },
+  "config": {}
+}

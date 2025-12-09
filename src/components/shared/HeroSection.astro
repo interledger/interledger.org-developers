@@ -1,0 +1,81 @@
+---
+import Link from './Link.astro'
+const {title, content, ctas} = Astro.props
+---
+
+<section class="hero">
+  <div class="content-wrapper">
+    <div class="text-wrapper">
+      <h1 class="hero__heading heading--2">
+        {title}
+      </h1>
+      <p class="hero__txt">
+        {content}
+      </p>
+      <div class="hero__ctas">
+        {
+          ctas.map((link) => (
+            <Link
+              href={link.href}
+              style={link.style}
+              umami={link.umami}
+              external={link.external}
+              text={link.text}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: bottom right;
+    background-image: linear-gradient(to right, #007777, #69bcc3);
+    background-image: linear-gradient(
+      to right,
+      oklch(51.54% 0.088 194.77),
+      oklch(74.53% 0.082 202.65)
+    );
+    min-height: 40vh;
+    padding-block: var(--space-m);
+    color: var(--color-white);
+    display: flex;
+    align-items: center;
+  }
+
+  .hero__ctas {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .hero__heading {
+    color: var(--color-white);
+    max-width: 15em;
+    line-height: 1.2;
+    font-weight: 600;
+    margin-block-end: var(--space-xs);
+  }
+
+  .hero__txt {
+    max-width: 50em;
+    font-size: 1.125rem;
+    line-height: 1.6;
+    margin-block-end: var(--space-xs);
+  }
+  
+  @media screen and (max-width: 799px) {
+    .hero {
+      min-height: 30vh;
+    }
+  }
+
+  @media screen and (min-width: 800px) {
+    .hero {
+      min-height: 50vh;
+    }
+  }
+</style>

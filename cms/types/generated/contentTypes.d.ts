@@ -556,6 +556,42 @@ export interface ApiGrantTrackGrantTrack extends Struct.CollectionTypeSchema {
   }
 }
 
+export interface ApiMediaPageMediaPage extends Struct.SingleTypeSchema {
+  collectionName: 'media_pages'
+  info: {
+    displayName: 'Media Page'
+    pluralName: 'media-pages'
+    singularName: 'media-page'
+  }
+  options: {
+    draftAndPublish: true
+  }
+  attributes: {
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::media-page.media-page'
+    > &
+      Schema.Attribute.Private
+    media_content: Schema.Attribute.RichText &
+      Schema.Attribute.CustomField<
+        'plugin::ckeditor5.CKEditor',
+        {
+          preset: 'defaultMarkdown'
+        }
+      >
+    media_cta: Schema.Attribute.Component<'shared.cta-link', false>
+    media_hero: Schema.Attribute.Component<'shared.hero-section', false>
+    publishedAt: Schema.Attribute.DateTime
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private
+  }
+}
+
 export interface ApiNewsEventNewsEvent extends Struct.CollectionTypeSchema {
   collectionName: 'news_events'
   info: {
@@ -1009,6 +1045,7 @@ declare module '@strapi/strapi' {
       'api::blog-post.blog-post': ApiBlogPostBlogPost
       'api::financial-services-page.financial-services-page': ApiFinancialServicesPageFinancialServicesPage
       'api::grant-track.grant-track': ApiGrantTrackGrantTrack
+      'api::media-page.media-page': ApiMediaPageMediaPage
       'api::news-event.news-event': ApiNewsEventNewsEvent
       'api::press-item.press-item': ApiPressItemPressItem
       'plugin::content-releases.release': PluginContentReleasesRelease
