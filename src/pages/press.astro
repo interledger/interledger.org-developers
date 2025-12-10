@@ -3,6 +3,9 @@ import { marked } from 'marked'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Link from '../components/shared/Link.astro'
 import HeroSection from '../components/shared/HeroSection.astro'
+
+export const prerender = false;
+
 const token = import.meta.env.STRAPI_PREVIEW_TOKEN
 const fetch_url = import.meta.env.STRAPI_URL
 async function getMediaFromStrapi() {
@@ -39,7 +42,6 @@ const mediaData = await getMediaFromStrapi()
         />
       </div>
     </section>
-    <p>Last paragraph</p>
   </main>
 </BaseLayout>
 
