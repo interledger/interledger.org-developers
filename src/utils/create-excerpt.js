@@ -4,7 +4,8 @@ import MarkdownIt from 'markdown-it'
 const parser = new MarkdownIt()
 
 export const createExcerpt = (body) => {
-  const html = parser.render(body)
+  const safeBody = typeof body === 'string' ? body : ''
+  const html = parser.render(safeBody)
   const options = {
     wordwrap: null,
     selectors: [
