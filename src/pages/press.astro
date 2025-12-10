@@ -18,10 +18,9 @@ async function getMediaFromStrapi() {
   const data = await response.json()
   return data.data
 }
-//checking something
+
 const mediaData = await getMediaFromStrapi()
 ---
-
 <BaseLayout title="Press - Interledger Developers">
   <main>
     <HeroSection title={mediaData.media_hero.hero_title} content={mediaData.media_hero.hero_content} ctas={mediaData.media_hero.hero_cta} />
@@ -40,6 +39,7 @@ const mediaData = await getMediaFromStrapi()
         />
       </div>
     </section>
+    <p>Last paragraph</p>
   </main>
 </BaseLayout>
 
