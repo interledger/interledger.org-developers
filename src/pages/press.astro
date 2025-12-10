@@ -4,51 +4,78 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 import Link from '../components/shared/Link.astro'
 import HeroSection from '../components/shared/HeroSection.astro'
 
-export const prerender = false;
+// export const prerender = false;
 
-const token = process.env.STRAPI_PREVIEW_TOKEN
-const fetch_url = process.env.STRAPI_URL
+// const token = process.env.STRAPI_PREVIEW_TOKEN
+// const fetch_url = process.env.STRAPI_URL
+
+const token = import.meta.env.STRAPI_PREVIEW_TOKEN
+const fetch_url = import.meta.env.STRAPI_URL
+
+if (!token || !fetch_url) {
+  throw new Error(`Missing Strapi config: token=${!!token}, url=${!!fetch_url}`)
+}
+
 async function getMediaFromStrapi() {
-  const response = await fetch(
-    `${fetch_url}/api/media-page?populate[media_hero][populate][hero_cta]=true&populate[media_cta]=true`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
+  try {
+    const response = await fetch(
+      `${fetch_url}/api/media-page?populate[media_hero][populate][hero_cta]=true&populate[media_cta]=true`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
       }
+    )
+    if (!response.ok) {
+      throw new Error(`Strapi API error: ${response.status}`)
     }
-  )
-  const data = await response.json()
-  return data.data
+    const data = await response.json()
+    return data.data
+  } catch (error) {
+    console.error('Strapi fetch failed:', error)
+    throw error
+  }
 }
 
-let mediaData
-try {
-  mediaData = await getMediaFromStrapi();
-} catch (err) {
-  console.error("PRESS PAGE ERROR:", err);
-  mediaData = null;
-}
+const mediaData = await getMediaFromStrapi()
 ---
-<BaseLayout title="Press - Interledger Developers">
-  <main>
-    <HeroSection title={mediaData.media_hero.hero_title} content={mediaData.media_hero.hero_content} ctas={mediaData.media_hero.hero_cta} />
 
-    <section class="press-intro">
-      <div class="content-wrapper" set:html={mediaData.media_content ? marked.parse(mediaData.media_content) : ''} />
-    </section>
-    <section>
-      <div class="content-wrapper">
-        <Link
-          href={mediaData.media_cta.href}
-          style={mediaData.media_cta.style}
-          umami={mediaData.media_cta.umami}
-          external={mediaData.media_cta.external}
-          text={mediaData.media_cta.text}
-        />
-      </div>
-    </section>
-  </main>
+<BaseLayout title="Press - Interledger Developers">
+  {
+    mediaData && (
+      <main>
+        {mediaData.media_hero && (
+          <HeroSection
+            title={mediaData.media_hero.hero_title ?? 'title'}
+            content={mediaData.media_hero.hero_content ?? 'content'}
+            ctas={mediaData.media_hero.hero_cta ?? []}
+          />
+        )}
+        {mediaData.media_content && (
+          <section class="press-intro">
+            <div
+              class="content-wrapper"
+              set:html={marked.parse(mediaData.media_content)}
+            />
+          </section>
+        )}
+        {mediaData.media_cta && (
+          <section>
+            <div class="content-wrapper">
+              <Link
+                href={mediaData.media_cta.href ?? ''}
+                style={mediaData.media_cta.style ?? 'primary'}
+                umami={mediaData.media_cta.umami ?? ''}
+                external={mediaData.media_cta.external ?? false}
+                text={mediaData.media_cta.text ?? 'Click'}
+              />
+            </div>
+          </section>
+        )}
+      </main>
+    )
+  }
 </BaseLayout>
 
 <style>
@@ -74,5 +101,4 @@ try {
     background-color: var(--color-background-light);
     padding-block: var(--space-m);
   }
-
 </style>

@@ -5,8 +5,8 @@ import starlightLinksValidator from 'starlight-links-validator'
 import starlightFullViewMode from 'starlight-fullview-mode'
 
 import mdx from '@astrojs/mdx'
-import dotenv from 'dotenv';
-dotenv.config();
+// import dotenv from 'dotenv';
+// dotenv.config();
 
 // https://astro.build/config
 export default defineConfig({
