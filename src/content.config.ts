@@ -49,7 +49,7 @@ const financialServicesPageCollection = defineCollection({
   schema: z.object({
     heroTitle: z.string(),
     heroDescription: z.string(),
-    introText: z.string(),
+    programOverview: z.string().optional(),
     applicationNotice: z.string().optional(),
     ctaTitle: z.string(),
     ctaDescription: z.string().optional(),

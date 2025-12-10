@@ -88,7 +88,7 @@ async function configureFieldLabels(strapi: any) {
     'api::financial-services-page.financial-services-page': {
       heroTitle: 'Hero Title',
       heroDescription: 'Hero Description',
-      introText: 'Introduction Text',
+      programOverview: 'Program Overview',
       applicationNotice: 'Application Notice',
       ctaTitle: 'CTA Title',
       ctaDescription: 'CTA Description',

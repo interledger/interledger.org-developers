@@ -21,7 +21,7 @@
       "type": "text",
       "required": true
     },
-    "introText": {
+    "programOverview": {
       "type": "text",
       "required": true
     },

@@ -511,13 +511,13 @@ export interface ApiFinancialServicesPageFinancialServicesPage
     heroTitle: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'Unlock payment potential'>
-    introText: Schema.Attribute.Text & Schema.Attribute.Required
     locale: Schema.Attribute.String & Schema.Attribute.Private
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::financial-services-page.financial-services-page'
     > &
       Schema.Attribute.Private
+    programOverview: Schema.Attribute.Text & Schema.Attribute.Required
     publishedAt: Schema.Attribute.DateTime
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &

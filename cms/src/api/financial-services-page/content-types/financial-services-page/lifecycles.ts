@@ -5,7 +5,7 @@ import { gitCommitAndPush } from '../../../../utils/gitSync';
 interface FinancialServicesPage {
   heroTitle: string;
   heroDescription: string;
-  introText: string;
+  programOverview: string;
   applicationNotice?: string;
   ctaTitle?: string;
   ctaDescription?: string;
@@ -29,7 +29,7 @@ function generateMDX(page: FinancialServicesPage): string {
   const frontmatter = [
     `heroTitle: "${escapeQuotes(page.heroTitle)}"`,
     `heroDescription: "${escapeQuotes(page.heroDescription)}"`,
-    `introText: "${escapeQuotes(page.introText)}"`,
+    `programOverview: "${escapeQuotes(page.programOverview)}"`,
     page.applicationNotice ? `applicationNotice: "${escapeQuotes(page.applicationNotice)}"` : undefined,
     `ctaTitle: "${escapeQuotes(page.ctaTitle || '')}"`,
     `ctaDescription: "${escapeQuotes(page.ctaDescription || '')}"`,
