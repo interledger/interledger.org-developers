@@ -6,8 +6,8 @@ import HeroSection from '../components/shared/HeroSection.astro'
 
 export const prerender = false;
 
-const token = import.meta.env.STRAPI_PREVIEW_TOKEN
-const fetch_url = import.meta.env.STRAPI_URL
+const token = process.env.STRAPI_PREVIEW_TOKEN
+const fetch_url = process.env.STRAPI_URL
 async function getMediaFromStrapi() {
   const response = await fetch(
     `${fetch_url}/api/media-page?populate[media_hero][populate][hero_cta]=true&populate[media_cta]=true`,
@@ -22,7 +22,13 @@ async function getMediaFromStrapi() {
   return data.data
 }
 
-const mediaData = await getMediaFromStrapi()
+let mediaData
+try {
+  mediaData = await getMediaFromStrapi();
+} catch (err) {
+  console.error("PRESS PAGE ERROR:", err);
+  mediaData = null;
+}
 ---
 <BaseLayout title="Press - Interledger Developers">
   <main>
