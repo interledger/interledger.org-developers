@@ -506,6 +506,7 @@ export interface ApiFinancialServicesPageFinancialServicesPage
       Schema.Attribute.DefaultTo<'Subscribe for Updates'>
     ctaTitle: Schema.Attribute.String &
       Schema.Attribute.DefaultTo<'Ready to Apply?'>
+    faqItems: Schema.Attribute.JSON & Schema.Attribute.DefaultTo<[]>
     heroDescription: Schema.Attribute.Text & Schema.Attribute.Required
     heroTitle: Schema.Attribute.String &
       Schema.Attribute.Required &

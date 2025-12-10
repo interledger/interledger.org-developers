@@ -1,14 +1,17 @@
 import fs from 'fs';
 import path from 'path';
+import { gitCommitAndPush } from '../../../../utils/gitSync';
 
 interface FinancialServicesPage {
   heroTitle: string;
   heroDescription: string;
   introText: string;
+  applicationNotice?: string;
   ctaTitle?: string;
   ctaDescription?: string;
   ctaEmailLabel?: string;
   ctaSubscribeLabel?: string;
+  faqItems?: Array<{ title: string; content: string; order?: number }>;
   publishedAt?: string;
 }
 
@@ -22,15 +25,20 @@ function escapeQuotes(value: string | undefined): string {
 }
 
 function generateMDX(page: FinancialServicesPage): string {
+  const faqItems = page.faqItems ?? [];
   const frontmatter = [
     `heroTitle: "${escapeQuotes(page.heroTitle)}"`,
     `heroDescription: "${escapeQuotes(page.heroDescription)}"`,
     `introText: "${escapeQuotes(page.introText)}"`,
+    page.applicationNotice ? `applicationNotice: "${escapeQuotes(page.applicationNotice)}"` : undefined,
     `ctaTitle: "${escapeQuotes(page.ctaTitle || '')}"`,
     `ctaDescription: "${escapeQuotes(page.ctaDescription || '')}"`,
     `ctaEmailLabel: "${escapeQuotes(page.ctaEmailLabel || 'Contact Us')}"`,
     `ctaSubscribeLabel: "${escapeQuotes(page.ctaSubscribeLabel || 'Subscribe for Updates')}"`,
-  ].join('\n');
+    `faqItems: ${JSON.stringify(faqItems)}`,
+  ]
+    .filter(Boolean)
+    .join('\n');
 
   return `---\n${frontmatter}\n---\n`;
 }
@@ -50,6 +58,8 @@ async function writeMDXFile(page: FinancialServicesPage): Promise<void> {
 
   fs.writeFileSync(filepath, mdxContent, 'utf-8');
   console.log(`✅ Generated Financial Services Page MDX file: ${filepath}`);
+
+  await gitCommitAndPush(filepath, 'financial-services: update page content');
 }
 
 async function deleteMDXFile(): Promise<void> {
@@ -62,6 +72,7 @@ async function deleteMDXFile(): Promise<void> {
   if (fs.existsSync(filepath)) {
     fs.unlinkSync(filepath);
     console.log(`🗑️  Deleted Financial Services Page MDX file: ${filepath}`);
+    await gitCommitAndPush(filepath, 'financial-services: delete page content');
   }
 }
 

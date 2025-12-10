@@ -2,35 +2,6 @@
 import { getCollection } from 'astro:content'
 import BaseLayout from '../layouts/BaseLayout.astro'
 
-const defaultContent = {
-  heroTitle: 'Unlock payment potential',
-  heroDescription: "We're building a global, open payments network designed to empower financial service providers.",
-  introText:
-    "We are building a global, open payments network designed to empower financial service providers, fintech innovators, and businesses to create an inclusive financial ecosystem. By building on Interledger, organizations are unlocking the potential of frictionless, global transactions, enabling micropayments, cross-currency interoperability, and seamless financial access for everyone—regardless of identity, geography, or income.",
-  applicationNotice: "The 2025 application window has closed, stay tuned for new opportunities in 2026.",
-  ctaTitle: 'Stay Connected',
-  ctaDescription: "You can email our Programs team with any questions, join our mailing list to get all grant opportunities into your inbox, and/or join our community space to interact with ongoing projects and our growing community.",
-  ctaEmailLabel: 'Contact Us',
-  ctaSubscribeLabel: 'Subscribe for Updates'
-}
-
-const defaultGrants = [
-  {
-    name: 'Interledger | Enabled',
-    amount: 'Up to $250,000 USD',
-    description:
-      '<p>Designed for <strong>digital financial service providers</strong>—including digital wallets, mobile money providers, banks, savings co-ops, and neo-banks—this track helps integrate Rafiki into existing financial infrastructures, establishing new financial nodes on the Interledger Network.</p>',
-    order: 0
-  },
-  {
-    name: 'Interledger | Unlocked',
-    amount: 'Up to $150,000 USD',
-    description:
-      '<p>For <strong>web-based platforms</strong> (e.g., e-commerce sites, donation platforms) that want to expand payment options for users by integrating Open Payments APIs into their systems.</p>',
-    order: 1
-  }
-]
-
 const defaultInfoItems = [
   {
     title: 'Who is eligible to apply?',
@@ -57,15 +28,48 @@ const defaultInfoItems = [
   }
 ]
 
+const defaultContent = {
+  heroTitle: 'Unlock payment potential',
+  heroDescription: "We're building a global, open payments network designed to empower financial service providers.",
+  introText:
+    "We are building a global, open payments network designed to empower financial service providers, fintech innovators, and businesses to create an inclusive financial ecosystem. By building on Interledger, organizations are unlocking the potential of frictionless, global transactions, enabling micropayments, cross-currency interoperability, and seamless financial access for everyone—regardless of identity, geography, or income.",
+  applicationNotice: 'The 2025 application window has closed, stay tuned for new opportunities in 2026.',
+  ctaTitle: 'Stay Connected',
+  ctaDescription:
+    'You can email our Programs team with any questions, join our mailing list to get all grant opportunities into your inbox, and/or join our community space to interact with ongoing projects and our growing community.',
+  ctaEmailLabel: 'Contact Us',
+  ctaSubscribeLabel: 'Subscribe for Updates'
+}
+
+const defaultGrants = [
+  {
+    name: 'Interledger | Enabled',
+    amount: 'Up to $250,000 USD',
+    description:
+      '<p>Designed for <strong>digital financial service providers</strong>—including digital wallets, mobile money providers, banks, savings co-ops, and neo-banks—this track helps integrate Rafiki into existing financial infrastructures, establishing new financial nodes on the Interledger Network.</p>',
+    order: 0
+  },
+  {
+    name: 'Interledger | Unlocked',
+    amount: 'Up to $150,000 USD',
+    description:
+      '<p>For <strong>web-based platforms</strong> (e.g., e-commerce sites, donation platforms) that want to expand payment options for users by integrating Open Payments APIs into their systems.</p>',
+    order: 1
+  }
+]
+
 const [pageContentEntry] = await getCollection('financial-services')
 const grantTracks = await getCollection('grant-tracks')
 
-const pageContent = pageContentEntry?.data || defaultContent
+const pageContent = { ...defaultContent, ...(pageContentEntry?.data || {}) }
 const grants =
   grantTracks.length > 0
     ? grantTracks.sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0)).map((entry) => entry.data)
     : defaultGrants
-const infoItems = defaultInfoItems
+const infoItems =
+  pageContentEntry?.data?.faqItems?.length
+    ? [...(pageContentEntry.data.faqItems || [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+    : defaultInfoItems
 ---
 
 <BaseLayout title="Financial Services - Interledger Foundation">
@@ -73,10 +77,8 @@ const infoItems = defaultInfoItems
     <!-- Hero Section with Background Image -->
     <section class="hero">
       <div class="hero__content">
-        <h1 class="hero__title">
-          <span class="hero__title-light">Unlock</span>
-          <span class="hero__title-bold">payment potential</span>
-        </h1>
+        <h1 class="hero__title">{pageContent.heroTitle}</h1>
+        <p class="hero__subtitle">{pageContent.heroDescription}</p>
       </div>
     </section>
 
@@ -154,7 +156,7 @@ const infoItems = defaultInfoItems
       <div class="content-wrapper">
         <h2 class="section-title">{pageContent.ctaTitle}</h2>
         <p class="cta-text">
-          {pageContent.ctaDescription}
+          {pageContent.ctaDescription || defaultContent.ctaDescription}
         </p>
       </div>
     </section>

@@ -50,10 +50,20 @@ const financialServicesPageCollection = defineCollection({
     heroTitle: z.string(),
     heroDescription: z.string(),
     introText: z.string(),
+    applicationNotice: z.string().optional(),
     ctaTitle: z.string(),
     ctaDescription: z.string().optional(),
     ctaEmailLabel: z.string(),
-    ctaSubscribeLabel: z.string()
+    ctaSubscribeLabel: z.string(),
+    faqItems: z
+      .array(
+        z.object({
+          title: z.string(),
+          content: z.string(),
+          order: z.number().optional()
+        })
+      )
+      .optional()
   })
 })
 

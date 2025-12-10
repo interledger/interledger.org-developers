@@ -42,6 +42,10 @@
     "ctaSubscribeLabel": {
       "type": "string",
       "default": "Subscribe for Updates"
+    },
+    "faqItems": {
+      "type": "json",
+      "default": []
     }
   }
 }
