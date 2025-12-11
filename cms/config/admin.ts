@@ -5,8 +5,10 @@ const getPreviewPathname = (uid: string, { document }): string => {
     if (!document?.id) {
       return "/blog";
     }
-
     return `/blog/preview?slug=${document.documentId}`;
+
+  } else if (uid === "api::media-page.media-page") {
+    return "/press?preview=true";
   }
   return null;
 };
