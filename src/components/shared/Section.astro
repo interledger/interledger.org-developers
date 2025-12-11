@@ -2,38 +2,36 @@
 const { title, content } = Astro.props
 // Helper: render children text
 const renderChildren = (children = []) => {
-  return children.map((child) => {
-    if (child.type === 'text'){
-      if (child.bold === true && child.italic === true && child.underline === true) {
-        return `<strong><em><u>${child.text}</u></em></strong>`
-      } else if (child.bold === true && child.italic === true) {
-        return `<strong><em>${child.text}</em></strong>`
-      } else if (child.bold === true && child.underline === true) {
-        return `<strong><u>${child.text}</u></strong>`
-      } else if (child.italic === true && child.underline === true) {
-        return `<em><u>${child.text}</u></em>`
-      } else if (child.bold === true) {
-        return `<strong>${child.text}</strong>`
-      } else if (child.italic === true) {
-        return `<em>${child.text}</em>`
-      } else if (child.underline === true) {
-        return `<u>${child.text}</u>`
-      } else {
-        return child.text
-      }
+  return children.map((node) => {
+    if (node.type === 'link' && node.type === 'text') return ''
+
+    if (node.type === 'link') {
+      const { url, children: linkChildren } = node
+      return `<a href="${url}">${renderChildren(linkChildren)}</a>`
     }
-    return ''
-  })};
+
+    const { text, bold, italic, underline, strikethrough, code } = node
+    let result = text
+
+    if (underline) result = `<u>${result}</u>`
+    if (italic) result = `<em>${result}</em>`
+    if (bold) result = `<strong>${result}</strong>`
+    if (strikethrough) result = `<s>${result}</s>`
+    if (code) result = `<code>${result}</code>`
+
+    return result
+  })
+}
 ---
 
 <section>
   <div class="content-wrapper">
     <h2>{title}</h2>
-      {content.map((block) => {
+    {
+      content.map((block) => {
         switch (block.type) {
           case 'paragraph':
-            return <p set:html={renderChildren(block.children)}/>
-
+            return <p set:html={renderChildren(block.children)} />
           case 'list': {
             const isOrdered = block.format === 'ordered'
             const ListTag = isOrdered ? 'ol' : 'ul'
@@ -47,8 +45,6 @@ const renderChildren = (children = []) => {
           }
           default:
             return null
-
-          // TODO - more types (heading, quote etc.)
         }
       })
     }
