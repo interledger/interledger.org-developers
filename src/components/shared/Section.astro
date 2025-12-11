@@ -1,21 +1,40 @@
 ---
 const { title, content } = Astro.props
 // Helper: render children text
-const renderChildren = (children) =>
-  children.map((child) => {
-    if (child.type === 'text') return child.text
+const renderChildren = (children = []) => {
+  return children.map((child) => {
+    if (child.type === 'text'){
+      if (child.bold === true && child.italic === true && child.underline === true) {
+        return `<strong><em><u>${child.text}</u></em></strong>`
+      } else if (child.bold === true && child.italic === true) {
+        return `<strong><em>${child.text}</em></strong>`
+      } else if (child.bold === true && child.underline === true) {
+        return `<strong><u>${child.text}</u></strong>`
+      } else if (child.italic === true && child.underline === true) {
+        return `<em><u>${child.text}</u></em>`
+      } else if (child.bold === true) {
+        return `<strong>${child.text}</strong>`
+      } else if (child.italic === true) {
+        return `<em>${child.text}</em>`
+      } else if (child.underline === true) {
+        return `<u>${child.text}</u>`
+      } else {
+        return child.text
+      }
+    }
     return ''
-  })
+  })};
 ---
 
 <section>
   <div class="content-wrapper">
     <h2>{title}</h2>
+    {<pre style={{ whiteSpace: "pre-wrap"}}>{JSON.stringify(content, null, 2)}</pre>}
     {
       content.map((block) => {
         switch (block.type) {
           case 'paragraph':
-            return <p>{renderChildren(block.children)}</p>
+            return <p set:html={renderChildren(block.children)}/>
 
           case 'list': {
             const isOrdered = block.format === 'ordered'
@@ -23,7 +42,7 @@ const renderChildren = (children) =>
             return (
               <ListTag>
                 {block.children.map((item) => (
-                  <li>{renderChildren(item.children)}</li>
+                  <li set:html={renderChildren(item.children)} />
                 ))}
               </ListTag>
             )
@@ -37,3 +56,18 @@ const renderChildren = (children) =>
     }
   </div>
 </section>
+<style>
+  h2 {
+    margin-block-end: var(--space-xs);
+  }
+
+  p,
+  ul,
+  ol {
+    margin-block-end: var(--space-2xs);
+  }
+
+  li {
+    margin-block-end: var(--space-3xs);
+  }
+</style>
