@@ -1,0 +1,39 @@
+---
+const { title, content } = Astro.props
+// Helper: render children text
+const renderChildren = (children) =>
+  children.map((child) => {
+    if (child.type === 'text') return child.text
+    return ''
+  })
+---
+
+<section>
+  <div class="content-wrapper">
+    <h2>{title}</h2>
+    {
+      content.map((block) => {
+        switch (block.type) {
+          case 'paragraph':
+            return <p>{renderChildren(block.children)}</p>
+
+          case 'list': {
+            const isOrdered = block.format === 'ordered'
+            const ListTag = isOrdered ? 'ol' : 'ul'
+            return (
+              <ListTag>
+                {block.children.map((item) => (
+                  <li>{renderChildren(item.children)}</li>
+                ))}
+              </ListTag>
+            )
+          }
+          default:
+            return null
+
+          // TODO - more types (heading, quote etc.)
+        }
+      })
+    }
+  </div>
+</section>

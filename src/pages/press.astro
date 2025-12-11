@@ -3,6 +3,7 @@ import { marked } from 'marked'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Link from '../components/shared/Link.astro'
 import HeroSection from '../components/shared/HeroSection.astro'
+import Section from '../components/shared/Section.astro'
 
 const token = import.meta.env.STRAPI_PREVIEW_TOKEN
 const fetch_url = import.meta.env.STRAPI_URL
@@ -87,11 +88,11 @@ const mediaData = await getMediaFromStrapi()
                     text={component.text}
                   />;
                 case 'shared.section': 
-                  return <p>This is a section</p>
+                  return <Section title={component.title} content={component.content}/>;
+                default:
+                  return null;
               } 
-            })
-
-            }
+            })}
           </div>
         </section>
       </main>
