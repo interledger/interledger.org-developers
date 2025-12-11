@@ -29,7 +29,7 @@ const renderChildren = (children = []) => {
 <section>
   <div class="content-wrapper">
     <h2>{title}</h2>
-      content.map((block) => {
+      {content.map((block) => {
         switch (block.type) {
           case 'paragraph':
             return <p set:html={renderChildren(block.children)}/>
