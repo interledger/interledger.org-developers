@@ -7,9 +7,10 @@ export interface SharedCtaLink extends Struct.ComponentSchema {
   }
   attributes: {
     external: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>
-    href: Schema.Attribute.String
-    style: Schema.Attribute.Enumeration<['primary', 'secondary']>
-    text: Schema.Attribute.String
+    href: Schema.Attribute.String & Schema.Attribute.Required
+    style: Schema.Attribute.Enumeration<['primary', 'secondary']> &
+      Schema.Attribute.DefaultTo<'primary'>
+    text: Schema.Attribute.String & Schema.Attribute.Required
     umami: Schema.Attribute.String
   }
 }

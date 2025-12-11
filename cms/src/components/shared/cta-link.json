@@ -6,16 +6,19 @@
   "options": {},
   "attributes": {
     "href": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "umami": {
       "type": "string"
     },
     "text": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "style": {
       "type": "enumeration",
+      "default": "primary",
       "enum": [
         "primary",
         "secondary"

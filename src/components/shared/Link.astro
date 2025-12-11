@@ -1,24 +1,35 @@
 ---
-const { href, style, umami, external, text } = Astro.props;
+const { href, style, umami, external, text } = Astro.props
 ---
 
 <a
-  href={href}
-  class={`btn-${style}`}
-  data-umami-event={umami}
-  {...(external && {
-    target: "_blank",
-    rel: "noopener noreferrer"
-  })}
-  >{text}
-  {external && (
-    <svg class="external" fill="none"  viewBox="0 0 18 18"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 3H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M11 1h6m0 0v6m0-6L7 11"/></svg>
-  )}
+  href={href ?? ''}
+  class={`btn-${style ?? 'primary'}`}
+  data-umami-event={umami ?? ''}
+  {...external && {
+    target: '_blank',
+    rel: 'noopener noreferrer'
+  }}
+  >{text ?? 'Click'}
+  {
+    external && (
+      <svg class="external" fill="none" viewBox="0 0 18 18">
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M7 3H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M11 1h6m0 0v6m0-6L7 11"
+        />
+      </svg>
+    )
+  }
 </a>
 
 <style>
-  .btn-primary, .btn-secondary {
-    display: inline-block; 
+  .btn-primary,
+  .btn-secondary {
+    display: inline-block;
     padding: 1.5rem 2rem;
     width: fit-content;
     border-radius: 1rem;

@@ -15,8 +15,6 @@ if (!token || !fetch_url) {
 async function getMediaFromStrapi() {
   try {
     const response = await fetch(
-      // `${fetch_url}/api/media-page?populate[media_hero][populate][hero_cta]=true&populate[media_cta]=true`,
-      // `${fetch_url}/api/media-page?populate[media_hero][populate][hero_cta]=true&populate[media_cta]=true&populate[dynamic][populate][section]=true&populate[dynamic][populate][cta_link]=true`,
       `${fetch_url}/api/media-page?populate[media_hero][populate][hero_cta]=true&populate[media_cta]=true&populate[dynamic]=true`,
       {
         headers: {
@@ -62,36 +60,40 @@ const mediaData = await getMediaFromStrapi()
           <section>
             <div class="content-wrapper">
               <Link
-                href={mediaData.media_cta.href ?? ''}
-                style={mediaData.media_cta.style ?? 'primary'}
-                umami={mediaData.media_cta.umami ?? ''}
-                external={mediaData.media_cta.external ?? false}
-                text={mediaData.media_cta.text ?? 'Click'}
+                href={mediaData.media_cta.href}
+                style={mediaData.media_cta.style}
+                umami={mediaData.media_cta.umami}
+                external={mediaData.media_cta.external}
+                text={mediaData.media_cta.text}
               />
             </div>
           </section>
         )}
         <section>
           <div class="content-wrapper">
-            <h3>Dynamic zone underneath:</h3>
-            {mediaData.dynamic && 
-              <code style={{ whiteSpace: "pre-wrap" }}>{JSON.stringify(mediaData.dynamic, null, 2)}</code>
-            }
-            {mediaData.dynamic.map( component => {
+            <h2>------- Dynamic zone below:--------</h2>
+            {mediaData.dynamic.map((component) => {
               switch (component.__component) {
                 case 'shared.cta-link':
-                  return <Link
-                    href={component.href}
-                    style={component.style}
-                    umami={component.umami}
-                    external={component.external}
-                    text={component.text}
-                  />;
-                case 'shared.section': 
-                  return <Section title={component.title} content={component.content}/>;
+                  return (
+                    <Link
+                      href={component.href}
+                      style={component.style}
+                      umami={component.umami}
+                      external={component.external}
+                      text={component.text}
+                    />
+                  )
+                case 'shared.section':
+                  return (
+                    <Section
+                      title={component.title}
+                      content={component.content}
+                    />
+                  )
                 default:
-                  return null;
-              } 
+                  return null
+              }
             })}
           </div>
         </section>
