@@ -5,7 +5,13 @@
   },
   "options": {},
   "attributes": {
-    "text_block": {
+    "name": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "content": {
       "type": "blocks"
     }
   },

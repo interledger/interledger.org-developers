@@ -6,7 +6,7 @@ export interface SharedCtaLink extends Struct.ComponentSchema {
     displayName: 'Cta Link'
   }
   attributes: {
-    external: Schema.Attribute.Boolean
+    external: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>
     href: Schema.Attribute.String
     style: Schema.Attribute.Enumeration<['primary', 'secondary']>
     text: Schema.Attribute.String
@@ -32,7 +32,9 @@ export interface SharedSection extends Struct.ComponentSchema {
     displayName: 'section'
   }
   attributes: {
-    text_block: Schema.Attribute.Blocks
+    content: Schema.Attribute.Blocks
+    name: Schema.Attribute.String
+    title: Schema.Attribute.String
   }
 }
 

@@ -571,6 +571,7 @@ export interface ApiMediaPageMediaPage extends Struct.SingleTypeSchema {
     createdAt: Schema.Attribute.DateTime
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private
+    dynamic: Schema.Attribute.DynamicZone<['shared.section', 'shared.cta-link']>
     locale: Schema.Attribute.String & Schema.Attribute.Private
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -587,6 +588,7 @@ export interface ApiMediaPageMediaPage extends Struct.SingleTypeSchema {
     media_cta: Schema.Attribute.Component<'shared.cta-link', false>
     media_hero: Schema.Attribute.Component<'shared.hero-section', false>
     publishedAt: Schema.Attribute.DateTime
+    title: Schema.Attribute.String
     updatedAt: Schema.Attribute.DateTime
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private

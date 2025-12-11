@@ -11,6 +11,9 @@
   },
   "pluginOptions": {},
   "attributes": {
+    "title": {
+      "type": "string"
+    },
     "media_hero": {
       "type": "component",
       "component": "shared.hero-section",
@@ -27,6 +30,13 @@
       "type": "component",
       "component": "shared.cta-link",
       "repeatable": false
+    },
+    "dynamic": {
+      "type": "dynamiczone",
+      "components": [
+        "shared.section",
+        "shared.cta-link"
+      ]
     }
   }
 }

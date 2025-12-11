@@ -14,7 +14,9 @@ if (!token || !fetch_url) {
 async function getMediaFromStrapi() {
   try {
     const response = await fetch(
-      `${fetch_url}/api/media-page?populate[media_hero][populate][hero_cta]=true&populate[media_cta]=true`,
+      // `${fetch_url}/api/media-page?populate[media_hero][populate][hero_cta]=true&populate[media_cta]=true`,
+      // `${fetch_url}/api/media-page?populate[media_hero][populate][hero_cta]=true&populate[media_cta]=true&populate[dynamic][populate][section]=true&populate[dynamic][populate][cta_link]=true`,
+      `${fetch_url}/api/media-page?populate[media_hero][populate][hero_cta]=true&populate[media_cta]=true&populate[dynamic]=true`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -68,6 +70,30 @@ const mediaData = await getMediaFromStrapi()
             </div>
           </section>
         )}
+        <section>
+          <div class="content-wrapper">
+            <h3>Dynamic zone underneath:</h3>
+            {mediaData.dynamic && 
+              <code style={{ whiteSpace: "pre-wrap" }}>{JSON.stringify(mediaData.dynamic, null, 2)}</code>
+            }
+            {mediaData.dynamic.map( component => {
+              switch (component.__component) {
+                case 'shared.cta-link':
+                  return <Link
+                    href={component.href}
+                    style={component.style}
+                    umami={component.umami}
+                    external={component.external}
+                    text={component.text}
+                  />;
+                case 'shared.section': 
+                  return <p>This is a section</p>
+              } 
+            })
+
+            }
+          </div>
+        </section>
       </main>
     )
   }
