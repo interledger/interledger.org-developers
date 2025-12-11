@@ -29,8 +29,6 @@ const renderChildren = (children = []) => {
 <section>
   <div class="content-wrapper">
     <h2>{title}</h2>
-    {<pre style={{ whiteSpace: "pre-wrap"}}>{JSON.stringify(content, null, 2)}</pre>}
-    {
       content.map((block) => {
         switch (block.type) {
           case 'paragraph':
