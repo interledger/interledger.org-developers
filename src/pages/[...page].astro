@@ -1,6 +1,4 @@
 ---
-// import { marked } from 'marked'
-// import { getMediaPageFromStrapi } from '../utils/getMediaPageFromStrapi.ts'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Link from '../components/shared/Link.astro'
 import HeroSection from '../components/shared/HeroSection.astro'
@@ -8,30 +6,23 @@ import Section from '../components/shared/Section.astro'
 
 export const prerender = false
 let slug = Astro.originPathname
-slug = slug.replace(/^\/|\/$/g, "");
-const preview = false; 
-console.log("NAME: ", slug)
-// const preview = Astro.url.searchParams.get('preview') ?? false
+slug = slug.replace(/^\/|\/$/g, '')
+const preview = Astro.url.searchParams.get('preview') ?? false
 
 async function getPageFromStrapi(slug, preview) {
   const token = import.meta.env.STRAPI_PREVIEW_TOKEN
   const base = import.meta.env.STRAPI_URL
 
   if (!token || !base) {
-    throw new Error(
-      `Missing Strapi config: token=${!!token}, url=${!!fetch_url}`
-    )
+    throw new Error(`Missing Strapi config: token=${!!token}, url=${!!base}`)
   }
-//api/pages?filters[slug]=about
-// this works :> http://localhost:1337/api/pages?filters[slug]=about&populate[hero][populate][hero_cta]=true
+
   const query =
-    '&populate[hero][populate][hero_cta]=true' + 
-    '&populate[dynamic]=true'
-  const fetch_url = `${base}/api/pages?filters[slug]=${slug}` + query
-  console.log("FETCH_URL: ", fetch_url)
-  // preview
-    // ? `${base}/api/pages/?status=draft&` + query
-    // : `${base}/api/pages/?` + query
+    '&populate[hero][populate][hero_cta]=true' + '&populate[dynamic]=true'
+
+  const fetch_url = preview
+    ? `${base}/api/pages?filters[slug]=${slug}&status=draft` + query
+    : `${base}/api/pages?filters[slug]=${slug}` + query
 
   try {
     const response = await fetch(fetch_url, {
@@ -52,8 +43,6 @@ async function getPageFromStrapi(slug, preview) {
 }
 
 const data = await getPageFromStrapi(slug, preview)
-console.log("DATA:  ", data)
-
 ---
 
 <BaseLayout title="Press - Interledger Developers">
@@ -67,8 +56,7 @@ console.log("DATA:  ", data)
             ctas={data.hero.hero_cta ?? []}
           />
         )}
-        {
-          data.dynamic && 
+        {data.dynamic && (
           <section>
             <div class="content-wrapper">
               <h2>------- Dynamic zone below:--------</h2>
@@ -97,10 +85,10 @@ console.log("DATA:  ", data)
               })}
             </div>
           </section>
-        }
+        )}
       </main>
     )
-  } 
+  }
 </BaseLayout>
 
 <style>
@@ -120,10 +108,5 @@ console.log("DATA:  ", data)
     display: flex;
     flex-direction: column;
     gap: var(--space-m);
-  }
-
-  .press-intro {
-    background-color: var(--color-background-light);
-    padding-block: var(--space-m);
   }
 </style>

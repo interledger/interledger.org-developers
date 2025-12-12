@@ -1,17 +1,20 @@
-
 const getPreviewPathname = (uid: string, { document }): string => {
   // Handle blog posts
-  if (uid === "api::blog-post.blog-post") {
-    if (!document?.id) {
-      return "/blog";
+  switch (uid) {
+    case 'api::blog-post.blog-post': {
+      if (!document?.id) {
+        return '/blog'
+      }
+      return `/blog/preview?slug=${document.documentId}`
     }
-    return `/blog/preview?slug=${document.documentId}`;
-
-  } else if (uid === "api::media-page.media-page") {
-    return "/press?preview=true";
+    case 'api::media-page.media-page':
+      return '/press?preview=true'
+    case 'api::page.page':
+      return `/${document.slug}?preview=true`
+    default:
+      return null
   }
-  return null;
-};
+}
 
 export default ({ env }) => {
   const clientUrl = env("CLIENT_URL");
