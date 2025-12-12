@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pages",
+  "info": {
+    "singularName": "page",
+    "pluralName": "pages",
+    "displayName": "Page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    },
+    "description": {
+      "type": "text"
+    },
+    "hero": {
+      "type": "component",
+      "component": "shared.hero-section",
+      "repeatable": false
+    },
+    "dynamic": {
+      "type": "dynamiczone",
+      "components": [
+        "shared.section",
+        "shared.cta-link"
+      ]
+    }
+  }
+}

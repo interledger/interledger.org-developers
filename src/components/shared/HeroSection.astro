@@ -1,20 +1,20 @@
 ---
 import Link from './Link.astro'
-const {title, content, ctas} = Astro.props
+const { title, content, ctas } = Astro.props
 ---
 
 <section class="hero">
   <div class="content-wrapper">
     <div class="text-wrapper">
       <h1 class="hero__heading heading--2">
-        {title}
+        {title ?? ''}
       </h1>
       <p class="hero__txt">
-        {content}
+        {content ?? ''}
       </p>
       <div class="hero__ctas">
         {
-          ctas.map((link) => (
+          ctas?.map((link) => (
             <Link
               href={link.href}
               style={link.style}
@@ -66,7 +66,7 @@ const {title, content, ctas} = Astro.props
     line-height: 1.6;
     margin-block-end: var(--space-xs);
   }
-  
+
   @media screen and (max-width: 799px) {
     .hero {
       min-height: 30vh;

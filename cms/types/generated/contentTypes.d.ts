@@ -633,6 +633,35 @@ export interface ApiNewsEventNewsEvent extends Struct.CollectionTypeSchema {
   }
 }
 
+export interface ApiPagePage extends Struct.CollectionTypeSchema {
+  collectionName: 'pages'
+  info: {
+    displayName: 'Page'
+    pluralName: 'pages'
+    singularName: 'page'
+  }
+  options: {
+    draftAndPublish: true
+  }
+  attributes: {
+    createdAt: Schema.Attribute.DateTime
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private
+    description: Schema.Attribute.Text
+    dynamic: Schema.Attribute.DynamicZone<['shared.section', 'shared.cta-link']>
+    hero: Schema.Attribute.Component<'shared.hero-section', false>
+    locale: Schema.Attribute.String & Schema.Attribute.Private
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::page.page'> &
+      Schema.Attribute.Private
+    publishedAt: Schema.Attribute.DateTime
+    slug: Schema.Attribute.UID<'title'>
+    title: Schema.Attribute.String
+    updatedAt: Schema.Attribute.DateTime
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private
+  }
+}
+
 export interface ApiPressItemPressItem extends Struct.CollectionTypeSchema {
   collectionName: 'press_items'
   info: {
@@ -1050,6 +1079,7 @@ declare module '@strapi/strapi' {
       'api::grant-track.grant-track': ApiGrantTrackGrantTrack
       'api::media-page.media-page': ApiMediaPageMediaPage
       'api::news-event.news-event': ApiNewsEventNewsEvent
+      'api::page.page': ApiPagePage
       'api::press-item.press-item': ApiPressItemPressItem
       'plugin::content-releases.release': PluginContentReleasesRelease
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction
