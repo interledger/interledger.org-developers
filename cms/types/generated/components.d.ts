@@ -3,15 +3,15 @@ import type { Schema, Struct } from '@strapi/strapi'
 export interface SharedCtaLink extends Struct.ComponentSchema {
   collectionName: 'components_shared_cta_links'
   info: {
-    displayName: 'Cta Link'
+    displayName: 'Call-to-action Link'
   }
   attributes: {
+    analytics_event_label: Schema.Attribute.String
     external: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>
-    href: Schema.Attribute.String & Schema.Attribute.Required
+    link: Schema.Attribute.String & Schema.Attribute.Required
     style: Schema.Attribute.Enumeration<['primary', 'secondary']> &
       Schema.Attribute.DefaultTo<'primary'>
     text: Schema.Attribute.String & Schema.Attribute.Required
-    umami: Schema.Attribute.String
   }
 }
 
@@ -21,8 +21,8 @@ export interface SharedHeroSection extends Struct.ComponentSchema {
     displayName: 'hero section'
   }
   attributes: {
+    hero_call_to_action: Schema.Attribute.Component<'shared.cta-link', true>
     hero_content: Schema.Attribute.Text
-    hero_cta: Schema.Attribute.Component<'shared.cta-link', true>
     hero_title: Schema.Attribute.Text
   }
 }
@@ -30,7 +30,7 @@ export interface SharedHeroSection extends Struct.ComponentSchema {
 export interface SharedSection extends Struct.ComponentSchema {
   collectionName: 'components_shared_sections'
   info: {
-    displayName: 'section'
+    displayName: 'Text Block'
   }
   attributes: {
     content: Schema.Attribute.Blocks

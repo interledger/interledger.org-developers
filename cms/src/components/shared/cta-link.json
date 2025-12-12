@@ -1,15 +1,15 @@
 {
   "collectionName": "components_shared_cta_links",
   "info": {
-    "displayName": "Cta Link"
+    "displayName": "Call-to-action Link"
   },
   "options": {},
   "attributes": {
-    "href": {
+    "link": {
       "type": "string",
       "required": true
     },
-    "umami": {
+    "analytics_event_label": {
       "type": "string"
     },
     "text": {

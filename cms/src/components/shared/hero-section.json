@@ -11,7 +11,7 @@
     "hero_content": {
       "type": "text"
     },
-    "hero_cta": {
+    "hero_call_to_action": {
       "type": "component",
       "component": "shared.cta-link",
       "repeatable": true
