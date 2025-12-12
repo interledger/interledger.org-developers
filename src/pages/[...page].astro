@@ -59,7 +59,6 @@ const data = await getPageFromStrapi(slug, preview)
         {data.dynamic && (
           <section>
             <div class="content-wrapper">
-              <h2>------- Dynamic zone below:--------</h2>
               {data.dynamic.map((component) => {
                 switch (component.__component) {
                   case 'shared.cta-link':
