@@ -59,7 +59,7 @@ export default {
           span.textContent = 'Save as Draft';
         }
         if (span && span.textContent === 'Publish') {
-          span.textContent = 'Publish to Netlify';
+          span.textContent = 'Save / Update';
         }
       });
     }, 100);
