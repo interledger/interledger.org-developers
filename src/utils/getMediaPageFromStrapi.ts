@@ -9,8 +9,8 @@ export async function getMediaPageFromStrapi(preview) {
   }
 
   const query =
-    'populate[media_hero][populate][hero_cta]=true' + 
-    '&populate[media_cta]=true' + 
+    'populate[media_hero][populate][hero_call_to_action]=true' +
+    '&populate[media_cta]=true' +
     '&populate[dynamic]=true'
   const fetch_url = preview
     ? `${base}/api/media-page?status=draft&` + query

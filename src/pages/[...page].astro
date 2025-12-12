@@ -18,7 +18,8 @@ async function getPageFromStrapi(slug, preview) {
   }
 
   const query =
-    '&populate[hero][populate][hero_cta]=true' + '&populate[dynamic]=true'
+    '&populate[hero][populate][hero_call_to_action]=true' +
+    '&populate[dynamic]=true'
 
   const fetch_url = preview
     ? `${base}/api/pages?filters[slug]=${slug}&status=draft` + query
@@ -43,9 +44,10 @@ async function getPageFromStrapi(slug, preview) {
 }
 
 const data = await getPageFromStrapi(slug, preview)
+console.log(data)
 ---
 
-<BaseLayout title="Press - Interledger Developers">
+<BaseLayout title={data?.title ?? null} description={data?.description ?? null}>
   {
     data && (
       <main>
@@ -53,7 +55,7 @@ const data = await getPageFromStrapi(slug, preview)
           <HeroSection
             title={data.hero.hero_title ?? 'title'}
             content={data.hero.hero_content ?? 'content'}
-            ctas={data.hero.hero_cta ?? []}
+            ctas={data.hero.hero_call_to_action ?? []}
           />
         )}
         {data.dynamic && (
@@ -64,9 +66,9 @@ const data = await getPageFromStrapi(slug, preview)
                   case 'shared.cta-link':
                     return (
                       <Link
-                        href={component.href}
+                        href={component.link}
                         style={component.style}
-                        umami={component.umami}
+                        umami={component.analytics_event_label}
                         external={component.external}
                         text={component.text}
                       />

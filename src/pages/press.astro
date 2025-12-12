@@ -21,7 +21,7 @@ const mediaData = await getMediaPageFromStrapi(preview)
           <HeroSection
             title={mediaData.media_hero.hero_title ?? 'title'}
             content={mediaData.media_hero.hero_content ?? 'content'}
-            ctas={mediaData.media_hero.hero_cta ?? []}
+            ctas={mediaData.media_hero.hero_call_to_action ?? []}
           />
         )}
         {mediaData.media_content && (
@@ -36,9 +36,9 @@ const mediaData = await getMediaPageFromStrapi(preview)
           <section>
             <div class="content-wrapper">
               <Link
-                href={mediaData.media_cta.href}
+                href={mediaData.media_cta.link}
                 style={mediaData.media_cta.style}
-                umami={mediaData.media_cta.umami}
+                umami={mediaData.media_cta.analytics_event_label}
                 external={mediaData.media_cta.external}
                 text={mediaData.media_cta.text}
               />
@@ -53,9 +53,9 @@ const mediaData = await getMediaPageFromStrapi(preview)
                 case 'shared.cta-link':
                   return (
                     <Link
-                      href={component.href}
+                      href={component.link}
                       style={component.style}
-                      umami={component.umami}
+                      umami={component.analytics_event_label}
                       external={component.external}
                       text={component.text}
                     />

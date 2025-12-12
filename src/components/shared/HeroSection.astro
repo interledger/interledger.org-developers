@@ -16,9 +16,9 @@ const { title, content, ctas } = Astro.props
         {
           ctas?.map((link) => (
             <Link
-              href={link.href}
+              href={link.link}
               style={link.style}
-              umami={link.umami}
+              umami={link.analytics_event_label}
               external={link.external}
               text={link.text}
             />
