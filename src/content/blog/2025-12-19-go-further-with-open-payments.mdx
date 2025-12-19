@@ -1,6 +1,6 @@
 ---
-title: "Go Further with Open Payments"
-description: "Announcing the Open Payments Go SDK"
+title: 'Go Further with Open Payments'
+description: 'Announcing the Open Payments Go SDK'
 date: 2025-12-19
 slug: go-further-with-open-payments
 authors:
@@ -156,6 +156,7 @@ Each Open Payments resource has a dedicated service with methods that map direct
 One challenge we faced was that the upstream OpenAPI specifications didn't always produce ideal Go types when run through code generators. For example, request bodies for grants and outgoing payments used `oneOf` unions that resulted in awkward generated type names like `PostRequestJSONBody`.
 
 To solve this, we leveraged [OpenAPI Overlays](https://learn.openapis.org/overlay/) — a powerful technique for modifying OpenAPI specs without forking them. Our overlay files (`authserver.overlay.yaml`, `resourceserver.overlay.yaml`) add explicit type names and restructure unions for better Go ergonomics:
+
 ```yaml
 # resourceserver.overlay.yaml
 actions:
@@ -166,7 +167,7 @@ actions:
         required: [walletAddress, quoteId]
         properties:
           walletAddress:
-            $ref: "#/components/schemas/walletAddress"
+            $ref: '#/components/schemas/walletAddress'
           quoteId:
             type: string
           metadata:
@@ -180,6 +181,7 @@ actions:
 ```
 
 Instead of wrestling with anonymous types, you get clear, self-documenting structs:
+
 ```go
 // Without overlays: confusing generated names
 var payload PostRequestJSONBody  // What is this?
