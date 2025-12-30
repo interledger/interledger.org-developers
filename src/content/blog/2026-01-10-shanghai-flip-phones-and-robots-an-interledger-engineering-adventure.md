@@ -91,7 +91,7 @@ So, how was Shanghai from the team’s perspective?
 
 ## Until Next Time, Shanghai
 
-Between the technical progress, strong partnerships, incredible food, and bubble tea consumption across the board, Shanghai exceeded expectations. It was an outstanding experience—building new business connections, strengthening collaboration, and discovering a new culture along the way.
+Between the technical progress, strong partnerships, incredible food, and bubble tea consumption across the board, Shanghai exceeded expectations. It was an outstanding experience, building new business connections, strengthening collaboration, and discovering a new culture along the way.
 
 **Thank you, Shanghai. Thank you, KaiOS.**  
 We can’t wait to be back. 🚀
