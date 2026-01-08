@@ -8,7 +8,7 @@
         "@astrojs/mdx": "^4.3.12",
         "@astrojs/node": "^9.5.1",
         "@astrojs/starlight": "^0.36.3",
-        "@interledger/docs-design-system": "^0.10.1",
+        "@interledger/docs-design-system": "^0.10.3",
         "@types/showdown": "^2.0.6",
         "astro": "^5.16.0",
         "html-to-text": "^9.0.5",
@@ -226,7 +226,7 @@
 
     "@img/sharp-win32-x64": ["@img/sharp-win32-x64@0.34.5", "", { "os": "win32", "cpu": "x64" }, "sha512-+29YMsqY2/9eFEiW93eqWnuLcWcufowXewwSNIT6UwZdUUCrM3oFjMWH/Z6/TMmb4hlFenmfAVbpWeup2jryCw=="],
 
-    "@interledger/docs-design-system": ["@interledger/docs-design-system@0.10.1", "", { "dependencies": { "mermaid": "^11.12.1" } }, "sha512-/nlTob1j+vsKycp9Q39ThZOyztBxNtWEKI0l3jaA+Px8hVzrizRa7ZtaaR4ZuYgoPRWGJPgXTi5tWdG+eiPybw=="],
+    "@interledger/docs-design-system": ["@interledger/docs-design-system@0.10.3", "", { "dependencies": { "mermaid": "^11.12.1" } }, "sha512-kQdpHUDqS3RWYrYuL6dunOG0h0alNZBNqh2n+J09LCiDxwz9/7aVvF8fCdo2gaTI8w+lcE9/CRnuEF7h26PLUA=="],
 
     "@jridgewell/sourcemap-codec": ["@jridgewell/sourcemap-codec@1.5.5", "", {}, "sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og=="],
 
