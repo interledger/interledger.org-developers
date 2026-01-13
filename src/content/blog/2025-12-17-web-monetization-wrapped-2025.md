@@ -3,6 +3,7 @@ title: 'Web Monetization Wrapped 2025'
 description: 'Welcome to Web Monetization Wrapped, a look back at the progress we made in 2025 and everything we shipped, fixed, revived, and pushed forward this year. '
 date: 2025-12-17
 slug: web-monetization-wrapped-2025
+lang: en
 authors:
   - Rabeb Othmani
 author_urls:
