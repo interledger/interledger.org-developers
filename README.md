@@ -6,7 +6,7 @@ Source code for the /developer-tools portion of [Interledger.org](https://interl
 
 Inside this project, you'll see the following folders and files:
 
-```
+```text
 .
 ├── public/
 ├── src/
@@ -53,12 +53,46 @@ All commands are run from the root of the project, from a terminal:
 | `bun run preview`         | Preview your build locally, before deploying     |
 | `bun run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `bun run astro -- --help` | Get help using the Astro CLI                     |
+| `bun run format`          | Format code and fix linting issues               |
+| `bun run lint`            | Check code formatting and linting                |
 
 You can substitute the `bun` commands with whatever package manager of your choice uses.
 
+### 🔍 Code Formatting
+
+This project uses [ESLint](https://eslint.org/) for code linting and [Prettier](https://prettier.io/) for code formatting. Before submitting a pull request, please ensure your code is properly formatted:
+
+1. **Fix issues**: Run `bun run format` to automatically format code and fix linting issues
+2. **Check before pushing**: Run `bun run lint` to verify everything passes (CI will also run this)
+
+ESLint is configured to work with TypeScript and Astro files. The configuration extends recommended rules from ESLint, TypeScript ESLint, and Astro ESLint plugins, and integrates with Prettier to avoid conflicts.
+
 ### 👀 Want to learn more?
 
-Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+Check out [Starlight's docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+
+## Deployment Notes
+
+This project has two deployment mechanisms:
+
+### Preview Deployments (Netlify)
+
+Every pull request automatically generates a preview deployment on Netlify at `https://deploy-preview-{PR_NUMBER}--developers-preview.netlify.app/developers/`. This allows reviewers to see changes before they're merged. The Netlify configuration is defined in `netlify.toml`.
+
+### Production Deployments (Google Cloud Storage)
+
+The real production deployment is served through Google Cloud Storage (GCS) at `https://interledger.org/developers/` as part of the main Interledger website. This is a transparent proxy configuration - the developers portal is hosted separately but appears as part of the main domain.
+
+When a PR is merged to the `main` branch, the `.github/workflows/deploy_gcs.yml` GitHub Actions workflow automatically:
+
+1. Builds the site using Bun
+2. Deploys the built files to Google Cloud Storage (`gs://interledger-websites-public/developers`)
+3. Rebuilds and deploys the nginx-rewrite Cloud Run service (which handles the `/developers` proxy routing)
+4. Invalidates the CDN cache to ensure new content is served immediately
+
+**Note:** There is a legacy `deploy.yaml` workflow in `.github/workflows/` which is being deprecated. New deployments should use `deploy_gcs.yml`.
+
+For more information about the main Interledger.org infrastructure and deployment pipeline, see the [`interledger.org-v4`](https://github.com/interledger/interledger.org-v4) repository.
 
 Thank You for Contributing! We appreciate your effort to write a blog post and share your expertise with the community!
 
@@ -68,24 +102,41 @@ Thank You for Contributing! We appreciate your effort to write a blog post and s
 
 **Typical Target Audience:**
 
-* Technically-inclined users interested in Interledger development.
-* Technically-inclined users interested in financial services technologies, innovations, or developments.
-* Users keen on topics like APIs, data analytics, metrics, analysis, and quantitative assessment for digital networks.
-* Users interested in privacy and related technologies.
+- Technically-inclined users interested in Interledger development.
+- Technically-inclined users interested in financial services technologies, innovations, or developments.
+- Users keen on topics like APIs, data analytics, metrics, analysis, and quantitative assessment for digital networks.
+- Users interested in privacy and related technologies.
 
 **Possible Content Framework:**
 
 If you're unsure how to structure your writing, you can use this as a guide.
 
-* Introduction / main point
-* Context - Interledger’s perspective / stance / commitment on the topic being written [broader categories like privacy, metrics for growth, Digital Financial Inclusion etc.]
-* The Challenge (or) The Problem
-* The Solution
-* The How / implementation
-* Roadmap - short-term / long-term
-* Note: A call to action (CTA) will be included automatically at the bottom of every post.
+- Introduction / main point
+- Context - Interledger’s perspective / stance / commitment on the topic being written [broader categories like privacy, metrics for growth, Digital Financial Inclusion etc.]
+- The Challenge (or) The Problem
+- The Solution
+- The How / implementation
+- Roadmap - short-term / long-term
+- Note: A call to action (CTA) will be included automatically at the bottom of every post.
 
 Ideal Word Count: Between 1,000 and 2,500 words, with links to relevant documents/pages for a deeper understanding.
+
+### Blog metadata and tags
+
+Each blog post includes frontmatter at the top of the file (title, description, date, authors, etc.), including a `tags` field used for filtering on the blog index.
+
+Please **only use the existing, approved tags** unless you have aligned with the tech + comms team on adding a new one. This helps keep the tag filter focused and avoids fragmentation.
+
+**Current tags:**
+
+- Interledger Protocol
+- Open Payments
+- Web Monetization
+- Rafiki
+- Updates
+- Releases
+
+If you believe your post needs a new tag, propose it in your PR description or in the `#tech-team` Slack channel so we can decide whether to add it and update this list.
 
 ### Getting Started
 
@@ -93,28 +144,29 @@ Discuss Ideas: Before starting, share your blog post ideas with the tech team to
 
 Copy the Template: Begin your draft using [this Google Doc template](https://docs.google.com/document/d/1L7vzsYORg9xmf72ljTdmyekpq2vJ7eQZ9atM2uAXgUM/edit?usp=sharing) to maintain a consistent format.
 
-Review Process## 
+Review Process##
 
 Initial Reviews:
 
-* Once your draft is ready, request specific reviewers or ask for feedback on the #tech-team Slack channel.
-* Incorporate feedback and refine the blog post.
+- Once your draft is ready, request specific reviewers or ask for feedback on the #tech-team Slack channel.
+- Incorporate feedback and refine the blog post.
 
 Finalizing:
 
-* When the draft is stable, create a pull request in the [interledger.org-developers](https://github.com/interledger/interledger.org-developers) GitHub repo.
-* Please add links where appropriate so people can easily click to learn more about the concepts you reference.
-* Include all images used in the post in the PR.
-* No-one is expected to know the ins and outs of Astro (the framework that powers our site), so please tag Sarah as a reviewer to ensure everything Astro-related is in order.
+- When the draft is stable, create a pull request in the [interledger.org-developers](https://github.com/interledger/interledger.org-developers) GitHub repo.
+- Please add links where appropriate so people can easily click to learn more about the concepts you reference.
+- Include all images used in the post in the PR.
+- No-one is expected to know the ins and outs of Astro (the framework that powers our site), so please tag Sarah as a reviewer to ensure everything Astro-related is in order.
 
-### Working with Visuals 
+### Working with Visuals
 
-* If you need an illustration, submit a design request in advance to Madalina via the #design Slack channel using the design request form.
-* Before uploading images to GitHub, run them through an image optimizer such as [TinyPNG](https://tinypng.com/).
-* Ensure images are appropriately sized; feel free to ask Madalina or Sarah for assistance.
+- If you need an illustration, submit a design request in advance to Madalina via the #design Slack channel using the design request form.
+- Before uploading images to GitHub, run them through an image optimizer such as [TinyPNG](https://tinypng.com/).
+- Ensure images are appropriately sized; feel free to ask Madalina or Sarah for assistance.
 
 ### Publishing Your Blog Post
 
-* Remember: merging the pull request will publish the blog post immediately.
-* Ensure the publishing date in the blog post metadata matches the intended release date.
-* Check with Ioana to confirm the publishing date and keep a consistent posting schedule. Ioana will also handle social media promotion.
+- Remember: merging the pull request will publish the blog post immediately.
+- Ensure the publishing date in the blog post metadata matches the intended release date.
+- Check with Ioana to confirm the publishing date and keep a consistent posting schedule. Ioana will also handle social media promotion.
+- Run `bun run format` and `bun run lint` to format your code and check for issues before creating a pull request.

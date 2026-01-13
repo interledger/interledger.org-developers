@@ -1,0 +1,31 @@
+[build]
+  command = "npm install -g bun && bun install && bun run build && mkdir -p _netlify/builders && cp -r dist _netlify/builders/developers"
+  publish = "_netlify/builders"
+  environment = { NETLIFY = "true" }
+
+[context.production]
+  command = "npm install -g bun && bun install && bun run build && mkdir -p _netlify/builders && cp -r dist _netlify/builders/developers"
+  publish = "_netlify/builders"
+  environment = { NETLIFY = "true" }
+
+[context.preview]
+  command = "npm install -g bun && bun install && bun run build && mkdir -p _netlify/builders && cp -r dist _netlify/builders/developers"
+  publish = "_netlify/builders"
+  environment = { NETLIFY = "true" }
+
+[context.deploy-preview]
+  command = "npm install -g bun && bun install && bun run build && mkdir -p _netlify/builders && cp -r dist _netlify/builders/developers"
+  publish = "_netlify/builders"
+  environment = { NETLIFY = "true" }
+
+# Rewrite everything to /developers/index.html for client-side routing
+[[redirects]]
+  from = "/developers/*"
+  to = "/developers/index.html"
+  status = 200
+
+# Root redirect
+[[redirects]]
+  from = "/"
+  to = "/developers/"
+  status = 301

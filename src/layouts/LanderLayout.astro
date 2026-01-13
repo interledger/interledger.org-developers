@@ -1,42 +1,53 @@
 ---
-import LanderHeader from '../components/pages/LanderHeader.astro';
-import Footer from '../components/pages/Footer.astro';
-import '../styles/pages.css';
+import Footer from '../components/pages/Footer.astro'
+import LanderHeader from '../components/pages/LanderHeader.astro'
+import '../styles/pages.css'
 
 interface Props {
-	title: string;
-	description?: string;
-	gradient?: string;
+  title: string
+  description?: string
+  gradient?: string
 }
 
-const { title, description, gradient = "option1" } = Astro.props;
+const { title, description, gradient = 'option1' } = Astro.props
 ---
 
 <!doctype html>
 <html lang="en" data-theme="dark">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="author" content="Interledger Foundation" />
-		<meta name="description" content={description ? description : 'Making payments as easy as sending an email'}>
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title ? `${title} | Interledger Foundation` : 'Interledger Foundation'}</title>
-		<link rel="icon" type="image/svg+xml" href="/developers/favicon.svg" />
-		<script defer src="https://ilf-site-analytics.netlify.app/script.js" data-website-id="50d81dd1-bd02-4f82-8a55-34a09ccbbbd9" data-domains="interledger.org"></script>
-	</head>
-	
-	<body style=`--gradient:var(--${gradient})`>
-		<LanderHeader />
-		<slot />
-		<Footer />
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="author" content="Interledger Foundation" />
+    <meta
+      name="description"
+      content={description
+        ? description
+        : 'Making payments as easy as sending an email'}
+    />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>
+      {title ? `${title} | Interledger Foundation` : 'Interledger Foundation'}
+    </title>
+    <link rel="icon" type="image/svg+xml" href="/developers/favicon.svg" />
+    <script
+      defer
+      src="https://uwa.interledger.org/script.js"
+      data-website-id="50d81dd1-bd02-4f82-8a55-34a09ccbbbd9"
+      data-domains="interledger.org"></script>
+  </head>
+
+  <body style=`--gradient:var(--${gradient})`>
+    <LanderHeader />
+    <slot />
+    <Footer />
+  </body>
 </html>
 
 <style is:global>
-	html {
-		box-sizing: border-box;
-		height: 100%;
-	}
+  html {
+    box-sizing: border-box;
+    height: 100%;
+  }
 
 	body {
 		display: flex;
@@ -52,58 +63,58 @@ const { title, description, gradient = "option1" } = Astro.props;
 		overflow-x: hidden;
 	}
 
-	main {
-		flex: 1;
-		font-size: var(--step-0);
-	}
+  main {
+    flex: 1;
+    font-size: var(--step-0);
+  }
 
-	section {
-		width: 100%;
-		padding-block: var(--space-m);
-	}
+  section {
+    width: 100%;
+    padding-block: var(--space-m);
+  }
 
-	.content-wrapper {
-		max-width: var(--max-content-width);
-		min-width: 360px;
-		margin: auto;
-		padding-inline: var(--space-m);
-	}
+  .content-wrapper {
+    max-width: var(--max-content-width);
+    min-width: 360px;
+    margin: auto;
+    padding-inline: var(--space-m);
+  }
 
-	.heading--1,
-	h1 {
-		font-size: var(--step-4);
-	}
+  .heading--1,
+  h1 {
+    font-size: var(--step-4);
+  }
 
-	.heading--2,
-	h2 {
-		font-size: var(--step-2);
-	}
+  .heading--2,
+  h2 {
+    font-size: var(--step-2);
+  }
 
-	.heading--3,
-	h3 {
-		font-size: var(--step-1);
-	}
+  .heading--3,
+  h3 {
+    font-size: var(--step-1);
+  }
 
-	.heading--4,
-	h4 {
-		font-size: var(--step-0);
-	}
+  .heading--4,
+  h4 {
+    font-size: var(--step-0);
+  }
 
-	a {
-		color: currentColor;
-		transition: color 300ms ease-in-out;
-	}
+  a {
+    color: currentColor;
+    transition: color 300ms ease-in-out;
+  }
 
-	a:hover {
-		color: hsla(26, 100%, 76%, 1);
-	}
+  a:hover {
+    color: hsla(26, 100%, 76%, 1);
+  }
 
-	.visually-hidden {
-		clip-path: inset(50%);
-		height: 1px;
-		overflow: hidden;
-		position: absolute;
-		white-space: nowrap;
-		width: 1px;
-	}
+  .visually-hidden {
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
 </style>

@@ -1,0 +1,253 @@
+---
+title: 'El Universo Interledger'
+description: 'Explora el sistema abierto que conecta pagos globales con Interledger.'
+date: 2025-07-02
+lang: es
+slug: el-universo-interledger
+authors:
+  - Marian Villa
+author_urls:
+  - https://www.linkedin.com/in/marianvilla/
+tags:
+  - Interledger Protocol
+  - Open Payments
+---
+
+> ⚠️ **Nota:** Este artículo es una adaptación al español.  
+> 📘 This article is also available in English: [Interledger Universe – interledger.org](https://interledger.org/developers/blog/interledger-universe/).
+
+Si estás un poco abrumado por términos como el **Protocolo de Interledger, Interledger Stack, o Fundación Interledger, Estándar de Pagos Abiertos, Rafiki, La Moneda Rafiki, Dassie, Monetización Web (Extensión), STREAM, SPSP, Paquetes,etc…** Y te sientes aún un poco perdido, aquí estamos para aclararlo. Vamos a desglozar cada uno de los términos para traer a la luz el significado y de esta manera mostrar más claramente el Universo de Interledger. Empecemos con el término más obvio:
+
+## Interledger
+
+El término **Interledger** puede dividirse en el prefijo **“Inter”** que puede entenderse como “entre” y **ledger**, que en su definición más pura en el [diccionario](https://www.merriam-webster.com/dictionary/ledger).
+, traduciría: Un libro. Un libro que contiene las cuentas donde se registran los débitos y créditos de los libros de registro contables. Si juntamos ambos conceptos, Interledger significa que el sistema de pagos puede hacerse entre múltiples libros contables, conocidos como ledgers.
+
+**¿Qué significa esto, cómo funciona?**
+Digamos que tengo una cuenta en Alemania y quiero transferir dinero a mi amigo Allan en Sur África. ¿Qué opciones tengo? Puedo empezar una transferencia internacional desde mi cuenta bancaria a la de Allan, lo que usará será una red SWIFT para intercambiar mensajes de pago. Probablemente la transferencia va a tomar al menos 3 días para verse reflejada en la cuenta bancaria de Allan y va a costarme relativamente una gran comisión. También puedo usar un servicio como [Wise](https://wise.com/), pero esta es una plataforma cerrada que requerirá que me registre, y Allan necesitará también crear su cuenta o diligenciar un formulario con el Banco de Reserva de Sur África antes de recibir sus fondos.
+
+También es importante entender que este servicio es regulado, porque utiliza sotware privado, entonces como usuario no tengo una manera de entender cómo es procesada mi data, y en este caso hipotético solo queda confiar. Y el caso se complicaría si asumimos que Allan no tiene una cuenta tradicional de banco, ya que solo tiene un proveedor de dinero móvil. **¿Cómo transferiríamos fondos a él, entonces?**
+
+Interledger fue diseñado para ser una serie de nodos que impulsa mensajes de pago en el sistema, teniendo en cuenta la conversión de la moneda, donde la ‘moneda’ puede ser cualquiera que incluya un valor para transar, incluyendo monedas fiduciarias, criptomonedas o dinero móvil.
+
+![Imagen 1 - Red de Pagos](/developers/img/blog/2025-06-04/network-Interledger.png)
+
+Ahora, continuando con el ejemplo, si mi cuenta bancaria está en Euros y la cuenta Móvil de Allan está en Moneda Surafricana, Rands, como vemos en el gráfico de la Red de Pagos, hay múltiples maneras de que mi dinero pueda ser enviado y enrutado a Allan. Lo que hace **Interledger** especial, es que se asegura que los paquetes lleguen con la ruta más rápida y barata, desde mi nodo de Interledger hasta el nodo de Interledger de Allan. Interledger está diseñado para ser una red encima de las redes existentes de pagos, y por esto logra interoperabilidad entre todas las capas.
+
+## Fundación Interledger
+
+Ahora que entendimos la parte técnica, podemos introducir **la Fundación Interledger**.
+Es una fundación constituída en Estados Unidos cuya visión es enviar dinero de manera fácil, como si enviaras un correo electrónico.
+
+La Fundación Interledger tiene bajo su dirección y cuidado, el Protocolo Interledger y sus protocolos asociados, y se dedica a desarrollar y fomentar la inclusión financiera en sus sistemas alrededor del mundo.
+
+La estrategia global es soportar la investigación y desarrollo de los sistemas de inclusión financiera en áreas vulnerable, fondear a través de subvenciones a poblaciones no representadas en el ecosistema financiero, cambiando el paradigma en este sistema; adicional creando una comunidad abierta e inclusiva, **la Comunidad Interledger**, que crece a través de la conversación abierta, uniendo otras voces y perspectivas, al espacio fintech.
+
+**¿Cuáles son los protocolos que desarrolla y mantiene la fundación?**
+
+## La Arquitectura de Interledger
+
+La Arquitectura de Interledger tiene un gran parecido a la Arquitectura de Internet, consiste en múltiples capas, y esto no es una coincidencia, ya que la arquitectura de Interledger fue modelada posterior a la arquitectura de Internet. Entonces por esto, cada capa de la arquitectura de Internet tiene su equivalente en la Arquitectura de Interledger. Cada capa sirve para una función específica que interactúa con capas tanto arriba como abajo.
+
+Exploremos cada una de las capas de la Arquitectura de Interledger desde abajo.
+
+![Imagen 2 - Infraestructura Interledger](/developers/img/blog/2025-06-04/infraestructura-Interledger-espanol.jpg)
+
+Si prefieres una versión en video de la Arquitectura de Interledger puedes ver esta presentación de su Arquitectura en [Youtube](https://youtu.be/sqGjkZKFjgo).
+
+### Capa de Infrastructura
+
+La infraestructura por si misma no es una parte técnica de la arquitectura, pero es una parte esencial para que los protocolos funcionen. En esta capa es donde se define el valor a intercambiar entre las las partes. Este acuerdo de intercambio puede ocurrir entre monedas _Fiat, Crypto, o Dinero Móvil, o cualquier activo de valor acordado_. Aquí es donde se define el valor intercambiado entre las partes, como créditos de Starbucks o incluso granos de café físicos.
+
+Esta capa se asegura que una vez el pago se haya liquidado, la transferencia de valor ha sido ejecutada con las partes involucradas. Usualmente, los nodos conectados, también llamados conectores, entran en un acuerdo de sincronización para definir la línea de crédito que se están extendiendo entre cada nodo para facilitar que el acuerdo se de. Esta transacción puede ocurrir en un punto predefinido o donde esté la línea de crédito, también llamada liquidación entre pares, y allí es completada.
+
+Es importante aclarar que en caso de que se utilice una crypto para realizar el acuerdo entre los nodos, esto pasa automáticamente en el acuerdo entre pares, porque las blockchains fuerzan el acuerdo según sus capacidades cryptográficas y a su ejecución.
+
+### Capa de Enlace
+
+La Capa de enlace define como los conectores en pares se comunican. Actualmente existen dos grandes protocolos en esta capa:
+
+> **Protocolo Bilateral de Transporte [(BTP)](https://interledger.org/developers/rfcs/bilateral-transfer-protocol/):** Usa comunicación basada en **WebSocket\*** entre conectores.
+> **[ILPoverHTTP](https://interledger.org/developers/rfcs/ilp-over-http/):** Utiliza HTTPS para la comunicación entre conectores.
+> Estos protocolos establecen la conexión necesaria para que las capas superiores funcionen.
+
+### Capa de Protocolo - Protocolo Interledger (ILP)
+
+El core de la Arquitectura de Interledger está basado en el [Protocolo Interledger (ILP)](https://interledger.org/developers/rfcs/interledger-protocol/). Este protocolo divide grandes pagos en pequeños paquetes cuyo contenido prescribe y define un protocolo de transferencia de dos fases.
+
+_¿Por qué se usa un proceso de dos fases en vez de un proceso de una sola fase en este protocolo de transferencia?_
+
+Empecemos ejemplificando una **Transferencia de una Fase**.
+
+![Imagen 3 - Transferencia de una sola fase](/developers/img/blog/2025-06-04/transferencia-ILP-Interledger-Protocol-unafase.png)
+
+Alice representada a la izquierda en la imagen, es un cliente de un servicio de cuentas de Identidad (ASE) que corre sobre un nodo conector de Interledger (Nodo A).
+
+- Un **Servicio de Cuentas de Identidad** ayuda a proveer y sostener la cuenta entre el pagador y el recibidor del pago, y es regulado por una entidad en el país o países donde opera, algunos ejemplos pueden ser bancos, proveedores de dinero móvil, etc.
+
+Bob en el gráfico representado a la derecha es un cliente del Servicio de Cuentas de Identidad que corre sobre el Conector de Interledger (D).
+
+Para que el pago de Alice llegue a Bob, el conector (A) necesita pasar los paquetes al conector (B), que necesita a su vez pasar los paquetes al conector (C), que a su vez necesita pasar al conector (D). En el escenario más optimista, ASE debitará de la cuenta de Alice, para pasar el pago hasta Bob.
+
+Pero, ¿Qué pasaría si por alguna razón, el conector (C) no logra pasar el pago al conector (D)? De la cuenta de Alice el dinero ya fue debitado, pero Bob no recibió los fondos.
+
+Para evitar el riesgo de que la transacción falle y no llegue al usuario final, entre Alice y Bob, a través de los nodos conectores, el Protocolo de Interledger define una **Transferencia de Dos Fases**.
+
+### Transferencia de Dos Fases:
+
+![Imagen 4 - Transferencia de dos fases](/developers/img/blog/2025-06-04/2p-transfer-es.jpg)
+
+A través del **Protocolo Interledger ILP**, la transferencia comenzará enviando al conector (A) un paquete construido en ILP que contiene la dirección ILP del que recibe, una condición de ejecución que tendrá un monto y un tiempo de expiración. El conector que envía también incluirá información adicional como el formato que se determinará por el protocolo de más alto nivel en uso. Luego, el paquete irá al conector (B) sobre un canal autenticado, y tendrá una configuración usando una capa de enlace al protocolo.
+
+El Conector (B) verificará con el conector (A) el balance de liquidez, y si hay recursos suficientes, debitará el monto desde la cuenta del conector de liquidez. El conector usa el enrutamiento a través de tablas para determinar el siguiente salto, y así ajustar la cantidad de recursos en el paquete que envía, y el tiempo de expiración de la tasa de la transacción, impulsando finalmente el paquete a seguir su camino.
+
+Este proceso se repitirá hasta que el paquete haya llegado a su destino, el conector recibidor (D). El recibidor validará que el paquete cumpla, basado en un protocolo de alto nivel, que aceptará retornando con un **_Paquete ILP Completado_** con una preimagen de la condición, o rechazando con un **_Paquete ILP Rechazado_**. Si es aceptado, cada conector en la cadena verificará el cumplimiento y créditos disponibles al siguiente conector hasta que el emisario original es alcanzado.
+
+El conector emisor revisa el cumplimiento de los párametros enviados contra la condición original, y graba la transacción, y repetirá el proceso hasta completar la cantidad deseada para realizar la transferencia. Este ciclo garantiza la seguridad, eficiencia y uso de múltiple monedas que se pueden manejar a través de la red de conectores, manteniendo la integridad y tiempo de cada paquete transferido.
+
+El protocolo es específicamente diseñado para transacciones de valores pequeños. Si el conector (A) y (B) se conectan usando paquetes, digamos que 1 centavo, perdiendo un par de ellos debido a problemas en la red, pueden realizarlo rápidamente.
+
+Sin embargo la conexión de (A) y (B) está basado en transacciones pequeñas por un centavo sobre un billón (1/1,000,000,000), así que perder una pequeña cantidad será inconsecuente cuando se cierre el arreglo.
+
+### Capa de transporte: Direcciones de ILP y Apuntadores de Pago
+
+Las [direcciones ILP](https://interledger.org/developers/rfcs/ilp-addresses/) son parte fundamental del Protocolo Interledger, sirviendo como un identificador único de cuentas en la red de Interledger. Estas direcciones siguen un formato jerárquico similar a las direcciones IP de Internet, habilitando el enrutamiento eficiente de paquetes entre diferentes **_‘Ledgers’_**.
+
+La **Estructura de una Dirección ILP** consiste en diversos componentes:
+
+- **Asignación (Allocation)**: Esta es la primera parte de la dirección que indica el tipo de red. Por ejemplo, `g` es usado para redes globales disponibles, y `test` es usado para pruebas de red.
+- **Vecindario (Neighborhood)**: Siguiendo la lógica de asignación, el vecindario especifica el grupo de conectores o **_‘ledger’_** o instituciones. Por ejemplo, `sepa` puede representar las ‘ledgers’ [solamente en pagos en Euros](https://en.wikipedia.org/wiki/Single_Euro_Payments_Area) en un área o `us-fed`, puede representar la Reserva Federal de los Estados Unidos. El objetivo de los vecindarios es agrupar conectors y **_‘ledgers’_** que se conocen, o son compatibles, para que el enrutamiento sea más eficiente.
+- **Identificación de Cuenta**: Esta parte identifica específicamente una cuenta dentro de el **_‘Ledger’_**, es único en cada propietario de cuenta, y se asegura que los fondos están siendo enrutados correctamente al destinatario.
+- **Interacción (Opcional)**: Finalmente, la interacción codifica la lógica del negocio y varia para cada transacción, permitiendo que múltiples llamados sean identificados.
+
+Un ejemplo de una dirección ILP luce así:
+`g.us-fed.ach.acmebank.acmecorp.~ipr.73WakrfVbNJBaAmhQtEeDv.2`
+
+- La `g` indica que es una red global.
+- `Us-fed.ach` representa el vecindario (La Reserva Federal de los Estados Unidos dentro de una red de ACH).
+- `Acmebank.acmecorp` es la identificación de la cuenta.
+- `~ipr.73WakrfVbNJBaAmhQtEeDv.2` es la interacción.
+
+### Apuntadores de Pagos
+
+Los [Apuntadores de pagos](https://paymentpointers.org/) son una forma amigable de representar las **direcciones ILP**, similar a cómo las URLs presentan las direcciones IP. Esto hace que sea más fácil para el usuario manejar y compartir sus direcciones de pago.
+
+Un apuntador de pago siempre tiene un prefijo de señal de dólar ($) seguido de una estructura similar a la de una URL. Por ejemplo: `$wallet.com/alice` este apuntador de pago resuelve en una url`https://wallet.com/alice` que apunta a una dirección ILP.
+
+Un ejemplo: `test.wallet.alice` (Que no contiene la parte de interacción).
+
+Los apuntadores de pagos pueden ser hosteados en la raíz del dominio. En ese caso, un apuntador de pagos como `$mymarketplace.com` enmascara esta dirección: **https://marketplace.com/.well-known/pay** y dirije a una dirección ILP como: `g.wallet.mymarketplace`
+
+Cuando avancemos a la sección de la **_Capa de Aplicación_**, volveremos sobre este concepto de apuntado de pagos, específicamente en la sección del **_Protocolo Simple de Configuración de Pagos (SPSP)_**. Sí quieres saltar directamente a este área, puedes dar el salto hasta esa [sección específica](https://interledger.org/developers/blog/interledger-universe/#capa-de-aplicacion).
+
+### Capa de transporte: - El Protocolo STREAM
+
+La Capa de Transporte construida sobre ILP provee funcionalidades adicionales por manejar la transferencia de valor. El único protocolo soportado al momento es el Protocolo [STREAM](https://interledger.org/developers/rfcs/stream-protocol/) **_(Streaming Transport for Real-time Exchange of Assets and Messages)_**.
+
+![Imagen 4 - Protocolo STREAM](/developers/img/blog/2025-06-04/Protocolo-STREAM.gif)
+
+**STREAM** es un protocolo versátil y seguro para transportar el **Protocolo ILP**, facilitando eficientemente y de forma escalable la transmisión de dinero e información. El protocolo ofrece un rango de funcionalidades diseñadas para optimizar las transacciones basadas en ILP como:
+
+- **Transferencia de dinero e información**: Permitiendo simultáneamente dinero e información.
+- **Segmentación y reensamblado de paquetes**: Segmentación de grandes pagos o mensajes en pequeños paquetes de información, para mejor transmisión y reensamblado final.
+- **Comunicación Bidireccional**: Soporta comunicación en dos vías, facilitando el intercambio de dinero o información en ambas direcciones.
+- **Multiplexidad de transmisión**: La lógica múltiple de transmisión puede ser enviada sobre una conección ILP, con IDs numéricos asignados para evitar que colapse.
+- **Flujo y Control de Congestión**: Ajustar la tasa de intercambio entre monedas y transferencia de datos basado en las condiciones de la red para mantener la eficiencia.
+- **Autenticación y Encriptación**: Asegura la seguridad a través de la autenticación y encriptación de los paquetes de datos.
+- **Generación de condiciones y cumplimiento**: Manejar las condiciones de generacion de paquetes ILP y su cumplimiento, asegurando la integridad de la transacción.
+- **Migración de Conexión**: Soporte ininterrumpido de transmisión, a pesar de cambios en la conexión.
+
+**STREAM** también maneja los patrones de cambios de tarifas efectivamente, e incluye un minimo aceptable de cantidad en ILP para preparar los paquetes y recibir un monto, y verificar de esta forma cumplimiento o de lo contrario, rechazar paquetes. De esta manera le permite a quien envía, fijar las cantidades y el precio en sus propias unidades, usando una calculadora para calcular la tarifa de intercambio en esa transacción, y también descartar el paquete de **_test_** que fue usado al iniciar la conexión. El protocolo se asegura que la preparación de paquetes que siguen con cantidades menores a las especificaciones, no serán tomadas en cuenta para el cumplimiento.
+
+**_Nota_**: Los paquetes de STREAM incluyen en el campo de datos, un paquete de ILP.
+
+### Capa de Aplicación
+
+La Capa de Aplicación es la capa final de la Arquitectura Interledger, haciendo visible para el desarrollador funcionalidades y habilitando varios posibles implementaciones. Los dos protocolos habilitados en esta capa son SPSP (protocolo de Configuración Simple de Pagos) y el Protocolo de Pagos Abiertos.
+
+[SPSP](https://interledger.org/developers/rfcs/simple-payment-setup-protocol/) simplifica el proceso de configuración de pagos. Cuando llega una petición **_GET_** relacionada a una URL asociada a un apuntador de pago que usa la petición de encabezamiento SPSP, SPSP define que necesita ser retornado
+
+```http wrap
+HTP/1.1 200 OK
+Content-Type: application/spsp4+json
+{
+  "destination_account": "example.ilpdemo.red.bob",
+  "shared_secret": "6jR5iNIVRvqeasJeCty6C+YB5X9FhSOUPCL/5nha5Vs=",
+  "Receipts_enabled": true
+}
+```
+
+Esto incluye la `destination_account` (Cuenta de destino) que es la dirección ILP del que recibe, y comparte un `shared_secret` (Secreto) para encriptar los paquetes de STREAM, que incluye un identificador `receipts_enabled`, (recibos habilitados) indicando cuando un [recibo de STREAM](https://interledger.org/developers/rfcs/stream-receipts/) fue requerido. SPSP asegura una configuración de pago segura y directa para entidades o individuos con un acceso ILP, esto significa que entidades o individuos pueden crear, enviar, y recibir paquetes ILP directamente sin ayuda de otra entidad.
+
+[Pagos Abiertos](https://interledger.org/developers/rfcs/simple-payment-setup-protocol/) es un API estándar API para entidades de servicios financieros, permitiendo que terceros puedan asegurar acceso a sus cuentas digitales para ver su información de cuenta e iniciar un pago. Pagos Abiertos soporta complejos escenarios de pagos como e-commerce o pagos recurrentes, facilitando un robusto marco de trabajo para autorizar e iniciar pagos digitales. Emplea una [Negociación de Subvenciones (Grant Negotiation)](https://datatracker.ietf.org/doc/html/draft-ietf-gnap-core-protocol-20) y un Protocolo de Autorización (GNAP) para Control de acceso preciso y autorización segura.
+
+Para entender de forma más amplia Pagos Abiertos, puedes revisar este artículo en inglés ['Open Payments Guide'](https://interledger.org/developers/blog/simple-open-payments-guide/). Si deseas hacer una revisión de más alto nivel del Protocolo de Autorización (GNAP) y dónde está siendo usando en Pagos Abiertos, puedes revisar este [Artículo de Nathan’s (EN)](https://interledger.org/developers/blog/open-payments-cinderella-story/) - La historia de Cenicienta: cómo encontrar un método de autorización adecuado.
+
+---
+
+## Monetización Web
+
+La [Monetización Web](https://webmonetization.org/) no es parte de la Arquitectura de Interledger, pero de cara al usuario es una aplicación que se sitúa en el top de la Arquitectura ILP.
+
+![Imagen 5 - Monetización Web](/developers/img/blog/2025-06-04/MonetizacionWeb-Infraestructura-Interledger.jpg)
+
+La Monetización Web es un estándar propuesto por la [W3C](https://www.w3.org/) que facilitará los pagos sin complicaciones directamente desde el navegador. Permitirá a los visitantes de un sitio web con interacciones mínimas pagar la cantidad elegida. Como un estandar propuesto, la meta con la Monetización Web es que nativamente pueda realizarse a través de los navegadores estas transacciones; Sin embargo, ningún navegador actualmente soporta esta funcionalidad. Por esto la Fundación Interledger está trabajando en una extensión de Monetización Web para habilitar esta funcionalidad inmediatamente.
+
+Cuando un navegador web (o en su defecto, la extensión para Monetización Web) encuentre la manera de ‘monetizar’ un sitio web, el sitio automáticamente podrá enviar una señal con su habilidad para aceptar pagos. Una vez la extensión o el navegador obtiene la autorización del Usuario de usar la Monetización Web en la fase de configuración, traerá todos los detalles del pago necesarios y las instrucciones para mover el dinero utilizando la API de Pagos Abiertos.
+
+El navegador luego creará una sesión de pago y comunicará el evento de pago de vuelta al sitio. En respuesta, el sitio web puede proveer beneficios para retribuir a los visitantes de su sitio, como remover anuncios o darle acceso a contenido exclusivo.
+
+Este acercamiento pretende crear una manera más intuitiva de integrar la experiecia de los usuarios y los creadores de contenido, promoviendo un nuevo modelo para la monetización web que sea eficiente y preserve la privacidad, y se enfoque en la experiencia del usuario.
+
+---
+
+## Rafiki
+
+Rafiki fue creado como una [referencia en la implementación](https://github.com/interledger/rafiki) de la Arquitectura de Interledger. No es una billetera, no es una plataforma o servicio, es un software.
+
+![Imagen 6 - Monetización Web](/developers/img/blog/2025-06-04/rafiki-es.jpg)
+
+[Rafiki](https://rafiki.dev/) es un software de código abierto, esto significa que puede usarse de manera gratuita y abierta. El propósito de Rafiki es minimizar el esfuerzo de las organizaciones de incorporar Interledger en las cuentas de los usuarios y ser conector con la red ILP. Rafiki usa ILPoverHTTP en vez de BTP porque se asume que los paquetes serán grandes al igual que las transacciones. Por esto los pagos son divididos en pocos paquetes, haciendo que establecer una conexión tipo socket sea excesiva.
+
+### Rafiki.money, ‘testnet’, y ‘test network’
+
+Tenemos que admitir que fuimos un poco perezosos para elegir nombres en nuestra red de pruebas para demostrar nuestra tecnología. Comenzamos creando una billetera de prueba que en ese momento, y hasta ahora, no tenía nombre pero lo alojamos en [rafiki.money](https://rafiki.money/).
+En esta Simulación de una Cuenta de Servicio de Entidades, el usuario puede crear su cuenta, pasar por un flujo simulado tipo **_KYC_**, y tener la posibilidad de retener un balance de prueba y enviar o recibir pagos a través de Interledger.
+La Billetera de prueba está integrada con el ambiente de prueba [Rapyd’s](https://www.rapyd.net/) para tener los balances y con Rafiki para facilitar los pagos. Sin embargo el ambiente de prueba de Rapyd’s es muy limitado de acuerdo a las restricciones de su API, entonces seguimos explorando mejores alternativas.
+
+Actualmente estamos:
+
+- En el proceso de encontrar un nombre para nuestra billetera de prueba, para que la gente no se confunda con 'Rafiki', la referencia de implementación del ILP.
+- Adicionalmente estamos cambiando como luce la interfaz de la billetera para alejarnos un poco más, dándole más identidad.
+
+La Billetera de prueba despliega una isntancia de Rafiki, lo que significa que en ese nodo de prueba en Interledger está corriendo un conector de Interledger también.
+
+Estamos trabajando para tener futuras integradores de Rafiki a través de Cuentas de Licencia en el Servicio de Entidades, para conectar al menos con la billetera de prueba en vez de probar su funcionalidad y crear una red grande de pruebas.
+
+También usamos el término **_‘testnet’_** para describir toda las herramientas que hemos desarrollado alrededor de la billetera de pruebas.
+Ejemplo: Una [Boutique](https://rafiki.boutique/products) para experimentar como se comporta en un eCommerce el sistema de Pagos Abiertos. Sin embargo, hemos decidido no seguir usando este término para reducir la confusión con la red de pruebas.
+
+---
+
+## ¿Qué es Dassie?
+
+[Dassie](https://dassie.land/) es la segunda referencia de implementación de la Arquitectura ILP, pero está dirigida a usuarios de Crypto Monedas y desarrolladores lejos de Entidades de Servicio de Cuentas. No es desarrollado directamente por la Fundación Interledger, es un proyecto personal liderado por [Stefan Thomas](https://x.com/justmoon), uno de los creadores del Protocolo Interledger.
+
+Si bien sirve a dos mundos diferentes, un nodo de Dassie puede emparejarse con un nodo de Rafiki, por ejemplo, si el nodo de Rafiki está ejecutando un intercambio de Crypto Monedas.
+
+---
+
+## Reflexiones Finales
+
+- Navegar el Universo de Interledger puede ser un poco abrumador al inicio por la cantidad de términos y conceptos para asimilar. Sin embargo en su core, Interledger busca facilitar de manera práctica, simple, eficiente y segura la forma de transferir valor a través de diversos ‘Ledgers’ y Monedas. Desde la Arquitectura Interledger hasta la Referencia de Implementación, Rafiki o Aplicaciones de uso específicas como Monetización Web. Cada componente juega un rol crucial en la realización de nuestra misión: **Una red financiera interoperable y unificada**.
+- El ecosistema Interledger está diseñado para promover innovación y accesibilidad en el mundo financiero, sea habilitando pagos a través de la monetización web, simplificando el servicio de cuentas de Pagos Abiertos, o probando nuevas funcionalidades en la billetera de prueba. Entendiendo estos elementos y sus interacciones, podemos apreciar el potencial del Protocolo Interledger para revolucionar el panorama global de pagos y el intercambio de valores.
+- Te invitamos a seguir refinando y expandiendo estas herramientas, contribuyendo a que la visión de Interledger sea una realidad. Nuestra misión es enviar dinero o activos a través de la red tan fácil como si fuera un correo electrónico, impulsando un ecosistema inclusivo donde la innovación construye puentes en el sistema financiero. El futuro interconectado del sistema financiero está aquí, y estamos muy emocionados del futuro que nos espera.
+
+**_Gracias al equipo que hace esto posible, y a los contribuidores principales de este artículo: Sarah, Radu, Melissa, Tseli, Mohammed, Max, y Chris_**.
+
+---
+
+**_En Interledger somos de código abierto, así qué puedes verificar fácilmente nuestro trabajo en [GitHub](https://github.com/interledger/). Si este blogpost y las tecnologías aquí mencionadas te inspiraron, agradecemos tus contribuciones. Puedes unirte a nuestra [Comunidad en Slack](https://communityinviter.com/apps/interledger/interledger-working-groups-slack) o participar en la próxima llamada de la [Comunidad Interledger](https://community.interledger.org/), que tiene lugar el segundo miércoles de cada mes.
+Si deseas mantenerte actualizado con todas las oportunidades y noticias de la Fundación Interledger, puedes suscribirte a nuestro boletín 🤓💪_**.
+
+**_🇺🇸🇬🇧[English article](https://interledger.org/developers/blog/interledger-universe/) Written by [Sabine Schaller](https://www.linkedin.com/in/sabineschaller)_**

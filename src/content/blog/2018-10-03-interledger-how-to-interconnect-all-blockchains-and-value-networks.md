@@ -1,6 +1,6 @@
 ---
-title: "Interledger: How to Interconnect All Blockchains and Value Networks"
-description: "Interledger was born out of a project to build a blockchain-agnostic smart contracts platform. A key challenge was neutrality: how could a decentralized app buy resources like storage and computing, without being tied to a specific blockchain?"
+title: 'Interledger: How to Interconnect All Blockchains and Value Networks'
+description: 'Interledger was born out of a project to build a blockchain-agnostic smart contracts platform. A key challenge was neutrality: how could a decentralized app buy resources like storage and computing, without being tied to a specific blockchain?'
 date: 2018-10-03
 slug: interledger-how-to-interconnect-all-blockchains-and-value-networks
 lang: en
@@ -10,9 +10,7 @@ author_urls:
   - https://www.linkedin.com/in/evanmarkschwartz/
 external_url: https://medium.com/xpring/interledger-how-to-interconnect-all-blockchains-and-value-networks-74f432e64543
 tags:
-  - Interledger
-  - Connector
-  - Streaming Payments
+  - Interledger Protocol
 ---
 
 *By* [_Evan Schwartz_](https://www.linkedin.com/in/evanmarkschwartz/) *and* [_Vanessa Pestritto_](https://www.linkedin.com/in/vanessaalexandra/)

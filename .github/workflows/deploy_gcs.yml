@@ -1,0 +1,67 @@
+name: Deploy to GCS
+
+on:
+  # Trigger the workflow every time you push to the `main` branch
+  # Using a different branch name? Replace `main` with your branch's name
+  push:
+    branches: [main]
+  # Allows you to run this workflow manually from the Actions tab on GitHub.
+  workflow_dispatch:
+
+# Allow this job to clone the repo and create a page deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your repository using git
+        uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GSA_JSON }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - uses: oven-sh/setup-bun@v1
+      - name: Install dependencies
+        run: bun install
+      - name: Test build website
+        run: bun run build
+
+      - name: Deploy to GCS
+        run: gsutil -m rsync -r -d ./dist/ gs://${{ secrets.GCS_BUCKET }}/developers
+
+      - name: Build nginx container
+        run: |
+          cd ci/nginx-rewrite
+          gcloud builds submit --tag gcr.io/interledger-websites/nginx-rewrite:latest .
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy nginx-rewrite \
+            --image gcr.io/interledger-websites/nginx-rewrite:latest \
+            --platform managed \
+            --region us-central1 \
+            --allow-unauthenticated \
+            --port 8080 \
+            --memory 512Mi \
+            --cpu 1 \
+            --min-instances 0 \
+            --max-instances 10 \
+            --quiet
+
+      - name: Invalidate CDN cache
+        run: |
+          gcloud compute url-maps invalidate-cdn-cache interledger-org \
+            --path "/developers/*" \
+            --async

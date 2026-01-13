@@ -1,5 +1,5 @@
 ---
-title: "The Telemetry Tale: A Journey into the Metrics of Interledger"
+title: 'The Telemetry Tale: A Journey into the Metrics of Interledger'
 description: When simple metrics are paired with complex cloud solutions and important privacy considerations, the implementation process becomes significantly more complicated.
 date: 2024-04-10
 slug: the-telemetry-tale
@@ -9,8 +9,7 @@ authors:
 author_urls:
   - https://www.linkedin.com/in/sarah-jones-ba6bb6b9
 tags:
-  - Interledger
-  - Telemetry
+  - Updates
 ---
 
 ## Charting the Course
@@ -46,7 +45,7 @@ We ran into a roadblock when we realized that AWS-managed Grafana does not allow
 
 Despite Grafana Cloud’s responsive support team, we also encountered issues adding the AWS-Managed Prometheus as a data source. Our [sigv4 authentication](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_aws-signing.html) failed with a 403 Forbidden response, despite having the appropriate IAM permissions. The issue resolved spontaneously without clear intervention, implying an external factor (potentially AWS-side changes or maintenance) was at play.
 
-You can view our public dashboard for test data telemetry [here](https://rafikitelemetry.grafana.net/public-dashboards/f70c8a6033b14da5a9f1cb974def602a).
+You can view our public dashboard for test data telemetry on [Grafana Cloud](https://rafikitelemetry.grafana.net/public-dashboards/f70c8a6033b14da5a9f1cb974def602a).
 
 Here is an example of how it looks:
 

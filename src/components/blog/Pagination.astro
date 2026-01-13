@@ -1,60 +1,79 @@
 ---
-const { length, currentPage, firstUrl, prevUrl, nextUrl, lastUrl } = Astro.props;
+const { length, currentPage, firstUrl, prevUrl, nextUrl, lastUrl } = Astro.props
 
-const paginationList = Array.from({length}, (_, i) => i + 1);
+const paginationList = Array.from({ length }, (_, i) => i + 1)
 ---
+
 <nav aria-label="Blog pages" class="pagination">
-  {firstUrl ? (
-    <a href={`${firstUrl}`} class="pagination__link">&#171;</a>
-  ) : (
-  <span class="pagination__link disabled">&#171;</span>
-  )}
+  {
+    firstUrl ? (
+      <a href={`${firstUrl}`} class="pagination__link">
+        &#171;
+      </a>
+    ) : (
+      <span class="pagination__link disabled">&#171;</span>
+    )
+  }
 
-  {prevUrl ? (
-    <a href={`${prevUrl}`} class="pagination__link">&#8249;</a>
-  ) : (
-    <span class="pagination__link disabled">&#8249;</span>
-  )}
+  {
+    prevUrl ? (
+      <a href={`${prevUrl}`} class="pagination__link">
+        &#8249;
+      </a>
+    ) : (
+      <span class="pagination__link disabled">&#8249;</span>
+    )
+  }
 
-  {paginationList.map((num) => (
-    <a
-      href={`/developers/blog${num == 1 ? "" : "/" + num}`}
-      class={`pagination__link ${currentPage == num ? "disabled active" : ""}`}
-    >
-      {num}
-    </a>
-  ))}
+  {
+    paginationList.map((num) => (
+      <a
+        href={`/developers/blog${num == 1 ? '' : '/' + num}`}
+        class={`pagination__link ${currentPage == num ? 'disabled active' : ''}`}
+      >
+        {num}
+      </a>
+    ))
+  }
 
-  {!nextUrl ? (
-    <span class="pagination__link disabled">&#8250;</span>
-  ) : (
-    <a href={`${nextUrl}`} class="pagination__link">&#8250;</a>
-  )}
+  {
+    !nextUrl ? (
+      <span class="pagination__link disabled">&#8250;</span>
+    ) : (
+      <a href={`${nextUrl}`} class="pagination__link">
+        &#8250;
+      </a>
+    )
+  }
 
-  {lastUrl ? (
-    <a href={`${lastUrl}`} class="pagination__link">&#187;</a>
-  ) : (
-    <span class="pagination__link disabled">&#187;</span>
-  )}
+  {
+    lastUrl ? (
+      <a href={`${lastUrl}`} class="pagination__link">
+        &#187;
+      </a>
+    ) : (
+      <span class="pagination__link disabled">&#187;</span>
+    )
+  }
 </nav>
 
 <style>
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin-block: var(--space-m);
-}
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-block: var(--space-m);
+  }
 
-.pagination__link {
-  padding: var(--space-xs) var(--space-s);
-}
+  .pagination__link {
+    padding: var(--space-xs) var(--space-s);
+  }
 
-.active {
-  color: var(--color-primary);
-}
+  .active {
+    color: var(--color-primary);
+  }
 
-.disabled:not(.active) {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+  .disabled:not(.active) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 </style>

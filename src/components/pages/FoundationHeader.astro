@@ -7,16 +7,35 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang); 
 const translatePath = useTranslatedPath(lang, lang);
 ---
+
 <header class="site-header" role="banner">
-  <nav class="site-nav" role="navigation" aria-labelledby="block-interledger-mainnavigation-menu" id="block-interledger-mainnavigation">
-    <h2 class="visually-hidden" id="block-interledger-mainnavigation-menu">Main navigation</h2>
-    <a href={translatePath("/")} class="site-logo" aria-label="Interledger Foundation" data-umami-event="Site Nav - Logo">
+  <nav
+    class="site-nav"
+    role="navigation"
+    aria-labelledby="block-interledger-mainnavigation-menu"
+    id="block-interledger-mainnavigation"
+  >
+    <h2 class="visually-hidden" id="block-interledger-mainnavigation-menu">
+      Main navigation
+    </h2>
+    <a
+      href={translatePath("/")}
+      class="site-logo"
+      aria-label="Interledger Foundation"
+      data-umami-event="Site Nav - Logo"
+    >
       <FoundationLogo />
     </a>
-    <div class="site-links-wrapper offscreen" data-nav-wrapper id="siteNavLinks">
+    <div
+      class="site-links-wrapper offscreen"
+      data-nav-wrapper
+      id="siteNavLinks"
+    >
       <ul class="site-nav__links menu--level-1" id="siteNavMenu">
         <li class="menu-item has-submenu menu-item--level-1">
-          <a href={translatePath("/about-us")} aria-expanded="false" data-umami-event="Site Nav - Foundation">{t("nav.foundation")}</a>
+          <button aria-expanded="false" data-umami-event="Site Nav - Foundation"
+            >{t("nav.foundation")}</button
+          >
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
               <a href={translatePath("/about-us")} data-umami-event="Site Nav - About us">{t("nav.about")}</a>
@@ -33,7 +52,7 @@ const translatePath = useTranslatedPath(lang, lang);
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
-          <a href={translatePath("/developers")} aria-expanded="false" data-umami-event="Site Nav - Technology">{t("nav.technology")}</a>
+          <button aria-expanded="false" data-umami-event="Site Nav - Technology">{t("nav.technology")}</button>
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
               <a href={translatePath("/open-standards")} data-umami-event="Site Nav - Open Standards">{t("nav.overview")}</a>
@@ -42,21 +61,36 @@ const translatePath = useTranslatedPath(lang, lang);
               <a href={translatePath("/interledger")} data-umami-event="Site Nav - Interledger">{t("nav.interledger")}</a>
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href={translatePath("/open-payments")} data-umami-event="Site Nav - Open Payments">{t("nav.open-payments")}</a>
+              <a
+                href={translatePath("/open-payments")}
+                data-umami-event="Site Nav - Open Payments">{t("nav.open-payments")}</a
+              >
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href={translatePath("/web-monetization")} data-umami-event="Site Nav - Web Monetization">{t("nav.web-monetization")}</a>
+              <a
+                href={translatePath("/web-monetization")}
+                data-umami-event="Site Nav - Web Monetization"
+                >{t("nav.web-monetization")}</a
+              >
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href={translatePath("/join-network")} data-umami-event="Site Nav - Join network">{t("nav.join")}</a>
+              <a href={translatePath("/join-network")} data-umami-event="Site Nav - Join network"
+                >{t("nav.join")}</a
+              >
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href={translatePath("/developers")} data-umami-event="Site Nav - Developers Portal">{t("nav.developers")}</a>
+              <a
+                href={translatePath("/developers")}
+                data-umami-event="Site Nav - Developers Portal"
+                >{t("nav.developers")}</a
+              >
             </li>
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
-          <a href={translatePath("/financial-services")} aria-expanded="false" data-umami-event="Site Nav - Grants">{t("nav.grants")}</a>
+          <button aria-expanded="false" data-umami-event="Site Nav - Grants"
+            >{t("nav.grants")}</button
+          >
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
               <a href={translatePath("/financial-services")} data-umami-event="Site Nav - Financial Services">{t("nav.financial-services")}</a>
@@ -70,7 +104,10 @@ const translatePath = useTranslatedPath(lang, lang);
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
-          <a href={translatePath("/blog")} aria-expanded="false" data-umami-event="Site Nav - Content hub">{t("nav.content-hub")}</a>
+          <button
+            aria-expanded="false"
+            data-umami-event="Site Nav - Content hub">{t("nav.content-hub")}</button
+          >
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
               <a href={translatePath("/blog")} data-umami-event="Site Nav - Blog">{t("nav.foundation-blog")}</a>
@@ -87,7 +124,10 @@ const translatePath = useTranslatedPath(lang, lang);
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
-          <a href={translatePath("/get-involved")} aria-expanded="false" data-umami-event="Site Nav - Participate">{t("nav.participate")}</a>
+          <button
+            aria-expanded="false"
+            data-umami-event="Site Nav - Participate">{t("nav.participate")}</button
+          >
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
               <a href={translatePath("/get-involved")} data-umami-event="Site Nav - Get involved">{t("nav.get-involved")}</a>
@@ -101,9 +141,20 @@ const translatePath = useTranslatedPath(lang, lang);
           </ul>
         </li>
       </ul>
-      <a class="switch-link" href={translatePath("/summit")} data-umami-event="Site Nav - Summit Link">{t("nav.summit")}</a>
+      <a
+        class="switch-link"
+        href={translatePath("/summit")} 
+        data-umami-event="Site Nav - Summit Link">{t("nav.summit")}</a
+      >
     </div>
-    <button type="button" class="site-nav__toggle" aria-controls="siteNavMenu" aria-label="Toggle Menu" title="Toggle Menu" id="siteNavToggle">
+    <button
+      type="button"
+      class="site-nav__toggle"
+      aria-controls="siteNavMenu"
+      aria-label="Toggle Menu"
+      title="Toggle Menu"
+      id="siteNavToggle"
+    >
       <div id="menuIcon" class="menu-icon">
         <span></span>
         <span></span>
@@ -118,50 +169,75 @@ const translatePath = useTranslatedPath(lang, lang);
 </header>
 
 <style>
-.site-header {
-  background-color: var(--color-header-bg);
-  padding: 0 var(--space-m);
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  border-block-start: 2px solid var(--color-header-accent);
-  box-shadow: var(--box-shadow);
-}
+  .site-header {
+    background-color: var(--color-header-bg);
+    padding: 0 var(--space-m);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    border-block-start: 2px solid var(--color-header-accent);
+    box-shadow: var(--box-shadow);
+  }
 
-.site-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+  .site-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 
-.site-nav ul {
-  list-style: none;
-  padding-inline-start: 0;
-  justify-content: center;
-}
+  .site-nav ul {
+    list-style: none;
+    padding-inline-start: 0;
+    justify-content: center;
+  }
 
-.site-nav a {
-  display: block;
-  color: currentColor;
-  transition: text-decoration 200ms ease-in-out;
-  white-space: nowrap;
-}
+  .site-nav a,
+  .site-nav__links button {
+    display: block;
+    color: currentColor;
+    transition: text-decoration 200ms ease-in-out;
+    white-space: nowrap;
+  }
 
-.site-logo {
-  width: 11em;
-  flex: none;
-}
+  .site-nav__links button {
+    padding: var(--space-s) var(--space-2xs);
+    border: none;
+    background-color: transparent;
+  }
 
-.site-nav__links a {
-  text-decoration: none;
-  padding: var(--space-s) var(--space-2xs);
-  color: var(--color-black);
-}
+  .site-logo {
+    width: 11em;
+    flex: none;
+  }
 
-.site-nav__links a:hover {
-  background-color: var(--color-header-accent);
-  color: currentColor;
-}
+  .site-nav__links .has-submenu > button::after {
+    content: url(/public/img/arrow-menu.svg);
+    display: inline-block;
+    width: 9px;
+    margin-left: 0.5rem;
+    transition: transform 0.5s ease-in-out;
+    @media (prefers-reduced-motion) {
+      transition: transform 0s;
+    }
+  }
+
+  .site-nav__links .has-submenu > button[aria-expanded='true']::after,
+  .site-nav__links .has-submenu > button:hover::after,
+  .site-nav__links .has-submenu:has(a:hover) > button::after {
+    transform: translateY(30%) rotate(180deg);
+  }
+
+  .site-nav__links a {
+    text-decoration: none;
+    padding: var(--space-s) var(--space-2xs);
+    color: var(--color-black);
+  }
+
+  .site-nav__links a:hover,
+  .site-nav__links button:hover {
+    background-color: var(--color-header-accent);
+    color: currentColor;
+  }
 
 a.external::after {
   content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18"><path stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 3H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M11 1h6m0 0v6m0-6L7 11"/></svg>');
@@ -171,139 +247,147 @@ a.external::after {
   margin-inline-start: var(--space-2xs);
 }
 
-.switch-link {
-  align-self: center;
-  justify-self: end;
-  grid-area: site;
-  padding-block: var(--space-s);
-  text-decoration: none;
-}
-
-a.switch-link:hover {
-  text-decoration: underline;
-  color: currentColor;
-}
-
-@media screen and (max-width: 479px) {
-  .site-links-wrapper {
-    width: 100%;
-  }
-}
-
-@media screen and (min-width: 480px) and (max-width: 1159px) {
-  .site-links-wrapper {
-    width: max-content;
-  }
-}
-
-@media screen and (max-width: 1159px) {
-  .site-nav {
-    height: var(--site-header-height);
+  .switch-link {
+    align-self: center;
+    justify-self: end;
+    grid-area: site;
+    padding-block: var(--space-s);
+    text-decoration: none;
   }
 
-  .site-links-wrapper {
-    position: absolute;
-    background-color: var(--color-header-bg);
-    top: var(--site-header-height);
-    right: 0;
-    transition: transform 300ms ease-in-out;
-    border-block-start: 1px solid var(--color-header-accent);
+  a.switch-link:hover {
+    text-decoration: underline;
+    color: currentColor;
   }
 
-  .site-links-wrapper.offscreen {
-    transform: translateX(100%);
+  .external {
+    display: inline-block;
+    height: 0.75em;
+    width: 0.75em;
+    margin-inline-start: var(--space-2xs);
   }
 
-  .site-links-wrapper a {
-    padding-inline: var(--space-s);
-  }
-
-  a[aria-expanded="false"] + .menu--level-2 {
-    display: none;
-  }
-
-  a[aria-expanded="true"] + .menu--level-2 {
-    display: block;
-  }
-
-  .menu-item--level-1 > .is-active {
-    border-inline-start: 2px solid var(--color-header-accent);
-  }
-
+  .menu-item--level-1 > .is-active,
   .menu-item--level-2 > .is-active {
     text-decoration: underline;
+    text-decoration-color: currentColor;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 8px;
   }
 
-  .switch-link:hover {
-    background-color: var(--color-header-accent);
+  @media screen and (max-width: 479px) {
+    .site-links-wrapper {
+      width: 100%;
+    }
   }
 
-  .site-nav__toggle {
-    border: 0;
-    background: initial;
-    padding: var(--space-xs) 0;
+  @media screen and (min-width: 480px) and (max-width: 1059px) {
+    .site-links-wrapper {
+      width: max-content;
+    }
   }
 
-  .menu-icon {
-    position: relative;
-    transform: rotate(0deg);
-    transition: 0.5s ease-in-out;
-    cursor: pointer;
-    height: 1em;
-    width: 1.5em;
-  }
+  @media screen and (max-width: 1059px) {
+    .site-nav {
+      height: var(--site-header-height);
+    }
 
-  .menu-icon span {
-    display: block;
-    position: absolute;
-    height: 4px;
-    width: 100%;
-    background: currentColor;
-    border-radius: 4px;
-    opacity: 1;
-    left: 0;
-    transform: rotate(0deg);
-    transition: 0.25s ease-in-out;
-  }
+    .site-links-wrapper {
+      position: absolute;
+      background-color: var(--color-header-bg);
+      top: var(--site-header-height);
+      right: 0;
+      transition: transform 300ms ease-in-out;
+      border-block-start: 1px solid var(--color-header-accent);
+    }
 
-  .menu-icon span:nth-child(1) {
-    top: 0;
-  }
+    .site-links-wrapper.offscreen {
+      transform: translateX(100%);
+    }
 
-  .menu-icon span:nth-child(2),
-  .menu-icon span:nth-child(3) {
-    top: 50%;
-  }
+    .site-links-wrapper a,
+    .site-nav__links button {
+      padding-inline: var(--space-s);
+    }
 
-  .menu-icon span:nth-child(4) {
-    top: 100%;
-  }
+    button[aria-expanded='false'] + .menu--level-2 {
+      display: none;
+    }
 
-  .menu-icon.open span:nth-child(1),
-  .menu-icon.open span:nth-child(4) {
-    top: 50%;
-    width: 0%;
-    left: 50%;
-  }
+    button[aria-expanded='true'] + .menu--level-2 {
+      display: block;
+    }
 
-  .menu-icon.open span:nth-child(2) {
-    transform: rotate(45deg);
-  }
+    .switch-link:hover {
+      background-color: var(--color-header-accent);
+    }
 
-  .menu-icon.open span:nth-child(3) {
-    transform: rotate(-45deg);
-  }
+    .site-nav__toggle {
+      border: 0;
+      background: initial;
+      padding: var(--space-xs) 0;
+    }
 
-  ul.menu--level-2 {
-    padding-inline-start: var(--space-m);
+    .menu-icon {
+      position: relative;
+      transform: rotate(0deg);
+      transition: 0.5s ease-in-out;
+      cursor: pointer;
+      height: 1em;
+      width: 1.5em;
+    }
+
+    .menu-icon span {
+      display: block;
+      position: absolute;
+      height: 4px;
+      width: 100%;
+      background: currentColor;
+      border-radius: 4px;
+      opacity: 1;
+      left: 0;
+      transform: rotate(0deg);
+      transition: 0.25s ease-in-out;
+    }
+
+    .menu-icon span:nth-child(1) {
+      top: 0;
+    }
+
+    .menu-icon span:nth-child(2),
+    .menu-icon span:nth-child(3) {
+      top: 50%;
+    }
+
+    .menu-icon span:nth-child(4) {
+      top: 100%;
+    }
+
+    .menu-icon.open span:nth-child(1),
+    .menu-icon.open span:nth-child(4) {
+      top: 50%;
+      width: 0%;
+      left: 50%;
+    }
+
+    .menu-icon.open span:nth-child(2) {
+      transform: rotate(45deg);
+    }
+
+    .menu-icon.open span:nth-child(3) {
+      transform: rotate(-45deg);
+    }
+
+    ul.menu--level-2 {
+      padding-inline-start: var(--space-m);
+    }
   }
-}
 
 .foundation-language-picker {
   display: none;
 }
 
-@media screen and (min-width: 1160px) {
+@media screen and (min-width: 1060px) {
   .foundation-language-picker {
     display: block;
   }
@@ -320,57 +404,58 @@ a.switch-link:hover {
     flex: 1;
   }
 
-  .site-logo {
-    grid-area: logo;
-    z-index: 1;
-  }
+    .site-logo {
+      grid-area: logo;
+      z-index: 1;
+    }
 
-  .site-links-wrapper {
-    grid-area: 1 / 1 / 2 / 4;
-    display: grid;
-    grid-template-columns: minmax(10em, 1fr) 1fr 1fr;
-    grid-template-areas: ". menu site";
-    gap: var(--space-s);
-  }
+    .site-links-wrapper {
+      grid-area: 1 / 1 / 2 / 4;
+      display: grid;
+      grid-template-columns: minmax(10em, 1fr) 1fr 1fr;
+      grid-template-areas: '. menu site';
+      gap: var(--space-s);
+    }
 
-  .site-nav__links {
-    grid-area: menu;
-    display: flex;
-    align-items: center;
-  }
+    .site-nav__links {
+      grid-area: menu;
+      display: flex;
+      align-items: center;
+    }
 
-  .has-submenu {
-    position: relative;
-  }
+    .has-submenu {
+      position: relative;
+    }
 
-  .site-nav .menu--level-2 {
-    background-color: var(--color-header-bg);
-    position: absolute;
-    border-inline-start: 2px solid var(--color-header-accent);
-    transition: opacity 150ms ease-in;
-  }
+    .site-nav .menu--level-2 {
+      background-color: var(--color-header-bg);
+      position: absolute;
+      border-inline-start: 2px solid var(--color-header-accent);
+      transition: opacity 150ms ease-in;
+    }
 
-  .site-nav .menu--level-2 a {
-    padding: var(--space-2xs);
-  }
+    .site-nav .menu--level-2 a {
+      padding: var(--space-2xs);
+    }
 
-  .has-submenu > a[aria-expanded="false"] + ul {
-    visibility: hidden;
-    opacity: 0;
-  }
+    .has-submenu > button[aria-expanded='false'] + ul {
+      visibility: hidden;
+      opacity: 0;
+    }
 
-  .has-submenu > a[aria-expanded="true"] + ul,
-  .menu-item--level-1:hover > .menu--level-2,
-  .menu--level-2:hover {
-    visibility: visible;
-    opacity: 1;
-    width: max-content;
-    min-width: 100%;
-    left: 0;
-    top: calc(1.4em + var(--space-s) * 2);
-    box-shadow: 2px 3px 6px -3px hsla(0, 0%, 0%, 0.06),
-    -2px 3px 6px -3px hsla(0, 0%, 0%, 0.06);
-  }
+    .has-submenu > button[aria-expanded='true'] + ul,
+    .menu-item--level-1:hover > .menu--level-2,
+    .menu--level-2:hover {
+      visibility: visible;
+      opacity: 1;
+      width: max-content;
+      min-width: 100%;
+      left: 0;
+      top: calc(1.4em + var(--space-s) * 2);
+      box-shadow:
+        2px 3px 6px -3px hsla(0, 0%, 0%, 0.06),
+        -2px 3px 6px -3px hsla(0, 0%, 0%, 0.06);
+    }
 
   .site-nav__toggle {
     display: none;
@@ -380,99 +465,135 @@ a.switch-link:hover {
 </style>
 
 <script>
-const siteLinksWrapper = document.querySelector("[data-nav-wrapper]");
-const wideNavMinWidth = window.matchMedia("(min-width: 1060px)");
-wideNavMinWidth.addEventListener("change", handleNavDisplayStyles);
+  const siteLinksWrapper = document.querySelector('[data-nav-wrapper]')
+  const wideNavMinWidth = window.matchMedia('(min-width: 1060px)')
+  wideNavMinWidth.addEventListener('change', handleNavDisplayStyles)
 
-const siteNavToggle = document.getElementById("siteNavToggle");
-const menuIcon = document.getElementById("menuIcon");
+  const siteNavToggle = document.getElementById('siteNavToggle')
+  const menuIcon = document.getElementById('menuIcon')
 
-if (document.contains(siteNavToggle)) {
-  siteNavToggle?.addEventListener("click", handleMobileNavToggle, false);
-}
-
-function handleMobileNavToggle() {
-  siteLinksWrapper?.classList.toggle("offscreen");
-  if (siteLinksWrapper?.getAttribute("class")?.includes("offscreen")) {
-    menuIcon?.classList.remove("open");
-  } else {
-    menuIcon?.classList.add("open");
+  if (document.contains(siteNavToggle)) {
+    siteNavToggle?.addEventListener('click', handleMobileNavToggle, false)
   }
-}
 
-function handleNavDisplayStyles(event: MediaQueryListEvent) {
-  if (event.matches) {
-    siteLinksWrapper?.classList.remove("offscreen");
-  } else {
-    if (siteLinksWrapper) {
-      flashPrevention(siteLinksWrapper);
+  function handleMobileNavToggle() {
+    siteLinksWrapper?.classList.toggle('offscreen')
+    if (siteLinksWrapper?.getAttribute('class')?.includes('offscreen')) {
+      menuIcon?.classList.remove('open')
+    } else {
+      menuIcon?.classList.add('open')
     }
-    siteLinksWrapper?.classList.add("offscreen");
   }
-}
 
-function flashPrevention(element: Element) {
-  element.setAttribute("style", "display:none");
-  setTimeout(() => {
-    element.removeAttribute("style");
-  }, 10);
-}
-
-// Site sub-navigation toggle
-const siteNav = document.querySelector(".site-nav__links") as HTMLInputElement;
-
-if (document.contains(siteNav)) {
-  const subLinks = document.querySelectorAll(".has-submenu > a");
-
-  subLinks.forEach((subLink) => {
-    subLink.setAttribute("aria-expanded", "false");
-
-    subLink.addEventListener("click", function (event) {
-      const clickedSubLink = event.target as Element;
-      const allSubLinks = Array.from(subLinks);
-      const notClickedLinks = allSubLinks.filter(function (otherLink) {
-        return otherLink !== clickedSubLink;
-      });
-      notClickedLinks.forEach((link) => {
-        link.setAttribute("aria-expanded", "false");
-      });
-      if (clickedSubLink?.getAttribute("aria-expanded") === "true") {
-        clickedSubLink?.setAttribute("aria-expanded", "false");
-      } else {
-        clickedSubLink?.setAttribute("aria-expanded", "true");
+  function handleNavDisplayStyles(event: MediaQueryListEvent) {
+    if (event.matches) {
+      siteLinksWrapper?.classList.remove('offscreen')
+    } else {
+      if (siteLinksWrapper) {
+        flashPrevention(siteLinksWrapper)
       }
-      event.preventDefault();
-      return false;
-    });
-  });
-
-  siteNav?.addEventListener("keydown", function (event) {
-    if (event.key === "Escape") {
-      resetSubMenus();
+      siteLinksWrapper?.classList.add('offscreen')
     }
-  });
-
-  document.addEventListener("click", function (event) {
-    if (isClickOutside(event, subLinks)) {
-      resetSubMenus();
-    }
-  });
-
-  function resetSubMenus() {
-    subLinks.forEach((subLink) => {
-      subLink.setAttribute("aria-expanded", "false");
-    });
   }
-}
 
-function isClickOutside(event: MouseEvent, nodeList: NodeListOf<Element>) {
-  let clickedInsideTarget = false;
-  const eventTarget = event.target as Element;
-  Array.from(nodeList).forEach(function (element) {
-    if (element.contains(eventTarget)) {
-      clickedInsideTarget = true;
+  function flashPrevention(element: Element) {
+    element.setAttribute('style', 'display:none')
+    setTimeout(() => {
+      element.removeAttribute('style')
+    }, 10)
+  }
+
+  // Site sub-navigation toggle
+  const siteNav = document.querySelector('.site-nav__links') as HTMLInputElement
+
+  if (document.contains(siteNav)) {
+    const submenuButtons = document.querySelectorAll('.has-submenu > button')
+
+    submenuButtons.forEach((submenuButton) => {
+      submenuButton.setAttribute('aria-expanded', 'false')
+
+      submenuButton.addEventListener('click', function (event) {
+        const clickedSubmenuButton = event.target
+        const allSubmenuButtons = Array.from(submenuButtons)
+        const notClickedSubmenuButtons = allSubmenuButtons.filter(
+          function (otherSubmenuButton) {
+            return otherSubmenuButton !== clickedSubmenuButton
+          }
+        )
+        notClickedSubmenuButtons.forEach((button) => {
+          button.setAttribute('aria-expanded', 'false')
+        })
+        if (clickedSubmenuButton instanceof HTMLElement) {
+          if (clickedSubmenuButton?.getAttribute('aria-expanded') === 'true') {
+            clickedSubmenuButton?.setAttribute('aria-expanded', 'false')
+          } else {
+            clickedSubmenuButton?.setAttribute('aria-expanded', 'true')
+          }
+        }
+      })
+    })
+
+    siteNav?.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
+        resetSubMenus()
+      }
+    })
+
+    document.addEventListener('click', function (event) {
+      if (isClickOutside(event, submenuButtons)) {
+        resetSubMenus()
+      }
+    })
+
+    function resetSubMenus() {
+      submenuButtons.forEach((submenuButton) => {
+        submenuButton.setAttribute('aria-expanded', 'false')
+      })
     }
-  });
-  return !clickedInsideTarget;
-}
+  }
+
+  function isClickOutside(
+    event: MouseEvent,
+    nodeList: NodeListOf<Element>
+  ): boolean {
+    let clickedInsideTarget = false
+    const eventTarget = event.target as Element
+    Array.from(nodeList).forEach(function (element) {
+      if (element.contains(eventTarget)) {
+        clickedInsideTarget = true
+      }
+    })
+    return !clickedInsideTarget
+  }
+
+  // Site sub-navigation highlighting parent menu item
+  const devLinks = document.querySelectorAll(
+    ".site-nav__links .menu-item--level-2 a[href*='/developers']"
+  )
+  let currentPath = window.location.pathname
+
+  if (currentPath.endsWith('/')) {
+    currentPath = currentPath.slice(0, -1)
+  }
+
+  const activeSections = ['/developers/blog']
+  devLinks.forEach((devLink) => {
+    if (devLink instanceof HTMLAnchorElement) {
+      const linkPath = devLink.pathname
+      const isExactMatch = linkPath === currentPath
+
+      const isSectionMatch = activeSections.some(
+        (section) =>
+          currentPath.startsWith(section) && linkPath.startsWith(section)
+      )
+
+      if (isExactMatch || isSectionMatch) {
+        const parentMenu = devLink.closest('.menu-item--level-1')
+        const parentMenuLink = parentMenu?.querySelector('button')
+
+        devLink.classList.add('is-active')
+        parentMenuLink?.classList.add('is-active')
+      }
+    }
+  })
 </script>
