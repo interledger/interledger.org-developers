@@ -3,7 +3,7 @@ import type { GetStaticPaths, Page } from 'astro'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import BlogIndex from '../../components/blog/BlogIndex.astro'
 import { getCollection } from 'astro:content'
-import { useTranslations, getLangFromUrl} from '../../i18n/utils';
+import { useTranslations, getLangFromUrl } from '../../i18n/utils'
 
 type Props = {
   page: Page
@@ -12,10 +12,10 @@ type Props = {
 
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
   const blogEntries = (await getCollection('blog'))
-  .filter((entry) => entry.filePath && entry.filePath.match(/\/blog\/[^\/]+\.mdx?$/))
-  .sort(
-    (a, b) => b.data.date.getTime() - a.data.date.getTime()
-  )
+    .filter(
+      (entry) => entry.filePath && entry.filePath.match(/\/blog\/[^\/]+\.mdx?$/)
+    )
+    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
 
   // Collect all unique tags
   const allTags = [
@@ -28,23 +28,22 @@ export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
   })
 }
 
-const lang = getLangFromUrl(Astro.url);
+const lang = getLangFromUrl(Astro.url)
 const { page, allTags } = Astro.props
-const t = useTranslations(lang);
-
+const t = useTranslations(lang)
 ---
 
 <BaseLayout
-  title={t("nav.tech-blog")}
-  description={t("nav.tech-blog-description")}
+  title={t('nav.tech-blog')}
+  description={t('nav.tech-blog-description')}
   ogImageUrl={new URL('/developers/img/blog/og-image.png', Astro.site).href}
 >
   <BlogIndex
-    title={t("nav.tech-blog")}
+    title={t('nav.tech-blog')}
     posts={page.data || []}
     breadcrumbs={[
       {
-        name: t("nav.developers"),
+        name: t('nav.developers'),
         href: '/developers',
         umamiEvent: 'Devs breadcrumb - Home'
       }

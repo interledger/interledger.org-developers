@@ -7,17 +7,17 @@ import mdx from '@astrojs/mdx'
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://interledger.org",
-  base: "/developers",
+  site: 'https://interledger.org',
+  base: '/developers',
   i18n: {
-    locales: ["es", "en"],
-    defaultLocale: "en",
+    locales: ['es', 'en'],
+    defaultLocale: 'en',
     routing: {
       prefixDefaultLocale: false,
-      fallbackType: "rewrite"
+      fallbackType: 'rewrite'
     },
     fallback: {
-      es: "en"
+      es: 'en'
     }
   },
   integrations: [
@@ -65,7 +65,7 @@ export default defineConfig({
         Header: './src/components/Header.astro',
         PageSidebar: './src/components/PageSidebar.astro'
       },
-      social:[
+      social: [
         {
           icon: 'github',
           label: 'GitHub',

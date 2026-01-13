@@ -1,49 +1,58 @@
 ---
-import { defaultLang } from "../i18n/ui";
-import { useTranslatedPath } from "../i18n/utils";
-const { lang } = Astro.props;
-const path = Astro.url.pathname;
-const translatePath = useTranslatedPath(defaultLang, lang);
+import { defaultLang } from '../i18n/ui'
+import { useTranslatedPath } from '../i18n/utils'
+const { lang } = Astro.props
+const path = Astro.url.pathname
+const translatePath = useTranslatedPath(defaultLang, lang)
 ---
 
 <div class="language-switcher-language-url" role="navigation">
   <!-- Dropdown version for 800px-1160px -->
   <select class="language-select" aria-label="Select language">
-    <option value={translatePath(path, "en")} selected={lang === "en"}>
+    <option value={translatePath(path, 'en')} selected={lang === 'en'}>
       EN
     </option>
-    <option value={translatePath(path, "es")} selected={lang === "es"}>
+    <option value={translatePath(path, 'es')} selected={lang === 'es'}>
       ES
     </option>
   </select>
-  <svg aria-hidden="true" class="caret" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M17 9.17a1 1 0 0 0-1.41 0L12 12.71 8.46 9.17a1 1 0 1 0-1.41 1.42l4.24 4.24a1.002 1.002 0 0 0 1.42 0L17 10.59a1.002 1.002 0 0 0 0-1.42Z"></path>
+  <svg
+    aria-hidden="true"
+    class="caret"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+  >
+    <path
+      d="M17 9.17a1 1 0 0 0-1.41 0L12 12.71 8.46 9.17a1 1 0 1 0-1.41 1.42l4.24 4.24a1.002 1.002 0 0 0 1.42 0L17 10.59a1.002 1.002 0 0 0 0-1.42Z"
+    ></path>
   </svg>
 
   <!-- List version for other viewport sizes -->
   <ul class="links">
     <li
-      class:list={[lang === "en" && "is-active"]}
-      aria-current={lang === "en" ? "page" : undefined}
+      class:list={[lang === 'en' && 'is-active']}
+      aria-current={lang === 'en' ? 'page' : undefined}
     >
       <a
-        href={translatePath(path, "en")}
-        class:list={["language-link", lang === "en" && "is-active"]}
+        href={translatePath(path, 'en')}
+        class:list={['language-link', lang === 'en' && 'is-active']}
         hreflang="en-gb"
-        aria-current={lang === "en" ? "page" : undefined}
+        aria-current={lang === 'en' ? 'page' : undefined}
       >
         EN
       </a>
     </li>
     <li
-      class:list={[lang === "es" && "is-active"]}
-      aria-current={lang === "es" ? "page" : undefined}
+      class:list={[lang === 'es' && 'is-active']}
+      aria-current={lang === 'es' ? 'page' : undefined}
     >
       <a
-        href={translatePath(path, "es")}
-        class:list={["language-link", lang === "es" && "is-active"]}
+        href={translatePath(path, 'es')}
+        class:list={['language-link', lang === 'es' && 'is-active']}
         hreflang="es"
-        aria-current={lang === "es" ? "page" : undefined}
+        aria-current={lang === 'es' ? 'page' : undefined}
       >
         ES
       </a>
@@ -52,14 +61,15 @@ const translatePath = useTranslatedPath(defaultLang, lang);
 </div>
 
 <script>
-  const languageSelect = document.querySelector<HTMLSelectElement>(".language-select");
+  const languageSelect =
+    document.querySelector<HTMLSelectElement>('.language-select')
   if (languageSelect) {
-    languageSelect.addEventListener("change", (e) => {
-      const target = e.target as HTMLSelectElement;
+    languageSelect.addEventListener('change', (e) => {
+      const target = e.target as HTMLSelectElement
       if (target?.value) {
-        window.location.href = target.value;
+        window.location.href = target.value
       }
-    });
+    })
   }
 </script>
 
@@ -116,7 +126,7 @@ const translatePath = useTranslatedPath(defaultLang, lang);
     .caret {
       display: block;
     }
-    
+
     .language-switcher-language-url:hover .caret {
       color: var(--sl-color-gray-2);
     }
@@ -138,7 +148,7 @@ const translatePath = useTranslatedPath(defaultLang, lang);
 
   .language-switcher-language-url .links li:first-child::after {
     display: inline-flex;
-    content: "|";
+    content: '|';
   }
 
   .language-switcher-language-url .links a {
@@ -158,5 +168,4 @@ const translatePath = useTranslatedPath(defaultLang, lang);
     background-color: var(--color-nav-hover);
     border-radius: var(--border-radius);
   }
-
 </style>

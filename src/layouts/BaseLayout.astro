@@ -1,9 +1,9 @@
 ---
-import FoundationHeader from '../components/pages/FoundationHeader.astro';
-import FoundationFooter from '../components/pages/FoundationFooter.astro';
-import { getLangFromUrl, useTranslatedPath } from '../i18n/utils';
-import { languages, defaultLang } from '../i18n/ui';
-import '../styles/pages.css';
+import FoundationHeader from '../components/pages/FoundationHeader.astro'
+import FoundationFooter from '../components/pages/FoundationFooter.astro'
+import { getLangFromUrl, useTranslatedPath } from '../i18n/utils'
+import { languages, defaultLang } from '../i18n/ui'
+import '../styles/pages.css'
 
 interface Props {
   title: string
@@ -21,29 +21,33 @@ const {
   ogImageUrl,
   canonicalURL = new URL(Astro.url.pathname, Astro.site).href
 } = Astro.props
-const lang = getLangFromUrl(Astro.url);
+const lang = getLangFromUrl(Astro.url)
 
 // Generate alternate URLs for hreflang
-const translatePath = useTranslatedPath(defaultLang, lang);
-const alternateUrls: Record<string, string> = {};
+const translatePath = useTranslatedPath(defaultLang, lang)
+const alternateUrls: Record<string, string> = {}
 
 // Normalize path by removing existing language segment
-const pathSegments = Astro.url.pathname.split("/");
-const isDevelopersPath = Astro.url.pathname.includes("/developers");
-const langIndex = isDevelopersPath ? 2 : 1;
+const pathSegments = Astro.url.pathname.split('/')
+const isDevelopersPath = Astro.url.pathname.includes('/developers')
+const langIndex = isDevelopersPath ? 2 : 1
 
 if (pathSegments[langIndex] && pathSegments[langIndex] in languages) {
-	pathSegments.splice(langIndex, 1);
+  pathSegments.splice(langIndex, 1)
 }
-const normalizedPath = pathSegments.join("/") || (isDevelopersPath ? "/developers" : "/");
+const normalizedPath =
+  pathSegments.join('/') || (isDevelopersPath ? '/developers' : '/')
 
 Object.keys(languages).forEach((locale) => {
-	const translatedPath = translatePath(normalizedPath, locale as keyof typeof languages);
-	alternateUrls[locale] = new URL(translatedPath, Astro.site).href;
-});
+  const translatedPath = translatePath(
+    normalizedPath,
+    locale as keyof typeof languages
+  )
+  alternateUrls[locale] = new URL(translatedPath, Astro.site).href
+})
 
 // x-default points to English version
-const defaultUrl = alternateUrls[defaultLang];
+const defaultUrl = alternateUrls[defaultLang]
 ---
 
 <!doctype html>
@@ -78,14 +82,16 @@ const defaultUrl = alternateUrls[defaultLang];
     />
     <meta property="og:url" content={canonicalURL} />
 
-		<!-- Canonical URL -->
-		<link rel="canonical" href={canonicalURL} />
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalURL} />
 
-		<!-- hreflang tags for multilingual SEO -->
-		{Object.entries(alternateUrls).map(([locale, url]) => (
-			<link rel="alternate" hreflang={locale} href={url} />
-		))}
-		<link rel="alternate" hreflang="x-default" href={defaultUrl} />
+    <!-- hreflang tags for multilingual SEO -->
+    {
+      Object.entries(alternateUrls).map(([locale, url]) => (
+        <link rel="alternate" hreflang={locale} href={url} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={defaultUrl} />
     <meta
       property="og:description"
       content={description
@@ -135,14 +141,14 @@ const defaultUrl = alternateUrls[defaultLang];
     overflow-x: clip;
   }
 
-	body {
-		display: flex;
-		flex-direction: column;
-		min-height: 100%;
-		min-width: 360px;
-		font-family: "Titillium Web", Arial, sans-serif;
-		overflow-x: clip;
-	}
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    min-width: 360px;
+    font-family: 'Titillium Web', Arial, sans-serif;
+    overflow-x: clip;
+  }
 
   /* Background swirl */
   body::before {

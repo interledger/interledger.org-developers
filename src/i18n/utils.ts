@@ -1,18 +1,18 @@
-import { ui, languages, defaultLang, routes } from "./ui";
+import { ui, languages, defaultLang, routes } from './ui'
 
 export function getLangFromUrl(url: URL) {
-  const [, , lang] = url.pathname.split("/");
-  if (lang in ui) return lang as keyof typeof languages;
-  return defaultLang;
+  const [, , lang] = url.pathname.split('/')
+  if (lang in ui) return lang as keyof typeof languages
+  return defaultLang
 }
 
 export function useTranslations(lang: keyof typeof languages) {
   return function t(key: keyof (typeof ui)[typeof defaultLang]) {
-    const defaultStrings = ui[defaultLang];
-    const currentStrings = ui[lang] as Partial<typeof defaultStrings>;
+    const defaultStrings = ui[defaultLang]
+    const currentStrings = ui[lang] as Partial<typeof defaultStrings>
 
-    return currentStrings[key] ?? defaultStrings[key];
-  };
+    return currentStrings[key] ?? defaultStrings[key]
+  }
 }
 
 export function useTranslatedPath(
@@ -24,29 +24,29 @@ export function useTranslatedPath(
     lang: keyof typeof languages = l,
     currentLang: keyof typeof languages = currentL
   ) {
-    if (!path.includes("/developers")) {
+    if (!path.includes('/developers')) {
       if (lang !== defaultLang) {
-        return `/${lang}${path}`;
+        return `/${lang}${path}`
       }
-      return path;
+      return path
     }
 
     // for paths inside dev portal: the translated path is /developers/es/blog, not /es/developers/blog
-    const pathSegments = path.split("/");
-    let newSegments: string[];
+    const pathSegments = path.split('/')
+    let newSegments: string[]
 
     if (lang !== defaultLang) {
-      newSegments = [...pathSegments];
-      newSegments.splice(2, 0, lang);
+      newSegments = [...pathSegments]
+      newSegments.splice(2, 0, lang)
     } else {
-      newSegments = pathSegments.filter((segment) => segment !== currentLang);
+      newSegments = pathSegments.filter((segment) => segment !== currentLang)
     }
 
-    translateSlug(lang, currentLang, newSegments);
+    translateSlug(lang, currentLang, newSegments)
 
-    const translatedPath = newSegments.join("/");
-    return translatedPath;
-  };
+    const translatedPath = newSegments.join('/')
+    return translatedPath
+  }
 }
 
 function translateSlug(
@@ -54,17 +54,17 @@ function translateSlug(
   currentLang: keyof typeof languages,
   newSegments: string[]
 ) {
-  const slug = newSegments.at(-1);
+  const slug = newSegments.at(-1)
   const isBlogPostPath =
-    slug !== undefined && Object.values(routes[currentLang]).includes(slug);
+    slug !== undefined && Object.values(routes[currentLang]).includes(slug)
   const key = Object.keys(routes[currentLang]).find(
     (key) => routes[currentLang][key] === slug
-  );
+  )
 
   if (isBlogPostPath && key) {
     const translatedSlug =
-      routes[translationLang][key] ?? routes[defaultLang][key] ?? "";
+      routes[translationLang][key] ?? routes[defaultLang][key] ?? ''
 
-    newSegments.splice(-1, 1, translatedSlug);
+    newSegments.splice(-1, 1, translatedSlug)
   }
 }

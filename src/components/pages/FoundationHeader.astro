@@ -1,11 +1,15 @@
 ---
-import FoundationLogo from "../logos/FoundationLogo.astro";
-import { getLangFromUrl, useTranslations, useTranslatedPath } from "../../i18n/utils";
-import LanguagePicker from "../LanguagePicker.astro"
+import FoundationLogo from '../logos/FoundationLogo.astro'
+import {
+  getLangFromUrl,
+  useTranslations,
+  useTranslatedPath
+} from '../../i18n/utils'
+import LanguagePicker from '../LanguagePicker.astro'
 
-const lang = getLangFromUrl(Astro.url); 
-const t = useTranslations(lang); 
-const translatePath = useTranslatedPath(lang, lang);
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+const translatePath = useTranslatedPath(lang, lang)
 ---
 
 <header class="site-header" role="banner">
@@ -19,7 +23,7 @@ const translatePath = useTranslatedPath(lang, lang);
       Main navigation
     </h2>
     <a
-      href={translatePath("/")}
+      href={translatePath('/')}
       class="site-logo"
       aria-label="Interledger Foundation"
       data-umami-event="Site Nav - Logo"
@@ -34,117 +38,182 @@ const translatePath = useTranslatedPath(lang, lang);
       <ul class="site-nav__links menu--level-1" id="siteNavMenu">
         <li class="menu-item has-submenu menu-item--level-1">
           <button aria-expanded="false" data-umami-event="Site Nav - Foundation"
-            >{t("nav.foundation")}</button
+            >{t('nav.foundation')}</button
           >
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
-              <a href={translatePath("/about-us")} data-umami-event="Site Nav - About us">{t("nav.about")}</a>
+              <a
+                href={translatePath('/about-us')}
+                data-umami-event="Site Nav - About us">{t('nav.about')}</a
+              >
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href={translatePath("/policy-and-advocacy")} data-umami-event="Site Nav - Policy & Advocacy">{t("nav.policy")}</a>
+              <a
+                href={translatePath('/policy-and-advocacy')}
+                data-umami-event="Site Nav - Policy & Advocacy"
+                >{t('nav.policy')}</a
+              >
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href={translatePath("/team")} data-umami-event="Site Nav - Team">{t("nav.team")}</a>
+              <a
+                href={translatePath('/team')}
+                data-umami-event="Site Nav - Team">{t('nav.team')}</a
+              >
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href={translatePath("/press")} data-umami-event="Site Nav - Press">{t("nav.media")}</a>
+              <a
+                href={translatePath('/press')}
+                data-umami-event="Site Nav - Press">{t('nav.media')}</a
+              >
             </li>
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
-          <button aria-expanded="false" data-umami-event="Site Nav - Technology">{t("nav.technology")}</button>
+          <button aria-expanded="false" data-umami-event="Site Nav - Technology"
+            >{t('nav.technology')}</button
+          >
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
-              <a href={translatePath("/open-standards")} data-umami-event="Site Nav - Open Standards">{t("nav.overview")}</a>
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a href={translatePath("/interledger")} data-umami-event="Site Nav - Interledger">{t("nav.interledger")}</a>
-            </li>
-            <li class="menu-item menu-item--level-2">
               <a
-                href={translatePath("/open-payments")}
-                data-umami-event="Site Nav - Open Payments">{t("nav.open-payments")}</a
+                href={translatePath('/open-standards')}
+                data-umami-event="Site Nav - Open Standards"
+                >{t('nav.overview')}</a
               >
             </li>
             <li class="menu-item menu-item--level-2">
               <a
-                href={translatePath("/web-monetization")}
+                href={translatePath('/interledger')}
+                data-umami-event="Site Nav - Interledger"
+                >{t('nav.interledger')}</a
+              >
+            </li>
+            <li class="menu-item menu-item--level-2">
+              <a
+                href={translatePath('/open-payments')}
+                data-umami-event="Site Nav - Open Payments"
+                >{t('nav.open-payments')}</a
+              >
+            </li>
+            <li class="menu-item menu-item--level-2">
+              <a
+                href={translatePath('/web-monetization')}
                 data-umami-event="Site Nav - Web Monetization"
-                >{t("nav.web-monetization")}</a
-              >
-            </li>
-            <li class="menu-item menu-item--level-2">
-              <a href={translatePath("/join-network")} data-umami-event="Site Nav - Join network"
-                >{t("nav.join")}</a
+                >{t('nav.web-monetization')}</a
               >
             </li>
             <li class="menu-item menu-item--level-2">
               <a
-                href={translatePath("/developers")}
+                href={translatePath('/join-network')}
+                data-umami-event="Site Nav - Join network">{t('nav.join')}</a
+              >
+            </li>
+            <li class="menu-item menu-item--level-2">
+              <a
+                href={translatePath('/developers')}
                 data-umami-event="Site Nav - Developers Portal"
-                >{t("nav.developers")}</a
+                >{t('nav.developers')}</a
               >
             </li>
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
           <button aria-expanded="false" data-umami-event="Site Nav - Grants"
-            >{t("nav.grants")}</button
+            >{t('nav.grants')}</button
           >
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
-              <a href={translatePath("/financial-services")} data-umami-event="Site Nav - Financial Services">{t("nav.financial-services")}</a>
+              <a
+                href={translatePath('/financial-services')}
+                data-umami-event="Site Nav - Financial Services"
+                >{t('nav.financial-services')}</a
+              >
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href={translatePath("/education")} data-umami-event="Site Nav - Education">{t("nav.education")}</a>
+              <a
+                href={translatePath('/education')}
+                data-umami-event="Site Nav - Education">{t('nav.education')}</a
+              >
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href={translatePath("/ambassadors")} data-umami-event="Site Nav - Ambassadors">{t("nav.ambassadors")}</a>
+              <a
+                href={translatePath('/ambassadors')}
+                data-umami-event="Site Nav - Ambassadors"
+                >{t('nav.ambassadors')}</a
+              >
             </li>
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
           <button
             aria-expanded="false"
-            data-umami-event="Site Nav - Content hub">{t("nav.content-hub")}</button
+            data-umami-event="Site Nav - Content hub"
+            >{t('nav.content-hub')}</button
           >
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
-              <a href={translatePath("/blog")} data-umami-event="Site Nav - Blog">{t("nav.foundation-blog")}</a>
+              <a
+                href={translatePath('/blog')}
+                data-umami-event="Site Nav - Blog">{t('nav.foundation-blog')}</a
+              >
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href={translatePath("/developers/blog")} data-umami-event="Site Nav - Engineering Blog">{t("nav.tech-blog")}</a>
+              <a
+                href={translatePath('/developers/blog')}
+                data-umami-event="Site Nav - Engineering Blog"
+                >{t('nav.tech-blog')}</a
+              >
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href={translatePath("/podcast")} data-umami-event="Site Nav - Podcast">{t("nav.podcast")}</a>
+              <a
+                href={translatePath('/podcast')}
+                data-umami-event="Site Nav - Podcast">{t('nav.podcast')}</a
+              >
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href="https://community.interledger.org/" data-umami-event="Site Nav - Community Forem" rel="noopener noreferrer" target="_blank" class="external">{t("nav.community-forem")}</a>
+              <a
+                href="https://community.interledger.org/"
+                data-umami-event="Site Nav - Community Forem"
+                rel="noopener noreferrer"
+                target="_blank"
+                class="external">{t('nav.community-forem')}</a
+              >
             </li>
           </ul>
         </li>
         <li class="menu-item has-submenu menu-item--level-1">
           <button
             aria-expanded="false"
-            data-umami-event="Site Nav - Participate">{t("nav.participate")}</button
+            data-umami-event="Site Nav - Participate"
+            >{t('nav.participate')}</button
           >
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
-              <a href={translatePath("/get-involved")} data-umami-event="Site Nav - Get involved">{t("nav.get-involved")}</a>
+              <a
+                href={translatePath('/get-involved')}
+                data-umami-event="Site Nav - Get involved"
+                >{t('nav.get-involved')}</a
+              >
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href={translatePath("/events")} data-umami-event="Site Nav - Events">{t("nav.events")}</a>
+              <a
+                href={translatePath('/events')}
+                data-umami-event="Site Nav - Events">{t('nav.events')}</a
+              >
             </li>
             <li class="menu-item menu-item--level-2">
-              <a href={translatePath("/participation-guidelines")} data-umami-event="Site Nav - Guidelines">{t("nav.guidelines")}</a>
+              <a
+                href={translatePath('/participation-guidelines')}
+                data-umami-event="Site Nav - Guidelines"
+                >{t('nav.guidelines')}</a
+              >
             </li>
           </ul>
         </li>
       </ul>
       <a
         class="switch-link"
-        href={translatePath("/summit")} 
-        data-umami-event="Site Nav - Summit Link">{t("nav.summit")}</a
+        href={translatePath('/summit')}
+        data-umami-event="Site Nav - Summit Link">{t('nav.summit')}</a
       >
     </div>
     <button
@@ -239,13 +308,13 @@ const translatePath = useTranslatedPath(lang, lang);
     color: currentColor;
   }
 
-a.external::after {
-  content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18"><path stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 3H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M11 1h6m0 0v6m0-6L7 11"/></svg>');
-  display: inline-block;
-  height: 0.75em;
-  width: 0.75em;
-  margin-inline-start: var(--space-2xs);
-}
+  a.external::after {
+    content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18"><path stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 3H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M11 1h6m0 0v6m0-6L7 11"/></svg>');
+    display: inline-block;
+    height: 0.75em;
+    width: 0.75em;
+    margin-inline-start: var(--space-2xs);
+  }
 
   .switch-link {
     align-self: center;
@@ -383,26 +452,26 @@ a.external::after {
     }
   }
 
-.foundation-language-picker {
-  display: none;
-}
-
-@media screen and (min-width: 1060px) {
   .foundation-language-picker {
-    display: block;
+    display: none;
   }
 
-  .site-header {
-    display: flex;
-    align-items: center;
-  }
-  .site-nav {
-    display: grid;
-    grid-template-columns: auto 1fr 1fr;
-    grid-template-areas: "logo links links";
-    gap: var(--space-s);
-    flex: 1;
-  }
+  @media screen and (min-width: 1060px) {
+    .foundation-language-picker {
+      display: block;
+    }
+
+    .site-header {
+      display: flex;
+      align-items: center;
+    }
+    .site-nav {
+      display: grid;
+      grid-template-columns: auto 1fr 1fr;
+      grid-template-areas: 'logo links links';
+      gap: var(--space-s);
+      flex: 1;
+    }
 
     .site-logo {
       grid-area: logo;
@@ -457,11 +526,10 @@ a.external::after {
         -2px 3px 6px -3px hsla(0, 0%, 0%, 0.06);
     }
 
-  .site-nav__toggle {
-    display: none;
+    .site-nav__toggle {
+      display: none;
+    }
   }
-}
-
 </style>
 
 <script>

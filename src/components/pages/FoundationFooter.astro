@@ -1,26 +1,30 @@
 ---
-import { getLangFromUrl, useTranslations, useTranslatedPath } from "../../i18n/utils";
+import {
+  getLangFromUrl,
+  useTranslations,
+  useTranslatedPath
+} from '../../i18n/utils'
 
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
-const translatePath = useTranslatedPath(lang, lang);
-const currentYear = new Date().getFullYear();
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+const translatePath = useTranslatedPath(lang, lang)
+const currentYear = new Date().getFullYear()
 ---
 
 <footer class="site-footer" role="contentinfo">
   <div class="connect-wrapper">
     <div class="mailing-list">
-      <h3>{t("footer.mailing-list")}</h3>
+      <h3>{t('footer.mailing-list')}</h3>
       <a
         class="button subscribe-btn"
-        href={translatePath("/subscribe")}
+        href={translatePath('/subscribe')}
         data-umami-event="Footer link - Subscribe"
       >
-        {t("footer.subscribe")}
+        {t('footer.subscribe')}
       </a>
     </div>
     <div class="social-links">
-      <h3>{t("footer.connect")}</h3>
+      <h3>{t('footer.connect')}</h3>
       <ul>
         <li>
           <a
@@ -121,22 +125,26 @@ const currentYear = new Date().getFullYear();
       </ul>
     </div>
   </div>
-  <p>&copy; 2020–{currentYear}, Interledger Foundation. {t("footer.copyright")}</p>
+  <p>
+    &copy; 2020–{currentYear}, Interledger Foundation. {t('footer.copyright')}
+  </p>
   <ul class="footer-links">
     <li>
       <a
         href="https://www.iubenda.com/terms-and-conditions/88624819"
-        data-umami-event="Footer - T&C">{t("footer.terms")}</a
+        data-umami-event="Footer - T&C">{t('footer.terms')}</a
       >
     </li>
     <li>
       <a
         href="https://www.iubenda.com/privacy-policy/88624819"
-        data-umami-event="Footer - Privacy">{t("footer.privacy")}</a
+        data-umami-event="Footer - Privacy">{t('footer.privacy')}</a
       >
     </li>
     <li>
-      <a href={translatePath("/contact")} data-umami-event="Footer - Contact">{t("footer.contact")}</a>
+      <a href={translatePath('/contact')} data-umami-event="Footer - Contact"
+        >{t('footer.contact')}</a
+      >
     </li>
   </ul>
 </footer>
