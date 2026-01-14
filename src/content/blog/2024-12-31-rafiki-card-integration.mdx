@@ -1,5 +1,5 @@
 ---
-title: "From Tap to Packet: Exploring Card Payments on Interledger"
+title: 'From Tap to Packet: Exploring Card Payments on Interledger'
 description: 'A Journey from POS Onboarding to Transaction Processing.'
 date: 2025-12-31
 slug: rafiki-card-integration
@@ -24,17 +24,19 @@ Card payments are the backbone of global commerce... trusted, regulated, and dee
 ## Card Payments Using Rafiki and ILP
 
 At a high level, an ILP card transaction involves:
-1.	Card (ICC) - EMV-compliant card with an ILP-linked wallet address
-2.	POS Device - EMV kernel + ILP extensions
-3.	Merchant ASE - Runs Rafiki and manages POS trust (RKI, IPEK lifecycle, compliance)
-4.	Customer ASE - Runs Rafiki and manages the cardholder account
-5.	Interledger Network - Routes value between ASEs
+
+1. Card (ICC) - EMV-compliant card with an ILP-linked wallet address
+2. POS Device - EMV kernel + ILP extensions
+3. Merchant ASE - Runs Rafiki and manages POS trust (RKI, IPEK lifecycle, compliance)
+4. Customer ASE - Runs Rafiki and manages the cardholder account
+5. Interledger Network - Routes value between ASEs
 
 ## Exploring a Path from EMV Cards to Interledger
 
 Card payments are everywhere. They are trusted, heavily regulated, and backed by decades of operational experience. At the same time, they are often locked into closed networks and bespoke integrations.
 
 What we have been exploring is a simple question:
+
 - What if card payments could naturally flow into Interledger without breaking EMV, without replacing kernels, and without weakening the security model everyone already relies on?
 - This post is a walkthrough of that exploration. It is not a final specification, but a journey through the design, the trade-offs, and the emerging shape of an ILP-enabled card flow built around Rafiki, existing EMV kernels, and a small set of new services.
 
@@ -42,23 +44,27 @@ What we have been exploring is a simple question:
 
 One of the earliest and most important decisions came out of conversations with our first POS (Point of Sale) manufacturing partner, who provides both the EMV kernel and a significant portion of the overall payment software stack running on the device.
 Because ILF's first objective is to enable SoftPOS, we needed to choose between two approaches:
+
 - developing a completely new EMV kernel based on the latest EMVCo C8 specifications,
 - or leveraging the existing certified kernel already embedded in the payment stack (C2).
 
 After evaluating the options, it became clear that reusing the existing kernel was the most practical and lowest-risk path to delivering SoftPOS quickly and reliably.
 
 #### The C8 certification path would have meant
+
 - Brand new certification cycles
 - Repeated scheme testing (Visa/Mastercard/etc.)
 - Long iteration loops with labs
 - Reviewing of the hardware and software stack
 
 #### The C2 path means
+
 - Existing correct EMV processing
 - Secure PIN entry / PAN handling out-of-the box
 - Already scheme compliant
 
 Exploring was very clear:
+
 - Use the C2 kernel
 - Stay as close as possible to EMVCo documentation
 - Avoid clever reinterpretations of kernel behavior
@@ -66,9 +72,11 @@ Exploring was very clear:
 C2, while perhaps less feature-rich than newer kernels, is predictable, explicit, and specification-aligned. That predictability turned out to be far more valuable than flexibility.
 
 The immediate consequence of this choice was important:
+
 - ILF does not need to develop an EMV kernel.
 
 Instead of re-implementing deeply complex, certification-heavy logic, we could focus on:
+
 - APIs
 - Cryptographic boundaries
 - ILP and Open Payments integration
@@ -86,6 +94,7 @@ This led us to the first new building block: POS onboarding.
 ### POS Onboarding as a Trust Ceremony
 
 Rather than treating onboarding as a provisioning script, we started thinking of it as a ceremony:
+
 - The POS proves who it is (serial number, model)
 - The ASE decides whether to trust it
 - Cryptographic material is issued with clear ownership
@@ -93,6 +102,7 @@ Rather than treating onboarding as a provisioning script, we started thinking of
 #### Onboarding
 
 The rough onboarding flow regarding keys looks like this:
+
 1. The POS generates a key pair locally and sends a CSR, along with device metadata, to the ASE
 2. The ASE signs the CSR via its CA
 3. The ASE generates the IPEK (Initial PIN Encryption Key) for SRED/PIN (Secure Reading and Exchange of Data / Personal Identification Number)
@@ -103,6 +113,7 @@ The rough onboarding flow regarding keys looks like this:
 ![ILP Cards, POS Key Onboarding](/developers/img/blog/2025-12-31/onboarding.png)
 
 ##### From this point on:
+
 - The POS can authenticate itself
 - The ASE can verify which device is speaking
 - Every future request can be cryptographically tied back to onboarding
@@ -118,11 +129,13 @@ Encryption keys must be rotated regularly (at least monthly)!
 This is where things get interesting.
 
 The POS is already running:
-- POS Manufacturer bespoke software (Andriod / Symbian / iOS  / Windows Phone)
+
+- POS Manufacturer bespoke software (Andriod / Symbian / iOS / Windows Phone)
 - POS kernel
 - POS WhiteBox secure storage
 
 And the POS Manufacturer already has strong opinions (for good reasons) about:
+
 - Where transaction keys live
 - How PIN and PAN encryption happens
 - What software is allowed to see those keys
@@ -137,6 +150,7 @@ Not payment processing. Not EMV logic. Just keys.
 #### Key Rotation as a First-Class Flow
 
 The key rotation (IPEK) flow looks like this:
+
 1. The POS requests a new set of IPEK keys from the ASE (via the POS API)
 2. The POS is cryptographically verified to ensure the request can be trusted
 3. A new IPEK is generated and stored at the ASE
@@ -146,6 +160,7 @@ The key rotation (IPEK) flow looks like this:
 ![ILP Cards, POS Key Rotation](/developers/img/blog/2025-12-31/rotation.png)
 
 ##### In this model:
+
 - The POS periodically asks the ASE for a new key
 - The request is authenticated using the POS identity established during onboarding
 - The ASE derives a new IPEK inside an HSM
@@ -153,25 +168,30 @@ The key rotation (IPEK) flow looks like this:
 - POS Manufacturer stores it inside the POS secure WhiteBox
 
 A subtle but important decision here:
+
 - POS TMK (Terminal Master Key) is generated and injected during POS manufacturing
 - Transaction keys live inside the WhiteBox
 - Network / ILP keys live outside the SDK, in the device keystore
 
 This clean separation keeps:
+
 - Payment cryptography in the kernels domain
 - ILP signing firmly under ASE control
 
 At this point, the architecture started to feel "right".
 
 ## Cards Enter the Picture
+
 With POS EMV kernel, onboarding and key rotation in place, cards themselves become almost... boring. And that is a good thing!
 
 Card personalization follows standard EMV practice:
+
 - Card keys are generated by the issuer (Customer ASE)
 - A wallet address is bound to the card
 - The private key lives securely on the chip
 
 From an ILP perspective, the card is simply:
+
 - A secure signing device
 - A holder of a wallet address
 - A producer of cryptographic proof during transactions
@@ -179,9 +199,11 @@ From an ILP perspective, the card is simply:
 No special casing. No new assumptions.
 
 ## The Transaction Moment
+
 When a card is presented, everything up to this point has been preparation.
 
 Now the familiar EMV flow kicks in:
+
 ```
 SELECT AID
 GET PROCESSING OPTIONS
@@ -189,11 +211,14 @@ READ RECORD
 GENERATE AC
 Optional PIN verification (Online)
 ```
+
 See ADPU (Application Protocol Data Unit:
+
 - https://en.wikipedia.org/wiki/Smart_card_application_protocol_data_unit
 - https://www.emvco.com/specifications/?search_bar_keywords=c-2
 
 All sensitive operations happen:
+
 - Inside the kernel
 - Using session keys derived from the current IPEK
 - With data protected by the WhiteBox
@@ -206,6 +231,7 @@ Once the kernel has done its job, the POS shifts context. Now it is no longer "d
 This is where the ILP terminal key issued during onboarding finally comes into play.
 
 The POS:
+
 - Assembles transaction data
 - References the card's wallet address (Customer ASE)
 - Signs the request with its ILP key (Merchant ASE)
@@ -214,6 +240,7 @@ The POS:
 Importantly, we don't have the POS talk to Rafiki directly to authorize the transaction. Instead, we route everything through an ASE POS API:
 
 Why?
+
 - Authentication
 - Policy enforcement
 - Request normalization
@@ -224,17 +251,19 @@ Why?
 The ASE remains firmly in control. Rafiki Does What It Already Does Well. From here on, Rafiki is on familiar ground.
 
 It:
+
 - Creates incoming and outgoing payments
 - Applies Open Payments semantics
 - Tracks lifecycle state
 - Emits events
-The POS eventually gets a simple answer: `Approved`, `Declined` or `Failed`.
+  The POS eventually gets a simple answer: `Approved`, `Declined` or `Failed`.
 
 All the complexity stays on the backend, where it belongs.
 
 ### What We Learned Along the Way
 
 A few themes kept repeating during this exploration:
+
 - Do not fight EMV, work with it
 - Do not overload the kernel, extend around it
 - Keys define trust boundaries more than APIs do
@@ -250,5 +279,3 @@ What is emerging is not a replacement for card payments, but an extension of the
 - ASEs remain accountable entities.
 
 Interledger simply becomes the connective tissue that lets value move beyond traditional rails, securely, incrementally, and without forcing the ecosystem to start over.
-
-
