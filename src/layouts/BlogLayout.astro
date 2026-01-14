@@ -65,26 +65,13 @@ const rawHTMLString = `This article was originally published at <a href=${frontm
             <span itemprop="name">{t('nav.tech-blog')}</span></a
           >
           <meta itemprop="position" content="2" />
-          {
-            frontmatter.lang && (
-              <>
-                <span>|</span>
-                <a
-                  itemprop="item"
-                  href="/developers/blog/es"
-                  data-umami-event="Devs breadcrumb - ES blogs"
-                >
-                  <span itemprop="name">Blog de Ingeniería</span>
-                </a>
-              </>
-            )
-          }
         </li>
       </ol>
       <h1>{frontmatter.title}</h1>
       <time datetime={isoDate} itemprop="datePublished">{longDate}</time>
       <address>
-        Written by {
+        {t('blog.written-by')}
+        {
           frontmatter.authors.map((author: string, index: number) => (
             <span>
               {frontmatter.author_urls[index] ? (

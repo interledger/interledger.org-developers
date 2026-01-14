@@ -1,29 +1,56 @@
 ---
-
+const lang = Astro.props.lang || 'en'
 ---
 
 <hr />
 
-<p>
-  As we are open source, you can easily check our work on <a
-    href="https://github.com/interledger/">GitHub</a
-  >. If the work mentioned here inspired you, we welcome your contributions. You
-  can join our <a
-    href="https://communityinviter.com/apps/interledger/interledger-working-groups-slack"
-    >community slack</a
-  > or participate in the next <a
-    href="https://docs.google.com/document/d/1T_Q_eRZtL8GluJR9rVADd7fvkB8mPluMk-d96LM4vlg/edit?usp=sharing"
-    >community call</a
-  >, which takes place each second Wednesday of the month.
-</p>
+{
+  lang === 'es' ? (
+    <>
+      <p>
+        En Interledger somos de código abierto, así qué puedes verificar
+        fácilmente nuestro trabajo en
+        <a href="https://github.com/interledger/">GitHub</a>. Si este blogpost y
+        las tecnologías aquí mencionadas te inspiraron, agradecemos tus
+        contribuciones. Puedes unirte a nuestra{' '}
+        <a href="https://communityinviter.com/apps/interledger/interledger-working-groups-slack">
+          Comunidad en Slack
+        </a>{' '}
+        o participar en la próxima llamada de la{' '}
+        <a href="https://community.interledger.org/">Comunidad Interledger</a>,
+        que tiene lugar el segundo miércoles de cada mes.
+      </p>
+      <p>
+        Si deseas mantenerte actualizado con todas las oportunidades y noticias
+        de la Fundación Interledger, puedes suscribirte a{' '}
+        <a href="https://interledger.org/es/subscribe">nuestro boletín</a>.
+      </p>
+    </>
+  ) : (
+    <>
+      <p>
+        As we are open source, you can easily check our work on{' '}
+        <a href="https://github.com/interledger/">GitHub</a>. If the work
+        mentioned here inspired you, we welcome your contributions. You can join
+        our{' '}
+        <a href="https://communityinviter.com/apps/interledger/interledger-working-groups-slack">
+          community slack
+        </a>{' '}
+        or participate in the next{' '}
+        <a href="https://docs.google.com/document/d/1T_Q_eRZtL8GluJR9rVADd7fvkB8mPluMk-d96LM4vlg/edit?usp=sharing">
+          community call
+        </a>
+        , which takes place each second Wednesday of the month.
+      </p>
 
-<p>
-  If you want to stay updated with all open opportunities and news from the
-  Interledger Foundation, you can subscribe to our <a
-    href="https://interledger.org/subscribe">newsletter</a
-  >.
-</p>
-
+      <p>
+        If you want to stay updated with all open opportunities and news from
+        the Interledger Foundation, you can subscribe to our{' '}
+        <a href="https://interledger.org/subscribe">newsletter</a>.
+      </p>
+    </>
+  )
+}
 <style>
   hr {
     margin-block-start: var(--space-l);

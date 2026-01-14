@@ -1,20 +1,21 @@
 ---
 title: 'El Universo Interledger'
 description: 'Explora el sistema abierto que conecta pagos globales con Interledger.'
-date: 2025-07-02
-lang: es
+date: 2024-08-13
 slug: el-universo-interledger
+lang: es
 authors:
+  - Sabine Schaller
   - Marian Villa
 author_urls:
+  - https://www.linkedin.com/in/sabineschaller
   - https://www.linkedin.com/in/marianvilla/
 tags:
   - Interledger Protocol
   - Open Payments
+  - Rafiki
+  - Web Monetization
 ---
-
-> ⚠️ **Nota:** Este artículo es una adaptación al español.  
-> 📘 This article is also available in English: [Interledger Universe – interledger.org](https://interledger.org/developers/blog/interledger-universe/).
 
 Si estás un poco abrumado por términos como el **Protocolo de Interledger, Interledger Stack, o Fundación Interledger, Estándar de Pagos Abiertos, Rafiki, La Moneda Rafiki, Dassie, Monetización Web (Extensión), STREAM, SPSP, Paquetes,etc…** Y te sientes aún un poco perdido, aquí estamos para aclararlo. Vamos a desglozar cada uno de los términos para traer a la luz el significado y de esta manera mostrar más claramente el Universo de Interledger. Empecemos con el término más obvio:
 
@@ -67,13 +68,14 @@ Es importante aclarar que en caso de que se utilice una crypto para realizar el 
 
 La Capa de enlace define como los conectores en pares se comunican. Actualmente existen dos grandes protocolos en esta capa:
 
-> **Protocolo Bilateral de Transporte [(BTP)](https://interledger.org/developers/rfcs/bilateral-transfer-protocol/):** Usa comunicación basada en **WebSocket\*** entre conectores.
-> **[ILPoverHTTP](https://interledger.org/developers/rfcs/ilp-over-http/):** Utiliza HTTPS para la comunicación entre conectores.
-> Estos protocolos establecen la conexión necesaria para que las capas superiores funcionen.
+- **Protocolo Bilateral de Transporte [(BTP)](https://interledger.org/developers/rfcs/bilateral-transfer-protocol/):** Usa comunicación basada en **WebSocket** entre conectores.
+- **[ILPoverHTTP](https://interledger.org/developers/rfcs/ilp-over-http/):** Utiliza HTTPS para la comunicación entre conectores.
+
+Estos protocolos establecen la conexión necesaria para que las capas superiores funcionen.
 
 ### Capa de Protocolo - Protocolo Interledger (ILP)
 
-El core de la Arquitectura de Interledger está basado en el [Protocolo Interledger (ILP)](https://interledger.org/developers/rfcs/interledger-protocol/). Este protocolo divide grandes pagos en pequeños paquetes cuyo contenido prescribe y define un protocolo de transferencia de dos fases.
+El core de la Arquitectura de Interledger está basado en el [Protocolo Interledger (ILP)](https://interledger.org/developers/es/rfcs/interledger-protocol/). Este protocolo divide grandes pagos en pequeños paquetes cuyo contenido prescribe y define un protocolo de transferencia de dos fases.
 
 _¿Por qué se usa un proceso de dos fases en vez de un proceso de una sola fase en este protocolo de transferencia?_
 
@@ -111,7 +113,7 @@ Sin embargo la conexión de (A) y (B) está basado en transacciones pequeñas po
 
 ### Capa de transporte: Direcciones de ILP y Apuntadores de Pago
 
-Las [direcciones ILP](https://interledger.org/developers/rfcs/ilp-addresses/) son parte fundamental del Protocolo Interledger, sirviendo como un identificador único de cuentas en la red de Interledger. Estas direcciones siguen un formato jerárquico similar a las direcciones IP de Internet, habilitando el enrutamiento eficiente de paquetes entre diferentes **_‘Ledgers’_**.
+Las [direcciones ILP](https://interledger.org/developers/es/rfcs/ilp-addresses/) son parte fundamental del Protocolo Interledger, sirviendo como un identificador único de cuentas en la red de Interledger. Estas direcciones siguen un formato jerárquico similar a las direcciones IP de Internet, habilitando el enrutamiento eficiente de paquetes entre diferentes **_‘Ledgers’_**.
 
 La **Estructura de una Dirección ILP** consiste en diversos componentes:
 
@@ -136,9 +138,9 @@ Un apuntador de pago siempre tiene un prefijo de señal de dólar ($) seguido de
 
 Un ejemplo: `test.wallet.alice` (Que no contiene la parte de interacción).
 
-Los apuntadores de pagos pueden ser hosteados en la raíz del dominio. En ese caso, un apuntador de pagos como `$mymarketplace.com` enmascara esta dirección: **https://marketplace.com/.well-known/pay** y dirije a una dirección ILP como: `g.wallet.mymarketplace`
+Los apuntadores de pagos pueden ser hosteados en la raíz del dominio. En ese caso, un apuntador de pagos como `$mymarketplace.com` enmascara esta dirección: `https://marketplace.com/.well-known/pay` y dirije a una dirección ILP como: `g.wallet.mymarketplace`
 
-Cuando avancemos a la sección de la **_Capa de Aplicación_**, volveremos sobre este concepto de apuntado de pagos, específicamente en la sección del **_Protocolo Simple de Configuración de Pagos (SPSP)_**. Sí quieres saltar directamente a este área, puedes dar el salto hasta esa [sección específica](https://interledger.org/developers/blog/interledger-universe/#capa-de-aplicacion).
+Cuando avancemos a la sección de la **_Capa de Aplicación_**, volveremos sobre este concepto de apuntado de pagos, específicamente en la sección del **_Protocolo Simple de Configuración de Pagos (SPSP)_**. Sí quieres saltar directamente a este área, puedes dar el salto hasta esa [sección específica](#capa-de-aplicación).
 
 ### Capa de transporte: - El Protocolo STREAM
 
@@ -165,7 +167,7 @@ La Capa de Transporte construida sobre ILP provee funcionalidades adicionales po
 
 La Capa de Aplicación es la capa final de la Arquitectura Interledger, haciendo visible para el desarrollador funcionalidades y habilitando varios posibles implementaciones. Los dos protocolos habilitados en esta capa son SPSP (protocolo de Configuración Simple de Pagos) y el Protocolo de Pagos Abiertos.
 
-[SPSP](https://interledger.org/developers/rfcs/simple-payment-setup-protocol/) simplifica el proceso de configuración de pagos. Cuando llega una petición **_GET_** relacionada a una URL asociada a un apuntador de pago que usa la petición de encabezamiento SPSP, SPSP define que necesita ser retornado
+[SPSP](https://interledger.org/developers/es/rfcs/simple-payment-setup-protocol/) simplifica el proceso de configuración de pagos. Cuando llega una petición **_GET_** relacionada a una URL asociada a un apuntador de pago que usa la petición de encabezamiento SPSP, SPSP define que necesita ser retornado
 
 ```http wrap
 HTP/1.1 200 OK
@@ -177,9 +179,9 @@ Content-Type: application/spsp4+json
 }
 ```
 
-Esto incluye la `destination_account` (Cuenta de destino) que es la dirección ILP del que recibe, y comparte un `shared_secret` (Secreto) para encriptar los paquetes de STREAM, que incluye un identificador `receipts_enabled`, (recibos habilitados) indicando cuando un [recibo de STREAM](https://interledger.org/developers/rfcs/stream-receipts/) fue requerido. SPSP asegura una configuración de pago segura y directa para entidades o individuos con un acceso ILP, esto significa que entidades o individuos pueden crear, enviar, y recibir paquetes ILP directamente sin ayuda de otra entidad.
+Esto incluye la `destination_account` (Cuenta de destino) que es la dirección ILP del que recibe, y comparte un `shared_secret` (Secreto) para encriptar los paquetes de STREAM, que incluye un identificador `receipts_enabled`, (recibos habilitados) indicando cuando un [recibo de STREAM](https://interledger.org/developers/es/rfcs/stream-receipts/) fue requerido. SPSP asegura una configuración de pago segura y directa para entidades o individuos con un acceso ILP, esto significa que entidades o individuos pueden crear, enviar, y recibir paquetes ILP directamente sin ayuda de otra entidad.
 
-[Pagos Abiertos](https://interledger.org/developers/rfcs/simple-payment-setup-protocol/) es un API estándar API para entidades de servicios financieros, permitiendo que terceros puedan asegurar acceso a sus cuentas digitales para ver su información de cuenta e iniciar un pago. Pagos Abiertos soporta complejos escenarios de pagos como e-commerce o pagos recurrentes, facilitando un robusto marco de trabajo para autorizar e iniciar pagos digitales. Emplea una [Negociación de Subvenciones (Grant Negotiation)](https://datatracker.ietf.org/doc/html/draft-ietf-gnap-core-protocol-20) y un Protocolo de Autorización (GNAP) para Control de acceso preciso y autorización segura.
+[Pagos Abiertos](https://interledger.org/developers/es/rfcs/simple-payment-setup-protocol/) es un API estándar API para entidades de servicios financieros, permitiendo que terceros puedan asegurar acceso a sus cuentas digitales para ver su información de cuenta e iniciar un pago. Pagos Abiertos soporta complejos escenarios de pagos como e-commerce o pagos recurrentes, facilitando un robusto marco de trabajo para autorizar e iniciar pagos digitales. Emplea una [Negociación de Subvenciones (Grant Negotiation)](https://datatracker.ietf.org/doc/html/draft-ietf-gnap-core-protocol-20) y un Protocolo de Autorización (GNAP) para Control de acceso preciso y autorización segura.
 
 Para entender de forma más amplia Pagos Abiertos, puedes revisar este artículo en inglés ['Open Payments Guide'](https://interledger.org/developers/blog/simple-open-payments-guide/). Si deseas hacer una revisión de más alto nivel del Protocolo de Autorización (GNAP) y dónde está siendo usando en Pagos Abiertos, puedes revisar este [Artículo de Nathan’s (EN)](https://interledger.org/developers/blog/open-payments-cinderella-story/) - La historia de Cenicienta: cómo encontrar un método de autorización adecuado.
 
@@ -207,7 +209,7 @@ Rafiki fue creado como una [referencia en la implementación](https://github.com
 
 ![Imagen 6 - Monetización Web](/developers/img/blog/2025-06-04/rafiki-es.jpg)
 
-[Rafiki](https://rafiki.dev/) es un software de código abierto, esto significa que puede usarse de manera gratuita y abierta. El propósito de Rafiki es minimizar el esfuerzo de las organizaciones de incorporar Interledger en las cuentas de los usuarios y ser conector con la red ILP. Rafiki usa ILPoverHTTP en vez de BTP porque se asume que los paquetes serán grandes al igual que las transacciones. Por esto los pagos son divididos en pocos paquetes, haciendo que establecer una conexión tipo socket sea excesiva.
+[Rafiki](https://rafiki.dev/es) es un software de código abierto, esto significa que puede usarse de manera gratuita y abierta. El propósito de Rafiki es minimizar el esfuerzo de las organizaciones de incorporar Interledger en las cuentas de los usuarios y ser conector con la red ILP. Rafiki usa ILPoverHTTP en vez de BTP porque se asume que los paquetes serán grandes al igual que las transacciones. Por esto los pagos son divididos en pocos paquetes, haciendo que establecer una conexión tipo socket sea excesiva.
 
 ### Rafiki.money, ‘testnet’, y ‘test network’
 
@@ -244,10 +246,3 @@ Si bien sirve a dos mundos diferentes, un nodo de Dassie puede emparejarse con u
 - Te invitamos a seguir refinando y expandiendo estas herramientas, contribuyendo a que la visión de Interledger sea una realidad. Nuestra misión es enviar dinero o activos a través de la red tan fácil como si fuera un correo electrónico, impulsando un ecosistema inclusivo donde la innovación construye puentes en el sistema financiero. El futuro interconectado del sistema financiero está aquí, y estamos muy emocionados del futuro que nos espera.
 
 **_Gracias al equipo que hace esto posible, y a los contribuidores principales de este artículo: Sarah, Radu, Melissa, Tseli, Mohammed, Max, y Chris_**.
-
----
-
-**_En Interledger somos de código abierto, así qué puedes verificar fácilmente nuestro trabajo en [GitHub](https://github.com/interledger/). Si este blogpost y las tecnologías aquí mencionadas te inspiraron, agradecemos tus contribuciones. Puedes unirte a nuestra [Comunidad en Slack](https://communityinviter.com/apps/interledger/interledger-working-groups-slack) o participar en la próxima llamada de la [Comunidad Interledger](https://community.interledger.org/), que tiene lugar el segundo miércoles de cada mes.
-Si deseas mantenerte actualizado con todas las oportunidades y noticias de la Fundación Interledger, puedes suscribirte a nuestro boletín 🤓💪_**.
-
-**_🇺🇸🇬🇧[English article](https://interledger.org/developers/blog/interledger-universe/) Written by [Sabine Schaller](https://www.linkedin.com/in/sabineschaller)_**

@@ -23,5 +23,5 @@ const { Content } = await render(entry)
 
 <BlogLayout frontmatter={entry.data}>
   <Content />
-  <CommunityLinks />
+  <CommunityLinks lang={entry.data.lang} />
 </BlogLayout>

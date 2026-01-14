@@ -9,12 +9,8 @@ const translatePath = useTranslatedPath(defaultLang, lang)
 <div class="language-switcher-language-url" role="navigation">
   <!-- Dropdown version for 800px-1160px -->
   <select class="language-select" aria-label="Select language">
-    <option value={translatePath(path, 'en')} selected={lang === 'en'}>
-      EN
-    </option>
-    <option value={translatePath(path, 'es')} selected={lang === 'es'}>
-      ES
-    </option>
+    <option value={path} selected={lang === 'en'}> EN </option>
+    <option value={path} selected={lang === 'es'}> ES </option>
   </select>
   <svg
     aria-hidden="true"

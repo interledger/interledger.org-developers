@@ -10,10 +10,12 @@ export const defaultLang = 'en'
 
 export const routes: LanguageRoutes = {
   en: {
-    'first-week': 'breakpoint-it-work-week'
+    'first-week': 'breakpoint-it-work-week',
+    'interledger-universe': 'interledger-universe'
   },
   es: {
-    'first-week': 'primera-semana-breakpoint'
+    'first-week': 'primera-semana-breakpoint',
+    'interledger-universe': 'el-universo-interledger'
   }
 }
 
@@ -54,7 +56,8 @@ export const ui: LanguageUi = {
     'footer.copyright': 'All rights reserved.',
     'footer.terms': 'Terms of Service',
     'footer.privacy': 'Privacy Policy',
-    'footer.contact': 'Contact Us'
+    'footer.contact': 'Contact Us',
+    'blog.written-by': 'Written by'
   },
   es: {
     'nav.foundation': 'Fundación',
@@ -92,6 +95,7 @@ export const ui: LanguageUi = {
     'footer.copyright': 'Todos los derechos reservados.',
     'footer.terms': 'Condiciones del servicio',
     'footer.privacy': 'Política de privacidad',
-    'footer.contact': 'Contáctanos'
+    'footer.contact': 'Contáctanos',
+    'blog.written-by': 'Escrito por'
   }
 } as const
