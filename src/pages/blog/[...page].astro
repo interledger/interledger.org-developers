@@ -34,13 +34,14 @@ const t = useTranslations(lang)
 ---
 
 <BaseLayout
-  title={t('nav.tech-blog')}
+  title={t('blog.tech-blog-title')}
   description={t('nav.tech-blog-description')}
   ogImageUrl={new URL('/developers/img/blog/og-image.png', Astro.site).href}
 >
   <BlogIndex
-    title={t('nav.tech-blog')}
+    title={t('blog.tech-blog-title')}
     posts={page.data || []}
+    lang={lang}
     breadcrumbs={[
       {
         name: t('nav.developers'),

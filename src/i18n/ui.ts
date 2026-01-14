@@ -57,7 +57,18 @@ export const ui: LanguageUi = {
     'footer.terms': 'Terms of Service',
     'footer.privacy': 'Privacy Policy',
     'footer.contact': 'Contact Us',
-    'blog.written-by': 'Written by'
+    'blog.tech-blog-title': 'Engineering Blog',
+    'blog.check-updates': 'Check out Foundation updates',
+    'blog.filter': 'Filter by tag',
+    'blog.written-by': 'Written by',
+    'tag.all': 'All',
+    'tag.interledger-protocol': 'Interledger Protocol',
+    'tag.open-payments': 'Open Payments',
+    'tag.rafiki': 'Rafiki',
+    'tag.releases': 'Releases',
+    'tag.updates': 'Updates',
+    'tag.web-monetization': 'Web Monetization',
+    'tag.other': 'Other'
   },
   es: {
     'nav.foundation': 'Fundación',
@@ -96,6 +107,17 @@ export const ui: LanguageUi = {
     'footer.terms': 'Condiciones del servicio',
     'footer.privacy': 'Política de privacidad',
     'footer.contact': 'Contáctanos',
-    'blog.written-by': 'Escrito por'
+    'blog.tech-blog-title': 'Blog de Ingeniería',
+    'blog.check-updates': 'Actualizaciones de la Fundación',
+    'blog.filter': 'Filtre por etiquetas',
+    'blog.written-by': 'Escrito por',
+    'tag.all': 'Todas',
+    'tag.interledger-protocol': 'Interledger Protocol',
+    'tag.open-payments': 'Open Payments',
+    'tag.rafiki': 'Rafiki',
+    'tag.releases': 'Lanzamientos',
+    'tag.updates': 'Actualizaciones',
+    'tag.web-monetization': 'Web Monetization',
+    'tag.other': 'Otros'
   }
 } as const

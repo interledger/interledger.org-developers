@@ -14,7 +14,14 @@ export default defineConfig([
   },
   tseslint.configs.recommended,
   eslintPluginAstro.configs.recommended,
-  globalIgnores(['dist', '.astro', 'node_modules', 'public', '**/*.min.js']),
+  globalIgnores([
+    'dist',
+    '.astro',
+    'node_modules',
+    'public',
+    '**/*.min.js',
+    'cms'
+  ]),
   {
     rules: {
       'no-console': 'error',
