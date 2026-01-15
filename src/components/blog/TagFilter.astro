@@ -32,7 +32,7 @@ const t = useTranslations(lang)
           class:list={['tag-button', { active: selectedTag === tag }]}
           data-umami-event={`Blog tag filter - ${tag}`}
         >
-          {t(`tag.${getTagSlug(tag)}`) ?? t(`tag.other`)}
+          {t(`tag.${getTagSlug(tag)}`)}
         </a>
       ))
     }

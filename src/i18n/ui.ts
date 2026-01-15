@@ -67,8 +67,7 @@ export const ui: LanguageUi = {
     'tag.rafiki': 'Rafiki',
     'tag.releases': 'Releases',
     'tag.updates': 'Updates',
-    'tag.web-monetization': 'Web Monetization',
-    'tag.other': 'Other'
+    'tag.web-monetization': 'Web Monetization'
   },
   es: {
     'nav.foundation': 'Fundación',
@@ -117,7 +116,6 @@ export const ui: LanguageUi = {
     'tag.rafiki': 'Rafiki',
     'tag.releases': 'Lanzamientos',
     'tag.updates': 'Actualizaciones',
-    'tag.web-monetization': 'Web Monetization',
-    'tag.other': 'Otros'
+    'tag.web-monetization': 'Web Monetization'
   }
 } as const
