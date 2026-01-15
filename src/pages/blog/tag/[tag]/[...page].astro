@@ -15,7 +15,7 @@ const lang = defaultLang
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
   const blogEntries = (await getCollection('blog'))
     .filter(
-      (entry) => entry.filePath && entry.filePath.match(/\/blog\/[^\/]+\.mdx?$/)
+      (entry) => entry.filePath && entry.filePath.match(/\/blog\/[^\/]+\.mdx?$/) && entry.data.lang === defaultLang
     )
     .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
 
