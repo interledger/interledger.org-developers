@@ -1,12 +1,15 @@
 ---
 import { defaultLang } from '../i18n/ui'
 import { useTranslatedPath } from '../i18n/utils'
-const { lang } = Astro.props
+const { lang, className } = Astro.props
 const path = Astro.url.pathname
 const translatePath = useTranslatedPath(defaultLang, lang)
 ---
 
-<div class="language-switcher-language-url" role="navigation">
+<div
+  class:list={['language-switcher-language-url', className]}
+  role="navigation"
+>
   <!-- Dropdown version for 800px-1160px -->
   <select class="language-select" aria-label="Select language">
     <option
@@ -128,28 +131,16 @@ const translatePath = useTranslatedPath(defaultLang, lang)
     color: var(--sl-color-gray-1);
   }
 
-  @media screen and (min-width: 800px) and (max-width: 1159px) {
-    .caret {
-      display: block;
-    }
-
-    .language-switcher-language-url:hover .caret {
-      color: var(--sl-color-gray-2);
-    }
-    .language-select {
-      display: block;
-    }
-    .links {
-      display: none !important;
-    }
-  }
-
   /* List version styling */
   .language-switcher-language-url .links {
     display: flex;
     list-style: none;
     padding: 0;
     margin-inline-start: var(--space-2xs);
+  }
+
+  .language-switcher-language-url .links li:first-child {
+    flex-shrink: 0;
   }
 
   .language-switcher-language-url .links li:first-child::after {
@@ -173,5 +164,34 @@ const translatePath = useTranslatedPath(defaultLang, lang)
   .language-switcher-language-url .links a:hover {
     background-color: var(--color-nav-hover);
     border-radius: var(--border-radius);
+  }
+
+  /* LanguagePicker on FoundationHeader - no dropdown select, just list */
+
+  .foundation-language-switcher .language-select {
+    display: none;
+  }
+
+  .foundation-language-switcher .caret {
+    display: none;
+  }
+
+  .foundation-language-switcher.language-switcher-language-url .links {
+    display: flex;
+  }
+
+  @media screen and (min-width: 800px) and (max-width: 1159px) {
+    .caret {
+      display: block;
+    }
+    .language-switcher-language-url:hover .caret {
+      color: var(--sl-color-gray-2);
+    }
+    .language-select {
+      display: block;
+    }
+    .language-switcher-language-url .links {
+      display: none;
+    }
   }
 </style>

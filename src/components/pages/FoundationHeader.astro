@@ -216,29 +216,31 @@ const translatePath = useTranslatedPath(lang, lang)
         data-umami-event="Site Nav - Summit Link">{t('nav.summit')}</a
       >
     </div>
-    <button
-      type="button"
-      class="site-nav__toggle"
-      aria-controls="siteNavMenu"
-      aria-label="Toggle Menu"
-      title="Toggle Menu"
-      id="siteNavToggle"
-    >
-      <div id="menuIcon" class="menu-icon">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-    </button>
   </nav>
+  <button
+    type="button"
+    class="site-nav__toggle"
+    aria-controls="siteNavMenu"
+    aria-label="Toggle Menu"
+    title="Toggle Menu"
+    id="siteNavToggle"
+  >
+    <div id="menuIcon" class="menu-icon">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </button>
   <div class="foundation-language-picker">
-    <LanguagePicker lang={lang} />
+    <LanguagePicker lang={lang} className="foundation-language-switcher" />
   </div>
 </header>
 
 <style>
   .site-header {
+    display: flex;
+    align-items: center;
     background-color: var(--color-header-bg);
     padding: 0 var(--space-m);
     position: sticky;
@@ -249,9 +251,19 @@ const translatePath = useTranslatedPath(lang, lang)
   }
 
   .site-nav {
+    flex-grow: 1;
+    order: 1;
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+
+  .foundation-language-picker {
+    order: 2;
+  }
+
+  .site-nav__toggle {
+    order: 3;
   }
 
   .site-nav ul {
@@ -329,13 +341,6 @@ const translatePath = useTranslatedPath(lang, lang)
     color: currentColor;
   }
 
-  .external {
-    display: inline-block;
-    height: 0.75em;
-    width: 0.75em;
-    margin-inline-start: var(--space-2xs);
-  }
-
   .menu-item--level-1 > .is-active,
   .menu-item--level-2 > .is-active {
     text-decoration: underline;
@@ -350,13 +355,13 @@ const translatePath = useTranslatedPath(lang, lang)
     }
   }
 
-  @media screen and (min-width: 480px) and (max-width: 1059px) {
+  @media screen and (min-width: 480px) and (max-width: 1159px) {
     .site-links-wrapper {
       width: max-content;
     }
   }
 
-  @media screen and (max-width: 1059px) {
+  @media screen and (max-width: 1159px) {
     .site-nav {
       height: var(--site-header-height);
     }
@@ -395,6 +400,7 @@ const translatePath = useTranslatedPath(lang, lang)
       border: 0;
       background: initial;
       padding: var(--space-xs) 0;
+      margin-left: var(--space-xs);
     }
 
     .menu-icon {
@@ -452,19 +458,7 @@ const translatePath = useTranslatedPath(lang, lang)
     }
   }
 
-  .foundation-language-picker {
-    display: none;
-  }
-
-  @media screen and (min-width: 1060px) {
-    .foundation-language-picker {
-      display: block;
-    }
-
-    .site-header {
-      display: flex;
-      align-items: center;
-    }
+  @media screen and (min-width: 1160px) {
     .site-nav {
       display: grid;
       grid-template-columns: auto 1fr 1fr;
@@ -534,7 +528,7 @@ const translatePath = useTranslatedPath(lang, lang)
 
 <script>
   const siteLinksWrapper = document.querySelector('[data-nav-wrapper]')
-  const wideNavMinWidth = window.matchMedia('(min-width: 1060px)')
+  const wideNavMinWidth = window.matchMedia('(min-width: 1160px)')
   wideNavMinWidth.addEventListener('change', handleNavDisplayStyles)
 
   const siteNavToggle = document.getElementById('siteNavToggle')
