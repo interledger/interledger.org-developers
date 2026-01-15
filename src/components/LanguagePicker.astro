@@ -9,8 +9,18 @@ const translatePath = useTranslatedPath(defaultLang, lang)
 <div class="language-switcher-language-url" role="navigation">
   <!-- Dropdown version for 800px-1160px -->
   <select class="language-select" aria-label="Select language">
-    <option value={path} selected={lang === 'en'}> EN </option>
-    <option value={path} selected={lang === 'es'}> ES </option>
+    <option
+      value={lang === 'en' ? path : translatePath(path, 'en')}
+      selected={lang === 'en'}
+    >
+      EN
+    </option>
+    <option
+      value={lang === 'es' ? path : translatePath(path, 'es')}
+      selected={lang === 'es'}
+    >
+      ES
+    </option>
   </select>
   <svg
     aria-hidden="true"
@@ -32,7 +42,7 @@ const translatePath = useTranslatedPath(defaultLang, lang)
       aria-current={lang === 'en' ? 'page' : undefined}
     >
       <a
-        href={translatePath(path, 'en')}
+        href={lang === 'en' ? path : translatePath(path, 'en')}
         class:list={['language-link', lang === 'en' && 'is-active']}
         hreflang="en-gb"
         aria-current={lang === 'en' ? 'page' : undefined}
@@ -45,7 +55,7 @@ const translatePath = useTranslatedPath(defaultLang, lang)
       aria-current={lang === 'es' ? 'page' : undefined}
     >
       <a
-        href={translatePath(path, 'es')}
+        href={lang === 'es' ? path : translatePath(path, 'es')}
         class:list={['language-link', lang === 'es' && 'is-active']}
         hreflang="es"
         aria-current={lang === 'es' ? 'page' : undefined}
