@@ -56,7 +56,7 @@ func main() {
 
     // Initialize the authenticated client
     client, err := openpayments.NewAuthenticatedClient(
-        "https://wallet.example.com/alice",  // Your wallet address
+        "https://wallet.example.com/alice",
         privateKeyBase64,
         keyId,
     )
@@ -125,31 +125,9 @@ func main() {
 
 With Go's strong typing and the SDK's clean API design, developers get compile-time safety and IDE autocompletion for the entire Open Payments workflow.
 
-## How It Works: Inside the Library
+## Under the Hood
 
-Open Payments Go is designed around Go idioms and best practices, making it feel natural for Go developers while handling the complexity of the Open Payments API standard.
-
-### Project Structure
-
-| Package                         | Purpose                                                         |
-| ------------------------------- | --------------------------------------------------------------- |
-| `openpayments` (root)           | Main client types, service implementations, and public API      |
-| `generated/authserver`          | Types generated from the Auth Server OpenAPI spec               |
-| `generated/resourceserver`      | Types generated from the Resource Server OpenAPI spec           |
-| `generated/walletaddressserver` | Types generated from the Wallet Address Server OpenAPI spec     |
-| `httpsignatureutils`            | HTTP signature creation and validation utilities                |
-| `test/integration`              | Integration tests against Rafiki local and testnet environments |
-
-### Service-Oriented Architecture
-
-Each Open Payments resource has a dedicated service with methods that map directly to API operations:
-
-- `client.WalletAddress.Get()`, `GetKeys()`, `GetDIDDocument()`
-- `client.Grant.Request()`, `Continue()`, `Cancel()`
-- `client.IncomingPayment.Create()`, `Get()`, `List()`, `Complete()`, `GetPublic()`
-- `client.OutgoingPayment.Create()`, `Get()`, `List()`
-- `client.Quote.Create()`, `Get()`
-- `client.Token.Rotate()`, `Revoke()`
+Here are two things we did to help ensure a good developer experience.
 
 ### Type-Safe Generated Types with OpenAPI Overlays
 
@@ -215,7 +193,7 @@ Go powers a significant portion of cloud infrastructure, payment systems, and fi
 
 - **Type safety at compile time**: Catch integration errors before runtime with Go's strong typing and the SDK's generated types.
 
-- **Battle-tested**: Comprehensive integration tests run against both local Rafiki environments and the Interledger testnet, ensuring real-world reliability.
+- **Battle-tested**: Comprehensive integration tests run against both local Rafiki environments and the Interledger test wallet, ensuring real-world reliability.
 
 ## Getting Started
 
