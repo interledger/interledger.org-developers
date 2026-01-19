@@ -12,7 +12,9 @@ const blogCollection = defineCollection({
     date: z.date(),
     lang: z.string().optional(),
     image: z.string().optional(),
-    ogImageUrl: z.string().optional()
+    ogImageUrl: z.string().optional(),
+    customClasses: z.string().optional(),
+    customCss: z.string().optional()
   })
 })
 

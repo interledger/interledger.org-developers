@@ -446,12 +446,17 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
       Schema.Attribute.CustomField<
         'plugin::ckeditor5.CKEditor',
         {
-          preset: 'defaultMarkdown'
+          preset: 'defaultHtml'
         }
       >
     createdAt: Schema.Attribute.DateTime
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private
+    customClasses: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255
+      }>
+    customCss: Schema.Attribute.Text
     date: Schema.Attribute.Date & Schema.Attribute.Required
     description: Schema.Attribute.Text & Schema.Attribute.Required
     featuredImage: Schema.Attribute.Media<'images'>

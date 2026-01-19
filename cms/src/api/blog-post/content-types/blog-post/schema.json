@@ -44,11 +44,18 @@
       "type": "string",
       "maxLength": 255
     },
+    "customClasses": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "customCss": {
+      "type": "text"
+    },
     "content": {
       "type": "customField",
       "customField": "plugin::ckeditor5.CKEditor",
       "options": {
-        "preset": "defaultMarkdown"
+        "preset": "defaultHtml"
       }
     }
   }

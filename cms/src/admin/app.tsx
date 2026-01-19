@@ -1,4 +1,4 @@
-import { setPluginConfig, defaultMarkdownPreset } from '@_sh/strapi-plugin-ckeditor';
+import { setPluginConfig, defaultHtmlPreset, defaultMarkdownPreset } from '@_sh/strapi-plugin-ckeditor';
 import type { PluginConfig, Preset } from '@_sh/strapi-plugin-ckeditor';
 
 const myCustomPreset: Preset = {
@@ -6,6 +6,16 @@ const myCustomPreset: Preset = {
   description: 'Markdown editor without H1',
   editorConfig: {
     ...defaultMarkdownPreset.editorConfig,
+    htmlSupport: {
+      allow: [
+        {
+          name: /.*/,
+          attributes: true,
+          classes: true,
+          styles: true,
+        },
+      ],
+    },
     heading: {
       options: defaultMarkdownPreset.editorConfig.heading?.options?.filter(
         (option) => option.model !== 'heading1'
@@ -40,7 +50,7 @@ const myCustomPreset: Preset = {
 };
 
 const myPluginConfig: PluginConfig = {
-  presets: [myCustomPreset],
+  presets: [myCustomPreset, defaultHtmlPreset],
 };
 
 export default {

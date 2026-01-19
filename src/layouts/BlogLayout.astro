@@ -8,6 +8,59 @@ const isoDate = dateObj.toISOString().slice(0, 10)
 const longDate = dateObj.toDateString().substring(4)
 
 const rawHTMLString = `This article was originally published at <a href=${frontmatter.external_url}>${frontmatter.external_url}</a>.`
+const scopeClass = frontmatter.slug ? `blog-post--${frontmatter.slug}` : 'blog-post--custom'
+const customClasses = frontmatter.customClasses?.trim() || ''
+
+function scopeCss(css, scope) {
+  const trimmed = css.trim()
+  if (!trimmed) return ''
+
+  let output = ''
+  let i = 0
+
+  while (i < trimmed.length) {
+    const nextOpen = trimmed.indexOf('{', i)
+    if (nextOpen === -1) {
+      output += trimmed.slice(i)
+      break
+    }
+
+    const selector = trimmed.slice(i, nextOpen).trim()
+    let depth = 1
+    let j = nextOpen + 1
+
+    while (j < trimmed.length && depth > 0) {
+      if (trimmed[j] === '{') depth += 1
+      if (trimmed[j] === '}') depth -= 1
+      j += 1
+    }
+
+    const body = trimmed.slice(nextOpen + 1, j - 1)
+
+    if (selector.startsWith('@media') || selector.startsWith('@supports')) {
+      const inner = scopeCss(body, scope)
+      output += `${selector} {\n${inner}\n}\n`
+    } else if (selector.startsWith('@')) {
+      output += `${selector} {${body}}\n`
+    } else if (selector) {
+      const scopedSelector = selector
+        .split(',')
+        .map((part) => `${scope} ${part.trim()}`)
+        .join(', ')
+      output += `${scopedSelector} {${body}}\n`
+    } else {
+      output += `{${body}}\n`
+    }
+
+    i = j
+  }
+
+  return output.trim()
+}
+
+const scopedCustomCss = frontmatter.customCss
+  ? scopeCss(frontmatter.customCss, `.${scopeClass}`)
+  : ''
 ---
 
 <BaseLayout
@@ -22,7 +75,7 @@ const rawHTMLString = `This article was originally published at <a href=${frontm
     <article
       itemscope
       itemtype="http://schema.org/Article"
-      class="content-wrapper"
+      class={`content-wrapper blog-post ${scopeClass}${customClasses ? ` ${customClasses}` : ''}`}
     >
       <ol
         class="breadcrumbs"
@@ -84,6 +137,7 @@ const rawHTMLString = `This article was originally published at <a href=${frontm
       <slot />
     </article>
   </main>
+  {scopedCustomCss ? <style is:global>{scopedCustomCss}</style> : null}
 </BaseLayout>
 
 <style>

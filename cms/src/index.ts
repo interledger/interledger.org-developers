@@ -48,6 +48,8 @@ async function configureFieldLabels(strapi: any) {
       lang: 'Language',
       featuredImage: 'Featured Image',
       ogImageUrl: 'OG Image URL',
+      customClasses: 'Custom Classes',
+      customCss: 'Custom CSS',
       content: 'Content',
       createdAt: 'Created At',
       updatedAt: 'Updated At',
@@ -100,6 +102,14 @@ async function configureFieldLabels(strapi: any) {
     },
   };
 
+  const fieldHelpText: Record<string, Record<string, string>> = {
+    'api::blog-post.blog-post': {
+      customClasses: 'Space-separated classes added to the blog post wrapper. Example: hero-accent featured-title',
+      customCss:
+        'Scoped CSS only for this post. Write normal CSS selectors. Example: h2 { color: #6a1b9a; } .callout { border: 2px solid #6a1b9a; }',
+    },
+  };
+
   for (const [uid, labels] of Object.entries(labelConfigs)) {
     if (Object.keys(labels).length === 0) continue;
 
@@ -115,9 +125,12 @@ async function configureFieldLabels(strapi: any) {
       let needsUpdate = false;
       const updatedMetadatas = { ...configuration.metadatas };
 
+      const helpText = fieldHelpText[uid] || {};
+
       for (const [fieldName, label] of Object.entries(labels)) {
         if (updatedMetadatas[fieldName]) {
           const currentEditLabel = updatedMetadatas[fieldName]?.edit?.label;
+          const currentDescription = updatedMetadatas[fieldName]?.edit?.description;
 
           // Update if label is default (same as field name, case-insensitive), empty, or not set
           const isDefaultLabel = !currentEditLabel || 
@@ -134,6 +147,17 @@ async function configureFieldLabels(strapi: any) {
               list: {
                 ...updatedMetadatas[fieldName]?.list,
                 label,
+              },
+            };
+            needsUpdate = true;
+          }
+
+          if (helpText[fieldName] && currentDescription !== helpText[fieldName]) {
+            updatedMetadatas[fieldName] = {
+              ...updatedMetadatas[fieldName],
+              edit: {
+                ...updatedMetadatas[fieldName]?.edit,
+                description: helpText[fieldName],
               },
             };
             needsUpdate = true;
