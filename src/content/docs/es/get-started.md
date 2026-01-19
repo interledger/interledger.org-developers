@@ -48,7 +48,7 @@ Interledger es una red de computadoras que permite enviar valor a través de red
 
 ## ¿Cómo funciona Interledger?
 
-En el núcleo de Interledger se encuentra el [Protocolo Interledger (ILPv4)](https://interledger.org/developers/rfcs/interledger-protocol/), un conjunto de reglas que define cómo deben enviar valor los nodos a través de la red Interledger. ILPv4 es un protocolo de *solicitud/respuesta*, donde las solicitudes y respuestas son paquetes ILPv4. Normalmente, un único pago agregado desde el origen hasta el destino se divide en varios paquetes ILP. Cada paquete contiene información de la transacción, que es privada entre los nodos que participan. ILPv4 tiene tres tipos de paquetes: *Prepare*, *Fulfill* y *Reject*.
+En el núcleo de Interledger se encuentra el [Protocolo Interledger (ILPv4)](https://interledger.org/developers/es/rfcs/interledger-protocol/), un conjunto de reglas que define cómo deben enviar valor los nodos a través de la red Interledger. ILPv4 es un protocolo de *solicitud/respuesta*, donde las solicitudes y respuestas son paquetes ILPv4. Normalmente, un único pago agregado desde el origen hasta el destino se divide en varios paquetes ILP. Cada paquete contiene información de la transacción, que es privada entre los nodos que participan. ILPv4 tiene tres tipos de paquetes: *Prepare*, *Fulfill* y *Reject*.
 
 ![Paquetes ILP](/developers/img/ilp-packets.svg)
 
@@ -56,7 +56,7 @@ El remitente construye y envía un paquete Prepare como solicitud al conector. L
 
 Interledger no depende de ninguna red de pago específica para procesar transacciones de valor. Puedes conectarte a un conector ILPv4 en cualquier momento para unirte a la red. Además, Interledger envía valor en pequeños paquetes de datos, lo que hace que las transacciones sean rápidas, seguras y económicas.
 
-Para un análisis más profundo de cómo funciona ILPv4, consulta [Flujo ILPv4](https://interledger.org/developers/rfcs/interledger-protocol#prerequisites).
+Para un análisis más profundo de cómo funciona ILPv4, consulta [Flujo ILPv4](https://interledger.org/developers/es/rfcs/interledger-protocol#prerequisites).
 
 ## Crear sobre Interledger
 
@@ -64,7 +64,7 @@ Incorpora pagos en tus aplicaciones u otros protocolos sin atarte a una moneda o
 
 ## Arquitectura de Interledger
 
-Interledger permite pagos a través de muchos tipos diferentes de libros contables. El conjunto de protocolos Interledger se compone de cuatro capas: las capas de Aplicación, Transporte, Interledger y Enlace. Para más información, consulta la [Visión General de la Arquitectura](https://interledger.org/developers/rfcs/interledger-architecture).
+Interledger permite pagos a través de muchos tipos diferentes de libros contables. El conjunto de protocolos Interledger se compone de cuatro capas: las capas de Aplicación, Transporte, Interledger y Enlace. Para más información, consulta la [Visión General de la Arquitectura](https://interledger.org/developers/es/rfcs/interledger-architecture).
 
 ## Especificaciones y APIs del protocolo
 
@@ -72,4 +72,4 @@ Para explorar las especificaciones técnicas, consulta los [Interledger RFCs](h
 
 ## Seguridad
 
-Interledger permite pagos seguros de múltiples saltos utilizando [Acuerdos de Bloqueo Temporal con Hash](https://interledger.org/developers/rfcs/hashed-timelock-agreements). A partir de Interledger v4, estas condiciones no son impuestas por el libro contable, ya que sería demasiado costoso y lento. En su lugar, los participantes de la red usan estos hashlocks para llevar la contabilidad entre pares. Esta contabilidad se utiliza para determinar los saldos en tránsito, que se liquidan periódicamente con transferencias en el libro contable o reclamos en canales de pago. Para una descripción detallada de cómo funciona esto, consulta la documentación sobre [Emparejamiento, Compensación y Liquidación](https://interledger.org/developers/rfcs/peering-clearing-settling/).
+Interledger permite pagos seguros de múltiples saltos utilizando [Acuerdos de Bloqueo Temporal con Hash](https://interledger.org/developers/es/rfcs/hashed-timelock-agreements). A partir de Interledger v4, estas condiciones no son impuestas por el libro contable, ya que sería demasiado costoso y lento. En su lugar, los participantes de la red usan estos hashlocks para llevar la contabilidad entre pares. Esta contabilidad se utiliza para determinar los saldos en tránsito, que se liquidan periódicamente con transferencias en el libro contable o reclamos en canales de pago. Para una descripción detallada de cómo funciona esto, consulta la documentación sobre [Emparejamiento, Compensación y Liquidación](https://interledger.org/developers/es/rfcs/peering-clearing-settling/).
