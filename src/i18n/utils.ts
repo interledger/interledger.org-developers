@@ -32,7 +32,25 @@ export function useTranslatedPath(
     }
 
     // for paths inside dev portal: the translated path is /developers/es/blog, not /es/developers/blog
-    const pathSegments = path.split('/')
+    let pathSegments = path.split('/')
+    
+    // Remove pagination page numbers (e.g., "2" from /developers/blog/2/)
+    // Keep only the last segment if it's numeric (page number), otherwise keep all
+    if (pathSegments.length > 0) {
+      const lastSegment = pathSegments[pathSegments.length - 1]
+      // If the last segment is empty (trailing slash), check the one before it
+      const checkSegment = lastSegment === '' ? pathSegments[pathSegments.length - 2] : lastSegment
+      
+      if (checkSegment && /^\d+$/.test(checkSegment)) {
+        // Remove the page number segment
+        if (lastSegment === '') {
+          pathSegments = pathSegments.slice(0, -2)
+        } else {
+          pathSegments = pathSegments.slice(0, -1)
+        }
+      }
+    }
+    
     let newSegments: string[]
 
     if (lang !== defaultLang) {
