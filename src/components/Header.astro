@@ -5,16 +5,17 @@ import SocialIcons from '@astrojs/starlight/components/SocialIcons.astro'
 import ThemeSelect from '@astrojs/starlight/components/ThemeSelect.astro'
 import DevelopersLogo from './logos/DevelopersLogo.astro'
 import LanguagePicker from './LanguagePicker.astro'
-import { getLangFromUrl } from '../i18n/utils'
+import { getLangFromUrl, useFoundationTranslatedPath } from '../i18n/utils'
 
 const lang = getLangFromUrl(Astro.url)
+const translateFoundationPath = useFoundationTranslatedPath(lang)
 ---
 
 <div class="header sl-flex">
-  <a href="/developers" class="site-title">
+  <a href={translateFoundationPath('developers')} class="site-title">
     <DevelopersLogo />
   </a>
-  <a href="/" class="home-link overflower">
+  <a href={translateFoundationPath('ilf')} class="home-link overflower">
     <span
       class="overflower-short"
       aria-hidden="true"

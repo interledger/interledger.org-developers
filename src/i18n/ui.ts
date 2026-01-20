@@ -1,23 +1,128 @@
-type LanguageRoutes = Record<keyof typeof languages, Record<string, string>>
-type LanguageUi = Record<keyof typeof languages, Record<string, string>>
+export type LanguageKey = 'en' | 'es'
+export type NavigationItemKey = keyof typeof navigationItems
+type LanguageRoutes = Record<LanguageKey, Record<string, string>>
+type LanguageUi = Record<LanguageKey, Record<string, string>>
+type NavigationLink = {
+  [K in LanguageKey]: {
+    href: string
+  }
+}
+type NavigationLinks = Record<string, NavigationLink>
 
-export const languages = {
+export const languages: Record<LanguageKey, string> = {
   en: 'English',
   es: 'Español'
 }
 
-export const defaultLang = 'en'
+export const defaultLang: LanguageKey = 'en'
 
 export const routes: LanguageRoutes = {
   en: {
-    'first-week': 'breakpoint-it-work-week',
     'interledger-universe': 'interledger-universe'
   },
   es: {
-    'first-week': 'primera-semana-breakpoint',
     'interledger-universe': 'el-universo-interledger'
   }
 }
+
+export const navigationItems = {
+  ilf: {
+    en: { href: '/' },
+    es: { href: '/es' }
+  },
+  developers: {
+    en: { href: '/developers' },
+    es: { href: '/developers/es' }
+  },
+  about: {
+    en: { href: '/about-us' },
+    es: { href: '/es/sobre-nosotros' }
+  },
+  policy: {
+    en: { href: '/policy-and-advocacy' },
+    es: { href: '/es/politica-y-defensa' }
+  },
+  team: {
+    en: { href: '/team' },
+    es: { href: '/es/equipo' }
+  },
+  media: {
+    en: { href: '/press' },
+    es: { href: '/es/medios' }
+  },
+  overview: {
+    en: { href: '/open-standards' },
+    es: { href: '/es/estandares-abiertos' }
+  },
+  interledger: {
+    en: { href: '/interledger' },
+    es: { href: '/es/interledger' }
+  },
+  'open-payments': {
+    en: { href: '/open-payments' },
+    es: { href: '/es/open-payments' }
+  },
+  'web-monetization': {
+    en: { href: '/web-monetization' },
+    es: { href: '/es/web-monetization' }
+  },
+  join: {
+    en: { href: '/join-network' },
+    es: { href: '/es/unase-la-red' }
+  },
+  'financial-services': {
+    en: { href: '/financial-services' },
+    es: { href: '/es/servicios-financieros-digitales' }
+  },
+  education: {
+    en: { href: '/education' },
+    es: { href: '/es/educacion' }
+  },
+  ambassadors: {
+    en: { href: '/ambassadors' },
+    es: { href: '/es/embajadores' }
+  },
+  'foundation-blog': {
+    en: { href: '/blog' },
+    es: { href: '/es/blog' }
+  },
+  'tech-blog': {
+    en: { href: '/developers/blog' },
+    es: { href: '/developers/es/blog' }
+  },
+  podcast: {
+    en: { href: '/podcast' },
+    es: { href: '/es/podcast' }
+  },
+  'community-forem': {
+    en: { href: 'https://community.interledger.org/' },
+    es: { href: 'https://community.interledger.org/' }
+  },
+  'get-involved': {
+    en: { href: '/get-involved' },
+    es: { href: '/es/involucrese' }
+  },
+  events: {
+    en: { href: '/events' },
+    es: { href: '/es/eventos' }
+  },
+  guidelines: {
+    en: { href: '/participation-guidelines' },
+    es: { href: '/es/pautas-de-participacion' }
+  },
+  summit: {
+    en: { href: '/summit' },
+    es: { href: '/es/summit' }
+  },
+  subscribe: {
+    en: { href: '/subscribe' },
+    es: { href: '/es/suscribase' }
+  },
+  contact: {
+    en: { href: '/contact' },
+    es: { href: '/es/contacto' }
+  }
+} satisfies NavigationLinks
 
 export const ui: LanguageUi = {
   en: {
@@ -43,7 +148,6 @@ export const ui: LanguageUi = {
     'nav.tech-blog-description':
       'Hear stories and experiences from the team who is working on making Interledger, the interoperable global payments network, a reality.',
     'nav.podcast': 'Podcast',
-    'nav.art': 'Art',
     'nav.community-forem': 'Community Forem',
     'nav.participate': 'Participate',
     'nav.get-involved': 'Get Involved',
@@ -92,7 +196,6 @@ export const ui: LanguageUi = {
     'nav.tech-blog-description':
       'Escucha historias y experiencias del equipo que está trabajando en hacer de Interledger, la red de pagos interoperable global, una realidad.',
     'nav.podcast': 'Podcast',
-    'nav.art': 'Arte',
     'nav.community-forem': 'Community Forem',
     'nav.participate': 'Participa',
     'nav.get-involved': 'Involúcrate',

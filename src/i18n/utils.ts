@@ -1,12 +1,13 @@
-import { ui, languages, defaultLang, routes } from './ui'
+import { ui, navigationItems, defaultLang, routes } from './ui'
+import type { LanguageKey, NavigationItemKey } from './ui'
 
 export function getLangFromUrl(url: URL) {
   const [, , lang] = url.pathname.split('/')
-  if (lang in ui) return lang as keyof typeof languages
+  if (lang in ui) return lang as LanguageKey
   return defaultLang
 }
 
-export function useTranslations(lang: keyof typeof languages) {
+export function useTranslations(lang: LanguageKey) {
   return function t(key: keyof (typeof ui)[typeof defaultLang]) {
     const defaultStrings = ui[defaultLang]
     const currentStrings = ui[lang] as Partial<typeof defaultStrings>
@@ -15,14 +16,19 @@ export function useTranslations(lang: keyof typeof languages) {
   }
 }
 
-export function useTranslatedPath(
-  l: keyof typeof languages,
-  currentL: keyof typeof languages
-) {
+export function useFoundationTranslatedPath(
+  lang: LanguageKey
+): (item: NavigationItemKey) => string {
+  return function translateFoundationPath(item = 'ilf') {
+    return navigationItems[item][lang].href
+  }
+}
+
+export function useTranslatedPath(l: LanguageKey, currentL: LanguageKey) {
   return function translatePath(
     path: string,
-    lang: keyof typeof languages = l,
-    currentLang: keyof typeof languages = currentL
+    lang: LanguageKey = l,
+    currentLang: LanguageKey = currentL
   ) {
     if (!path.includes('/developers')) {
       if (lang !== defaultLang) {
@@ -69,8 +75,8 @@ export function useTranslatedPath(
 }
 
 function translateSlug(
-  translationLang: keyof typeof languages,
-  currentLang: keyof typeof languages,
+  translationLang: LanguageKey,
+  currentLang: LanguageKey,
   newSegments: string[]
 ) {
   const slug = newSegments.at(-1)

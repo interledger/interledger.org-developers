@@ -4,7 +4,8 @@ import TagFilter from './TagFilter.astro'
 import Pagination from './Pagination.astro'
 import type { CollectionEntry } from 'astro:content'
 import { useTranslations } from '../../i18n/utils'
-import { languages, defaultLang } from '../../i18n/ui'
+import { defaultLang } from '../../i18n/ui'
+import type { LanguageKey } from '../../i18n/ui'
 interface BreadcrumbItem {
   name: string
   href: string
@@ -14,7 +15,7 @@ interface BreadcrumbItem {
 interface Props {
   title: string
   posts: CollectionEntry<'blog'>[]
-  lang: keyof typeof languages
+  lang: LanguageKey
   breadcrumbs?: BreadcrumbItem[]
   allTags?: string[]
   selectedTag?: string

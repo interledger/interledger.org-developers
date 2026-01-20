@@ -2,12 +2,12 @@
 import {
   getLangFromUrl,
   useTranslations,
-  useTranslatedPath
+  useFoundationTranslatedPath
 } from '../../i18n/utils'
 
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslations(lang)
-const translatePath = useTranslatedPath(lang, lang)
+const translatePath = useFoundationTranslatedPath(lang)
 const currentYear = new Date().getFullYear()
 ---
 
@@ -17,7 +17,7 @@ const currentYear = new Date().getFullYear()
       <h3>{t('footer.mailing-list')}</h3>
       <a
         class="button subscribe-btn"
-        href={translatePath('/subscribe')}
+        href={translatePath('subscribe')}
         data-umami-event="Footer link - Subscribe"
       >
         {t('footer.subscribe')}
@@ -142,7 +142,7 @@ const currentYear = new Date().getFullYear()
       >
     </li>
     <li>
-      <a href={translatePath('/contact')} data-umami-event="Footer - Contact"
+      <a href={translatePath('contact')} data-umami-event="Footer - Contact"
         >{t('footer.contact')}</a
       >
     </li>

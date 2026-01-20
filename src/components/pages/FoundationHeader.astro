@@ -3,13 +3,13 @@ import FoundationLogo from '../logos/FoundationLogo.astro'
 import {
   getLangFromUrl,
   useTranslations,
-  useTranslatedPath
+  useFoundationTranslatedPath
 } from '../../i18n/utils'
 import LanguagePicker from '../LanguagePicker.astro'
 
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslations(lang)
-const translatePath = useTranslatedPath(lang, lang)
+const translatePath = useFoundationTranslatedPath(lang)
 ---
 
 <header class="site-header" role="banner">
@@ -23,7 +23,7 @@ const translatePath = useTranslatedPath(lang, lang)
       Main navigation
     </h2>
     <a
-      href={translatePath('/')}
+      href={translatePath('ilf')}
       class="site-logo"
       aria-label="Interledger Foundation"
       data-umami-event="Site Nav - Logo"
@@ -43,26 +43,25 @@ const translatePath = useTranslatedPath(lang, lang)
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
               <a
-                href={translatePath('/about-us')}
+                href={translatePath('about')}
                 data-umami-event="Site Nav - About us">{t('nav.about')}</a
               >
             </li>
             <li class="menu-item menu-item--level-2">
               <a
-                href={translatePath('/policy-and-advocacy')}
+                href={translatePath('policy')}
                 data-umami-event="Site Nav - Policy & Advocacy"
                 >{t('nav.policy')}</a
               >
             </li>
             <li class="menu-item menu-item--level-2">
-              <a
-                href={translatePath('/team')}
-                data-umami-event="Site Nav - Team">{t('nav.team')}</a
+              <a href={translatePath('team')} data-umami-event="Site Nav - Team"
+                >{t('nav.team')}</a
               >
             </li>
             <li class="menu-item menu-item--level-2">
               <a
-                href={translatePath('/press')}
+                href={translatePath('media')}
                 data-umami-event="Site Nav - Press">{t('nav.media')}</a
               >
             </li>
@@ -75,41 +74,41 @@ const translatePath = useTranslatedPath(lang, lang)
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
               <a
-                href={translatePath('/open-standards')}
+                href={translatePath('overview')}
                 data-umami-event="Site Nav - Open Standards"
                 >{t('nav.overview')}</a
               >
             </li>
             <li class="menu-item menu-item--level-2">
               <a
-                href={translatePath('/interledger')}
+                href={translatePath('interledger')}
                 data-umami-event="Site Nav - Interledger"
                 >{t('nav.interledger')}</a
               >
             </li>
             <li class="menu-item menu-item--level-2">
               <a
-                href={translatePath('/open-payments')}
+                href={translatePath('open-payments')}
                 data-umami-event="Site Nav - Open Payments"
                 >{t('nav.open-payments')}</a
               >
             </li>
             <li class="menu-item menu-item--level-2">
               <a
-                href={translatePath('/web-monetization')}
+                href={translatePath('web-monetization')}
                 data-umami-event="Site Nav - Web Monetization"
                 >{t('nav.web-monetization')}</a
               >
             </li>
             <li class="menu-item menu-item--level-2">
               <a
-                href={translatePath('/join-network')}
+                href={translatePath('join')}
                 data-umami-event="Site Nav - Join network">{t('nav.join')}</a
               >
             </li>
             <li class="menu-item menu-item--level-2">
               <a
-                href={translatePath('/developers')}
+                href={translatePath('developers')}
                 data-umami-event="Site Nav - Developers Portal"
                 >{t('nav.developers')}</a
               >
@@ -123,20 +122,20 @@ const translatePath = useTranslatedPath(lang, lang)
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
               <a
-                href={translatePath('/financial-services')}
+                href={translatePath('financial-services')}
                 data-umami-event="Site Nav - Financial Services"
                 >{t('nav.financial-services')}</a
               >
             </li>
             <li class="menu-item menu-item--level-2">
               <a
-                href={translatePath('/education')}
+                href={translatePath('education')}
                 data-umami-event="Site Nav - Education">{t('nav.education')}</a
               >
             </li>
             <li class="menu-item menu-item--level-2">
               <a
-                href={translatePath('/ambassadors')}
+                href={translatePath('ambassadors')}
                 data-umami-event="Site Nav - Ambassadors"
                 >{t('nav.ambassadors')}</a
               >
@@ -152,20 +151,20 @@ const translatePath = useTranslatedPath(lang, lang)
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
               <a
-                href={translatePath('/blog')}
+                href={translatePath('foundation-blog')}
                 data-umami-event="Site Nav - Blog">{t('nav.foundation-blog')}</a
               >
             </li>
             <li class="menu-item menu-item--level-2">
               <a
-                href={translatePath('/developers/blog')}
+                href={translatePath('tech-blog')}
                 data-umami-event="Site Nav - Engineering Blog"
                 >{t('nav.tech-blog')}</a
               >
             </li>
             <li class="menu-item menu-item--level-2">
               <a
-                href={translatePath('/podcast')}
+                href={translatePath('podcast')}
                 data-umami-event="Site Nav - Podcast">{t('nav.podcast')}</a
               >
             </li>
@@ -189,20 +188,20 @@ const translatePath = useTranslatedPath(lang, lang)
           <ul class="menu--level-2">
             <li class="menu-item menu-item--level-2">
               <a
-                href={translatePath('/get-involved')}
+                href={translatePath('get-involved')}
                 data-umami-event="Site Nav - Get involved"
                 >{t('nav.get-involved')}</a
               >
             </li>
             <li class="menu-item menu-item--level-2">
               <a
-                href={translatePath('/events')}
+                href={translatePath('events')}
                 data-umami-event="Site Nav - Events">{t('nav.events')}</a
               >
             </li>
             <li class="menu-item menu-item--level-2">
               <a
-                href={translatePath('/participation-guidelines')}
+                href={translatePath('guidelines')}
                 data-umami-event="Site Nav - Guidelines"
                 >{t('nav.guidelines')}</a
               >
@@ -212,7 +211,7 @@ const translatePath = useTranslatedPath(lang, lang)
       </ul>
       <a
         class="switch-link"
-        href={translatePath('/summit')}
+        href={translatePath('summit')}
         data-umami-event="Site Nav - Summit Link">{t('nav.summit')}</a
       >
     </div>
