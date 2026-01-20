@@ -148,7 +148,7 @@ export const ui: LanguageUi = {
     'nav.tech-blog-description':
       'Hear stories and experiences from the team who is working on making Interledger, the interoperable global payments network, a reality.',
     'nav.podcast': 'Podcast',
-    'nav.community-forem': 'Community Forem',
+    'nav.community-forem': 'Community Forum',
     'nav.participate': 'Participate',
     'nav.get-involved': 'Get Involved',
     'nav.events': 'Events',
@@ -196,7 +196,7 @@ export const ui: LanguageUi = {
     'nav.tech-blog-description':
       'Escucha historias y experiencias del equipo que está trabajando en hacer de Interledger, la red de pagos interoperable global, una realidad.',
     'nav.podcast': 'Podcast',
-    'nav.community-forem': 'Community Forem',
+    'nav.community-forem': 'Community Forum',
     'nav.participate': 'Participa',
     'nav.get-involved': 'Involúcrate',
     'nav.events': 'Eventos',
