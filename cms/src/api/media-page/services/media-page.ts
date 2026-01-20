@@ -2,6 +2,6 @@
  * media-page service
  */
 
-import { factories } from '@strapi/strapi';
+import { factories } from '@strapi/strapi'
 
-export default factories.createCoreService('api::media-page.media-page');
+export default factories.createCoreService('api::media-page.media-page')

@@ -4,4 +4,4 @@
 
 import { factories } from '@strapi/strapi'
 
-export default factories.createCoreRouter('api::news-event.news-event');
+export default factories.createCoreRouter('api::news-event.news-event')

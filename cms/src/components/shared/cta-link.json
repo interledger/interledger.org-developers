@@ -19,10 +19,7 @@
     "style": {
       "type": "enumeration",
       "default": "primary",
-      "enum": [
-        "primary",
-        "secondary"
-      ]
+      "enum": ["primary", "secondary"]
     },
     "external": {
       "type": "boolean",

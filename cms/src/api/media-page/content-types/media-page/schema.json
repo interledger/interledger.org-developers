@@ -33,10 +33,7 @@
     },
     "dynamic": {
       "type": "dynamiczone",
-      "components": [
-        "shared.section",
-        "shared.cta-link"
-      ]
+      "components": ["shared.section", "shared.cta-link"]
     }
   }
 }

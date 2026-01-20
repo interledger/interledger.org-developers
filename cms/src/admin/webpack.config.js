@@ -1,6 +1,6 @@
 module.exports = (config) => {
   // Copy JSON files after build
-  const CopyPlugin = require('copy-webpack-plugin');
+  const CopyPlugin = require('copy-webpack-plugin')
 
   config.plugins.push(
     new CopyPlugin({
@@ -12,7 +12,7 @@ module.exports = (config) => {
         }
       ]
     })
-  );
+  )
 
-  return config;
-};
+  return config
+}

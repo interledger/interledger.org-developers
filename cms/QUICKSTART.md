@@ -57,6 +57,7 @@ Once published, an MDX file will be automatically created in `../src/content/pre
 ## Viewing Your Content
 
 1. Make sure the Astro dev server is running:
+
    ```bash
    cd ..  # Go back to root
    bun run start
