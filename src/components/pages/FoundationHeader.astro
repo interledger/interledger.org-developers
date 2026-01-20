@@ -638,7 +638,7 @@ const translatePath = useTranslatedPath(lang, lang)
     currentPath = currentPath.slice(0, -1)
   }
 
-  const activeSections = ['/developers/blog']
+  const activeSections = ['/developers/blog', '/developers/es/blog']
   devLinks.forEach((devLink) => {
     if (devLink instanceof HTMLAnchorElement) {
       const linkPath = devLink.pathname
