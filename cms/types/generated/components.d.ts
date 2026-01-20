@@ -40,7 +40,7 @@ export interface SharedSection extends Struct.ComponentSchema {
 }
 
 declare module '@strapi/strapi' {
-  export module Public {
+  export namespace Public {
     export interface ComponentSchemas {
       'shared.cta-link': SharedCtaLink
       'shared.hero-section': SharedHeroSection
