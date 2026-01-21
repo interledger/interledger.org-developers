@@ -29,14 +29,15 @@ Card payments are the backbone of global commerce-trusted, regulated, and deeply
 4. ['Hello World' for POS (Point of Sale): How Does a POS device become "Known"?](#hello-world-for-pos-point-of-sale-how-does-a-pos-device-become-known)
 5. [The Transaction Moment](#the-transaction-moment)
 6. [Conclusion, Where This Leaves Us](#conclusion-where-this-leaves-us)
-7. [References](#references)
-8. [Glossary of Terms](#glossary-of-terms)
+7. [What is next for ILF and Cards?](#what-is-next-for-ilf-and-cards)
+8. [References](#references)
+9. [Glossary of Terms](#glossary-of-terms)
 
 ## Card Payments Using Rafiki and ILP
 
 At a high level, an ILP card transaction involves:
 
-1. Card (ICC) - EMV-compliant card with an ILP-linked wallet address
+1. Card (ICC) - EMV-compliant card with an [Open Payments](https://openpayments.dev/) enabled wallet address
 2. POS Device - EMV kernel + ILP extensions
 3. Merchant ASE - Runs Rafiki and manages POS trust (RKI, IPEK lifecycle, compliance)
 4. Customer ASE - Runs Rafiki and manages the cardholder account
@@ -52,7 +53,11 @@ This post is a walkthrough of that exploration - not a final specification, but 
 
 ## Starting Point: Should you build a Kernel?
 
-One of the earliest and most important decisions came out of conversations with our first POS (Point of Sale) manufacturing partner, who provides both the EMV kernel and a significant portion of the overall payment software stack running on the device.
+In the world of card payments, a **kernel** is the core software component within a POS terminal that manages the complex interaction between the payment card (the chip) and the terminal. It handles the EMV protocol logic, data-exchange, and cryptographic processing required to authorize a transaction.
+Essentially, it's the "brain" that knows how to speak "chip card" securely and according to global standards.
+
+With the kernel being the “brain” of the POS, it quickly became clear that our first major design decision would revolve around which kernel approach to build on.
+The earliest and most important decisions came out of conversations with our first POS (Point of Sale) manufacturing partner, who provides both the EMV kernel and a significant portion of the overall payment software stack running on the device.
 Because ILF's first objective is to enable SoftPOS, we needed to choose between two approaches:
 
 - developing a completely new EMV kernel based on the latest EMVCo C8 specifications,
@@ -136,7 +141,7 @@ The POS is already running:
 
 - POS Manufacturer bespoke software (Android / Symbian / iOS / Windows Phone)
 - POS kernel
-- POS WhiteBox secure storage
+- POS WhiteBox (secure software-based storage and execution environment for a POS device)
 
 And the POS Manufacturer already has strong opinions (for good reasons) about:
 
@@ -227,10 +232,10 @@ This is where the ILP terminal key issued during onboarding finally comes into p
 
 The POS:
 
-- Assembles transaction data
-- References the card's wallet address (Customer ASE)
-- Signs the request with its ILP key (Merchant ASE)
-- Sends it to the Customer and Merchant ASE
+1. Assembles transaction data
+2. References the card's wallet address (Customer ASE)
+3. Signs the request with its ILP key (Merchant ASE)
+4. Sends it to the Customer and Merchant ASE
 
 Importantly, we don't have the POS talk to Rafiki directly to authorize the transaction. Instead, we route everything through an ASE POS API:
 
@@ -243,11 +248,11 @@ Why?
 - Certifications
 - Key management
 
-The ASE remains firmly in control. Rafiki Does What It Already Does Well. From here on, Rafiki is on familiar ground.
+The ASE remains firmly in control. Rafiki does what it already does well. From here on, Rafiki is on familiar ground.
 
 It:
 
-- Creates incoming and outgoing payments
+- Creates incoming and outgoing payments (as well as processing the ILP payments)
 - Applies Open Payments semantics
 - Tracks lifecycle state
 - Emits events
@@ -274,6 +279,16 @@ What is emerging is not a replacement for card payments, but an extension of the
 - ASEs remain accountable entities.
 
 Interledger simply becomes the connective tissue that lets value move beyond traditional rails, securely, incrementally, and without forcing the ecosystem to start over.
+
+## What is next for ILF and Cards?
+
+- Further development of the Card applet for `C2` kernel support
+- Further development of the Rafiki SDK to support the new POS/Card services
+- New Merchant-API service to support ASE's with regards to:
+  - Merchant onboarding
+  - Terminal configuration and onboarding
+  - Merchant management
+  - Remote key injection (RKI)
 
 ## References
 
