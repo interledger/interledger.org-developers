@@ -4,6 +4,7 @@ import type { GetStaticPaths, Page } from 'astro'
 import Pagination from '../../components/blog/Pagination.astro'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import { createExcerpt } from '../../utils/create-excerpt'
+import ResponsiveImage from '../../components/ResponsiveImage.astro'
 
 type Props = {
   page: Page
@@ -67,12 +68,12 @@ const { page } = Astro.props
               <li class="postlist-item">
                 <div class="postlist-image">
                   {blogPostEntry.data.image && (
-                    <img
-                      loading="lazy"
+                    <ResponsiveImage
                       src={blogPostEntry.data.image}
-                      width="250"
-                      height="250"
                       alt={blogPostEntry.data.title}
+                      sizes="(max-width: 768px) 100vw, 250px"
+                      width={250}
+                      height={250}
                     />
                   )}
                 </div>

@@ -1,0 +1,174 @@
+---
+/**
+ * ResponsiveImage with Blur Placeholder
+ *
+ * Enhanced version with Low Quality Image Placeholder (LQIP) support
+ *
+ * Usage:
+ *   <ResponsiveImageWithPlaceholder
+ *     src="/uploads/image.jpg"
+ *     alt="Description"
+ *     placeholder="blur"  // or "dominant-color" or base64 string
+ *   />
+ */
+
+import { getImagePlaceholder, getImageDominantColor } from '../utils/getImagePlaceholder';
+
+interface Props {
+  src: string;
+  alt: string;
+  sizes?: string;
+  loading?: 'lazy' | 'eager';
+  class?: string;
+  width?: number;
+  height?: number;
+  priority?: boolean;
+  placeholder?: 'blur' | 'dominant-color' | string;
+}
+
+const {
+  src,
+  alt,
+  sizes = '100vw',
+  loading = 'lazy',
+  class: className,
+  width,
+  height,
+  priority = false,
+  placeholder,
+} = Astro.props;
+
+// Extract filename and extension
+const srcMatch = src.match(/^(.+?)(\.[^.]+)$/);
+if (!srcMatch) {
+  throw new Error(`Invalid image src: ${src}`);
+}
+
+const basePath = srcMatch[1];
+const ext = srcMatch[2];
+const isUploaded = src.startsWith('/uploads/');
+
+// Generate srcset
+const generateSrcset = (extension: string) => {
+  if (!isUploaded) {
+    return `${src} 1920w`;
+  }
+
+  const variants = [
+    { prefix: 'small_', width: 500 },
+    { prefix: 'medium_', width: 750 },
+    { prefix: 'large_', width: 1000 },
+  ];
+
+  const srcsetEntries = variants.map(({ prefix, width }) => {
+    const path = basePath.replace('/uploads/', `/uploads/${prefix}`);
+    return `${path}${extension} ${width}w`;
+  });
+
+  srcsetEntries.push(`${basePath}${extension} 1920w`);
+  return srcsetEntries.join(', ');
+};
+
+const avifSrcset = generateSrcset('.avif');
+const webpSrcset = generateSrcset('.webp');
+const originalSrcset = generateSrcset(ext);
+
+const loadingAttr = priority ? 'eager' : loading;
+const fetchPriority = priority ? 'high' : undefined;
+
+// Generate placeholder
+let placeholderData = '';
+let backgroundColor = '';
+
+if (placeholder === 'blur') {
+  // Generate tiny blurred base64 image
+  placeholderData = await getImagePlaceholder(src);
+} else if (placeholder === 'dominant-color') {
+  // Extract dominant color
+  backgroundColor = await getImageDominantColor(src);
+} else if (placeholder && placeholder.startsWith('data:')) {
+  // Use provided base64 placeholder
+  placeholderData = placeholder;
+} else if (placeholder && placeholder.startsWith('#')) {
+  // Use provided color
+  backgroundColor = placeholder;
+}
+---
+
+<div class="responsive-image-wrapper" style={backgroundColor ? `background-color: ${backgroundColor}` : ''}>
+  {placeholderData && (
+    <img
+      src={placeholderData}
+      alt=""
+      aria-hidden="true"
+      class="placeholder-blur"
+    />
+  )}
+
+  <picture>
+    <source type="image/avif" srcset={avifSrcset} sizes={sizes} />
+    <source type="image/webp" srcset={webpSrcset} sizes={sizes} />
+    <source
+      type={ext === '.jpg' || ext === '.jpeg' ? 'image/jpeg' : `image/${ext.slice(1)}`}
+      srcset={originalSrcset}
+      sizes={sizes}
+    />
+
+    <img
+      src={src}
+      alt={alt}
+      loading={loadingAttr}
+      fetchpriority={fetchPriority}
+      decoding="async"
+      class={className}
+      width={width}
+      height={height}
+    />
+  </picture>
+</div>
+
+<style>
+  .responsive-image-wrapper {
+    position: relative;
+    display: block;
+    overflow: hidden;
+  }
+
+  .placeholder-blur {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(20px);
+    transform: scale(1.1);
+    z-index: 0;
+  }
+
+  picture {
+    position: relative;
+    z-index: 1;
+    display: contents;
+  }
+
+  img:not(.placeholder-blur) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Fade in effect when image loads */
+  img:not(.placeholder-blur) {
+    animation: fadeIn 0.3s ease-in;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+</style>

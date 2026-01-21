@@ -1,0 +1,133 @@
+---
+/**
+ * ResponsiveImage Component
+ *
+ * Renders responsive images with:
+ * - Automatic srcset generation from Strapi variants
+ * - WebP format with fallback
+ * - Lazy loading
+ * - Proper sizing hints
+ *
+ * Usage:
+ *   <ResponsiveImage
+ *     src="/uploads/image.jpg"
+ *     alt="Description"
+ *     sizes="(max-width: 768px) 100vw, 750px"
+ *   />
+ */
+
+interface Props {
+  src: string;
+  alt: string;
+  sizes?: string;
+  loading?: 'lazy' | 'eager';
+  class?: string;
+  width?: number;
+  height?: number;
+  priority?: boolean;
+}
+
+const {
+  src,
+  alt,
+  sizes = '100vw',
+  loading = 'lazy',
+  class: className,
+  width,
+  height,
+  priority = false,
+} = Astro.props;
+
+// Extract filename and extension
+const srcMatch = src.match(/^(.+?)(\.[^.]+)$/);
+if (!srcMatch) {
+  throw new Error(`Invalid image src: ${src}`);
+}
+
+const basePath = srcMatch[1];
+const ext = srcMatch[2];
+
+// Check if this is from Strapi uploads
+const isUploaded = src.startsWith('/uploads/');
+
+// Generate srcset from Strapi's auto-generated variants
+// Strapi creates: xsmall (64px), small (500px), medium (750px), large (1000px), xlarge (1920px)
+const generateSrcset = (extension: string) => {
+  if (!isUploaded) {
+    // Not a Strapi upload, just use original
+    return `${src} 1920w`;
+  }
+
+  const variants = [
+    { prefix: 'small_', width: 500 },
+    { prefix: 'medium_', width: 750 },
+    { prefix: 'large_', width: 1000 },
+  ];
+
+  const srcsetEntries = variants.map(({ prefix, width }) => {
+    const path = basePath.replace('/uploads/', `/uploads/${prefix}`);
+    return `${path}${extension} ${width}w`;
+  });
+
+  // Add original as largest size
+  srcsetEntries.push(`${basePath}${extension} 1920w`);
+
+  return srcsetEntries.join(', ');
+};
+
+// Generate AVIF, WebP and original srcsets
+const avifSrcset = generateSrcset('.avif');
+const webpSrcset = generateSrcset('.webp');
+const originalSrcset = generateSrcset(ext);
+
+// Determine actual loading strategy
+const loadingAttr = priority ? 'eager' : loading;
+const fetchPriority = priority ? 'high' : undefined;
+---
+
+<picture>
+  <!-- AVIF source (newest format, 20-30% smaller than WebP) -->
+  <source
+    type="image/avif"
+    srcset={avifSrcset}
+    sizes={sizes}
+  />
+
+  <!-- WebP source (fallback for browsers without AVIF) -->
+  <source
+    type="image/webp"
+    srcset={webpSrcset}
+    sizes={sizes}
+  />
+
+  <!-- Original format fallback (JPEG/PNG) -->
+  <source
+    type={ext === '.jpg' || ext === '.jpeg' ? 'image/jpeg' : `image/${ext.slice(1)}`}
+    srcset={originalSrcset}
+    sizes={sizes}
+  />
+
+  <!-- Fallback img tag -->
+  <img
+    src={src}
+    alt={alt}
+    loading={loadingAttr}
+    fetchpriority={fetchPriority}
+    decoding="async"
+    class={className}
+    width={width}
+    height={height}
+  />
+</picture>
+
+<style>
+  picture {
+    display: contents;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>

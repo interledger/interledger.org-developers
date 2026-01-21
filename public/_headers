@@ -1,0 +1,49 @@
+# HTTP Caching Headers for Static Assets
+# This file is used by CloudFront, Netlify, and other CDNs
+
+# Cache uploaded images for 1 year (immutable)
+/uploads/*
+  Cache-Control: public, max-age=31536000, immutable
+  Vary: Accept
+
+# Cache other image assets
+/*.jpg
+  Cache-Control: public, max-age=31536000, immutable
+/*.jpeg
+  Cache-Control: public, max-age=31536000, immutable
+/*.png
+  Cache-Control: public, max-age=31536000, immutable
+/*.webp
+  Cache-Control: public, max-age=31536000, immutable
+/*.avif
+  Cache-Control: public, max-age=31536000, immutable
+/*.gif
+  Cache-Control: public, max-age=31536000, immutable
+/*.svg
+  Cache-Control: public, max-age=31536000, immutable
+/*.ico
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache JavaScript and CSS for 1 year
+/*.js
+  Cache-Control: public, max-age=31536000, immutable
+/*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache fonts for 1 year
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+/*.ttf
+  Cache-Control: public, max-age=31536000, immutable
+/*.otf
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML files - short cache with revalidation
+/*.html
+  Cache-Control: public, max-age=300, must-revalidate
+
+# Root HTML
+/
+  Cache-Control: public, max-age=300, must-revalidate

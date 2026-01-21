@@ -29,8 +29,20 @@ export default [
   },
   'strapi::poweredBy',
   'strapi::query',
-  'strapi::body',
+  {
+    name: 'strapi::body',
+    config: {
+      formLimit: '5mb',
+      jsonLimit: '5mb',
+      textLimit: '5mb',
+      formidable: {
+        maxFileSize: 5 * 1024 * 1024, // 5MB
+      },
+    },
+  },
   'strapi::session',
   'strapi::favicon',
   'strapi::public',
+  // Custom middleware for automatic WebP conversion on image upload
+  'global::image-optimizer',
 ];

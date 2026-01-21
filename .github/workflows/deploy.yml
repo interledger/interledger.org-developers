@@ -1,8 +1,8 @@
-name: Deploy to AWS
+name: Deploy to GCP
 
 on:
   # Trigger the workflow every time you push to the `main` branch
-  # Using a different branch name? Replace `main` with your branch’s name
+  # Using a different branch name? Replace `main` with your branch's name
   push:
     branches: [main]
   # Allows you to run this workflow manually from the Actions tab on GitHub.
@@ -24,12 +24,13 @@ jobs:
         with:
           node-version: 18
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.ACCOUNT_ID }}:role/GitHubAction-AssumeRoleWithAction
-          role-session-name: GitHub_to_AWS_via_FederatedOIDC
-          aws-region: ${{ vars.AWS_REGION }}
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
 
       - uses: oven-sh/setup-bun@v1
       - name: Install dependencies
@@ -37,9 +38,18 @@ jobs:
       - name: Test build website
         run: bun run build
 
-      - name: Deploy to S3
-        run: aws s3 sync ./dist/ s3://${{ secrets.BUCKET_ID }}/developers
-
-      - name: Invalidate CloudFront cache
+      - name: Deploy to GCS
         run: |
-          aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/developers/*"
+          # Sync main content (exclude uploads to set different cache headers)
+          gsutil -m rsync -r -d ./dist/ gs://${{ secrets.BUCKET_ID }}/developers \
+            -x ".*uploads/.*"
+
+          # Sync images with cache headers (1 year)
+          gsutil -m -h "Cache-Control:public, max-age=31536000, immutable" \
+            rsync -r ./dist/uploads/ gs://${{ secrets.BUCKET_ID }}/developers/uploads/ || true
+
+      - name: Set cache metadata for images
+        run: |
+          # Set cache control headers for all images in uploads folder
+          gsutil -m setmeta -h "Cache-Control:public, max-age=31536000, immutable" \
+            "gs://${{ secrets.BUCKET_ID }}/developers/uploads/**" || true

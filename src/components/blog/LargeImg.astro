@@ -5,9 +5,9 @@ const { src, alt, hasBorder = true } = Astro.props
 <div>
   {
     hasBorder ? (
-      <img src={src} alt={alt} class="border" />
+      <img src={src} alt={alt} class="border" loading="lazy" decoding="async" />
     ) : (
-      <img src={src} alt={alt} />
+      <img src={src} alt={alt} loading="lazy" decoding="async" />
     )
   }
   <a href={src} target="_blank" rel="noopener noreferrer"> View full image </a>

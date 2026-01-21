@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content'
 import BaseLayout from '../layouts/BaseLayout.astro'
+import ResponsiveImage from '../components/ResponsiveImage.astro'
 
 const events = await getCollection('events')
 const sortedEvents = events.sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
@@ -40,7 +41,11 @@ const renderedEvents = await Promise.all(
                 </div>
                 {hasImage && (
                   <div class="event-image">
-                    <img src={event.data.featuredImage} alt={event.data.title} loading="lazy" />
+                    <ResponsiveImage
+                      src={event.data.featuredImage}
+                      alt={event.data.title}
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
                   </div>
                 )}
               </article>
