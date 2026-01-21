@@ -2,12 +2,12 @@ name: Sync MDX to Strapi
 
 on:
   # Run when PRs are merged to main (production)
-  push:
-    branches:
-      - main
-    paths:
-      - 'src/content/blog/**/*.mdx'
-      - 'src/content/events/**/*.mdx'
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - 'src/content/blog/**/*.mdx'
+  #     - 'src/content/events/**/*.mdx'
 
   # Manual trigger for demo/testing from any branch
   workflow_dispatch:
