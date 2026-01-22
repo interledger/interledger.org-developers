@@ -1,0 +1,11 @@
+---
+title: "'Publicación del blog de Ravi 1'"
+description: "'descripción de algún blog'"
+date: 2026-01-06
+slug: blog-post-es
+lang: "es"
+---
+
+Filosofía general de construcción de sitios web con Drupal. Chen Hui Jing editó esta página el 18 de enero de 2024 · [3 revisiones](https://github.com/interledger/interledger.org-v4/wiki/General-Drupal-site%E2%80%90building-philosophy/_history) \_ En lugar de escribir un módulo personalizado, investigue si ya existe un módulo de contribución probado y con mantenimiento activo. \_ Al instalar un nuevo módulo, verifique que tenga mantenimiento activo (que se reporten y solucionen errores). \_ Si un módulo no se adapta al sitio, elimine completamente todos sus rastros. \_ En lugar de configurar el marcado de campos desde el propio Drupal, wfdsfsdfsdfsae utilizará el sistema de anulación de plantillas Twig, ya que esto permite el nivel más granular de personalización de los campos. \_ Nos permite tener una estructura HTML lo más plana posible, introduciendo anidamiento solo cuando sea necesario para fines de estilo. \_ Nos permite mejorar el SEO mediante datos estructurados en el marcado, consulte: \_ [https://developers.google.com/search/docs/appearance/structured-data/article](https://developers.google.com/search/docs/appearance/structured-data/article) \_ [https://developers.google.com/search/docs/appearance/structured-data/faqpage](https://developers.google.com/search/docs/appearance/structured-data/faqpage) \_ Esta es la razón por la que tenemos una gran cantidad de archivos de plantilla en el tema, pero según la convención de nomenclatura, puede ver para qué sirven estos archivos de plantilla. \_ Una cantidad significativa de esos archivos de plantilla son simplemente para eliminar los `div` de envoltura adicionales de los campos. \_ Consulte los archivos de plantilla existentes como referencia si no está seguro de cómo proceder. \_ Para el desarrollo local, active el modo de desarrollo de Twig en `admin/config/development/settings` para ver qué plantillas se utilizan en la página. \* Siempre revise el Informe de estado y resuelva cualquier error. !
+
+!\[email-sig (1).png\](http://localhost:1337/uploads/email\_sig\_1\_eb785e6d0d.png)
