@@ -220,19 +220,19 @@ async function importTranslations(): Promise<void> {
         continue
       }
 
-      const existingId = await checkExistingEntry(slug, lang)
+      const uniqueSlug = lang !== 'en' ? `${lang}-${slug}` : slug
+      const existingId = await checkExistingEntry(uniqueSlug, lang)
       if (existingId) {
         console.log(
-          `   ⚠️  Skipped: Entry already exists for "${slug}" in language "${lang}"\n`
+          `   ⚠️  Skipped: Entry already exists for "${uniqueSlug}" in language "${lang}"\n`
         )
         skippedImports.push({ file, reason: 'Entry already exists' })
         continue
       }
-
       const postData: StrapiBlogPost = {
         title: frontmatter.title || slug,
         description: frontmatter.description || '',
-        slug: slug,
+        slug: uniqueSlug,
         date: frontmatter.date || date || '',
         content: markdownToHtml(body),
         lang: lang,
@@ -244,7 +244,16 @@ async function importTranslations(): Promise<void> {
       }
 
       if (frontmatter.image) {
-        postData.featuredImage = frontmatter.image
+        const imageValue = frontmatter.image
+        const numericId = imageValue.match(/^\d+$/)
+
+        if (numericId) {
+          postData.featuredImage = imageValue
+        } else {
+          console.log(
+            `   ⚠️  Warning: Skipping featuredImage - invalid format (expected numeric ID, got path string)`
+          )
+        }
       }
 
       await createBlogPost(postData)
