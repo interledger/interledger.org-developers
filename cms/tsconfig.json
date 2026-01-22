@@ -16,13 +16,8 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.json",
-    "config/**/*.ts"
+    "config/**/*.ts",
+    "scripts/**/*.ts"
   ],
-  "exclude": [
-    "node_modules/**",
-    "build/**",
-    "dist/**",
-    ".cache/**",
-    ".tmp/**"
-  ]
+  "exclude": ["node_modules/**", "build/**", "dist/**", ".cache/**", ".tmp/**"]
 }
