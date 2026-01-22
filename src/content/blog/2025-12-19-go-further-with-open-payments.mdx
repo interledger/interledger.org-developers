@@ -179,7 +179,7 @@ Open Payments requires [HTTP Message Signatures](https://openpayments.dev/introd
 The SDK automatically signs requests when using `AuthenticatedClient`. Internally, it:
 
 1. Computes `Content-Digest` for request bodies
-2. Builds the signature base string per RFC 9421
+2. Builds the signature base string per [RFC 9421](https://datatracker.ietf.org/doc/html/rfc9421)
 3. Signs with your Ed25519 private key
 4. Sets `Signature` and `Signature-Input` headers
 
