@@ -102,7 +102,10 @@ function parseFrontmatter(content: string): ParsedMDX | null {
     const [key, ...valueParts] = line.split(':')
     if (key && valueParts.length > 0) {
       let value = valueParts.join(':').trim()
-      if (value.startsWith('"') && value.endsWith('"')) {
+      if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+      ) {
         value = value.slice(1, -1)
       }
       frontmatter[key.trim()] = value
@@ -315,7 +318,7 @@ async function importTranslations(): Promise<void> {
         description: frontmatter.description || '',
         slug: uniqueSlug,
         date: frontmatter.date || date || '',
-        content: markdownToHtml(body),
+        content: body,
         lang: lang,
         publishedAt: new Date().toISOString()
       }

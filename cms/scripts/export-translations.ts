@@ -71,11 +71,14 @@ function generateMDX(post: BlogPost, locale?: string): string {
     `date: ${formatDate(post.date)}`,
     `slug: ${post.slug}`,
     imageUrl ? `image: "${escapeQuotes(imageUrl)}"` : undefined,
-    locale ? `lang: "${escapeQuotes(locale)}"` : undefined
+    locale ? `lang: "${escapeQuotes(locale)}"` : undefined,
+    locale
+      ? `uniqueSlug: ${locale !== 'en' ? `${locale}-${post.slug}` : post.slug}`
+      : undefined
   ].filter(Boolean) as string[]
 
   const frontmatter = frontmatterLines.join('\n')
-  const content = post.content ? htmlToMarkdown(post.content) : ''
+  const content = post.content || ''
 
   return `---\n${frontmatter}\n---\n\n${content}\n`
 }

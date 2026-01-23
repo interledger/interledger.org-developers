@@ -1,28 +1,47 @@
 ---
 import { getCollection } from 'astro:content'
-import type { GetStaticPaths, Page } from 'astro'
-import Pagination from '../../components/blog/Pagination.astro'
+import type { GetStaticPaths } from 'astro'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import { createExcerpt } from '../../utils/create-excerpt'
 
-type Props = {
-  page: Page
-}
-
 export const prerender = true
 
-export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
-  const blogEntries = (await getCollection('blog')).sort(
-    (a, b) => b.data.date.getTime() - a.data.date.getTime()
-  )
-  return paginate(blogEntries, { pageSize: 10 })
+export const getStaticPaths: GetStaticPaths = async () => {
+  const blogEntries = await getCollection('blog')
+  
+  // Get unique locales from blog posts (excluding undefined/null)
+  const locales = [...new Set(
+    blogEntries
+      .map(entry => entry.data.lang)
+      .filter((lang): lang is string => Boolean(lang))
+  )]
+  
+  return locales.map(locale => ({
+    params: { locale },
+    props: { locale }
+  }))
 }
 
-const { page } = Astro.props
+const { locale } = Astro.props
+
+// Get blog entries filtered by locale
+const localeEntries = (await getCollection('blog', ({ data }) => {
+  return data.lang === locale
+})).sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+
+// Locale display names for page title
+const localeNames: Record<string, string> = {
+  es: 'Español',
+  fr: 'Français',
+  de: 'Deutsch',
+  zh: '中文'
+}
+
+const localeName = localeNames[locale] || locale.toUpperCase()
 ---
 
 <BaseLayout
-  title="Engineering Blog"
+  title={`Engineering Blog (${localeName})`}
   description="Hear stories and experiences from the team who is working on making Interledger, the interoperable global payments network, a reality."
   ogImageUrl={new URL('/img/blog/og-image.png', Astro.site).href}
 >
@@ -47,11 +66,25 @@ const { page } = Astro.props
           >
           <meta itemprop="position" content="1" />
         </li>
+        <li
+          itemprop="itemListElement"
+          itemscope
+          itemtype="https://schema.org/ListItem"
+        >
+          <a
+            itemprop="item"
+            href="/blog"
+            data-umami-event="Devs breadcrumb - Blog"
+          >
+            <span itemprop="name">Engineering Blog</span></a
+          >
+          <meta itemprop="position" content="2" />
+        </li>
       </ol>
       <header>
-        <h1>Engineering Blog</h1>
+        <h1>Engineering Blog <span class="locale-badge">{locale.toUpperCase()}</span></h1>
         <a class="cta__blog" href="/blog">
-          <p>Check out Foundation updates</p>
+          <p>View all posts</p>
           <img
             src="/img/ernie-purple.svg"
             alt="Ernie holding an envelope"
@@ -59,9 +92,11 @@ const { page } = Astro.props
           />
         </a>
       </header>
-      <ol class="postlist">
-        {
-          (page.data || []).map((blogPostEntry) => {
+      {localeEntries.length === 0 ? (
+        <p class="no-posts">No posts available in {localeName} yet.</p>
+      ) : (
+        <ol class="postlist">
+          {localeEntries.map((blogPostEntry) => {
             const excerpt = `${createExcerpt(blogPostEntry.body).substring(0, 300)}...`
             return (
               <li class="postlist-item">
@@ -77,30 +112,14 @@ const { page } = Astro.props
                   )}
                 </div>
                 <div class="postlist-content">
-                  {blogPostEntry.data.lang ? (
-                    <div class="postlist-es">
-                      <h2>
-                        <a
-                          href={`/blog/${blogPostEntry.id}`}
-                          class="postlist-link"
-                        >
-                          {blogPostEntry.data.title}
-                        </a>
-                      </h2>
-                      <a class="postlist-lang" href={`/blog/${blogPostEntry.data.lang}`}>
-                        {blogPostEntry.data.lang.toUpperCase()}
-                      </a>
-                    </div>
-                  ) : (
-                    <h2>
-                      <a
-                        href={`/blog/${blogPostEntry.id}`}
-                        class="postlist-link"
-                      >
-                        {blogPostEntry.data.title}
-                      </a>
-                    </h2>
-                  )}
+                  <h2>
+                    <a
+                      href={`/blog/${blogPostEntry.id}`}
+                      class="postlist-link"
+                    >
+                      {blogPostEntry.data.title}
+                    </a>
+                  </h2>
                   <time
                     class="postlist-date"
                     datetime={blogPostEntry.data.date.toISOString()}
@@ -118,17 +137,9 @@ const { page } = Astro.props
                 </div>
               </li>
             )
-          })
-        }
-      </ol>
-      <Pagination
-        length={page.lastPage}
-        currentPage={page.currentPage}
-        firstUrl={page.url.first}
-        prevUrl={page.url.prev}
-        nextUrl={page.url.next}
-        lastUrl={page.url.last}
-      />
+          })}
+        </ol>
+      )}
     </div>
   </main>
 </BaseLayout>
@@ -153,6 +164,12 @@ const { page } = Astro.props
     text-decoration: none;
   }
 
+  .breadcrumbs li:not(:first-child)::before {
+    content: '>';
+    display: inline-flex;
+    margin-inline-start: var(--space-3xs);
+  }
+
   ol {
     padding: 0;
   }
@@ -164,6 +181,20 @@ const { page } = Astro.props
     justify-content: space-between;
     align-items: center;
     gap: var(--space-xs);
+  }
+
+  header h1 {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+
+  .locale-badge {
+    border: 1.5px solid;
+    padding-inline: 8px;
+    border-radius: var(--border-radius);
+    font-size: var(--step-0);
+    background-color: white;
   }
 
   @media screen and (max-width: 730px) {
@@ -292,19 +323,9 @@ const { page } = Astro.props
     opacity: 0.8;
   }
 
-  .postlist-es {
-    display: flex;
-    align-items: start;
-    gap: var(--space-2xs);
-  }
-
-  .postlist-lang {
-    border: 1.5px solid;
-    padding-inline: 4px;
-    border-radius: var(--border-radius);
-    font-size: var(--step--1);
-    background-color: white;
-    margin-block-start: var(--space-3xs);
-    text-decoration: none;
+  .no-posts {
+    text-align: center;
+    padding: var(--space-xl);
+    color: var(--color-text-muted);
   }
 </style>
