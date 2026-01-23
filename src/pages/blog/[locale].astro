@@ -14,15 +14,15 @@ export const getStaticPaths: GetStaticPaths = async () => {
     blogEntries
       .map(entry => entry.data.lang)
       .filter((lang): lang is string => Boolean(lang))
-  )]
+  )].sort()
   
   return locales.map(locale => ({
     params: { locale },
-    props: { locale }
+    props: { locale, availableLocales: locales }
   }))
 }
 
-const { locale } = Astro.props
+const { locale, availableLocales } = Astro.props
 
 // Get blog entries filtered by locale
 const localeEntries = (await getCollection('blog', ({ data }) => {
@@ -82,7 +82,27 @@ const localeName = localeNames[locale] || locale.toUpperCase()
         </li>
       </ol>
       <header>
-        <h1>Engineering Blog <span class="locale-badge">{locale.toUpperCase()}</span></h1>
+        <div class="header-title">
+          <h1>Engineering Blog</h1>
+          <div class="language-switcher">
+            <button class="language-switcher__toggle" aria-expanded="false" aria-haspopup="true">
+              {locale.toUpperCase()}
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <ul class="language-switcher__menu">
+              <li><a href="/blog">EN - English</a></li>
+              {availableLocales.map((loc: string) => (
+                <li>
+                  <a href={`/blog/${loc}`} class={loc === locale ? 'active' : ''}>
+                    {loc.toUpperCase()} - {localeNames[loc] || loc}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
         <a class="cta__blog" href="/blog">
           <p>View all posts</p>
           <img
@@ -183,24 +203,96 @@ const localeName = localeNames[locale] || locale.toUpperCase()
     gap: var(--space-xs);
   }
 
-  header h1 {
+  .header-title {
     display: flex;
     align-items: center;
-    gap: var(--space-xs);
+    gap: var(--space-s);
   }
 
-  .locale-badge {
-    border: 1.5px solid;
-    padding-inline: 8px;
-    border-radius: var(--border-radius);
-    font-size: var(--step-0);
+  .header-title h1 {
+    margin: 0;
+  }
+
+  /* Language Switcher */
+  .language-switcher {
+    position: relative;
+  }
+
+  .language-switcher__toggle {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
     background-color: white;
+    border: 1.5px solid currentColor;
+    border-radius: var(--border-radius);
+    font-size: var(--step--1);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 200ms ease;
+  }
+
+  .language-switcher__toggle:hover {
+    background-color: #f5f5f5;
+  }
+
+  .language-switcher__menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 4px;
+    padding: 8px 0;
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    list-style: none;
+    min-width: 150px;
+    display: none;
+    z-index: 100;
+  }
+
+  .language-switcher.is-open .language-switcher__menu {
+    display: block;
+  }
+
+  .language-switcher__toggle svg {
+    transition: transform 200ms ease;
+  }
+
+  .language-switcher.is-open .language-switcher__toggle svg {
+    transform: rotate(180deg);
+  }
+
+  .language-switcher__menu li {
+    margin: 0;
+  }
+
+  .language-switcher__menu a {
+    display: block;
+    padding: 8px 16px;
+    color: inherit;
+    text-decoration: none;
+    font-size: var(--step--1);
+    transition: background-color 150ms ease;
+  }
+
+  .language-switcher__menu a:hover {
+    background-color: #f5f5f5;
+  }
+
+  .language-switcher__menu a.active {
+    font-weight: 600;
+    color: var(--color-primary);
   }
 
   @media screen and (max-width: 730px) {
     header {
       flex-direction: column;
       align-items: start;
+    }
+
+    .header-title {
+      flex-wrap: wrap;
     }
   }
 
@@ -329,3 +421,35 @@ const localeName = localeNames[locale] || locale.toUpperCase()
     color: var(--color-text-muted);
   }
 </style>
+
+<script>
+  // Language switcher toggle
+  document.addEventListener('DOMContentLoaded', () => {
+    const switcher = document.querySelector('.language-switcher');
+    const toggle = document.querySelector('.language-switcher__toggle');
+    
+    if (toggle && switcher) {
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        switcher.classList.toggle('is-open');
+        toggle.setAttribute('aria-expanded', switcher.classList.contains('is-open').toString());
+      });
+      
+      // Close on click outside
+      document.addEventListener('click', (e) => {
+        if (!switcher.contains(e.target as Node)) {
+          switcher.classList.remove('is-open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+      
+      // Close on escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          switcher.classList.remove('is-open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+  });
+</script>

@@ -7,18 +7,42 @@ import { createExcerpt } from '../../utils/create-excerpt'
 
 type Props = {
   page: Page
+  availableLocales: string[]
 }
 
 export const prerender = true
 
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
-  const blogEntries = (await getCollection('blog')).sort(
-    (a, b) => b.data.date.getTime() - a.data.date.getTime()
-  )
-  return paginate(blogEntries, { pageSize: 10 })
+  // Get all blog entries to determine available locales
+  const allEntries = await getCollection('blog')
+  
+  // Get unique locales for the language switcher
+  const availableLocales = [...new Set(
+    allEntries
+      .map(entry => entry.data.lang)
+      .filter((lang): lang is string => Boolean(lang))
+  )].sort()
+  
+  // Filter to English-only posts (posts without lang field)
+  const englishEntries = allEntries
+    .filter(entry => !entry.data.lang)
+    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  
+  return paginate(englishEntries, { 
+    pageSize: 10,
+    props: { availableLocales }
+  })
 }
 
-const { page } = Astro.props
+const { page, availableLocales } = Astro.props
+
+// Locale display names
+const localeNames: Record<string, string> = {
+  es: 'Español',
+  fr: 'Français',
+  de: 'Deutsch',
+  zh: '中文'
+}
 ---
 
 <BaseLayout
@@ -49,7 +73,29 @@ const { page } = Astro.props
         </li>
       </ol>
       <header>
-        <h1>Engineering Blog</h1>
+        <div class="header-title">
+          <h1>Engineering Blog</h1>
+          {availableLocales.length > 0 && (
+            <div class="language-switcher">
+              <button class="language-switcher__toggle" aria-expanded="false" aria-haspopup="true">
+                EN
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                  <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <ul class="language-switcher__menu">
+                <li><a href="/blog" class="active">EN - English</a></li>
+                {availableLocales.map(locale => (
+                  <li>
+                    <a href={`/blog/${locale}`}>
+                      {locale.toUpperCase()} - {localeNames[locale] || locale}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
         <a class="cta__blog" href="/blog">
           <p>Check out Foundation updates</p>
           <img
@@ -77,30 +123,14 @@ const { page } = Astro.props
                   )}
                 </div>
                 <div class="postlist-content">
-                  {blogPostEntry.data.lang ? (
-                    <div class="postlist-es">
-                      <h2>
-                        <a
-                          href={`/blog/${blogPostEntry.id}`}
-                          class="postlist-link"
-                        >
-                          {blogPostEntry.data.title}
-                        </a>
-                      </h2>
-                      <a class="postlist-lang" href={`/blog/${blogPostEntry.data.lang}`}>
-                        {blogPostEntry.data.lang.toUpperCase()}
-                      </a>
-                    </div>
-                  ) : (
-                    <h2>
-                      <a
-                        href={`/blog/${blogPostEntry.id}`}
-                        class="postlist-link"
-                      >
-                        {blogPostEntry.data.title}
-                      </a>
-                    </h2>
-                  )}
+                  <h2>
+                    <a
+                      href={`/blog/${blogPostEntry.id}`}
+                      class="postlist-link"
+                    >
+                      {blogPostEntry.data.title}
+                    </a>
+                  </h2>
                   <time
                     class="postlist-date"
                     datetime={blogPostEntry.data.date.toISOString()}
@@ -166,10 +196,96 @@ const { page } = Astro.props
     gap: var(--space-xs);
   }
 
+  .header-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-s);
+  }
+
+  .header-title h1 {
+    margin: 0;
+  }
+
+  /* Language Switcher */
+  .language-switcher {
+    position: relative;
+  }
+
+  .language-switcher__toggle {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    background-color: white;
+    border: 1.5px solid currentColor;
+    border-radius: var(--border-radius);
+    font-size: var(--step--1);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 200ms ease;
+  }
+
+  .language-switcher__toggle:hover {
+    background-color: #f5f5f5;
+  }
+
+  .language-switcher__menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 4px;
+    padding: 8px 0;
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    list-style: none;
+    min-width: 150px;
+    display: none;
+    z-index: 100;
+  }
+
+  .language-switcher.is-open .language-switcher__menu {
+    display: block;
+  }
+
+  .language-switcher__toggle svg {
+    transition: transform 200ms ease;
+  }
+
+  .language-switcher.is-open .language-switcher__toggle svg {
+    transform: rotate(180deg);
+  }
+
+  .language-switcher__menu li {
+    margin: 0;
+  }
+
+  .language-switcher__menu a {
+    display: block;
+    padding: 8px 16px;
+    color: inherit;
+    text-decoration: none;
+    font-size: var(--step--1);
+    transition: background-color 150ms ease;
+  }
+
+  .language-switcher__menu a:hover {
+    background-color: #f5f5f5;
+  }
+
+  .language-switcher__menu a.active {
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+
   @media screen and (max-width: 730px) {
     header {
       flex-direction: column;
       align-items: start;
+    }
+
+    .header-title {
+      flex-wrap: wrap;
     }
   }
 
@@ -291,20 +407,36 @@ const { page } = Astro.props
   .postlist-readmore:hover {
     opacity: 0.8;
   }
-
-  .postlist-es {
-    display: flex;
-    align-items: start;
-    gap: var(--space-2xs);
-  }
-
-  .postlist-lang {
-    border: 1.5px solid;
-    padding-inline: 4px;
-    border-radius: var(--border-radius);
-    font-size: var(--step--1);
-    background-color: white;
-    margin-block-start: var(--space-3xs);
-    text-decoration: none;
-  }
 </style>
+
+<script>
+  // Language switcher toggle
+  document.addEventListener('DOMContentLoaded', () => {
+    const switcher = document.querySelector('.language-switcher');
+    const toggle = document.querySelector('.language-switcher__toggle');
+    
+    if (toggle && switcher) {
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        switcher.classList.toggle('is-open');
+        toggle.setAttribute('aria-expanded', switcher.classList.contains('is-open').toString());
+      });
+      
+      // Close on click outside
+      document.addEventListener('click', (e) => {
+        if (!switcher.contains(e.target as Node)) {
+          switcher.classList.remove('is-open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+      
+      // Close on escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          switcher.classList.remove('is-open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+  });
+</script>
