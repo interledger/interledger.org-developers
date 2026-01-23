@@ -37,7 +37,7 @@ This SDK makes it straightforward for Java teams to experiment with, prototype, 
 We've heard from our community: Java remains a powerhouse for enterprise-grade applications, especially in the fintech space where reliability, scalability, and security are paramount. The new Java SDK addresses this by offering:
 
 - **Native Java feel**: Fluent APIs, builders, and strong typing.
-- **Simplified complexity**: Handles GNAP grant flows, HTTP signing (EdDSA) and nonce management.
+- **Simplified complexity**: Handles GNAP grant flows, HTTP signature support (Ed25519) and nonce management.
 - **Minimal boilerplate**: No more manual JSON handling or signature calculations for every request.
 
 While building the Java SDK for Interledger's Open Payments, we ran into two main challenges.
