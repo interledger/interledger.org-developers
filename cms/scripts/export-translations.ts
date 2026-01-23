@@ -48,7 +48,18 @@ interface StrapiResponse {
   data?: BlogPost[]
 }
 
-function generateMDX(post: BlogPost): string {
+interface Locale {
+  id: number
+  name: string
+  code: string
+  isDefault: boolean
+}
+
+interface LocalesResponse {
+  data?: Locale[]
+}
+
+function generateMDX(post: BlogPost, locale?: string): string {
   const imageUrl = post.featuredImage?.url
 
   const frontmatterLines = [
@@ -59,7 +70,8 @@ function generateMDX(post: BlogPost): string {
       : undefined,
     `date: ${formatDate(post.date)}`,
     `slug: ${post.slug}`,
-    imageUrl ? `image: "${escapeQuotes(imageUrl)}"` : undefined
+    imageUrl ? `image: "${escapeQuotes(imageUrl)}"` : undefined,
+    locale ? `lang: "${escapeQuotes(locale)}"` : undefined
   ].filter(Boolean) as string[]
 
   const frontmatter = frontmatterLines.join('\n')
@@ -68,10 +80,48 @@ function generateMDX(post: BlogPost): string {
   return `---\n${frontmatter}\n---\n\n${content}\n`
 }
 
-function generateFilename(post: BlogPost): string {
+function generateFilename(post: BlogPost, locale?: string): string {
   const date = formatDate(post.date)
   const prefix = date ? `${date}-` : ''
-  return `${prefix}${post.slug}.mdx`
+  const langSuffix = locale ? `.${locale}` : ''
+  return `${prefix}${post.slug}${langSuffix}.mdx`
+}
+
+async function fetchLocales(): Promise<string[]> {
+  try {
+    const response = await fetch(`${STRAPI_URL}/api/i18n/locales`, {
+      headers: {
+        Authorization: `Bearer ${STRAPI_API_TOKEN}`
+      }
+    })
+
+    if (!response.ok) {
+      console.warn('⚠️  Could not fetch locales from Strapi, using default set')
+      return ['es', 'zh', 'de', 'fr']
+    }
+
+    const data = await response.json()
+    console.log('Locales API response:', data)
+    let localeCodes: string[] = []
+    if (Array.isArray(data)) {
+      localeCodes = data
+        .map((locale: Locale) => locale.code)
+        .filter((code) => code !== 'en')
+    } else {
+      const responseData = data as LocalesResponse
+      localeCodes =
+        responseData.data
+          ?.map((locale) => locale.code)
+          .filter((code) => code !== 'en') || []
+    }
+    return localeCodes.length > 0 ? localeCodes : ['es', 'zh', 'de', 'fr']
+  } catch (error) {
+    console.warn(
+      '⚠️  Error fetching locales, using default set:',
+      (error as Error).message
+    )
+    return ['es', 'zh', 'de', 'fr']
+  }
 }
 
 async function fetchBlogPosts(): Promise<BlogPost[]> {
@@ -100,6 +150,11 @@ async function fetchBlogPosts(): Promise<BlogPost[]> {
 async function exportTranslations(): Promise<void> {
   console.log('🚀 Starting translation export...')
 
+  const locales = await fetchLocales()
+  console.log(
+    `📍 Found ${locales.length} locales for translation: ${locales.join(', ')}`
+  )
+
   const posts = await fetchBlogPosts()
   if (posts.length === 0) {
     console.log('ℹ️  No published blog posts found to export')
@@ -114,12 +169,23 @@ async function exportTranslations(): Promise<void> {
 
   for (const post of posts) {
     try {
+      // Export English version
       const filename = generateFilename(post)
       const filepath = path.join(EXPORTS_DIR, filename)
       const mdxContent = generateMDX(post)
 
       fs.writeFileSync(filepath, mdxContent, 'utf-8')
       console.log(`✅ Exported: ${filename}`)
+
+      // Export localized versions for translation
+      for (const locale of locales) {
+        const localizedFilename = generateFilename(post, locale)
+        const localizedFilepath = path.join(EXPORTS_DIR, localizedFilename)
+        const localizedMdxContent = generateMDX(post, locale)
+
+        fs.writeFileSync(localizedFilepath, localizedMdxContent, 'utf-8')
+        console.log(`✅ Exported: ${localizedFilename}`)
+      }
     } catch (error) {
       console.error(
         `❌ Failed to export post "${post.title}":`,
@@ -129,8 +195,12 @@ async function exportTranslations(): Promise<void> {
     }
   }
 
+  const totalFiles = posts.length * (1 + locales.length)
+  const successFiles =
+    (posts.length - failedExports.length) * (1 + locales.length)
+
   console.log(
-    `\n✨ Export complete! ${posts.length - failedExports.length}/${posts.length} posts exported to ${EXPORTS_DIR}`
+    `\n✨ Export complete! ${successFiles}/${totalFiles} files exported to ${EXPORTS_DIR} (${posts.length} posts × ${1 + locales.length} locales)`
   )
 
   if (failedExports.length > 0) {
