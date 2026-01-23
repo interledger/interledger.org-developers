@@ -134,6 +134,15 @@ function generateMDX(post: BlogPost): string {
 }
 
 async function writeMDXFile(post: BlogPost): Promise<void> {
+  // Populate the featuredImage to get the URL
+  const populatedPost = await strapi.entityService.findOne(
+    'api::blog-post.blog-post',
+    post.id,
+    {
+      populate: ['featuredImage']
+    }
+  )
+
   const outputPath = process.env.BLOG_MDX_OUTPUT_PATH || '../src/content/blog'
   // Resolve from dist/src/api/blog-post/content-types/blog-post/ up to cms root then project root
   const baseDir = path.resolve(__dirname, '../../../../../../', outputPath)
@@ -142,9 +151,9 @@ async function writeMDXFile(post: BlogPost): Promise<void> {
     fs.mkdirSync(baseDir, { recursive: true })
   }
 
-  const filename = generateFilename(post)
+  const filename = generateFilename(populatedPost as BlogPost)
   const filepath = path.join(baseDir, filename)
-  const mdxContent = generateMDX(post)
+  const mdxContent = generateMDX(populatedPost as BlogPost)
 
   fs.writeFileSync(filepath, mdxContent, 'utf-8')
   console.log(`✅ Generated Blog Post MDX file: ${filepath}`)
