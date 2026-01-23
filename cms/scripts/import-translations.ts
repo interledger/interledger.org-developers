@@ -39,13 +39,41 @@ interface StrapiBlogPost {
   lang: string
   publishedAt: string
   ogImageUrl?: string
-  featuredImage?: string
+  featuredImage?: { id: number }
+}
+
+interface FullPostAttributes {
+  title?: string
+  description?: string
+  date?: string
+  slug?: string
+  image?: string
+  ogImageUrl?: string
+  lang?: string
+  featuredImage?: {
+    data?: {
+      id: number
+    }
+  }
 }
 
 interface StrapiResponse {
   data?: Array<{
     id: number
     attributes: Frontmatter
+  }>
+}
+
+interface FullStrapiResponse {
+  data?: Array<{
+    id: number
+    slug: string
+    lang?: string
+    ogImageUrl?: string
+    featuredImage?: {
+      id: number
+      url: string
+    }
   }>
 }
 
@@ -147,6 +175,47 @@ async function checkExistingEntry(
   }
 }
 
+async function getEnglishPostImage(englishSlug: string): Promise<{
+  featuredImage?: number
+  ogImageUrl?: string
+  imageUrl?: string
+} | null> {
+  try {
+    const response = await fetch(
+      `${STRAPI_URL}/api/blog-posts?filters[slug][$eq]=${englishSlug}&populate=featuredImage`,
+      {
+        headers: {
+          Authorization: `Bearer ${STRAPI_API_TOKEN}`
+        }
+      }
+    )
+
+    if (!response.ok) {
+      return null
+    }
+
+    const data = (await response.json()) as FullStrapiResponse
+    console.log('Fetched data for English post:', data)
+    if (data.data && data.data.length > 0) {
+      const post = data.data[0]
+      console.log('English post slug:', post.slug, 'lang:', post.lang)
+      console.log('featuredImage object:', post.featuredImage)
+      return {
+        featuredImage: post.featuredImage?.id,
+        ogImageUrl: post.ogImageUrl,
+        imageUrl: post.featuredImage?.url
+      }
+    }
+    return null
+  } catch (error) {
+    console.error(
+      '❌ Error fetching English post image:',
+      (error as Error).message
+    )
+    return null
+  }
+}
+
 async function createBlogPost(postData: StrapiBlogPost): Promise<void> {
   try {
     const response = await fetch(`${STRAPI_URL}/api/blog-posts`, {
@@ -229,6 +298,18 @@ async function importTranslations(): Promise<void> {
         skippedImports.push({ file, reason: 'Entry already exists' })
         continue
       }
+
+      let englishImage: {
+        featuredImage?: number
+        ogImageUrl?: string
+        imageUrl?: string
+      } | null = null
+      if (lang !== 'en') {
+        const englishSlug = slug
+        englishImage = await getEnglishPostImage(englishSlug)
+        console.log(`English image for ${englishSlug}:`, englishImage)
+      }
+
       const postData: StrapiBlogPost = {
         title: frontmatter.title || slug,
         description: frontmatter.description || '',
@@ -239,21 +320,17 @@ async function importTranslations(): Promise<void> {
         publishedAt: new Date().toISOString()
       }
 
+      // Set ogImageUrl from frontmatter or English post
       if (frontmatter.ogImageUrl) {
         postData.ogImageUrl = frontmatter.ogImageUrl
+      } else if (englishImage?.ogImageUrl) {
+        postData.ogImageUrl = englishImage.ogImageUrl
       }
 
-      if (frontmatter.image) {
-        const imageValue = frontmatter.image
-        const numericId = imageValue.match(/^\d+$/)
-
-        if (numericId) {
-          postData.featuredImage = imageValue
-        } else {
-          console.log(
-            `   ⚠️  Warning: Skipping featuredImage - invalid format (expected numeric ID, got path string)`
-          )
-        }
+      // Set featuredImage from English post for translated content
+      if (englishImage?.featuredImage) {
+        postData.featuredImage = { id: englishImage.featuredImage }
+        console.log(`Setting featuredImage to ${englishImage.featuredImage}`)
       }
 
       await createBlogPost(postData)
