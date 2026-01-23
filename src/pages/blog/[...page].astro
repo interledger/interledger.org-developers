@@ -125,7 +125,7 @@ const localeNames: Record<string, string> = {
                 <div class="postlist-content">
                   <h2>
                     <a
-                      href={`/blog/${blogPostEntry.id}`}
+                      href={`/blog/${blogPostEntry.data.slug}`}
                       class="postlist-link"
                     >
                       {blogPostEntry.data.title}
@@ -142,7 +142,7 @@ const localeNames: Record<string, string> = {
                       ? blogPostEntry.data.description
                       : excerpt}
                   </p>
-                  <a href={`/blog/${blogPostEntry.id}`} class="postlist-readmore">
+                  <a href={`/blog/${blogPostEntry.data.slug}`} class="postlist-readmore">
                     Read more →
                   </a>
                 </div>

@@ -134,7 +134,7 @@ const localeName = localeNames[locale] || locale.toUpperCase()
                 <div class="postlist-content">
                   <h2>
                     <a
-                      href={`/blog/${blogPostEntry.id}`}
+                      href={`/blog/${locale}/${blogPostEntry.data.slug}`}
                       class="postlist-link"
                     >
                       {blogPostEntry.data.title}
@@ -151,7 +151,7 @@ const localeName = localeNames[locale] || locale.toUpperCase()
                       ? blogPostEntry.data.description
                       : excerpt}
                   </p>
-                  <a href={`/blog/${blogPostEntry.id}`} class="postlist-readmore">
+                  <a href={`/blog/${locale}/${blogPostEntry.data.slug}`} class="postlist-readmore">
                     Read more →
                   </a>
                 </div>
