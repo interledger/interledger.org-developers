@@ -54,7 +54,7 @@ This post is a walkthrough of that exploration - not a final specification, but 
 ## Starting Point: Should you build a Kernel?
 
 In the world of card payments, a **kernel** is the core software component within a POS terminal that manages the complex interaction between the payment card (the chip) and the terminal. It handles the EMV protocol logic, data-exchange, and cryptographic processing required to authorize a transaction.
-Essentially, it's the "brain" that knows how to speak "chip card" securely and according to global standards.
+Essentially, it is the "brain" that knows how to speak "chip card" securely and according to global standards.
 
 With the kernel being the “brain” of the POS, it quickly became clear that our first major design decision would revolve around which kernel approach to build on.
 The earliest and most important decisions came out of conversations with our first POS (Point of Sale) manufacturing partner, who provides both the EMV kernel and a significant portion of the overall payment software stack running on the device.
@@ -233,7 +233,7 @@ This is where the ILP terminal key issued during onboarding finally comes into p
 The POS:
 
 1. Assembles transaction data
-2. References the card's wallet address (Customer ASE)
+2. References the cards wallet address (Customer ASE)
 3. Signs the request with its ILP key (Merchant ASE)
 4. Sends it to the Customer and Merchant ASE
 
@@ -283,8 +283,8 @@ Interledger simply becomes the connective tissue that lets value move beyond tra
 ## What is next for ILF and Cards?
 
 - Further development of the Card applet for `C2` kernel support
-- Further development of the Rafiki SDK to support the new POS/Card services
-- New Merchant-API service to support ASE's with regards to:
+- Further development of the Rafiki APIs to support the new POS/Card services
+- New Merchant-API service to support ASEs with regards to:
   - Merchant onboarding
   - Terminal configuration and onboarding
   - Merchant management
