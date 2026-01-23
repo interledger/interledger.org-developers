@@ -15,21 +15,11 @@ tags:
 
 As adoption of Open Payments grows within the Interledger ecosystem, developers are building innovative solutions, enabling truly global, frictionless value transfer.
 
-A significant portion of enterprise-grade backend services, financial platforms, and scalable applications are powered by Java. Developers in these environments have long sought a native, idiomatic way to integrate Open Payments without the overhead of language bridges or manual HTTP management.
+A significant portion of enterprise-grade backend services, financial platforms, and scalable applications are powered by Java. Now, we are bringing Open Payments support to these developers through a native, idiomatic library that eliminates the need for manual HTTP management.
 
 ## Introducing Java SDK for Open Payments
 
 We're excited to announce the release of the [**Java SDK for Open Payments**](https://github.com/interledger/open-payments-java)\! This new SDK brings robust, type-safe support directly to the Java world, making it easier than ever for Java developers to harness the full potential of interoperable payments.
-
-## Why We Built the Java SDK
-
-We've heard from our community: Java remains a powerhouse for enterprise-grade applications, especially in the fintech space where reliability, scalability, and security are paramount. The new Java SDK addresses this by offering:
-
-- **Native Java feel**: Fluent APIs, builders, and strong typing.
-- **Simplified complexity**: Handles GNAP grant flows, HTTP signing (EdDSA), nonce management, and interactive continuations automatically.
-- **Minimal boilerplate**: No more manual JSON handling or signature calculations for every request.
-
-It lets you focus on building innovative payment features while writing clean, maintainable Java code.
 
 ## Open Payments and the Java Ecosystem
 
@@ -38,20 +28,34 @@ Java continues to power the majority of enterprise software, especially in secto
 - **Reduced integration costs**: Connect to a global, protocol-agnostic payment network without maintaining dozens of provider-specific integrations.
 - **Improved resilience and reach**: Leverage Interledger's interoperability to access new markets and payment rails while avoiding single-provider risk.
 - **Enterprise-ready tooling alignment**: Integrate seamlessly with familiar frameworks like Spring Boot, Quarkus, or Micronaut, and existing security/compliance workflows.
-- **Faster innovation**: Enable use cases such as cross-border B2B transfers, automated treasury management, real-time reconciliations, and next-generation fintech products—all within established Java ecosystems.
+- **Faster innovation**: Enable use cases such as cross-border B2B transfers, automated treasury management, real-time reconciliations, and next-generation fintech products, all within established Java ecosystems.
 
-This SDK makes it straightforward for Java teams to experiment with, prototype, and deploy Interledger-based payments in production.
+This SDK makes it straightforward for Java teams to experiment with, prototype, and deploy Open Payments-based payments in production.
+
+## Why We Built the Java SDK
+
+We've heard from our community: Java remains a powerhouse for enterprise-grade applications, especially in the fintech space where reliability, scalability, and security are paramount. The new Java SDK addresses this by offering:
+
+- **Native Java feel**: Fluent APIs, builders, and strong typing.
+- **Simplified complexity**: Handles GNAP grant flows, HTTP signing (EdDSA) and nonce management.
+- **Minimal boilerplate**: No more manual JSON handling or signature calculations for every request.
+
+While building the Java SDK for Interledger's Open Payments, we ran into two main challenges.
+
+First, the OpenAPI specification did not work well with Java code generators. The generated Java code was cluttered — with unnecessary wrappers and structures that did not respect typical Java idioms and readability standards. Instead of trying to fix generated code with extra scripts or keeping the output, we chose to write the entire client layer by hand. This gave us a lightweight, focused library with full alignment to Java's conventions.
+
+We also faced JSON handling issues that default Java libraries couldn't manage well. Open Payments models include special cases like RFC 3339 timestamp (`Instant`), ordered set (needing preserved insertion order of `Set`), and `Client` model. To fix this, we wrote custom serializers to ensure exact spec compliance.
 
 ## Key Features
 
 The SDK supports core Open Payments functionality:
 
-- Complete support for managing Open Payments operations (grants, incoming and outgoing payments, obtaining quotes and token).
+- Complete support for managing Open Payments operations (grants, incoming and outgoing payments, quotes and tokens).
 - Full error handling and validation.
-- Configurable HTTP clients.
+- Configurable HTTP client, such as connection, read timeout and transaction expiration durations.
 - Examples for common flows.
 - Comprehensive models and Javadoc.
-- Unit tests for core logic and integration tests verifying end-to-end flows.
+- Unit tests for core logic and integration tests verifying end-to-end flows (against the Interledger Test Wallet)
 
 ## Getting Started
 
@@ -61,7 +65,7 @@ The library is available on Maven Central and adding it to your project is strai
 <dependency>
     <groupId>org.interledger</groupId>
     <artifactId>open-payments</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
@@ -81,8 +85,8 @@ IOpenPaymentsClient client = OpenPaymentsHttpClient.defaultClient(
 var receiverWallet = client.getWalletAddress("https://cloudninebank.example.com/merchant");
 
 // Create incoming payment:
-var grantRequest = this.client.createGrantIncomingPayment(receiverWallet);
-var incomingPayment = this.client.createIncomingPayment(receiverWallet, grantRequest, BigDecimal.valueOf(11.25));
+var grantRequest = client.createGrantIncomingPayment(receiverWallet);
+var incomingPayment = client.createIncomingPayment(receiverWallet, grantRequest, BigDecimal.valueOf(11.25));
 
 ```
 
@@ -101,4 +105,4 @@ The SDK is thoughtfully organized into packages for better modularity and mainta
 
 ## Get Coding\!
 
-Give the Java SDK a spin in your project. Try it out, break it, and let us know what you think via GitHub or the Interledger community channels. Your feedback will shape where this goes next!
+Give the Java SDK a spin in your project. Try it out and let us know what you think via GitHub or the Interledger Slack community channels. Your feedback will shape where this goes next!
