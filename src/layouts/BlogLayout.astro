@@ -1,7 +1,16 @@
 ---
 import BaseLayout from './BaseLayout.astro'
+import {
+  getLangFromUrl,
+  useTranslations,
+  useTranslatedPath
+} from '../i18n/utils'
 
 const { frontmatter } = Astro.props
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+const translatePath = useTranslatedPath(lang, lang)
 
 const dateObj = new Date(frontmatter.date)
 const isoDate = dateObj.toISOString().slice(0, 10)
@@ -36,10 +45,10 @@ const rawHTMLString = `This article was originally published at <a href=${frontm
         >
           <a
             itemprop="item"
-            href="/developers"
+            href={translatePath('/developers')}
             data-umami-event="Devs breadcrumb - Home"
           >
-            <span itemprop="name">Developers Portal</span></a
+            <span itemprop="name">{t('nav.developers')}</span></a
           >
           <meta itemprop="position" content="1" />
         </li>
@@ -50,32 +59,19 @@ const rawHTMLString = `This article was originally published at <a href=${frontm
         >
           <a
             itemprop="item"
-            href="/developers/blog"
+            href={translatePath('/developers/blog')}
             data-umami-event="Devs breadcrumb - Blog"
           >
-            <span itemprop="name">Engineering Blog</span></a
+            <span itemprop="name">{t('blog.tech-blog-title')}</span></a
           >
           <meta itemprop="position" content="2" />
-          {
-            frontmatter.lang && (
-              <>
-                <span>|</span>
-                <a
-                  itemprop="item"
-                  href="/developers/blog/es"
-                  data-umami-event="Devs breadcrumb - ES blogs"
-                >
-                  <span itemprop="name">Blog de Ingeniería</span>
-                </a>
-              </>
-            )
-          }
         </li>
       </ol>
       <h1>{frontmatter.title}</h1>
       <time datetime={isoDate} itemprop="datePublished">{longDate}</time>
       <address>
-        Written by {
+        {t('blog.written-by')}
+        {
           frontmatter.authors.map((author: string, index: number) => (
             <span>
               {frontmatter.author_urls[index] ? (

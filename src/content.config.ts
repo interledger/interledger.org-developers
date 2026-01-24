@@ -9,10 +9,20 @@ const blogCollection = defineCollection({
     title: z.string(),
     description: z.string(),
     slug: z.string(),
+    lang: z.string(),
     date: z.date(),
-    lang: z.string().optional(),
     image: z.string().optional(),
-    tags: z.array(z.string()),
+    tags: z.array(
+      z.enum([
+        'Interledger Protocol',
+        'Open Payments',
+        'Rafiki',
+        'Releases',
+        'Updates',
+        'Web Monetization'
+        // Please add a matching translation in i18n/ui.ts for any new tag
+      ])
+    ),
     authors: z.array(z.string()),
     author_urls: z.array(z.string())
   })

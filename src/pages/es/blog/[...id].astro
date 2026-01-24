@@ -1,17 +1,18 @@
 ---
 import { getCollection, render } from 'astro:content'
-import CommunityLinks from '../../components/blog/CommunityLinks.astro'
-import BlogLayout from '../../layouts/BlogLayout.astro'
+import BlogLayout from '../../../layouts/BlogLayout.astro'
+import CommunityLinks from '../../../components/blog/CommunityLinks.astro'
+import { defaultLang } from '../../../i18n/ui'
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('blog')
-  const defaultLang = 'en'
+  const defaultLanguage = defaultLang
 
   return blogEntries
-    .filter((entry) => entry.data.lang === defaultLang)
+    .filter((entry) => entry.data.lang !== defaultLanguage) // handle the case of missing data? or is that done automatically?
     .map((entry) => {
       return {
-        params: { id: entry.id },
+        params: { id: entry.id, lang: entry.data.lang },
         props: { entry }
       }
     })

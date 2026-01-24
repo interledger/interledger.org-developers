@@ -1,32 +1,39 @@
 ---
-import { getTagUrl } from '../../utils/tag-url'
+import { useTranslations } from '../../i18n/utils'
+import { defaultLang } from '../../i18n/ui'
+import type { LanguageKey } from '../../i18n/ui'
+import { getTagSlug, getTagUrl } from '../../utils/tag-url'
 
 interface Props {
+  lang: LanguageKey
   allTags: string[]
   selectedTag?: string
 }
 
-const { allTags, selectedTag } = Astro.props
+const { lang, allTags, selectedTag } = Astro.props
+const t = useTranslations(lang)
 ---
 
 <div class="tag-filter">
-  <div class="tag-filter-label">Filter by tag:</div>
+  <div class="tag-filter-label">{t('blog.filter')}:</div>
   <div class="tag-filter-buttons">
     <a
-      href="/developers/blog"
+      href={lang === defaultLang
+        ? '/developers/blog'
+        : `/developers/${lang}/blog`}
       class:list={['tag-button', { active: !selectedTag }]}
       data-umami-event="Blog tag filter - All"
     >
-      All
+      {t('tag.all')}
     </a>
     {
       allTags.map((tag) => (
         <a
-          href={getTagUrl(tag)}
+          href={getTagUrl(tag, lang)}
           class:list={['tag-button', { active: selectedTag === tag }]}
           data-umami-event={`Blog tag filter - ${tag}`}
         >
-          {tag}
+          {t(`tag.${getTagSlug(tag)}`)}
         </a>
       ))
     }

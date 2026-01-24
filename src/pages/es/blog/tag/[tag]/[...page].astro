@@ -1,0 +1,88 @@
+---
+import type { GetStaticPaths, Page } from 'astro'
+import { getTagSlug } from '../../../../../utils/tag-url'
+import BaseLayout from '../../../../../layouts/BaseLayout.astro'
+import BlogIndex from '../../../../../components/blog/BlogIndex.astro'
+import { getCollection } from 'astro:content'
+import { useTranslations, getLangFromUrl } from '../../../../../i18n/utils'
+type Props = {
+  page: Page
+  allTags: string[]
+  selectedTag: string
+}
+
+export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
+  const defaultLang = 'en'
+  const blogEntries = await getCollection('blog')
+
+  const allLangs = Array.from(
+    new Set(blogEntries.map((entry) => entry.data.lang))
+  )
+  const langs = allLangs.filter((lang) => lang !== defaultLang)
+  return langs.flatMap((lang) => {
+    const filteredPosts = blogEntries
+      .filter(
+        (entry) => entry.data.lang !== defaultLang && entry.data.lang === lang
+      )
+      .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+
+    // Collect all unique tags
+    const allTags = [
+      ...new Set(filteredPosts.flatMap((entry) => entry.data.tags))
+    ].sort()
+
+    // Create pages for each tag
+    return allTags.flatMap((tag) => {
+      const tagSlug = getTagSlug(tag)
+      const filteredEntries = filteredPosts.filter((entry) =>
+        entry.data.tags.includes(tag)
+      )
+      return paginate(filteredEntries, {
+        params: { tag: tagSlug, lang: lang },
+        pageSize: 10,
+        props: { allTags, selectedTag: tag }
+      })
+    })
+  })
+}
+
+const { page, allTags, selectedTag } = Astro.props
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+---
+
+<BaseLayout
+  title={`Engineering Blog - ${selectedTag}`}
+  description={`Blog posts tagged with ${selectedTag}`}
+  ogImageUrl={new URL('/developers/img/blog/og-image.png', Astro.site).href}
+>
+  <BlogIndex
+    title={t('blog.tech-blog-title')}
+    posts={page.data || []}
+    lang={lang}
+    breadcrumbs={[
+      {
+        name: t('nav.developers'),
+        href: `/developers/${lang}`,
+        umamiEvent: 'Devs breadcrumb - Home'
+      },
+      {
+        name: t('blog.tech-blog-title'),
+        href: `/developers/${lang}/blog`,
+        umamiEvent: 'Devs breadcrumb - Blog'
+      }
+    ]}
+    allTags={allTags}
+    selectedTag={selectedTag}
+    showTagFilter={true}
+    showPagination={true}
+    paginationProps={{
+      length: page.lastPage,
+      currentPage: page.currentPage,
+      firstUrl: page.url.first,
+      prevUrl: page.url.prev,
+      nextUrl: page.url.next,
+      lastUrl: page.url.last
+    }}
+  />
+</BaseLayout>

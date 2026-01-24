@@ -1,4 +1,8 @@
 ---
+import { getLangFromUrl, useTranslations } from '../../i18n/utils'
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
 const currentYear = new Date().getFullYear()
 ---
 
@@ -37,7 +41,9 @@ const currentYear = new Date().getFullYear()
       >
     </li>
   </ul>
-  <p>&copy; 2020–{currentYear}, Interledger Foundation</p>
+  <p>
+    &copy; 2020–{currentYear}, Interledger Foundation. {t('footer.copyright')}
+  </p>
 </footer>
 
 <style>
