@@ -2,7 +2,7 @@
 import type { GetStaticPaths, Page } from 'astro'
 import BaseLayout from '../../../layouts/BaseLayout.astro'
 import { getCollection } from 'astro:content'
-import { useTranslations, getLangFromUrl } from '../../../i18n/utils'
+import { useTranslations, getLangFromUrl } from '../../../i18n/utils' // You're here, you already know thisn is ES, can you set this as a var higher up somehow?
 import BlogIndex from '../../../components/blog/BlogIndex.astro'
 
 type Props = {

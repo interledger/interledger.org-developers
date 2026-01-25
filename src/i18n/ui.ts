@@ -16,6 +16,7 @@ export const languages: Record<LanguageKey, string> = {
 
 export const defaultLang: LanguageKey = 'en'
 
+// This feels odd - Use is very unclear as well in utils.ts and needs clean up
 export const routes: LanguageRoutes = {
   en: {
     'interledger-universe': 'interledger-universe'
