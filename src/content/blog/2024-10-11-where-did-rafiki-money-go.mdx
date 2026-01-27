@@ -3,6 +3,7 @@ title: "Where did rafiki.money go?"
 description: "Or “The need for rebranding when something confuses people.”"
 date: 2024-10-11
 slug: where-did-rafiki-money-go
+locale: "en"
 ---
 
 In the past few months we have come to know and love rafiki.money. So why did it disappear? Where did it go?
@@ -43,8 +44,6 @@ Upon finalizing the visuals with our in-house illustrator, [Madalina Tantareanu]
 
 We were also able to account for designing the interactions, like hover states, which commonly get missed out if a static design file is used.
 
-
-
 ## Challenges we faced, interesting stuff we used
 
 
@@ -66,22 +65,14 @@ Codewise it is quite easy, just throw a dark: in front of any color utility to a
 The production/light mode, and development/dark mode will look like this:
 
 
-
-
 ![Login page for redesigned Test Wallet in light mode](/developers/img/blog/2024-10-11/test-wallet-light.png)
 
 ![Login page for redesigned Test Wallet in dark mode](/developers/img/blog/2024-10-11/test-wallet-dark.png)
 
 
-
-
-
-
 ![Login page for redesigned Test Boutique in light mode](/developers/img/blog/2024-10-11/test-boutique-light.png)
 
 ![Login page for redesigned Test Boutique in dark mode](/developers/img/blog/2024-10-11/test-boutique-dark.png)
-
-
 
 Another great thing about Tailwind is that it’s tiny. It automatically removes unused CSS when building for production, so the final shipped CSS bundle is the smallest it could possibly be. It is, of course, responsive on all devices. The utility classes help us work within the constraints of a system instead of adding arbitrary values to the stylesheets. They make it easy to be consistent with color choices, spacing, typography, shadows, and everything else that make up a well-engineered design-system.
 

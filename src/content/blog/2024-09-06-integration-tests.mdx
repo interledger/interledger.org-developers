@@ -3,6 +3,7 @@ title: "Leveling Up Rafiki Testing: Shifting from Manual to Automated"
 description: "How we automated our manual payment flow tests."
 date: 2024-09-06
 slug: integration-tests
+locale: "en"
 ---
 
 import LargeImg from '/src/components/blog/LargeImg.astro'
@@ -159,8 +160,6 @@ To ensure functionality of these critical payment flows as our codebase evolves,
 Running tests from the host machine against services in Docker posed a problem with respect to URLs. We needed to use URLs that worked from both the host machine and from within our Docker services. From the host machine, we could reach a Docker container by referencing the exposed port on `localhost`, while in the Docker network, we needed to use the hostname derived from the Docker container name. For example, from the host machine we would get the `gfranklin` wallet address via `localhost:3100/accounts/gfranklin`. But from within Docker the URL should be `http://cloud-nine-wallet-test-backend/accounts/gfranklin` instead. To resolve this we used [hostile](https://github.com/feross/hostile) to map `127.0.0.1` (`localhost`) to our Docker service hostnames (`cloud-nine-wallet-test-backend`, `happy-life-bank-test-backend`, etc.) in the start script. This allows us to use the same URL pattern everywhere.
 
 This sequence diagram illustrates how a request from the host machine resolves using the mapped hostnames.
-
-
 
 ## Conclusion
 

@@ -3,6 +3,7 @@ title: "Breaking Down Rafiki: What Makes Our Friend Tick"
 description: "A low-level introduction to the software packages that comprise Rafiki."
 date: 2024-09-23
 slug: rafiki-low-level-intro
+locale: "en"
 ---
 
 import LargeImg from '/src/components/blog/LargeImg.astro'
@@ -31,8 +32,6 @@ This article assumes the reader has high-level knowledge of the following concep
 This article also assumes that its readers already have high-level knowledge of [Rafiki](https://rafiki.dev/overview/overview/) itself, and that they understand on that level how it accomplishes being an Interledger node and an Open Payments server.
 
 ## Components
-
-
 
 
 
@@ -354,8 +353,6 @@ pnpm localenv:compose up
 ```
 
 With this environment live, the Admin GraphQL Endpoints can be demoed using [Bruno](https://www.usebruno.com/). [The Rafiki repository contains a collection](https://github.com/interledger/rafiki/tree/main/bruno/collections/Rafiki) which contains example calls for all of the GraphQL endpoints on both the `backend` and `auth` servers. It also contains calls for every Open Payments action and examples for certain flows in Open Payments.
-
-
 
 To help provide an idea of what integrating with Rafiki would be like, the local Docker environment also starts up two [Mock Accout Servicing Entities (Mock ASEs)](https://github.com/interledger/rafiki/tree/main/localenv/mock-account-servicing-entity) to represent integrators of Rafiki.
 

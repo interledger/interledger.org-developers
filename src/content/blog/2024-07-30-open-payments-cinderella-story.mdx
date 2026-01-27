@@ -3,6 +3,7 @@ title: "Open Payments: The Cinderella Story of Finding a Fitting Authorization M
 description: "A breakdown of the unique needs that an authorization method for Open Payments needs to be able to fulfill."
 date: 2024-07-30
 slug: open-payments-cinderella-story
+locale: "en"
 ---
 
 import LargeImg from '/src/components/blog/LargeImg.astro'
@@ -79,8 +80,6 @@ The client then redirects the user to a page on the identity provider with that 
 Once the user completes the flow on the identity provider, the authorization server gives the client a token which is used to communicate with an API on the resource server to retrieve the resource in question.
 
 Let’s collect this all into a nice sequence diagram.
-
-
 
 While extremely useful, OAuth 2.0 is best suited for delegating access to _information_. Sadly, when one is interested in delegating _control_, rather than access, the tradition of OAuth 2.0 begins to fall short. A typical OAuth 2.0 authorization is initialized when a third party client generates a link for a resource owner that contains, among other things, a “scope” value that contains a list of the items the authorization should grant access to. For example:
 
@@ -164,8 +163,6 @@ Host: wallet.example
 Now we’re getting messy again. It’s immediately clear how much noise is in the “authorization_details” query parameter, and in a more practical sense, there’s the added step of creating the mandate before a client can request authorization from a resource owner. We haven’t even gotten into the fact that a whole other object, a “charge”, needs to be created on the resource server in order to make use of the mandate. **It’s additional overhead for the resource server to maintain all of those mandates for a process that ideally should be handled entirely by the authorization server delegating access.**
 
 Compare this sequence diagram with the previous sequence diagram and the increased complexity. There’s more interaction with the resource server just to set up the authorization flow and more work after the flow in order to initiate the payment.
-
-
 
 ## A New Approach
 
@@ -339,8 +336,6 @@ All access delegation is kept within an authorization server, making accounting 
 There is a clear way to describe the parameters for a payment.
 
 For reference, we have a more tame sequence diagram with GNAP. It’s closer to the baseline set by the OAuth 2.0 sequence diagram and keeps the responsibilities of the resource server properly separated from the authorization flow at large.
-
-
 
 With this in mind, it’s clear that GNAP is best suited for sending payments via Open Payments. Though the spec is not officially final, progress is steady and the future looks promising - the specifications are well on their way to becoming a proper RFC. [The core protocol](https://datatracker.ietf.org/doc/draft-ietf-gnap-core-protocol/) was recently approved by the IESG and has entered the IESG editor’s queue. [The specification for resource servers](https://datatracker.ietf.org/doc/draft-ietf-gnap-resource-servers/) is also on the cusp of being submitted to the IESG for publication.
 
