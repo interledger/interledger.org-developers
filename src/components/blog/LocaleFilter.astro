@@ -1,0 +1,125 @@
+---
+// Client-side locale filter dropdown component
+---
+
+<div class="locale-filter">
+  <label for="locale-select" class="locale-filter-label">Filter by language:</label>
+  <select id="locale-select" class="locale-filter-select">
+    <option value="all">All Languages</option>
+    <option value="en">English</option>
+    <option value="es">Español</option>
+    <option value="de">Deutsch</option>
+  </select>
+</div>
+
+<script>
+  // Wait for DOM to be ready
+  function initLocaleFilter() {
+    // Get all blog post items
+    const postList = document.querySelector('.postlist');
+    if (!postList) {
+      // Retry if DOM not ready yet
+      setTimeout(initLocaleFilter, 100);
+      return;
+    }
+
+    const posts = Array.from(postList.querySelectorAll('.postlist-item'));
+    const localeSelect = document.getElementById('locale-select');
+    
+    if (!localeSelect) {
+      setTimeout(initLocaleFilter, 100);
+      return;
+    }
+
+    if (posts.length === 0) {
+      return;
+    }
+
+    // Ensure all posts have data-locale attribute (should already be set by Astro)
+    posts.forEach(post => {
+      const locale = post.getAttribute('data-locale') || 'en';
+      post.setAttribute('data-locale', locale);
+    });
+
+    // Filter function
+    function filterPosts(selectedLocale) {
+      let visibleCount = 0;
+      posts.forEach(post => {
+        const postLocale = post.getAttribute('data-locale') || 'en';
+        const normalizedPostLocale = postLocale.split('-')[0]; // es-ES -> es
+        
+        if (selectedLocale === 'all' || normalizedPostLocale === selectedLocale) {
+          post.style.display = '';
+          visibleCount++;
+        } else {
+          post.style.display = 'none';
+        }
+      });
+      
+      // Update URL without reload
+      const url = new URL(window.location.href);
+      if (selectedLocale === 'all') {
+        url.searchParams.delete('locale');
+      } else {
+        url.searchParams.set('locale', selectedLocale);
+      }
+      window.history.replaceState({}, '', url.toString());
+    }
+
+    // Set initial value from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlLocale = urlParams.get('locale');
+    if (urlLocale && ['en', 'es', 'de'].includes(urlLocale)) {
+      localeSelect.value = urlLocale;
+      filterPosts(urlLocale);
+    }
+
+    // Listen for changes
+    localeSelect.addEventListener('change', function(e) {
+      const selectedLocale = e.target.value;
+      filterPosts(selectedLocale);
+    });
+  }
+
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLocaleFilter);
+  } else {
+    // DOM already ready, run immediately
+    initLocaleFilter();
+  }
+</script>
+
+<style>
+  .locale-filter {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    margin-bottom: var(--space-m);
+  }
+
+  .locale-filter-label {
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .locale-filter-select {
+    padding: var(--space-3xs) var(--space-2xs);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--border-radius);
+    background-color: white;
+    font-size: var(--step--1);
+    cursor: pointer;
+    transition: border-color 200ms ease-in-out;
+  }
+
+  .locale-filter-select:hover {
+    border-color: var(--color-primary);
+  }
+
+  .locale-filter-select:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+</style>

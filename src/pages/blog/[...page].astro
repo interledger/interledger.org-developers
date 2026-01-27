@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content'
 import type { GetStaticPaths, Page } from 'astro'
 import Pagination from '../../components/blog/Pagination.astro'
+import LocaleFilter from '../../components/blog/LocaleFilter.astro'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import { createExcerpt } from '../../utils/create-excerpt'
 
@@ -55,12 +56,16 @@ const { page } = Astro.props
           />
         </a>
       </header>
+      <LocaleFilter />
       <ol class="postlist">
         {
           (page.data || []).map((blogPostEntry) => {
             const excerpt = `${createExcerpt(blogPostEntry.body).substring(0, 300)}...`
+            // Get locale from frontmatter, normalize it (es-ES -> es)
+            const locale = blogPostEntry.data.locale || blogPostEntry.data.lang || 'en'
+            const normalizedLocale = locale.split('-')[0]
             return (
-              <li class="postlist-item">
+              <li class="postlist-item" data-locale={normalizedLocale}>
                 <div class="postlist-image">
                   {blogPostEntry.data.image && (
                     <img
@@ -83,8 +88,8 @@ const { page } = Astro.props
                           {blogPostEntry.data.title}
                         </a>
                       </h2>
-                      <a class="postlist-lang" href="/blog/es">
-                        ES
+                      <a class="postlist-lang" href={`/blog/${normalizedLocale}`}>
+                        {normalizedLocale.toUpperCase()}
                       </a>
                     </div>
                   ) : (

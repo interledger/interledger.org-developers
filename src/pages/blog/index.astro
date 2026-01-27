@@ -1,16 +1,24 @@
 ---
 import { getCollection } from 'astro:content'
+import Pagination from '../../components/blog/Pagination.astro'
+import LocaleFilter from '../../components/blog/LocaleFilter.astro'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import { createExcerpt } from '../../utils/create-excerpt'
 
-// Only return posts with `draft: true` in the frontmatter
-const esEntries = await getCollection('blog', ({ data }) => {
-  return data.lang === 'es'
-})
+export const prerender = true
+
+const pageSize = 10
+const allBlogEntries = (await getCollection('blog')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+)
+
+// Get first page of posts
+const firstPagePosts = allBlogEntries.slice(0, pageSize)
+const totalPages = Math.ceil(allBlogEntries.length / pageSize)
 ---
 
 <BaseLayout
-  title="Blog de Ingeniería"
+  title="Engineering Blog"
   description="Hear stories and experiences from the team who is working on making Interledger, the interoperable global payments network, a reality."
   ogImageUrl={new URL('/img/blog/og-image.png', Astro.site).href}
 >
@@ -31,23 +39,9 @@ const esEntries = await getCollection('blog', ({ data }) => {
           >
           <meta itemprop="position" content="1" />
         </li>
-        <li
-          itemprop="itemListElement"
-          itemscope
-          itemtype="https://schema.org/ListItem"
-        >
-          <a
-            itemprop="item"
-            href="/blog"
-            data-umami-event="Devs breadcrumb - Blog"
-          >
-            <span itemprop="name">Engineering Blog</span></a
-          >
-          <meta itemprop="position" content="2" />
-        </li>
       </ol>
       <header>
-        <h1>Blog de Ingeniería</h1>
+        <h1>Engineering Blog</h1>
         <a class="cta__blog" href="/blog">
           <p>Check out Foundation updates</p>
           <img
@@ -57,12 +51,16 @@ const esEntries = await getCollection('blog', ({ data }) => {
           />
         </a>
       </header>
+      <LocaleFilter />
       <ol class="postlist">
         {
-          esEntries.map((blogPostEntry) => {
+          firstPagePosts.map((blogPostEntry) => {
             const excerpt = `${createExcerpt(blogPostEntry.body).substring(0, 300)}...`
+            // Get locale from frontmatter, normalize it (es-ES -> es)
+            const locale = blogPostEntry.data.locale || blogPostEntry.data.lang || 'en'
+            const normalizedLocale = locale.split('-')[0]
             return (
-              <li class="postlist-item">
+              <li class="postlist-item" data-locale={normalizedLocale}>
                 <div class="postlist-image">
                   {blogPostEntry.data.image && (
                     <img
@@ -75,14 +73,30 @@ const esEntries = await getCollection('blog', ({ data }) => {
                   )}
                 </div>
                 <div class="postlist-content">
-                  <h2>
-                    <a
-                      href={`/blog/${blogPostEntry.id}`}
-                      class="postlist-link"
-                    >
-                      {blogPostEntry.data.title}
-                    </a>
-                  </h2>
+                  {blogPostEntry.data.lang ? (
+                    <div class="postlist-es">
+                      <h2>
+                        <a
+                          href={`/blog/${blogPostEntry.id}`}
+                          class="postlist-link"
+                        >
+                          {blogPostEntry.data.title}
+                        </a>
+                      </h2>
+                      <a class="postlist-lang" href={`/blog/${blogPostEntry.data.lang}`}>
+                        {blogPostEntry.data.lang.toUpperCase()}
+                      </a>
+                    </div>
+                  ) : (
+                    <h2>
+                      <a
+                        href={`/blog/${blogPostEntry.id}`}
+                        class="postlist-link"
+                      >
+                        {blogPostEntry.data.title}
+                      </a>
+                    </h2>
+                  )}
                   <time
                     class="postlist-date"
                     datetime={blogPostEntry.data.date.toISOString()}
@@ -98,7 +112,7 @@ const esEntries = await getCollection('blog', ({ data }) => {
                     href={`/blog/${blogPostEntry.id}`}
                     class="postlist-readmore"
                   >
-                    Leer más →
+                    Read more →
                   </a>
                 </div>
               </li>
@@ -106,6 +120,16 @@ const esEntries = await getCollection('blog', ({ data }) => {
           })
         }
       </ol>
+      {totalPages > 1 && (
+        <Pagination
+          length={totalPages}
+          currentPage={1}
+          firstUrl="/blog/1"
+          prevUrl={undefined}
+          nextUrl={totalPages > 1 ? "/blog/2" : undefined}
+          lastUrl={`/blog/${totalPages}`}
+        />
+      )}
     </div>
   </main>
 </BaseLayout>
@@ -128,12 +152,6 @@ const esEntries = await getCollection('blog', ({ data }) => {
   .breadcrumbs a {
     color: var(--color-primary);
     text-decoration: none;
-  }
-
-  .breadcrumbs li:not(:first-child)::before {
-    content: '>';
-    display: inline-flex;
-    margin-inline-start: var(--space-3xs);
   }
 
   ol {
@@ -183,7 +201,6 @@ const esEntries = await getCollection('blog', ({ data }) => {
   .cta__blog:hover p {
     color: currentColor;
     text-decoration-color: currentColor;
-    text-decoration-line: underline;
   }
 
   .cta__blog img {
@@ -274,5 +291,21 @@ const esEntries = await getCollection('blog', ({ data }) => {
 
   .postlist-readmore:hover {
     opacity: 0.8;
+  }
+
+  .postlist-es {
+    display: flex;
+    align-items: start;
+    gap: var(--space-2xs);
+  }
+
+  .postlist-lang {
+    border: 1.5px solid;
+    padding-inline: 4px;
+    border-radius: var(--border-radius);
+    font-size: var(--step--1);
+    background-color: white;
+    margin-block-start: var(--space-3xs);
+    text-decoration: none;
   }
 </style>

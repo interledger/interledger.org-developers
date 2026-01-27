@@ -4,13 +4,20 @@ import { docsSchema, i18nSchema } from '@astrojs/starlight/schema'
 import { glob } from 'astro/loaders'
 
 const blogCollection = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/blog' }),
+  loader: glob({ 
+    pattern: '**/blog/**/*.{md,mdx}', 
+    base: './src/content',
+    // Include blog posts from main blog directory and locale subdirectories
+    // Pattern matches: blog/*.mdx, es/blog/*.mdx, de/blog/*.mdx, etc.
+  }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
     slug: z.string(),
     date: z.date(),
+    locale: z.string().optional(),
     lang: z.string().optional(),
+    contentId: z.string().optional(),
     image: z.string().optional(),
     ogImageUrl: z.string().optional()
   })

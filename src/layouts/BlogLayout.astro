@@ -58,10 +58,14 @@ const rawHTMLString = `This article was originally published at <a href=${frontm
                 <span>|</span>
                 <a
                   itemprop="item"
-                  href="/blog/es"
-                  data-umami-event="Devs breadcrumb - ES blogs"
+                  href={`/blog/${frontmatter.lang}`}
+                  data-umami-event={`Devs breadcrumb - ${frontmatter.lang.toUpperCase()} blogs`}
                 >
-                  <span itemprop="name">Blog de Ingeniería</span>
+                  <span itemprop="name">
+                    {frontmatter.lang === 'es' ? 'Blog de Ingeniería' : 
+                     frontmatter.lang === 'de' ? 'Ingenieur-Blog' : 
+                     'Engineering Blog'}
+                  </span>
                 </a>
               </>
             )

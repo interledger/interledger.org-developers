@@ -3,15 +3,15 @@ import { getCollection } from 'astro:content'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import { createExcerpt } from '../../utils/create-excerpt'
 
-// Only return posts with `draft: true` in the frontmatter
-const esEntries = await getCollection('blog', ({ data }) => {
-  return data.lang === 'es'
-})
+// Only return posts with `lang: 'de'` in the frontmatter
+const deEntries = await getCollection('blog', ({ data }) => {
+  return data.lang === 'de' || data.locale === 'de' || data.locale === 'de-DE'
+}).sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
 ---
 
 <BaseLayout
-  title="Blog de Ingeniería"
-  description="Hear stories and experiences from the team who is working on making Interledger, the interoperable global payments network, a reality."
+  title="Ingenieur-Blog"
+  description="Hören Sie Geschichten und Erfahrungen vom Team, das daran arbeitet, Interledger, das interoperable globale Zahlungsnetzwerk, Wirklichkeit werden zu lassen."
   ogImageUrl={new URL('/img/blog/og-image.png', Astro.site).href}
 >
   <main>
@@ -47,19 +47,19 @@ const esEntries = await getCollection('blog', ({ data }) => {
         </li>
       </ol>
       <header>
-        <h1>Blog de Ingeniería</h1>
+        <h1>Ingenieur-Blog</h1>
         <a class="cta__blog" href="/blog">
-          <p>Check out Foundation updates</p>
+          <p>Foundation-Updates ansehen</p>
           <img
             src="/img/ernie-purple.svg"
-            alt="Ernie holding an envelope"
+            alt="Ernie hält einen Briefumschlag"
             aria-hidden="true"
           />
         </a>
       </header>
       <ol class="postlist">
         {
-          esEntries.map((blogPostEntry) => {
+          deEntries.map((blogPostEntry) => {
             const excerpt = `${createExcerpt(blogPostEntry.body).substring(0, 300)}...`
             return (
               <li class="postlist-item">
@@ -98,7 +98,7 @@ const esEntries = await getCollection('blog', ({ data }) => {
                     href={`/blog/${blogPostEntry.id}`}
                     class="postlist-readmore"
                   >
-                    Leer más →
+                    Weiterlesen →
                   </a>
                 </div>
               </li>
