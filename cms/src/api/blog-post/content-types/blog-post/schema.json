@@ -38,7 +38,9 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ]
     },
     "ogImageUrl": {
       "type": "string",
@@ -50,6 +52,11 @@
       "options": {
         "preset": "defaultMarkdown"
       }
+    },
+    "linked_translations": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::blog-post.blog-post"
     }
   }
 }

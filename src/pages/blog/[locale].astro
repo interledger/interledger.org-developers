@@ -1,52 +1,47 @@
 ---
 import { getCollection } from 'astro:content'
-import type { GetStaticPaths, Page } from 'astro'
-import Pagination from '../../components/blog/Pagination.astro'
+import type { GetStaticPaths } from 'astro'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import { createExcerpt } from '../../utils/create-excerpt'
 
-type Props = {
-  page: Page
-  availableLocales: string[]
-}
-
 export const prerender = true
 
-export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
-  // Get all blog entries to determine available locales
-  const allEntries = await getCollection('blog')
+export const getStaticPaths: GetStaticPaths = async () => {
+  const blogEntries = await getCollection('blog')
   
-  // Get unique locales for the language switcher
-  const availableLocales = [...new Set(
-    allEntries
+  // Get unique locales from blog posts (excluding undefined/null)
+  const locales = [...new Set(
+    blogEntries
       .map(entry => entry.data.lang)
       .filter((lang): lang is string => Boolean(lang))
   )].sort()
   
-  // Filter to English-only posts (posts without lang field)
-  const englishEntries = allEntries
-    .filter(entry => !entry.data.lang)
-    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  
-  return paginate(englishEntries, { 
-    pageSize: 10,
-    props: { availableLocales }
-  })
+  return locales.map(locale => ({
+    params: { locale },
+    props: { locale, availableLocales: locales }
+  }))
 }
 
-const { page, availableLocales } = Astro.props
+const { locale, availableLocales } = Astro.props
 
-// Locale display names
+// Get blog entries filtered by locale
+const localeEntries = (await getCollection('blog', ({ data }) => {
+  return data.lang === locale
+})).sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+
+// Locale display names for page title
 const localeNames: Record<string, string> = {
   es: 'Español',
   fr: 'Français',
   de: 'Deutsch',
   zh: '中文'
 }
+
+const localeName = localeNames[locale] || locale.toUpperCase()
 ---
 
 <BaseLayout
-  title="Engineering Blog"
+  title={`Engineering Blog (${localeName})`}
   description="Hear stories and experiences from the team who is working on making Interledger, the interoperable global payments network, a reality."
   ogImageUrl={new URL('/img/blog/og-image.png', Astro.site).href}
 >
@@ -71,33 +66,45 @@ const localeNames: Record<string, string> = {
           >
           <meta itemprop="position" content="1" />
         </li>
+        <li
+          itemprop="itemListElement"
+          itemscope
+          itemtype="https://schema.org/ListItem"
+        >
+          <a
+            itemprop="item"
+            href="/blog"
+            data-umami-event="Devs breadcrumb - Blog"
+          >
+            <span itemprop="name">Engineering Blog</span></a
+          >
+          <meta itemprop="position" content="2" />
+        </li>
       </ol>
       <header>
         <div class="header-title">
           <h1>Engineering Blog</h1>
-          {availableLocales.length > 0 && (
-            <div class="language-switcher">
-              <button class="language-switcher__toggle" aria-expanded="false" aria-haspopup="true">
-                EN
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                  <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </button>
-              <ul class="language-switcher__menu">
-                <li><a href="/blog" class="active">EN - English</a></li>
-                {availableLocales.map(locale => (
-                  <li>
-                    <a href={`/blog/${locale}`}>
-                      {locale.toUpperCase()} - {localeNames[locale] || locale}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          <div class="language-switcher">
+            <button class="language-switcher__toggle" aria-expanded="false" aria-haspopup="true">
+              {locale.toUpperCase()}
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <ul class="language-switcher__menu">
+              <li><a href="/blog">EN - English</a></li>
+              {availableLocales.map((loc: string) => (
+                <li>
+                  <a href={`/blog/${loc}`} class={loc === locale ? 'active' : ''}>
+                    {loc.toUpperCase()} - {localeNames[loc] || loc}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
         <a class="cta__blog" href="/blog">
-          <p>Check out Foundation updates</p>
+          <p>View all posts</p>
           <img
             src="/img/ernie-purple.svg"
             alt="Ernie holding an envelope"
@@ -105,9 +112,11 @@ const localeNames: Record<string, string> = {
           />
         </a>
       </header>
-      <ol class="postlist">
-        {
-          (page.data || []).map((blogPostEntry) => {
+      {localeEntries.length === 0 ? (
+        <p class="no-posts">No posts available in {localeName} yet.</p>
+      ) : (
+        <ol class="postlist">
+          {localeEntries.map((blogPostEntry) => {
             const excerpt = `${createExcerpt(blogPostEntry.body).substring(0, 300)}...`
             return (
               <li class="postlist-item">
@@ -125,7 +134,7 @@ const localeNames: Record<string, string> = {
                 <div class="postlist-content">
                   <h2>
                     <a
-                      href={`/blog/${blogPostEntry.data.slug}`}
+                      href={`/blog/${locale}/${blogPostEntry.data.slug}`}
                       class="postlist-link"
                     >
                       {blogPostEntry.data.title}
@@ -142,23 +151,15 @@ const localeNames: Record<string, string> = {
                       ? blogPostEntry.data.description
                       : excerpt}
                   </p>
-                  <a href={`/blog/${blogPostEntry.data.slug}`} class="postlist-readmore">
+                  <a href={`/blog/${locale}/${blogPostEntry.data.slug}`} class="postlist-readmore">
                     Read more →
                   </a>
                 </div>
               </li>
             )
-          })
-        }
-      </ol>
-      <Pagination
-        length={page.lastPage}
-        currentPage={page.currentPage}
-        firstUrl={page.url.first}
-        prevUrl={page.url.prev}
-        nextUrl={page.url.next}
-        lastUrl={page.url.last}
-      />
+          })}
+        </ol>
+      )}
     </div>
   </main>
 </BaseLayout>
@@ -181,6 +182,12 @@ const localeNames: Record<string, string> = {
   .breadcrumbs a {
     color: var(--color-primary);
     text-decoration: none;
+  }
+
+  .breadcrumbs li:not(:first-child)::before {
+    content: '>';
+    display: inline-flex;
+    margin-inline-start: var(--space-3xs);
   }
 
   ol {
@@ -406,6 +413,12 @@ const localeNames: Record<string, string> = {
 
   .postlist-readmore:hover {
     opacity: 0.8;
+  }
+
+  .no-posts {
+    text-align: center;
+    padding: var(--space-xl);
+    color: var(--color-text-muted);
   }
 </style>
 

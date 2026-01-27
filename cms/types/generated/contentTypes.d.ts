@@ -459,6 +459,10 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 10
       }>
+    linked_translations: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::blog-post.blog-post'
+    >
     locale: Schema.Attribute.String & Schema.Attribute.Private
     localizations: Schema.Attribute.Relation<
       'oneToMany',

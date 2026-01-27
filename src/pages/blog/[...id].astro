@@ -7,17 +7,221 @@ export const prerender = true
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('blog')
-  return blogEntries.map((entry) => ({
-    params: { id: entry.id },
-    props: { entry }
-  }))
+  return blogEntries.map((entry) => {
+    const lang = entry.data.lang || 'en'
+    const slug = entry.data.slug
+    const id = lang === 'en' ? slug : `${lang}/${slug}`
+    return {
+      params: { id },
+      props: { entry }
+    }
+  })
 }
 
 const { entry } = Astro.props
 const { Content } = await render(entry)
+
+// --- Language Switcher Logic ---
+
+const translations = entry.data.translations || {}
+const currentLang = entry.data.lang || 'en'
+
+const localeNames: Record<string, string> = {
+  en: 'English',
+  es: 'Español',
+  fr: 'Français'
+}
+
+const availableLocales = ['en', 'es', 'fr']
+
+// Pre-calculate links for the template
+const languageLinks = availableLocales.map(locale => {
+  const isCurrent = locale === currentLang
+  let link = null
+  
+  if (!isCurrent) {
+    const slug = translations[locale]
+    if (slug) {
+      link = locale === 'en' ? `/blog/${slug}` : `/blog/${locale}/${slug}`
+    } else {
+      link = '/translation-in-progress'
+    }
+  }
+
+  return {
+    locale,
+    name: localeNames[locale],
+    isCurrent,
+    link
+  }
+})
 ---
 
 <BlogLayout frontmatter={entry.data}>
+  <div class="blog-post-language-switcher">
+    <div class="language-switcher" id="languageSwitcher">
+      <button
+        class="language-switcher__toggle"
+        aria-expanded="false"
+        aria-controls="language-menu"
+      >
+        <span>{localeNames[currentLang] || currentLang.toUpperCase()}</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="m6 9 6 6 6-6"></path>
+        </svg>
+      </button>
+      <ul id="language-menu" class="language-switcher__menu">
+        {
+          languageLinks.map((item) => (
+            <li>
+              {item.isCurrent ? (
+                <span class="language-switcher__link active">
+                  {item.name}
+                </span>
+              ) : (
+                <a 
+                  href={item.link} 
+                  class="language-switcher__link"
+                >
+                  {item.name}
+                </a>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+
   <Content />
   <CommunityLinks />
 </BlogLayout>
+
+<script>
+  function initLanguageSwitcher() {
+    const switcher = document.getElementById('languageSwitcher')
+    const toggle = switcher?.querySelector('.language-switcher__toggle')
+    const menu = switcher?.querySelector('.language-switcher__menu')
+
+    if (!switcher || !toggle || !menu) return
+
+    const toggleMenu = (open: boolean) => {
+      const isExpanded = open ? 'true' : 'false'
+      toggle.setAttribute('aria-expanded', isExpanded)
+      switcher.classList.toggle('is-open', open)
+    }
+
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation()
+      const isOpen = switcher.classList.contains('is-open')
+      toggleMenu(!isOpen)
+    })
+
+    document.addEventListener('click', (e) => {
+      if (!switcher.contains(e.target as Node)) {
+        toggleMenu(false)
+      }
+    })
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        toggleMenu(false)
+      }
+    })
+  }
+
+  initLanguageSwitcher()
+  document.addEventListener('astro:page-load', initLanguageSwitcher)
+</script>
+
+<style>
+  .blog-post-language-switcher {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 10;
+  }
+
+  .language-switcher {
+    position: relative;
+    display: inline-block;
+  }
+
+  .language-switcher__toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--color-text);
+    transition: all 0.2s ease;
+  }
+
+  .language-switcher__toggle:hover {
+    background-color: var(--color-surface-hover);
+  }
+
+  .language-switcher__menu {
+    position: absolute;
+    top: 100%;
+    right: 0; 
+    margin-top: 4px;
+    padding: 8px 0;
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    list-style: none;
+    min-width: 150px;
+    display: none;
+    z-index: 100;
+  }
+
+  .language-switcher.is-open .language-switcher__menu {
+    display: block;
+  }
+
+  .language-switcher__toggle svg {
+    transition: transform 200ms ease;
+  }
+
+  .language-switcher.is-open .language-switcher__toggle svg {
+    transform: rotate(180deg);
+  }
+
+  .language-switcher__link {
+    display: block;
+    padding: 8px 16px;
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+  }
+
+  .language-switcher__link:hover,
+  .language-switcher__link:focus {
+    background-color: var(--color-surface-hover);
+    color: var(--color-primary);
+  }
+
+  .language-switcher__link.active {
+    font-weight: bold;
+    color: var(--color-primary);
+    background-color: rgba(0, 0, 0, 0.05);
+    pointer-events: none;
+  }
+</style>
