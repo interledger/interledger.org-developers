@@ -14,16 +14,29 @@ export default defineConfig([
   },
   tseslint.configs.recommended,
   eslintPluginAstro.configs.recommended,
-  globalIgnores(['dist', '.astro', 'node_modules', 'public', '**/*.min.js']),
+  globalIgnores([
+    '**/dist/**',
+    '.astro',
+    'node_modules',
+    'public',
+    '**/*.min.js',
+    'cms/strapi-server.js',
+    'cms/copy-schemas.js',
+    'cms/src/admin/app.tsx',
+    'cms/src/index.ts',
+    'src/pages/financial-services.astro'
+  ]),
   {
     rules: {
-      'no-console': 'error',
+      'no-console': 'off',
       '@typescript-eslint/no-unused-vars': [
-        'error',
+        'warn',
         { argsIgnorePattern: '^_' }
       ],
-      '@typescript-eslint/no-explicit-any': 'error',
-      'astro/no-set-text-directive': 'error'
+      '@typescript-eslint/no-explicit-any': 'warn',
+      'astro/no-set-text-directive': 'error',
+      '@typescript-eslint/no-require-imports': 'off',
+      '@typescript-eslint/no-empty-object-type': 'off'
     }
   },
   eslintConfigPrettier

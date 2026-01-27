@@ -1,4 +1,4 @@
-import path from 'path';
+import path from 'path'
 
 export default ({ env }) => ({
   connection: {
@@ -7,8 +7,8 @@ export default ({ env }) => ({
       filename: path.resolve(
         process.cwd(),
         env('DATABASE_FILENAME', '.tmp/data.db')
-      ),
+      )
     },
-    useNullAsDefault: true,
-  },
-});
+    useNullAsDefault: true
+  }
+})

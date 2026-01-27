@@ -1,34 +1,34 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'fs'
+import path from 'path'
 
 function copySchemas() {
-  const srcDir = path.join(__dirname, '../../src');
-  const destDir = path.join(__dirname);
+  const srcDir = path.join(__dirname, '../../src')
+  const destDir = path.join(__dirname)
 
   function copyDir(src: string, dest: string) {
     if (!fs.existsSync(dest)) {
-      fs.mkdirSync(dest, { recursive: true });
+      fs.mkdirSync(dest, { recursive: true })
     }
 
-    const entries = fs.readdirSync(src, { withFileTypes: true });
+    const entries = fs.readdirSync(src, { withFileTypes: true })
 
     for (const entry of entries) {
-      const srcPath = path.join(src, entry.name);
-      const destPath = path.join(dest, entry.name);
+      const srcPath = path.join(src, entry.name)
+      const destPath = path.join(dest, entry.name)
 
       if (entry.isDirectory()) {
-        copyDir(srcPath, destPath);
+        copyDir(srcPath, destPath)
       } else if (entry.name.endsWith('.json')) {
-        fs.copyFileSync(srcPath, destPath);
+        fs.copyFileSync(srcPath, destPath)
       }
     }
   }
 
   try {
-    copyDir(srcDir, destDir);
-    console.log('✅ Schema files copied successfully');
+    copyDir(srcDir, destDir)
+    console.log('✅ Schema files copied successfully')
   } catch (error) {
-    console.error('❌ Error copying schema files:', error);
+    console.error('❌ Error copying schema files:', error)
   }
 }
 
@@ -53,7 +53,7 @@ async function configureFieldLabels(strapi: any) {
       content: 'Content',
       createdAt: 'Created At',
       updatedAt: 'Updated At',
-      publishedAt: 'Published At',
+      publishedAt: 'Published At'
     },
     'api::press-item.press-item': {
       title: 'Title',
@@ -68,7 +68,7 @@ async function configureFieldLabels(strapi: any) {
       category: 'Category',
       createdAt: 'Created At',
       updatedAt: 'Updated At',
-      publishedAt: 'Published At',
+      publishedAt: 'Published At'
     },
     'api::grant-track.grant-track': {
       name: 'Grant Name',
@@ -77,7 +77,7 @@ async function configureFieldLabels(strapi: any) {
       order: 'Display Order',
       createdAt: 'Created At',
       updatedAt: 'Updated At',
-      publishedAt: 'Published At',
+      publishedAt: 'Published At'
     },
     'api::info-item.info-item': {
       title: 'Title',
@@ -85,7 +85,7 @@ async function configureFieldLabels(strapi: any) {
       order: 'Display Order',
       createdAt: 'Created At',
       updatedAt: 'Updated At',
-      publishedAt: 'Published At',
+      publishedAt: 'Published At'
     },
     'api::financial-services-page.financial-services-page': {
       heroTitle: 'Hero Title',
@@ -98,9 +98,9 @@ async function configureFieldLabels(strapi: any) {
       ctaSubscribeLabel: 'Subscribe Button Label',
       createdAt: 'Created At',
       updatedAt: 'Updated At',
-      publishedAt: 'Published At',
-    },
-  };
+      publishedAt: 'Published At'
+    }
+  }
 
   const fieldHelpText: Record<string, Record<string, string>> = {
     'api::blog-post.blog-post': {
@@ -111,45 +111,54 @@ async function configureFieldLabels(strapi: any) {
   };
 
   for (const [uid, labels] of Object.entries(labelConfigs)) {
-    if (Object.keys(labels).length === 0) continue;
+    if (Object.keys(labels).length === 0) continue
 
     try {
       // Get the content-manager plugin service
-      const contentManagerService = strapi.plugin('content-manager')?.service('content-types');
-      if (!contentManagerService) continue;
+      const contentManagerService = strapi
+        .plugin('content-manager')
+        ?.service('content-types')
+      if (!contentManagerService) continue
 
       // Get current configuration
-      const configuration = await contentManagerService.findConfiguration({ uid });
-      if (!configuration?.metadatas) continue;
+      const configuration = await contentManagerService.findConfiguration({
+        uid
+      })
+      if (!configuration?.metadatas) continue
 
-      let needsUpdate = false;
-      const updatedMetadatas = { ...configuration.metadatas };
+      let needsUpdate = false
+      const updatedMetadatas = { ...configuration.metadatas }
 
       const helpText = fieldHelpText[uid] || {};
 
       for (const [fieldName, label] of Object.entries(labels)) {
         if (updatedMetadatas[fieldName]) {
+<<<<<<< HEAD
           const currentEditLabel = updatedMetadatas[fieldName]?.edit?.label;
           const currentDescription = updatedMetadatas[fieldName]?.edit?.description;
+=======
+          const currentEditLabel = updatedMetadatas[fieldName]?.edit?.label
+>>>>>>> origin/jm/strapi_2
 
           // Update if label is default (same as field name, case-insensitive), empty, or not set
-          const isDefaultLabel = !currentEditLabel || 
+          const isDefaultLabel =
+            !currentEditLabel ||
             currentEditLabel === fieldName ||
-            currentEditLabel.toLowerCase() === fieldName.toLowerCase();
+            currentEditLabel.toLowerCase() === fieldName.toLowerCase()
 
           if (isDefaultLabel && currentEditLabel !== label) {
             updatedMetadatas[fieldName] = {
               ...updatedMetadatas[fieldName],
               edit: {
                 ...updatedMetadatas[fieldName]?.edit,
-                label,
+                label
               },
               list: {
                 ...updatedMetadatas[fieldName]?.list,
-                label,
-              },
-            };
-            needsUpdate = true;
+                label
+              }
+            }
+            needsUpdate = true
           }
 
           if (helpText[fieldName] && currentDescription !== helpText[fieldName]) {
@@ -169,12 +178,12 @@ async function configureFieldLabels(strapi: any) {
         await contentManagerService.updateConfiguration(
           { uid },
           { metadatas: updatedMetadatas }
-        );
-        strapi.log.info(`✅ Updated field labels for ${uid}`);
+        )
+        strapi.log.info(`✅ Updated field labels for ${uid}`)
       }
     } catch (error) {
       // Log but don't fail - configuration might not exist yet
-      strapi.log.debug(`Could not update labels for ${uid}: ${error.message}`);
+      strapi.log.debug(`Could not update labels for ${uid}: ${error.message}`)
     }
   }
 }
@@ -188,7 +197,7 @@ export default {
    */
   register(/* { strapi } */) {
     // Copy schema JSON files after TypeScript compilation
-    copySchemas();
+    copySchemas()
   },
 
   /**
@@ -201,29 +210,29 @@ export default {
   async bootstrap({ strapi }) {
     // Ensure database directory exists with proper permissions
     // Default database path is .tmp/data.db relative to process.cwd()
-    const dbDir = path.resolve(process.cwd(), '.tmp');
+    const dbDir = path.resolve(process.cwd(), '.tmp')
     if (!fs.existsSync(dbDir)) {
-      fs.mkdirSync(dbDir, { recursive: true, mode: 0o775 });
+      fs.mkdirSync(dbDir, { recursive: true, mode: 0o775 })
     } else {
       // Ensure directory has write permissions
       try {
-        fs.chmodSync(dbDir, 0o775);
+        fs.chmodSync(dbDir, 0o775)
       } catch (error) {
         // Ignore permission errors if we can't change them
       }
     }
-    
+
     // If database file exists, ensure it has write permissions
-    const dbPath = path.join(dbDir, 'data.db');
+    const dbPath = path.join(dbDir, 'data.db')
     if (fs.existsSync(dbPath)) {
       try {
-        fs.chmodSync(dbPath, 0o664);
+        fs.chmodSync(dbPath, 0o664)
       } catch (error) {
         // Ignore permission errors if we can't change them
       }
     }
 
     // Configure pretty field labels for the admin panel
-    await configureFieldLabels(strapi);
-  },
-};
+    await configureFieldLabels(strapi)
+  }
+}
