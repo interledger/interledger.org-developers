@@ -3,7 +3,9 @@ import { getCollection, render } from 'astro:content'
 import BaseLayout from '../layouts/BaseLayout.astro'
 
 const events = await getCollection('events')
-const sortedEvents = events.sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
+const sortedEvents = events.sort(
+  (a, b) => (a.data.order || 0) - (b.data.order || 0)
+)
 
 // Render all events to get their Content components
 const renderedEvents = await Promise.all(
@@ -14,7 +16,10 @@ const renderedEvents = await Promise.all(
 )
 ---
 
-<BaseLayout title="Events - Interledger Foundation" description="Create space to be inspired">
+<BaseLayout
+  title="Events - Interledger Foundation"
+  description="Create space to be inspired"
+>
   <main>
     <section class="hero">
       <div class="content-wrapper">
@@ -26,26 +31,32 @@ const renderedEvents = await Promise.all(
     <section class="events-section">
       <div class="content-wrapper">
         <div class="events-grid">
-          {renderedEvents.map((event, index) => {
-            const hasImage = Boolean(event.data.featuredImage)
-            return (
-              <article
-                class={`event-card ${index % 2 === 1 ? 'event-card--reverse' : ''} ${!hasImage ? 'event-card--no-image' : ''}`}
-              >
-                <div class="event-copy">
-                  <h2 class="event-title">{event.data.title}</h2>
-                  <div class="event-body">
-                    <event.Content />
+          {
+            renderedEvents.map((event, index) => {
+              const hasImage = Boolean(event.data.featuredImage)
+              return (
+                <article
+                  class={`event-card ${index % 2 === 1 ? 'event-card--reverse' : ''} ${!hasImage ? 'event-card--no-image' : ''}`}
+                >
+                  <div class="event-copy">
+                    <h2 class="event-title">{event.data.title}</h2>
+                    <div class="event-body">
+                      <event.Content />
+                    </div>
                   </div>
-                </div>
-                {hasImage && (
-                  <div class="event-image">
-                    <img src={event.data.featuredImage} alt={event.data.title} loading="lazy" />
-                  </div>
-                )}
-              </article>
-            )
-          })}
+                  {hasImage && (
+                    <div class="event-image">
+                      <img
+                        src={event.data.featuredImage}
+                        alt={event.data.title}
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
+                </article>
+              )
+            })
+          }
         </div>
       </div>
     </section>
@@ -58,9 +69,10 @@ const renderedEvents = await Promise.all(
   }
 
   .hero {
-    background: linear-gradient(135deg,
+    background: linear-gradient(
+      135deg,
       oklch(35% 0.12 200) 0%,
-      oklch(45% 0.10 190) 30%,
+      oklch(45% 0.1 190) 30%,
       oklch(50% 0.08 180) 60%,
       oklch(55% 0.06 170) 100%
     );
@@ -84,8 +96,17 @@ const renderedEvents = await Promise.all(
   }
 
   .events-section {
-    background: radial-gradient(circle at 30% 20%, rgba(255, 148, 128, 0.25), transparent 45%),
-      radial-gradient(circle at 80% 10%, rgba(111, 181, 255, 0.3), transparent 40%),
+    background:
+      radial-gradient(
+        circle at 30% 20%,
+        rgba(255, 148, 128, 0.25),
+        transparent 45%
+      ),
+      radial-gradient(
+        circle at 80% 10%,
+        rgba(111, 181, 255, 0.3),
+        transparent 40%
+      ),
       linear-gradient(180deg, #f7f8fb 0%, #f1f7f8 50%, #f7f8fb 100%);
     padding-block: var(--space-xl);
   }

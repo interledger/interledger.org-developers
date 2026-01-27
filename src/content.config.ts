@@ -27,12 +27,17 @@ const pressCollection = defineCollection({
     publicationLogo: z.string().optional(),
     externalUrl: z.string().optional(),
     featured: z.boolean().default(false),
-    category: z.enum(['press-release', 'media-mention', 'announcement']).default('media-mention')
+    category: z
+      .enum(['press-release', 'media-mention', 'announcement'])
+      .default('media-mention')
   })
 })
 
 const grantTrackCollection = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/grant-tracks' }),
+  loader: glob({
+    pattern: '**/[^_]*.{md,mdx}',
+    base: './src/content/grant-tracks'
+  }),
   schema: z.object({
     name: z.string(),
     amount: z.string(),

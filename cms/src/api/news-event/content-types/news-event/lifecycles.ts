@@ -4,28 +4,28 @@
  * Then commits and pushes to trigger Netlify preview builds
  */
 
-import fs from 'fs';
-import path from 'path';
-import { gitCommitAndPush } from '../../../../utils/gitSync';
+import fs from 'fs'
+import path from 'path'
+import { gitCommitAndPush } from '../../../../utils/gitSync'
 
 interface NewsEvent {
-  id: number;
-  title: string;
-  slug: string;
-  order: number;
-  content: string;
-  publishedAt?: string;
+  id: number
+  title: string
+  slug: string
+  order: number
+  content: string
+  publishedAt?: string
 }
 
 interface Event {
-  result?: NewsEvent;
+  result?: NewsEvent
 }
 
 /**
  * Converts HTML content to markdown-like format
  */
 function htmlToMarkdown(html: string): string {
-  if (!html) return '';
+  if (!html) return ''
 
   return html
     .replace(/&nbsp;/gi, ' ')
@@ -53,99 +53,104 @@ function htmlToMarkdown(html: string): string {
     .replace(/<img[^>]*src="([^"]*)"[^>]*alt="([\s\S]*?)"[^>]*>/gi, '![$2]($1)')
     .replace(/<img[^>]*src="([^"]*)"[^>]*>/gi, '![]($1)')
     .replace(/<[^>]+>/g, '')
-    .trim();
+    .trim()
 }
 
 function escapeQuotes(value: string): string {
-  return value.replace(/"/g, '\\"');
+  return value.replace(/"/g, '\\"')
 }
 
 function generateFilename(event: NewsEvent): string {
-  return `${event.slug}.mdx`;
+  return `${event.slug}.mdx`
 }
 
 function generateMDX(event: NewsEvent): string {
   const frontmatterLines = [
     `title: "${escapeQuotes(event.title)}"`,
-    `order: ${event.order || 0}`,
-  ].filter(Boolean) as string[];
+    `order: ${event.order || 0}`
+  ].filter(Boolean) as string[]
 
-  const frontmatter = frontmatterLines.join('\n');
-  const content = event.content ? htmlToMarkdown(event.content) : '';
+  const frontmatter = frontmatterLines.join('\n')
+  const content = event.content ? htmlToMarkdown(event.content) : ''
 
-  return `---\n${frontmatter}\n---\n\n${content}\n`;
+  return `---\n${frontmatter}\n---\n\n${content}\n`
 }
 
 async function writeMDXFile(event: NewsEvent): Promise<void> {
-  const outputPath = process.env.EVENTS_MDX_OUTPUT_PATH || '../src/content/events';
+  const outputPath =
+    process.env.EVENTS_MDX_OUTPUT_PATH || '../src/content/events'
   // Resolve from dist/src/api/news-event/content-types/news-event/ up to cms root then project root
-  const baseDir = path.resolve(__dirname, '../../../../../../', outputPath);
+  const baseDir = path.resolve(__dirname, '../../../../../../', outputPath)
 
   if (!fs.existsSync(baseDir)) {
-    fs.mkdirSync(baseDir, { recursive: true });
+    fs.mkdirSync(baseDir, { recursive: true })
   }
 
-  const filename = generateFilename(event);
-  const filepath = path.join(baseDir, filename);
-  const mdxContent = generateMDX(event);
+  const filename = generateFilename(event)
+  const filepath = path.join(baseDir, filename)
+  const mdxContent = generateMDX(event)
 
-  fs.writeFileSync(filepath, mdxContent, 'utf-8');
-  console.log(`✅ Generated Event MDX file: ${filepath}`);
+  fs.writeFileSync(filepath, mdxContent, 'utf-8')
+  console.log(`✅ Generated Event MDX file: ${filepath}`)
 }
 
 async function deleteMDXFile(event: NewsEvent): Promise<void> {
-  const outputPath = process.env.EVENTS_MDX_OUTPUT_PATH || '../src/content/events';
+  const outputPath =
+    process.env.EVENTS_MDX_OUTPUT_PATH || '../src/content/events'
   // Resolve from dist/src/api/news-event/content-types/news-event/ up to cms root then project root
-  const baseDir = path.resolve(__dirname, '../../../../../../', outputPath);
-  const filename = generateFilename(event);
-  const filepath = path.join(baseDir, filename);
+  const baseDir = path.resolve(__dirname, '../../../../../../', outputPath)
+  const filename = generateFilename(event)
+  const filepath = path.join(baseDir, filename)
 
   if (fs.existsSync(filepath)) {
-    fs.unlinkSync(filepath);
-    console.log(`🗑️  Deleted Event MDX file: ${filepath}`);
+    fs.unlinkSync(filepath)
+    console.log(`🗑️  Deleted Event MDX file: ${filepath}`)
   }
 }
 
 export default {
   async afterCreate(event: Event) {
-    const { result } = event;
+    const { result } = event
     if (result && result.publishedAt) {
-      await writeMDXFile(result);
-      const filename = generateFilename(result);
-      const outputPath = process.env.EVENTS_MDX_OUTPUT_PATH || '../src/content/events';
-      const baseDir = path.resolve(__dirname, '../../../../../../', outputPath);
-      const filepath = path.join(baseDir, filename);
-      await gitCommitAndPush(filepath, `events: add "${result.title}"`);
+      await writeMDXFile(result)
+      const filename = generateFilename(result)
+      const outputPath =
+        process.env.EVENTS_MDX_OUTPUT_PATH || '../src/content/events'
+      const baseDir = path.resolve(__dirname, '../../../../../../', outputPath)
+      const filepath = path.join(baseDir, filename)
+      await gitCommitAndPush(filepath, `events: add "${result.title}"`)
     }
   },
 
   async afterUpdate(event: Event) {
-    const { result } = event;
+    const { result } = event
     if (result) {
-      const filename = generateFilename(result);
-      const outputPath = process.env.EVENTS_MDX_OUTPUT_PATH || '../src/content/events';
-      const baseDir = path.resolve(__dirname, '../../../../../../', outputPath);
-      const filepath = path.join(baseDir, filename);
+      const filename = generateFilename(result)
+      const outputPath =
+        process.env.EVENTS_MDX_OUTPUT_PATH || '../src/content/events'
+      const baseDir = path.resolve(__dirname, '../../../../../../', outputPath)
+      const filepath = path.join(baseDir, filename)
 
       if (result.publishedAt) {
-        await writeMDXFile(result);
-        await gitCommitAndPush(filepath, `events: update "${result.title}"`);
+        await writeMDXFile(result)
+        await gitCommitAndPush(filepath, `events: update "${result.title}"`)
       } else {
-        await deleteMDXFile(result);
-        await gitCommitAndPush(filepath, `events: unpublish "${result.title}"`);
+        await deleteMDXFile(result)
+        await gitCommitAndPush(filepath, `events: unpublish "${result.title}"`)
       }
     }
   },
 
   async afterDelete(event: Event) {
-    const { result } = event;
+    const { result } = event
     if (result) {
-      await deleteMDXFile(result);
-      const filename = generateFilename(result);
-      const outputPath = process.env.EVENTS_MDX_OUTPUT_PATH || '../src/content/events';
-      const baseDir = path.resolve(__dirname, '../../../../../../', outputPath);
-      const filepath = path.join(baseDir, filename);
-      await gitCommitAndPush(filepath, `events: delete "${result.title}"`);
+      await deleteMDXFile(result)
+      const filename = generateFilename(result)
+      const outputPath =
+        process.env.EVENTS_MDX_OUTPUT_PATH || '../src/content/events'
+      const baseDir = path.resolve(__dirname, '../../../../../../', outputPath)
+      const filepath = path.join(baseDir, filename)
+      await gitCommitAndPush(filepath, `events: delete "${result.title}"`)
     }
-  },
-};
+  }
+}

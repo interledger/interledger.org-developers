@@ -38,11 +38,7 @@ const { page } = Astro.props
           itemscope
           itemtype="https://schema.org/ListItem"
         >
-          <a
-            itemprop="item"
-            href="/"
-            data-umami-event="Devs breadcrumb - Home"
-          >
+          <a itemprop="item" href="/" data-umami-event="Devs breadcrumb - Home">
             <span itemprop="name">Developers Portal</span></a
           >
           <meta itemprop="position" content="1" />
@@ -112,7 +108,10 @@ const { page } = Astro.props
                       ? blogPostEntry.data.description
                       : excerpt}
                   </p>
-                  <a href={`/blog/${blogPostEntry.id}`} class="postlist-readmore">
+                  <a
+                    href={`/blog/${blogPostEntry.id}`}
+                    class="postlist-readmore"
+                  >
                     Read more →
                   </a>
                 </div>
