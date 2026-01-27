@@ -139,6 +139,12 @@ flowchart TD
   **Import (`npm run translations:import -- [options]`)**:
   - `--force`: Overwrite existing entries in Strapi instead of skipping them
 
+  **Force Export Sync**:
+  If you use `--force` with the export script, it will generate MDX files even for locales that already exist in Strapi. For these existing translations:
+  - The content, title, and description will be pulled from the *translated* entry in Strapi, not the English source.
+  - The MDX will have `isTranslated: true` by default.
+  - This is useful for "pulling" current CMS state back into local files for editing or backup.
+
 - **Environment Variables**:
   - `STRAPI_URL`: API endpoint (default: http://localhost:1337)
   - `STRAPI_API_TOKEN`: For authenticated requests

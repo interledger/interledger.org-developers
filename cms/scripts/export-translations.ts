@@ -22,6 +22,7 @@ const options = {
   since: getArgValue('--since'),
   ids: getArgValue('--ids')?.split(',').map(Number),
   slugs: getArgValue('--slugs')?.split(','),
+  force: args.includes('--force'),
   help: args.includes('--help') || args.includes('-h')
 }
 
@@ -42,6 +43,7 @@ Options:
   --since <YYYY-MM-DD>  Process posts published after this date
   --ids <id1,id2>       Process only specific post IDs
   --slugs <s1,s2>       Process only specific slugs
+  --force               Export all locales even if translation exists (uses translated content)
   -h, --help            Show this help message
   `)
   process.exit(0)
@@ -68,7 +70,7 @@ interface BlogPost {
   featuredImage?: MediaFile
   ogImageUrl?: string
   lang?: string
-  linked_translations?: Array<{ id: number, lang?: string }>
+  linked_translations?: BlogPost[]
 }
 
 interface MediaFile {
@@ -182,6 +184,7 @@ async function fetchBlogPosts(filters: string[] = []): Promise<BlogPost[]> {
     const queryParams = [
       'populate[0]=featuredImage',
       'populate[1]=linked_translations',
+      'populate[2]=linked_translations.featuredImage',
       'filters[publishedAt][$notNull]=true',
       // Only export English posts as source
       'filters[$or][0][lang][$eq]=en',
@@ -261,16 +264,26 @@ async function exportTranslations(): Promise<void> {
       }
 
       // Check which locales already have translations in Strapi
-      const existingLocales = (post.linked_translations || []).map(t => t.lang).filter(Boolean) as string[]
-      const localesToExport = locales.filter(l => !existingLocales.includes(l))
+      const existingLocales = (post.linked_translations || [])
+        .map((t) => t.lang)
+        .filter(Boolean) as string[]
+
+      let localesToExport: string[]
+      if (options.force) {
+        localesToExport = locales
+      } else {
+        localesToExport = locales.filter((l) => !existingLocales.includes(l))
+      }
 
       if (localesToExport.length === 0) {
-        console.log(`⏭️  Skipping "${post.title}": Translations already exist for all locales`)
+        console.log(
+          `⏭️  Skipping "${post.title}": Translations already exist for all locales (use --force to override)`
+        )
         totalSkipped++
         continue
       }
 
-      locales.forEach(locale => {
+      locales.forEach((locale) => {
         // e.g., 'es-my-post-title'
         translations[locale] = `${locale}-${post.slug}`
       })
@@ -284,20 +297,51 @@ async function exportTranslations(): Promise<void> {
       console.log(`✅ Exported reference (EN): ${filename}`)
       totalExported++
 
-      // Export only missing localized versions for translation
+      // Export missing or forced localized versions for translation
       for (const locale of localesToExport) {
+        const existingTranslation = (post.linked_translations || []).find(
+          (t) => t.lang === locale
+        )
+
         const localizedFilename = generateFilename(post, locale)
         const localizedFilepath = path.join(EXPORTS_DIR, localizedFilename)
-        // Add isTranslated: false to frontmatter for localized files
-        const localizedMdxContent = generateMDX(post, locale, translations, false)
+
+        let localizedMdxContent: string
+        if (existingTranslation && options.force) {
+          // Use the actual translation data from Strapi
+          const translationData: BlogPost = {
+            ...existingTranslation,
+            date: existingTranslation.date || post.date // Fallback to parent date
+          }
+          // Use isTranslated: true because this reflects existing state
+          localizedMdxContent = generateMDX(
+            translationData,
+            locale,
+            translations,
+            true
+          )
+          console.log(
+            `✅ Exported existing translation (${locale}): ${localizedFilename}`
+          )
+        } else {
+          // Use English source as template
+          localizedMdxContent = generateMDX(
+            post,
+            locale,
+            translations,
+            false
+          )
+          console.log(
+            `✅ Exported for translation (${locale}): ${localizedFilename}`
+          )
+        }
 
         fs.writeFileSync(localizedFilepath, localizedMdxContent, 'utf-8')
-        console.log(`✅ Exported for translation (${locale}): ${localizedFilename}`)
         totalExported++
       }
 
-      if (localesToExport.length < locales.length) {
-        const skipped = locales.filter(l => !localesToExport.includes(l))
+      if (!options.force && localesToExport.length < locales.length) {
+        const skipped = locales.filter((l) => !localesToExport.includes(l))
         console.log(`   (Skipped ${skipped.join(', ')} - already exists)`)
       }
     } catch (error) {
