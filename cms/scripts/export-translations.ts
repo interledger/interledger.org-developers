@@ -59,7 +59,11 @@ interface LocalesResponse {
   data?: Locale[]
 }
 
-function generateMDX(post: BlogPost, locale?: string): string {
+interface Translations {
+  [key: string]: string | boolean
+}
+
+function generateMDX(post: BlogPost, locale?: string, translations?: Translations, isTranslated?: boolean): string {
   const imageUrl = post.featuredImage?.url
 
   const frontmatterLines = [
@@ -74,8 +78,20 @@ function generateMDX(post: BlogPost, locale?: string): string {
     locale ? `lang: "${escapeQuotes(locale)}"` : undefined,
     locale
       ? `uniqueSlug: ${locale !== 'en' ? `${locale}-${post.slug}` : post.slug}`
-      : undefined
+      : undefined,
+    isTranslated !== undefined ? `isTranslated: ${isTranslated}` : undefined
   ].filter(Boolean) as string[]
+
+  if (translations) {
+    frontmatterLines.push('translations:')
+    Object.entries(translations).forEach(([key, value]) => {
+      if (typeof value === 'boolean') {
+        frontmatterLines.push(`  ${key}: ${value}`)
+      } else {
+        frontmatterLines.push(`  ${key}: "${value}"`)
+      }
+    })
+  }
 
   const frontmatter = frontmatterLines.join('\n')
   const content = post.content || ''
@@ -172,10 +188,21 @@ async function exportTranslations(): Promise<void> {
 
   for (const post of posts) {
     try {
+      // Build translations map
+      // Default: Generate predictable slugs for all locales
+      const translations: Translations = {
+        en: post.slug
+      }
+
+      locales.forEach(locale => {
+        // e.g., 'es-my-post-title'
+        translations[locale] = `${locale}-${post.slug}`
+      })
+
       // Export English version
       const filename = generateFilename(post)
       const filepath = path.join(EXPORTS_DIR, filename)
-      const mdxContent = generateMDX(post)
+      const mdxContent = generateMDX(post, undefined, translations)
 
       fs.writeFileSync(filepath, mdxContent, 'utf-8')
       console.log(`✅ Exported: ${filename}`)
@@ -184,7 +211,8 @@ async function exportTranslations(): Promise<void> {
       for (const locale of locales) {
         const localizedFilename = generateFilename(post, locale)
         const localizedFilepath = path.join(EXPORTS_DIR, localizedFilename)
-        const localizedMdxContent = generateMDX(post, locale)
+        // Add isTranslated: false to frontmatter for localized files
+        const localizedMdxContent = generateMDX(post, locale, translations, false)
 
         fs.writeFileSync(localizedFilepath, localizedMdxContent, 'utf-8')
         console.log(`✅ Exported: ${localizedFilename}`)

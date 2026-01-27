@@ -13,7 +13,8 @@ const blogCollection = defineCollection({
     lang: z.string().optional(),
     image: z.string().optional(),
     ogImageUrl: z.string().optional(),
-    translations: z.record(z.string()).optional()
+    translations: z.record(z.union([z.string(), z.boolean()])).optional(),
+    isTranslated: z.boolean().optional()
   })
 })
 

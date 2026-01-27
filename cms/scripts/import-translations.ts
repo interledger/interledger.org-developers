@@ -40,6 +40,7 @@ interface StrapiBlogPost {
   publishedAt: string
   ogImageUrl?: string
   featuredImage?: { id: number }
+  linked_translations?: any
 }
 
 interface FullPostAttributes {
@@ -67,6 +68,7 @@ interface StrapiResponse {
 interface FullStrapiResponse {
   data?: Array<{
     id: number
+    documentId: string
     slug: string
     lang?: string
     ogImageUrl?: string
@@ -141,8 +143,8 @@ function extractSlugAndDate(filename: string): {
     date: null,
     slug: slugMatch
       ? slugMatch[1]
-          .replace(/\.([a-z]{2}(-[A-Z]{2})?)\.mdx$/, '')
-          .replace(/\.mdx$/, '')
+        .replace(/\.([a-z]{2}(-[A-Z]{2})?)\.mdx$/, '')
+        .replace(/\.mdx$/, '')
       : filename
   }
 }
@@ -153,7 +155,10 @@ async function checkExistingEntry(
 ): Promise<number | null> {
   try {
     const filters = [`filters[slug][$eq]=${slug}`]
-    if (lang) {
+    // If checking for EN, also check for null lang as Strapi might have it as null
+    if (lang === 'en') {
+      filters.push(`filters[$or][0][lang][$eq]=en&filters[$or][1][lang][$null]=true`)
+    } else {
       filters.push(`filters[lang][$eq]=${lang}`)
     }
 
@@ -179,6 +184,8 @@ async function checkExistingEntry(
 }
 
 async function getEnglishPostImage(englishSlug: string): Promise<{
+  id: number
+  documentId: string
   featuredImage?: number
   ogImageUrl?: string
   imageUrl?: string
@@ -198,12 +205,11 @@ async function getEnglishPostImage(englishSlug: string): Promise<{
     }
 
     const data = (await response.json()) as FullStrapiResponse
-    console.log('Fetched data for English post:', data)
     if (data.data && data.data.length > 0) {
       const post = data.data[0]
-      console.log('English post slug:', post.slug, 'lang:', post.lang)
-      console.log('featuredImage object:', post.featuredImage)
       return {
+        id: post.id,
+        documentId: post.documentId,
         featuredImage: post.featuredImage?.id,
         ogImageUrl: post.ogImageUrl,
         imageUrl: post.featuredImage?.url
@@ -219,7 +225,7 @@ async function getEnglishPostImage(englishSlug: string): Promise<{
   }
 }
 
-async function createBlogPost(postData: StrapiBlogPost): Promise<void> {
+async function createBlogPost(postData: StrapiBlogPost): Promise<string> {
   try {
     const response = await fetch(`${STRAPI_URL}/api/blog-posts`, {
       method: 'POST',
@@ -238,8 +244,36 @@ async function createBlogPost(postData: StrapiBlogPost): Promise<void> {
         `Failed to create blog post: ${response.statusText} - ${errorText}`
       )
     }
+
+    const data = (await response.json()) as { data: { documentId: string } }
+    return data.data.documentId
   } catch (error) {
     console.error('❌ Error creating blog post:', (error as Error).message)
+    throw error
+  }
+}
+
+async function updateBlogPost(documentId: string, data: Partial<StrapiBlogPost>): Promise<void> {
+  try {
+    const response = await fetch(`${STRAPI_URL}/api/blog-posts/${documentId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${STRAPI_API_TOKEN}`
+      },
+      body: JSON.stringify({
+        data
+      })
+    })
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      throw new Error(
+        `Failed to update blog post: ${response.statusText} - ${errorText}`
+      )
+    }
+  } catch (error) {
+    console.error('❌ Error updating blog post:', (error as Error).message)
     throw error
   }
 }
@@ -255,6 +289,13 @@ async function importTranslations(): Promise<void> {
   const files = fs
     .readdirSync(IMPORTS_DIR)
     .filter((file) => file.endsWith('.mdx'))
+    .sort((a, b) => {
+      const langA = extractLangFromFilename(a) || 'en'
+      const langB = extractLangFromFilename(b) || 'en'
+      if (langA === 'en' && langB !== 'en') return -1
+      if (langA !== 'en' && langB === 'en') return 1
+      return a.localeCompare(b)
+    })
 
   if (files.length === 0) {
     console.log('ℹ️  No MDX files found in', IMPORTS_DIR)
@@ -281,16 +322,16 @@ async function importTranslations(): Promise<void> {
       }
 
       const { frontmatter, body } = parsed
-      const { date, slug } = extractSlugAndDate(file)
-      const lang = extractLangFromFilename(file)
 
-      if (!lang) {
-        console.log(
-          `   ⚠️  Skipped: No language code in filename. Expected format: slug.lang.mdx (e.g., post.es.mdx)\n`
-        )
-        skippedImports.push({ file, reason: 'No language code in filename' })
+      // Check isTranslated flag
+      if (frontmatter.isTranslated === 'false') {
+        console.log(`   ⚠️  Skipped: Translation not ready (isTranslated: false)\n`)
+        skippedImports.push({ file, reason: 'isTranslated is false' })
         continue
       }
+      const { date, slug } = extractSlugAndDate(file)
+      // Default to 'en' if no language code is found in the filename
+      const lang = extractLangFromFilename(file) || 'en'
 
       const uniqueSlug = lang !== 'en' ? `${lang}-${slug}` : slug
       const existingId = await checkExistingEntry(uniqueSlug, lang)
@@ -302,15 +343,23 @@ async function importTranslations(): Promise<void> {
         continue
       }
 
+      let englishPostDocumentId: string | null = null // For linking
       let englishImage: {
         featuredImage?: number
         ogImageUrl?: string
         imageUrl?: string
       } | null = null
+
       if (lang !== 'en') {
         const englishSlug = slug
-        englishImage = await getEnglishPostImage(englishSlug)
-        console.log(`English image for ${englishSlug}:`, englishImage)
+        const engData = await getEnglishPostImage(englishSlug)
+        if (engData) {
+          englishImage = engData
+          englishPostDocumentId = engData.documentId
+          console.log(`Found English parent post: Document ID ${englishPostDocumentId}`)
+        } else {
+          console.log(`⚠️  Warning: English parent post not found for slug "${englishSlug}". Creating as standalone.`)
+        }
       }
 
       const postData: StrapiBlogPost = {
@@ -333,11 +382,27 @@ async function importTranslations(): Promise<void> {
       // Set featuredImage from English post for translated content
       if (englishImage?.featuredImage) {
         postData.featuredImage = { id: englishImage.featuredImage }
-        console.log(`Setting featuredImage to ${englishImage.featuredImage}`)
       }
 
-      await createBlogPost(postData)
-      console.log(`   ✅ Imported: "${postData.title}" (${lang})\n`)
+      // Create the post
+      const newPostDocId = await createBlogPost(postData)
+
+      if (lang !== 'en' && englishPostDocumentId) {
+        // Link bidirectional
+        // 1. Update English post to connect to this new translation
+        await updateBlogPost(englishPostDocumentId, {
+          linked_translations: { connect: [newPostDocId] }
+        } as any)
+
+        // 2. Update this new translation to connect back to the English post
+        await updateBlogPost(newPostDocId, {
+          linked_translations: { connect: [englishPostDocumentId] }
+        } as any)
+
+        console.log(`   ✅ Imported (linked bidirectional to ${englishPostDocumentId}): "${postData.title}" (${lang})\n`)
+      } else {
+        console.log(`   ✅ Imported: "${postData.title}" (${lang})\n`)
+      }
     } catch (error) {
       console.error(
         `   ❌ Failed to import "${file}":`,

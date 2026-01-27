@@ -14,8 +14,6 @@ This report details the implementation of a translation management system for th
 - No existing translation scripts, workflows, or localized content found
 - Blog posts have `lang` field but no i18n localization enabled
 
-**Conclusion**: Clean slate for translation implementation. Can build new scripts and modify existing content types without conflicts.
-
 ## Changes Made
 
 ### 1. Strapi Configuration
@@ -24,18 +22,7 @@ This report details the implementation of a translation management system for th
 - **Locales**: Configure in Strapi admin (Settings → Internationalization) for en, es, zh, de, fr
 - **Content Types**: Blog posts use `lang` field for locale identification (custom workflow, not Strapi's localized fields)
 
-### 2. Code Changes to be made
-
-- `cms/src/api/blog-post/content-types/blog-post/lifecycles.ts`: Updated `generateFilename()` to append language suffix (e.g., `.es.mdx` for Spanish)
-- `cms/scripts/export-translations.js`: New script to export English MDX files for agency
-- `cms/scripts/import-translations.js`: New script to import translated MDX and create localized Strapi entries
-
-#### Unchanged Files:
-
-- `cms/package.json`: No i18n plugin added (built-in to Strapi v5)
-- `src/content.config.ts`: Blog collection schema already includes optional `lang` field
-
-### 3. Export/Import Scripts
+### 2. Export/Import Scripts
 
 - **Export**: Queries Strapi API for English posts, generates MDX files with frontmatter and content
 - **Import**: Parses translated MDX, extracts data, creates new Strapi entries with `lang` set
@@ -53,7 +40,6 @@ This report details the implementation of a translation management system for th
 ### Translation Handling
 
 - Custom components in MDX: Agency translates text strings only, preserves JSX
-- Fallback: Pages show English if translation missing
 - Tracking: Git diffs show changes between versions automatically
 
 ### API Integration
@@ -92,11 +78,10 @@ flowchart TD
    - Generates MDX files with frontmatter and HTML-to-markdown converted content
 
 3. **Agency Translation**:
-   - Receive MDX files (e.g., `2024-01-01-my-post.mdx`)
+   - Receive MDX files (e.g., `2024-01-01-my-post.es.mdx`)
    - Translate frontmatter fields: `title`, `description`, `ogImageUrl`
    - Translate body content (text, headers, component props)
    - Preserve all JSX, component names, and non-text elements
-   - Save as `2024-01-01-my-post.es.mdx` (append language code)
 
 4. **Import Phase**:
    - Place translated files in `cms/exports/translations-translated/`
@@ -108,7 +93,7 @@ flowchart TD
 5. **Site Integration**:
    - Astro loads all MDX files via content collections
    - Pages filter posts by current language or fallback to English
-   - Language switcher (to be implemented) allows users to change locale
+   - Language switcher allows users to change locale
 
 ### Error Handling and Validation
 
@@ -166,13 +151,4 @@ flowchart TD
 - **Component Fallback**: If no posts in requested locale, show English with "Translation pending" notice
 - **URL Handling**: `/es/blog/` shows Spanish posts, falls back to `/blog/` for English
 
-### Next Steps
 
-1. Configure locales in Strapi admin
-2. Implement language switcher component
-3. Test with sample content
-4. Document for agency (translation guidelines)
-5. Add validation for MDX parsing
-6. Consider AI-assisted translation for future enhancement
-
-This implementation provides a robust, scalable translation system that eliminates the pain points of the previous Drupal workflow while leveraging the power of MDX and Strapi.
