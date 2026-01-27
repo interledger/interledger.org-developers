@@ -15,6 +15,38 @@ if (!STRAPI_API_TOKEN) {
 
 const EXPORTS_DIR = path.join(__dirname, '../exports/translations')
 
+// CLI Argument Parsing
+const args = process.argv.slice(2)
+const options = {
+  limit: parseInt(getArgValue('--limit') || '0'),
+  since: getArgValue('--since'),
+  ids: getArgValue('--ids')?.split(',').map(Number),
+  slugs: getArgValue('--slugs')?.split(','),
+  help: args.includes('--help') || args.includes('-h')
+}
+
+function getArgValue(name: string): string | undefined {
+  const index = args.indexOf(name)
+  if (index !== -1 && index + 1 < args.length) {
+    return args[index + 1]
+  }
+  return undefined
+}
+
+if (options.help) {
+  console.log(`
+Usage: tsx scripts/export-translations.ts [options]
+
+Options:
+  --limit <number>      Process only the first N posts
+  --since <YYYY-MM-DD>  Process posts published after this date
+  --ids <id1,id2>       Process only specific post IDs
+  --slugs <s1,s2>       Process only specific slugs
+  -h, --help            Show this help message
+  `)
+  process.exit(0)
+}
+
 function escapeQuotes(value: string): string {
   return value.replace(/"/g, '\\"')
 }
@@ -35,6 +67,8 @@ interface BlogPost {
   content?: string
   featuredImage?: MediaFile
   ogImageUrl?: string
+  lang?: string
+  linked_translations?: Array<{ id: number, lang?: string }>
 }
 
 interface MediaFile {
@@ -143,10 +177,20 @@ async function fetchLocales(): Promise<string[]> {
   }
 }
 
-async function fetchBlogPosts(): Promise<BlogPost[]> {
+async function fetchBlogPosts(filters: string[] = []): Promise<BlogPost[]> {
   try {
+    const queryParams = [
+      'populate[0]=featuredImage',
+      'populate[1]=linked_translations',
+      'filters[publishedAt][$notNull]=true',
+      // Only export English posts as source
+      'filters[$or][0][lang][$eq]=en',
+      'filters[$or][1][lang][$null]=true',
+      ...filters
+    ]
+
     const response = await fetch(
-      `${STRAPI_URL}/api/blog-posts?populate=*&filters[publishedAt][$notNull]=true`,
+      `${STRAPI_URL}/api/blog-posts?${queryParams.join('&')}`,
       {
         headers: {
           Authorization: `Bearer ${STRAPI_API_TOKEN}`
@@ -174,7 +218,28 @@ async function exportTranslations(): Promise<void> {
     `📍 Found ${locales.length} locales for translation: ${locales.join(', ')}`
   )
 
-  const posts = await fetchBlogPosts()
+  const apiFilters: string[] = []
+  if (options.since) {
+    apiFilters.push(`filters[publishedAt][$gte]=${options.since}`)
+  }
+  if (options.ids) {
+    options.ids.forEach((id, index) => {
+      apiFilters.push(`filters[id][$in][${index}]=${id}`)
+    })
+  }
+  if (options.slugs) {
+    options.slugs.forEach((slug, index) => {
+      apiFilters.push(`filters[slug][$in][${index}]=${slug}`)
+    })
+  }
+
+  let posts = await fetchBlogPosts(apiFilters)
+
+  if (options.limit > 0) {
+    posts = posts.slice(0, options.limit)
+    console.log(`🔢 Limited to ${options.limit} posts`)
+  }
+
   if (posts.length === 0) {
     console.log('ℹ️  No published blog posts found to export')
     return
@@ -185,13 +250,24 @@ async function exportTranslations(): Promise<void> {
   }
 
   const failedExports: string[] = []
+  let totalExported = 0
+  let totalSkipped = 0
 
   for (const post of posts) {
     try {
       // Build translations map
-      // Default: Generate predictable slugs for all locales
       const translations: Translations = {
         en: post.slug
+      }
+
+      // Check which locales already have translations in Strapi
+      const existingLocales = (post.linked_translations || []).map(t => t.lang).filter(Boolean) as string[]
+      const localesToExport = locales.filter(l => !existingLocales.includes(l))
+
+      if (localesToExport.length === 0) {
+        console.log(`⏭️  Skipping "${post.title}": Translations already exist for all locales`)
+        totalSkipped++
+        continue
       }
 
       locales.forEach(locale => {
@@ -199,23 +275,30 @@ async function exportTranslations(): Promise<void> {
         translations[locale] = `${locale}-${post.slug}`
       })
 
-      // Export English version
+      // Export English version as reference
       const filename = generateFilename(post)
       const filepath = path.join(EXPORTS_DIR, filename)
       const mdxContent = generateMDX(post, undefined, translations)
 
       fs.writeFileSync(filepath, mdxContent, 'utf-8')
-      console.log(`✅ Exported: ${filename}`)
+      console.log(`✅ Exported reference (EN): ${filename}`)
+      totalExported++
 
-      // Export localized versions for translation
-      for (const locale of locales) {
+      // Export only missing localized versions for translation
+      for (const locale of localesToExport) {
         const localizedFilename = generateFilename(post, locale)
         const localizedFilepath = path.join(EXPORTS_DIR, localizedFilename)
         // Add isTranslated: false to frontmatter for localized files
         const localizedMdxContent = generateMDX(post, locale, translations, false)
 
         fs.writeFileSync(localizedFilepath, localizedMdxContent, 'utf-8')
-        console.log(`✅ Exported: ${localizedFilename}`)
+        console.log(`✅ Exported for translation (${locale}): ${localizedFilename}`)
+        totalExported++
+      }
+
+      if (localesToExport.length < locales.length) {
+        const skipped = locales.filter(l => !localesToExport.includes(l))
+        console.log(`   (Skipped ${skipped.join(', ')} - already exists)`)
       }
     } catch (error) {
       console.error(
@@ -226,12 +309,8 @@ async function exportTranslations(): Promise<void> {
     }
   }
 
-  const totalFiles = posts.length * (1 + locales.length)
-  const successFiles =
-    (posts.length - failedExports.length) * (1 + locales.length)
-
   console.log(
-    `\n✨ Export complete! ${successFiles}/${totalFiles} files exported to ${EXPORTS_DIR} (${posts.length} posts × ${1 + locales.length} locales)`
+    `\n✨ Export complete! ${totalExported} files generated. ${totalSkipped} posts fully skipped.`
   )
 
   if (failedExports.length > 0) {

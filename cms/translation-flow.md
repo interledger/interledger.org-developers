@@ -24,9 +24,10 @@ This report details the implementation of a translation management system for th
 
 ### 2. Export/Import Scripts
 
-- **Export**: Queries Strapi API for English posts, generates MDX files with frontmatter and content
-- **Import**: Parses translated MDX, extracts data, creates new Strapi entries with `lang` set
-- **Error Handling**: Continues processing on failures, logs failed files at end
+- **Export**: Queries Strapi API for English posts. Now supports selective export (skips locales that already have a translation in Strapi) and control via CLI arguments (`--limit`, `--since`, `--ids`, `--slugs`).
+- **Import**: Parses translated MDX, extracts data. Now supports idempotent re-import via the `--force` flag, which updates existing entries using a `PUT` request instead of skipping them.
+- **Bi-directional Linking**: Automatically maintains bi-directional relations between the English source and its translations in Strapi.
+- **Error Handling**: Continues processing on failures, logs failed files at end.
 
 ## How It Works
 
@@ -73,8 +74,9 @@ flowchart TD
    - Sets `lang` to empty (defaults to English)
 
 2. **Export Phase**:
-   - Run: `node cms/scripts/export-translations.js`
-   - Script fetches all English posts (where `lang` is null or 'en')
+   - Run: `npm run translations:export` (optionally add `--limit`, `--since`, `--ids`, or `--slugs`)
+   - Script fetches only English source posts (where `lang` is null or 'en')
+   - Checks Strapi for existing translations; only generates MDX for missing locales
    - Generates MDX files with frontmatter and HTML-to-markdown converted content
 
 3. **Agency Translation**:
@@ -84,10 +86,12 @@ flowchart TD
    - Preserve all JSX, component names, and non-text elements
 
 4. **Import Phase**:
-   - Place translated files in `cms/exports/translations-translated/`
-   - Run: `node cms/scripts/import-translations.js`
+   - Place translated files in `cms/exports/translations/`
+   - Run: `npm run translations:import` (add `--force` to update existing entries)
    - Script parses each file, extracts data
-   - Creates new Strapi entry with `lang='es'`, adjusted slug, and translated content
+   - Check for existing entry: skips by default, or updates if `--force` is provided
+   - Creates/Updates Strapi entry with `lang='es'`, adjusted slug, and translated content
+   - Verifies and maintains bi-directional links via the `linked_translations` relation
    - Strapi lifecycle generates `2024-01-01-my-post.es.mdx` in `src/content/blog/`
 
 5. **Site Integration**:
@@ -124,6 +128,17 @@ flowchart TD
 
 ### Technical Considerations
 
+- **CLI Arguments**:
+
+  **Export (`npm run translations:export -- [options]`)**:
+  - `--limit <n>`: Process only the first N posts
+  - `--since <YYYY-MM-DD>`: Process posts published after this date
+  - `--ids <id1,id2>`: Process specific post IDs
+  - `--slugs <s1,s2>`: Process specific slugs
+
+  **Import (`npm run translations:import -- [options]`)**:
+  - `--force`: Overwrite existing entries in Strapi instead of skipping them
+
 - **Environment Variables**:
   - `STRAPI_URL`: API endpoint (default: http://localhost:1337)
   - `STRAPI_API_TOKEN`: For authenticated requests
@@ -134,11 +149,10 @@ flowchart TD
   ```
   cms/
   ├── scripts/
-  │   ├── export-translations.js
-  │   └── import-translations.js
+  │   ├── export-translations.ts
+  │   └── import-translations.ts
   └── exports/
-      ├── translations/           # Exported English MDX
-      └── translations-translated/ # Agency returns here
+      └── translations/           # Both exported and incoming files
   src/content/blog/               # Generated localized MDX
   ```
 

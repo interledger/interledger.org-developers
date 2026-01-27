@@ -15,6 +15,24 @@ if (!STRAPI_API_TOKEN) {
 
 const IMPORTS_DIR = path.join(__dirname, '../exports/translations')
 
+// CLI Argument Parsing
+const args = process.argv.slice(2)
+const options = {
+  force: args.includes('--force'),
+  help: args.includes('--help') || args.includes('-h')
+}
+
+if (options.help) {
+  console.log(`
+Usage: tsx scripts/import-translations.ts [options]
+
+Options:
+  --force       Overwrite existing entries in Strapi
+  -h, --help    Show this help message
+  `)
+  process.exit(0)
+}
+
 interface Frontmatter {
   title?: string
   description?: string
@@ -61,6 +79,7 @@ interface FullPostAttributes {
 interface StrapiResponse {
   data?: Array<{
     id: number
+    documentId: string
     attributes: Frontmatter
   }>
 }
@@ -152,12 +171,14 @@ function extractSlugAndDate(filename: string): {
 async function checkExistingEntry(
   slug: string,
   lang: string
-): Promise<number | null> {
+): Promise<{ id: number; documentId: string } | null> {
   try {
     const filters = [`filters[slug][$eq]=${slug}`]
     // If checking for EN, also check for null lang as Strapi might have it as null
     if (lang === 'en') {
-      filters.push(`filters[$or][0][lang][$eq]=en&filters[$or][1][lang][$null]=true`)
+      filters.push(
+        `filters[$or][0][lang][$eq]=en&filters[$or][1][lang][$null]=true`
+      )
     } else {
       filters.push(`filters[lang][$eq]=${lang}`)
     }
@@ -176,7 +197,9 @@ async function checkExistingEntry(
     }
 
     const data = (await response.json()) as StrapiResponse
-    return data.data && data.data.length > 0 ? data.data[0].id : null
+    return data.data && data.data.length > 0
+      ? { id: data.data[0].id, documentId: data.data[0].documentId }
+      : null
   } catch (error) {
     console.error('❌ Error checking existing entry:', (error as Error).message)
     return null
@@ -334,10 +357,11 @@ async function importTranslations(): Promise<void> {
       const lang = extractLangFromFilename(file) || 'en'
 
       const uniqueSlug = lang !== 'en' ? `${lang}-${slug}` : slug
-      const existingId = await checkExistingEntry(uniqueSlug, lang)
-      if (existingId) {
+      const existingEntry = await checkExistingEntry(uniqueSlug, lang)
+
+      if (existingEntry && !options.force) {
         console.log(
-          `   ⚠️  Skipped: Entry already exists for "${uniqueSlug}" in language "${lang}"\n`
+          `   ⚠️  Skipping: Entry already exists for "${uniqueSlug}" in language "${lang}". Use --force to overwrite.\n`
         )
         skippedImports.push({ file, reason: 'Entry already exists' })
         continue
@@ -356,9 +380,13 @@ async function importTranslations(): Promise<void> {
         if (engData) {
           englishImage = engData
           englishPostDocumentId = engData.documentId
-          console.log(`Found English parent post: Document ID ${englishPostDocumentId}`)
+          console.log(
+            `Found English parent post: Document ID ${englishPostDocumentId}`
+          )
         } else {
-          console.log(`⚠️  Warning: English parent post not found for slug "${englishSlug}". Creating as standalone.`)
+          console.log(
+            `⚠️  Warning: English parent post not found for slug "${englishSlug}". Creating as standalone.`
+          )
         }
       }
 
@@ -384,24 +412,34 @@ async function importTranslations(): Promise<void> {
         postData.featuredImage = { id: englishImage.featuredImage }
       }
 
-      // Create the post
-      const newPostDocId = await createBlogPost(postData)
+      let targetDocId: string
+      if (existingEntry && options.force) {
+        console.log(`   🔄 Updating existing entry ${existingEntry.documentId}`)
+        await updateBlogPost(existingEntry.documentId, postData)
+        targetDocId = existingEntry.documentId
+      } else {
+        targetDocId = await createBlogPost(postData)
+      }
 
       if (lang !== 'en' && englishPostDocumentId) {
         // Link bidirectional
         // 1. Update English post to connect to this new translation
         await updateBlogPost(englishPostDocumentId, {
-          linked_translations: { connect: [newPostDocId] }
+          linked_translations: { connect: [targetDocId] }
         } as any)
 
-        // 2. Update this new translation to connect back to the English post
-        await updateBlogPost(newPostDocId, {
+        // 2. Update this translation to connect back to the English post
+        await updateBlogPost(targetDocId, {
           linked_translations: { connect: [englishPostDocumentId] }
         } as any)
 
-        console.log(`   ✅ Imported (linked bidirectional to ${englishPostDocumentId}): "${postData.title}" (${lang})\n`)
+        console.log(
+          `   ✅ ${existingEntry ? 'Updated' : 'Imported'} (linked bidirectional to ${englishPostDocumentId}): "${postData.title}" (${lang})\n`
+        )
       } else {
-        console.log(`   ✅ Imported: "${postData.title}" (${lang})\n`)
+        console.log(
+          `   ✅ ${existingEntry ? 'Updated' : 'Imported'}: "${postData.title}" (${lang})\n`
+        )
       }
     } catch (error) {
       console.error(
