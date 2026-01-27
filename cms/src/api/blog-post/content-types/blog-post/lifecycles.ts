@@ -1,6 +1,12 @@
+/**
+ * Lifecycle callbacks for blog-post
+ * Generates MDX files that match the blog post format used on the site
+ * Then commits and pushes to trigger Netlify preview builds
+ */
+
 import fs from 'fs'
 import path from 'path'
-import { htmlToMarkdown } from '../../../../utils/contentUtils'
+import { gitCommitAndPush } from '../../../../utils/gitSync'
 
 const escapeQuotes = (str: string) => str?.replace(/"/g, '\\"') || ''
 
@@ -11,9 +17,14 @@ const formatDate = (date: string) => {
 
 const generateFilename = (post: BlogPost) => {
   const dateStr = formatDate(post.date)
-  return `${dateStr}-${post.slug}.${post.lang || 'en'}.mdx`
+  const lang = post.lang || 'en'
+  return `${dateStr}-${post.slug}.${lang}.mdx`
 }
 
+/**
+ * Gets the image URL from a media field
+ * Returns the full Strapi URL
+ */
 const getImageUrl = (media: any) => {
   if (!media) return null
   if (Array.isArray(media)) {
@@ -23,6 +34,42 @@ const getImageUrl = (media: any) => {
   const url = media.url || media.attributes?.url
   if (!url) return null
   return url.startsWith('http') ? url : `${STRAPI_URL}${url}`
+}
+
+/**
+ * Simple HTML to Markdown conversion (Regex-based as used originally)
+ * This handles basic tags and avoids over-escaping existing Markdown
+ */
+function htmlToMarkdown(html: string): string {
+  if (!html) return ''
+
+  return html
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/<h1[^>]*>([\s\S]*?)<\/h1>/gi, '# $1\n\n')
+    .replace(/<h2[^>]*>([\s\S]*?)<\/h2>/gi, '## $1\n\n')
+    .replace(/<h3[^>]*>([\s\S]*?)<\/h3>/gi, '### $1\n\n')
+    .replace(/<h4[^>]*>([\s\S]*?)<\/h4>/gi, '#### $1\n\n')
+    .replace(/<h5[^>]*>([\s\S]*?)<\/h5>/gi, '##### $1\n\n')
+    .replace(/<h6[^>]*>([\s\S]*?)<\/h6>/gi, '###### $1\n\n')
+    .replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, '$1\n\n')
+    .replace(/<strong[^>]*>([\s\S]*?)<\/strong>/gi, '**$1**')
+    .replace(/<b[^>]*>([\s\S]*?)<\/b>/gi, '**$1**')
+    .replace(/<em[^>]*>([\s\S]*?)<\/em>/gi, '*$1*')
+    .replace(/<i[^>]*>([\s\S]*?)<\/i>/gi, '*$1*')
+    .replace(/<a[^>]*href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/gi, '[$2]($1)')
+    .replace(/<pre[^>]*><code[^>]*>([\s\S]*?)<\/code><\/pre>/gi, '```\n$1\n```')
+    .replace(/<code[^>]*>([\s\S]*?)<\/code>/gi, '`$1`')
+    .replace(/<ul[^>]*>/gi, '\n')
+    .replace(/<\/ul>/gi, '\n')
+    .replace(/<ol[^>]*>/gi, '\n')
+    .replace(/<\/ol>/gi, '\n')
+    .replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, '- $1\n')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<blockquote[^>]*>([\s\S]*?)<\/blockquote>/gi, '> $1\n')
+    .replace(/<img[^>]*src="([^"]*)"[^>]*alt="([\s\S]*?)"[^>]*>/gi, '![$2]($1)')
+    .replace(/<img[^>]*src="([^"]*)"[^>]*>/gi, '![]($1)')
+    .replace(/<[^>]+>/g, '')
+    .trim()
 }
 
 interface BlogPost {
@@ -59,7 +106,7 @@ function generateMDX(post: BlogPost, translations?: Translations, isTranslated?:
     isTranslated !== undefined ? `isTranslated: ${isTranslated}` : undefined
   ].filter(Boolean) as string[]
 
-  if (translations) {
+  if (translations && Object.keys(translations).length > 0) {
     frontmatterLines.push('translations:')
     Object.entries(translations).forEach(([key, value]) => {
       if (typeof value === 'boolean') {
@@ -71,12 +118,14 @@ function generateMDX(post: BlogPost, translations?: Translations, isTranslated?:
   }
 
   const frontmatter = frontmatterLines.join('\n')
-  const content = post.content || '' // CKEditor is already in Markdown mode
+  // Use simple regex-based conversion or direct content if it's already markdown
+  // CKEditor defaultMarkdown preset usually saves as markdown.
+  const content = htmlToMarkdown(post.content)
 
   return `---\n${frontmatter}\n---\n\n${content}\n`
 }
 
-async function writeMDXFile(post: BlogPost, cascade = true): Promise<void> {
+async function writeMDXFile(post: BlogPost, cascade = true): Promise<string> {
   // Use Document Service in Strapi v5 for better relation consistency
   const populatedPost: any = await (strapi as any).documents('api::blog-post.blog-post').findOne({
     documentId: post.documentId || (post as any).id,
@@ -90,7 +139,7 @@ async function writeMDXFile(post: BlogPost, cascade = true): Promise<void> {
 
   if (!populatedPost) {
     console.error(`❌ Could not find post to generate MDX: ${post.id}`)
-    return
+    return ''
   }
 
   const outputPath = process.env.BLOG_MDX_OUTPUT_PATH || '../src/content/blog'
@@ -103,8 +152,9 @@ async function writeMDXFile(post: BlogPost, cascade = true): Promise<void> {
   // Build translations map
   const translations: Translations = {}
   const addPostToMap = (p: any) => {
-    if (p.lang && p.slug) {
-      translations[p.lang] = p.slug
+    const lang = p.lang || 'en'
+    if (p.slug) {
+      translations[lang] = p.slug
     }
   }
 
@@ -121,22 +171,24 @@ async function writeMDXFile(post: BlogPost, cascade = true): Promise<void> {
     })
   }
 
+  const mdxContent = generateMDX(populatedPost as BlogPost, translations, true)
   const filename = generateFilename(populatedPost as BlogPost)
   const filepath = path.join(baseDir, filename)
-  const mdxContent = generateMDX(populatedPost as BlogPost, translations, true)
 
   fs.writeFileSync(filepath, mdxContent, 'utf-8')
   console.log(`✅ Generated Blog Post MDX file: ${filepath}`)
 
-  // Cascade to siblings
+  // Cascade to siblings (one level only)
   if (cascade && populatedPost.linked_translations && Array.isArray(populatedPost.linked_translations)) {
     for (const loc of populatedPost.linked_translations) {
       await writeMDXFile(loc, false)
     }
   }
+
+  return filepath
 }
 
-async function deleteMDXFile(post: BlogPost): Promise<void> {
+async function deleteMDXFile(post: BlogPost): Promise<string> {
   const outputPath = process.env.BLOG_MDX_OUTPUT_PATH || '../src/content/blog'
   const baseDir = path.resolve(__dirname, '../../../../../../', outputPath)
   const filename = generateFilename(post)
@@ -146,13 +198,17 @@ async function deleteMDXFile(post: BlogPost): Promise<void> {
     fs.unlinkSync(filepath)
     console.log(`🗑️  Deleted Blog Post MDX file: ${filepath}`)
   }
+  return filepath
 }
 
 export default {
   async afterCreate(event: any) {
     const { result } = event
     if (result && result.publishedAt) {
-      await writeMDXFile(result)
+      const filepath = await writeMDXFile(result)
+      if (filepath) {
+        await gitCommitAndPush(filepath, `blog: add "${result.title}"`)
+      }
     }
   },
 
@@ -160,9 +216,13 @@ export default {
     const { result } = event
     if (result) {
       if (result.publishedAt) {
-        await writeMDXFile(result)
+        const filepath = await writeMDXFile(result)
+        if (filepath) {
+          await gitCommitAndPush(filepath, `blog: update "${result.title}"`)
+        }
       } else {
-        await deleteMDXFile(result)
+        const filepath = await deleteMDXFile(result)
+        await gitCommitAndPush(filepath, `blog: unpublish "${result.title}"`)
       }
     }
   },
@@ -170,7 +230,8 @@ export default {
   async afterDelete(event: any) {
     const { result } = event
     if (result) {
-      await deleteMDXFile(result)
+      const filepath = await deleteMDXFile(result)
+      await gitCommitAndPush(filepath, `blog: delete "${result.title}"`)
     }
   }
 }
