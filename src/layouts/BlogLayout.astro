@@ -1,13 +1,20 @@
 ---
 import BaseLayout from './BaseLayout.astro'
 
-const { frontmatter } = Astro.props
+const { frontmatter, translations = [], currentLocale = 'en' } = Astro.props
 
 const dateObj = new Date(frontmatter.date)
 const isoDate = dateObj.toISOString().slice(0, 10)
 const longDate = dateObj.toDateString().substring(4)
 
 const rawHTMLString = `This article was originally published at <a href=${frontmatter.external_url}>${frontmatter.external_url}</a>.`
+
+// Language names mapping
+const languageNames: Record<string, string> = {
+  en: 'English',
+  es: 'Español',
+  de: 'Deutsch'
+}
 ---
 
 <BaseLayout
@@ -24,54 +31,78 @@ const rawHTMLString = `This article was originally published at <a href=${frontm
       itemtype="http://schema.org/Article"
       class="content-wrapper"
     >
-      <ol
-        class="breadcrumbs"
-        itemscope
-        itemtype="https://schema.org/BreadcrumbList"
-      >
-        <li
-          itemprop="itemListElement"
+      <div class="breadcrumbs-wrapper">
+        <ol
+          class="breadcrumbs"
           itemscope
-          itemtype="https://schema.org/ListItem"
+          itemtype="https://schema.org/BreadcrumbList"
         >
-          <a itemprop="item" href="/" data-umami-event="Devs breadcrumb - Home">
-            <span itemprop="name">Developers Portal</span></a
+          <li
+            itemprop="itemListElement"
+            itemscope
+            itemtype="https://schema.org/ListItem"
           >
-          <meta itemprop="position" content="1" />
-        </li>
-        <li
-          itemprop="itemListElement"
-          itemscope
-          itemtype="https://schema.org/ListItem"
-        >
-          <a
-            itemprop="item"
-            href="/blog"
-            data-umami-event="Devs breadcrumb - Blog"
+            <a itemprop="item" href="/" data-umami-event="Devs breadcrumb - Home">
+              <span itemprop="name">Developers Portal</span></a
+            >
+            <meta itemprop="position" content="1" />
+          </li>
+          <li
+            itemprop="itemListElement"
+            itemscope
+            itemtype="https://schema.org/ListItem"
           >
-            <span itemprop="name">Engineering Blog</span></a
-          >
-          <meta itemprop="position" content="2" />
-          {
-            frontmatter.lang && (
-              <>
-                <span>|</span>
-                <a
-                  itemprop="item"
-                  href={`/blog/${frontmatter.lang}`}
-                  data-umami-event={`Devs breadcrumb - ${frontmatter.lang.toUpperCase()} blogs`}
-                >
-                  <span itemprop="name">
-                    {frontmatter.lang === 'es' ? 'Blog de Ingeniería' : 
-                     frontmatter.lang === 'de' ? 'Ingenieur-Blog' : 
-                     'Engineering Blog'}
-                  </span>
-                </a>
-              </>
-            )
-          }
-        </li>
-      </ol>
+            <a
+              itemprop="item"
+              href="/blog"
+              data-umami-event="Devs breadcrumb - Blog"
+            >
+              <span itemprop="name">Engineering Blog</span></a
+            >
+            <meta itemprop="position" content="2" />
+            {
+              frontmatter.lang && (
+                <>
+                  <span>|</span>
+                  <a
+                    itemprop="item"
+                    href={`/blog/${frontmatter.lang}`}
+                    data-umami-event={`Devs breadcrumb - ${frontmatter.lang.toUpperCase()} blogs`}
+                  >
+                    <span itemprop="name">
+                      {frontmatter.lang === 'es' ? 'Blog de Ingeniería' : 
+                       frontmatter.lang === 'de' ? 'Ingenieur-Blog' : 
+                       'Engineering Blog'}
+                    </span>
+                  </a>
+                </>
+              )
+            }
+          </li>
+        </ol>
+        {
+          translations.length > 1 && (
+            <div class="language-switcher">
+              <select
+                id="language-dropdown"
+                class="language-dropdown"
+                data-umami-event="Language switch dropdown"
+              >
+                {
+                  translations.map((translation) => (
+                    <option
+                      value={translation.isCurrent ? '' : `/blog/${translation.id}`}
+                      selected={translation.isCurrent}
+                    >
+                      {languageNames[translation.locale] || translation.locale.toUpperCase()}
+                    </option>
+                  ))
+                }
+              </select>
+            </div>
+          )
+        }
+      </div>
       <h1>{frontmatter.title}</h1>
       <time datetime={isoDate} itemprop="datePublished">{longDate}</time>
       {
@@ -95,13 +126,21 @@ const rawHTMLString = `This article was originally published at <a href=${frontm
     padding-block-end: var(--space-xl);
   }
 
+  .breadcrumbs-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-block-start: var(--space-l);
+    gap: var(--space-m);
+  }
+
   .breadcrumbs {
     list-style: none;
     display: flex;
     padding-inline-start: 0;
     font-size: var(--step--1);
     font-weight: 700;
-    padding-block-start: var(--space-l);
+    margin: 0;
   }
 
   .breadcrumbs li:not(:first-child)::before {
@@ -253,4 +292,48 @@ const rawHTMLString = `This article was originally published at <a href=${frontm
     display: block;
     margin-inline: auto;
   }
+
+  .language-switcher {
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  .language-dropdown {
+    padding: var(--space-3xs) var(--space-2xs);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--border-radius);
+    background-color: white;
+    color: var(--color-text);
+    font-size: var(--step--1);
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 200ms ease-in-out;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--space-2xs) center;
+    padding-right: calc(var(--space-2xs) + 16px);
+  }
+
+  .language-dropdown:hover {
+    border-color: var(--color-primary);
+  }
+
+  .language-dropdown:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
 </style>
+
+<script>
+  // Handle language dropdown navigation
+  const languageDropdown = document.getElementById('language-dropdown');
+  if (languageDropdown) {
+    languageDropdown.addEventListener('change', function(e) {
+      const selectedValue = e.target.value;
+      if (selectedValue) {
+        window.location.href = selectedValue;
+      }
+    });
+  }
+</script>

@@ -15,9 +15,38 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props
 const { Content } = await render(entry)
+
+// Find all translations of this post by contentId
+const contentId = entry.data.contentId || entry.data.slug
+const allBlogEntries = await getCollection('blog')
+const currentLocale = (entry.data.locale || entry.data.lang || 'en').split('-')[0]
+
+// Get all posts with the same contentId (including current post)
+const allTranslations = allBlogEntries
+  .filter((e) => {
+    const eContentId = e.data.contentId || e.data.slug
+    return eContentId === contentId
+  })
+  .map((e) => {
+    const locale = e.data.locale || e.data.lang || 'en'
+    const normalizedLocale = locale.split('-')[0]
+    return {
+      id: e.id,
+      locale: normalizedLocale,
+      title: e.data.title,
+      isCurrent: e.id === entry.id
+    }
+  })
+  .sort((a, b) => {
+    // Sort: en first, then es, then de, then others alphabetically
+    const order = { en: 0, es: 1, de: 2 }
+    const aOrder = order[a.locale] ?? 99
+    const bOrder = order[b.locale] ?? 99
+    return aOrder - bOrder
+  })
 ---
 
-<BlogLayout frontmatter={entry.data}>
+<BlogLayout frontmatter={entry.data} translations={allTranslations} currentLocale={currentLocale}>
   <Content />
   <CommunityLinks />
 </BlogLayout>

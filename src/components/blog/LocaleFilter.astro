@@ -5,9 +5,8 @@
 <div class="locale-filter">
   <label for="locale-select" class="locale-filter-label">Filter by language:</label>
   <select id="locale-select" class="locale-filter-select">
-    <option value="all">All Languages</option>
     <option value="en">English</option>
-    <option value="es">Español</option>
+    <option value="es">Spanish</option>
     <option value="de">Deutsch</option>
   </select>
 </div>
@@ -43,14 +42,12 @@
 
     // Filter function
     function filterPosts(selectedLocale) {
-      let visibleCount = 0;
       posts.forEach(post => {
         const postLocale = post.getAttribute('data-locale') || 'en';
         const normalizedPostLocale = postLocale.split('-')[0]; // es-ES -> es
         
-        if (selectedLocale === 'all' || normalizedPostLocale === selectedLocale) {
+        if (normalizedPostLocale === selectedLocale) {
           post.style.display = '';
-          visibleCount++;
         } else {
           post.style.display = 'none';
         }
@@ -58,21 +55,16 @@
       
       // Update URL without reload
       const url = new URL(window.location.href);
-      if (selectedLocale === 'all') {
-        url.searchParams.delete('locale');
-      } else {
-        url.searchParams.set('locale', selectedLocale);
-      }
+      url.searchParams.set('locale', selectedLocale);
       window.history.replaceState({}, '', url.toString());
     }
 
-    // Set initial value from URL
+    // Set initial value from URL or default to English
     const urlParams = new URLSearchParams(window.location.search);
     const urlLocale = urlParams.get('locale');
-    if (urlLocale && ['en', 'es', 'de'].includes(urlLocale)) {
-      localeSelect.value = urlLocale;
-      filterPosts(urlLocale);
-    }
+    const initialLocale = (urlLocale && ['en', 'es', 'de'].includes(urlLocale)) ? urlLocale : 'en';
+    localeSelect.value = initialLocale;
+    filterPosts(initialLocale);
 
     // Listen for changes
     localeSelect.addEventListener('change', function(e) {
@@ -94,6 +86,7 @@
   .locale-filter {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: var(--space-2xs);
     margin-bottom: var(--space-m);
   }

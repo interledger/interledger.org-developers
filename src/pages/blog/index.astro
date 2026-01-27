@@ -42,16 +42,8 @@ const totalPages = Math.ceil(allBlogEntries.length / pageSize)
       </ol>
       <header>
         <h1>Engineering Blog</h1>
-        <a class="cta__blog" href="/blog">
-          <p>Check out Foundation updates</p>
-          <img
-            src="/img/ernie-purple.svg"
-            alt="Ernie holding an envelope"
-            aria-hidden="true"
-          />
-        </a>
+        <LocaleFilter />
       </header>
-      <LocaleFilter />
       <ol class="postlist">
         {
           firstPagePosts.map((blogPostEntry) => {
@@ -172,39 +164,6 @@ const totalPages = Math.ceil(allBlogEntries.length / pageSize)
       flex-direction: column;
       align-items: start;
     }
-  }
-
-  .cta__blog {
-    display: flex;
-    align-items: center;
-    gap: var(--space-s);
-    padding: var(--space-3xs) var(--space-2xs);
-    background-color: white;
-    box-shadow: var(--box-shadow);
-    border-radius: var(--border-radius);
-    font-size: var(--step--1);
-    background-image: var(--color-white);
-    text-decoration: none;
-  }
-
-  .cta__blog p {
-    flex: none;
-    text-decoration-color: transparent;
-    text-decoration-line: underline;
-    transition: text-decoration-color 300ms ease-in-out;
-  }
-
-  .cta__blog:hover {
-    color: inherit;
-  }
-
-  .cta__blog:hover p {
-    color: currentColor;
-    text-decoration-color: currentColor;
-  }
-
-  .cta__blog img {
-    width: 4em;
   }
 
   .post-metadata,
