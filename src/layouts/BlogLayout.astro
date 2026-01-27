@@ -8,6 +8,11 @@ const isoDate = dateObj.toISOString().slice(0, 10)
 const longDate = dateObj.toDateString().substring(4)
 
 const rawHTMLString = `This article was originally published at <a href=${frontmatter.external_url}>${frontmatter.external_url}</a>.`
+
+const blogNames: Record<string, string> = {
+  es: 'Blog de Ingeniería',
+  fr: "Blog d'ingénierie"
+}
 ---
 
 <BaseLayout
@@ -57,15 +62,15 @@ const rawHTMLString = `This article was originally published at <a href=${frontm
           >
           <meta itemprop="position" content="2" />
           {
-            frontmatter.lang && (
+            frontmatter.lang && frontmatter.lang !== 'en' && (
               <>
                 <span>|</span>
                 <a
                   itemprop="item"
-                  href="/blog/es"
-                  data-umami-event="Devs breadcrumb - ES blogs"
+                  href={`/blog/${frontmatter.lang}`}
+                  data-umami-event={`Devs breadcrumb - ${frontmatter.lang.toUpperCase()} blogs`}
                 >
-                  <span itemprop="name">Blog de Ingeniería</span>
+                  <span itemprop="name">{blogNames[frontmatter.lang] || 'Engineering Blog'}</span>
                 </a>
               </>
             )

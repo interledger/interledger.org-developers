@@ -63,39 +63,24 @@ const languageLinks = availableLocales.map(locale => {
       <button
         class="language-switcher__toggle"
         aria-expanded="false"
-        aria-controls="language-menu"
+        aria-haspopup="true"
       >
-        <span>{localeNames[currentLang] || currentLang.toUpperCase()}</span>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="m6 9 6 6 6-6"></path>
+        {currentLang.toUpperCase()}
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+          <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
       <ul id="language-menu" class="language-switcher__menu">
         {
           languageLinks.map((item) => (
             <li>
-              {item.isCurrent ? (
-                <span class="language-switcher__link active">
-                  {item.name}
-                </span>
-              ) : (
-                <a 
-                  href={item.link} 
-                  class="language-switcher__link"
-                >
-                  {item.name}
-                </a>
-              )}
+              <a 
+                href={item.isCurrent ? '#' : item.link} 
+                class={`language-switcher__link ${item.isCurrent ? 'active' : ''}`}
+                aria-current={item.isCurrent ? 'page' : undefined}
+              >
+                {item.locale.toUpperCase()} - {item.name}
+              </a>
             </li>
           ))
         }
@@ -153,33 +138,33 @@ const languageLinks = availableLocales.map(locale => {
     z-index: 10;
   }
 
+  /* Language Switcher */
   .language-switcher {
     position: relative;
-    display: inline-block;
   }
 
   .language-switcher__toggle {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
+    gap: 4px;
+    padding: 6px 12px;
+    background-color: white;
+    border: 1.5px solid currentColor;
     border-radius: var(--border-radius);
+    font-size: var(--step--1);
+    font-weight: 600;
     cursor: pointer;
-    font-size: 14px;
-    color: var(--color-text);
-    transition: all 0.2s ease;
+    transition: background-color 200ms ease;
   }
 
   .language-switcher__toggle:hover {
-    background-color: var(--color-surface-hover);
+    background-color: #f5f5f5;
   }
 
   .language-switcher__menu {
     position: absolute;
     top: 100%;
-    right: 0; 
+    right: 0;
     margin-top: 4px;
     padding: 8px 0;
     background-color: white;
@@ -203,25 +188,25 @@ const languageLinks = availableLocales.map(locale => {
     transform: rotate(180deg);
   }
 
+  .language-switcher__menu li {
+    margin: 0;
+  }
+
   .language-switcher__link {
     display: block;
     padding: 8px 16px;
-    color: var(--color-text);
+    color: inherit;
     text-decoration: none;
-    font-size: 14px;
-    transition: background-color 0.2s ease;
+    font-size: var(--step--1);
+    transition: background-color 150ms ease;
   }
 
-  .language-switcher__link:hover,
-  .language-switcher__link:focus {
-    background-color: var(--color-surface-hover);
-    color: var(--color-primary);
+  .language-switcher__link:hover {
+    background-color: #f5f5f5;
   }
 
   .language-switcher__link.active {
-    font-weight: bold;
+    font-weight: 600;
     color: var(--color-primary);
-    background-color: rgba(0, 0, 0, 0.05);
-    pointer-events: none;
   }
 </style>
