@@ -34,10 +34,16 @@ interface BlogPost {
   lang?: string
   ogImageUrl?: string
   publishedAt?: string
+  locale?: string
+  localizations?: Array<{ id: number; locale: string }>
 }
 
 interface Event {
   result?: BlogPost
+  params?: {
+    data?: BlogPost
+    locale?: string
+  }
 }
 
 /**
@@ -113,6 +119,7 @@ function getImageUrl(media: MediaFile | undefined): string | undefined {
 
 function generateMDX(post: BlogPost): string {
   const imageUrl = getImageUrl(post.featuredImage)
+  const locale = post.locale || 'en'
 
   const frontmatterLines = [
     `title: "${escapeQuotes(post.title)}"`,
@@ -122,6 +129,7 @@ function generateMDX(post: BlogPost): string {
       : undefined,
     `date: ${formatDate(post.date)}`,
     `slug: ${post.slug}`,
+    `locale: "${locale}"`,
     post.lang ? `lang: "${escapeQuotes(post.lang)}"` : undefined,
     imageUrl ? `image: "${escapeQuotes(imageUrl)}"` : undefined
   ].filter(Boolean) as string[]
@@ -133,64 +141,119 @@ function generateMDX(post: BlogPost): string {
 }
 
 async function writeMDXFile(post: BlogPost): Promise<void> {
-  const outputPath = process.env.BLOG_MDX_OUTPUT_PATH || '../src/content/blog'
+  const baseOutputPath = process.env.BLOG_MDX_OUTPUT_PATH || '../src/content/blog'
+  const locale = post.locale || 'en'
+  const localeForPath = normalizeLocaleForPath(locale)
+  
+  // Determine locale-specific directory
+  // Default locale (en) goes to /blog/, other locales go to /{locale}/blog/
+  // e.g., ../src/content/blog (en) or ../src/content/es/blog (es)
+  const outputPath = localeForPath === 'en'
+    ? baseOutputPath
+    : path.join(path.dirname(baseOutputPath), localeForPath, 'blog')
+  
   // Resolve from dist/src/api/blog-post/content-types/blog-post/ up to cms root then project root
-  const baseDir = path.resolve(__dirname, '../../../../../../', outputPath)
+  const resolvedDir = path.resolve(__dirname, '../../../../../../', outputPath)
 
-  if (!fs.existsSync(baseDir)) {
-    fs.mkdirSync(baseDir, { recursive: true })
+  if (!fs.existsSync(resolvedDir)) {
+    fs.mkdirSync(resolvedDir, { recursive: true })
   }
 
   const filename = generateFilename(post)
-  const filepath = path.join(baseDir, filename)
+  const filepath = path.join(resolvedDir, filename)
   const mdxContent = generateMDX(post)
 
   fs.writeFileSync(filepath, mdxContent, 'utf-8')
-  console.log(`✅ Generated Blog Post MDX file: ${filepath}`)
+  console.log(`✅ Generated Blog Post MDX file (locale: ${locale}): ${filepath}`)
 }
 
 async function deleteMDXFile(post: BlogPost): Promise<void> {
-  const outputPath = process.env.BLOG_MDX_OUTPUT_PATH || '../src/content/blog'
-  // Resolve from dist/src/api/blog-post/content-types/blog-post/ up to cms root then project root
+  const baseOutputPath = process.env.BLOG_MDX_OUTPUT_PATH || '../src/content/blog'
+  const locale = post.locale || 'en'
+  const localeForPath = normalizeLocaleForPath(locale)
+  
+  // Determine locale-specific directory
+  const outputPath = localeForPath === 'en'
+    ? baseOutputPath
+    : path.join(path.dirname(baseOutputPath), localeForPath, 'blog')
   const baseDir = path.resolve(__dirname, '../../../../../../', outputPath)
+  
   const filename = generateFilename(post)
   const filepath = path.join(baseDir, filename)
 
   if (fs.existsSync(filepath)) {
     fs.unlinkSync(filepath)
-    console.log(`🗑️  Deleted Blog Post MDX file: ${filepath}`)
+    console.log(`🗑️  Deleted Blog Post MDX file (locale: ${locale}): ${filepath}`)
   }
+}
+
+/**
+ * Gets the locale from a blog post or event params
+ */
+function getLocale(post: BlogPost | undefined, event?: Event): string {
+  // Try to get locale from the post first
+  if (post?.locale) {
+    return post.locale
+  }
+  // Fall back to event params
+  if (event?.params?.locale) {
+    return event.params.locale
+  }
+  // Default to 'en'
+  return 'en'
+}
+
+/**
+ * Normalizes locale code to use only the language part (e.g., 'es-ES' -> 'es')
+ * This ensures directory paths use simple language codes like /es/ instead of /es-ES/
+ */
+function normalizeLocaleForPath(locale: string): string {
+  // Extract just the language code (part before hyphen)
+  // e.g., 'es-ES' -> 'es', 'en-US' -> 'en', 'fr' -> 'fr'
+  return locale.split('-')[0]
+}
+
+/**
+ * Gets the filepath for a blog post based on its locale
+ */
+function getFilepath(post: BlogPost, locale?: string): string {
+  const baseOutputPath = process.env.BLOG_MDX_OUTPUT_PATH || '../src/content/blog'
+  const postLocale = locale || post.locale || 'en'
+  const localeForPath = normalizeLocaleForPath(postLocale)
+  const outputPath = localeForPath === 'en'
+    ? baseOutputPath
+    : path.join(path.dirname(baseOutputPath), localeForPath, 'blog')
+  const baseDir = path.resolve(__dirname, '../../../../../../', outputPath)
+  const filename = generateFilename(post)
+  return path.join(baseDir, filename)
 }
 
 export default {
   async afterCreate(event: Event) {
     const { result } = event
     if (result && result.publishedAt) {
-      await writeMDXFile(result)
-      const filename = generateFilename(result)
-      const outputPath =
-        process.env.BLOG_MDX_OUTPUT_PATH || '../src/content/blog'
-      const baseDir = path.resolve(__dirname, '../../../../../../', outputPath)
-      const filepath = path.join(baseDir, filename)
-      await gitCommitAndPush(filepath, `blog: add "${result.title}"`)
+      // Ensure locale is set on the result
+      const locale = getLocale(result, event)
+      const postWithLocale = { ...result, locale }
+      await writeMDXFile(postWithLocale)
+      const filepath = getFilepath(postWithLocale, locale)
+      await gitCommitAndPush(filepath, `blog: add "${result.title}" (${locale})`)
     }
   },
 
   async afterUpdate(event: Event) {
     const { result } = event
     if (result) {
-      const filename = generateFilename(result)
-      const outputPath =
-        process.env.BLOG_MDX_OUTPUT_PATH || '../src/content/blog'
-      const baseDir = path.resolve(__dirname, '../../../../../../', outputPath)
-      const filepath = path.join(baseDir, filename)
+      const locale = getLocale(result, event)
+      const postWithLocale = { ...result, locale }
+      const filepath = getFilepath(postWithLocale, locale)
 
       if (result.publishedAt) {
-        await writeMDXFile(result)
-        await gitCommitAndPush(filepath, `blog: update "${result.title}"`)
+        await writeMDXFile(postWithLocale)
+        await gitCommitAndPush(filepath, `blog: update "${result.title}" (${locale})`)
       } else {
-        await deleteMDXFile(result)
-        await gitCommitAndPush(filepath, `blog: unpublish "${result.title}"`)
+        await deleteMDXFile(postWithLocale)
+        await gitCommitAndPush(filepath, `blog: unpublish "${result.title}" (${locale})`)
       }
     }
   },
@@ -198,13 +261,11 @@ export default {
   async afterDelete(event: Event) {
     const { result } = event
     if (result) {
-      await deleteMDXFile(result)
-      const filename = generateFilename(result)
-      const outputPath =
-        process.env.BLOG_MDX_OUTPUT_PATH || '../src/content/blog'
-      const baseDir = path.resolve(__dirname, '../../../../../../', outputPath)
-      const filepath = path.join(baseDir, filename)
-      await gitCommitAndPush(filepath, `blog: delete "${result.title}"`)
+      const locale = getLocale(result, event)
+      const postWithLocale = { ...result, locale }
+      await deleteMDXFile(postWithLocale)
+      const filepath = getFilepath(postWithLocale, locale)
+      await gitCommitAndPush(filepath, `blog: delete "${result.title}" (${locale})`)
     }
   }
 }
