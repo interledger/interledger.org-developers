@@ -1,0 +1,217 @@
+---
+title: "Introducing publisher tools: simple monetization for content owners and publishers"
+description: "An overview of the toolset and a sneak peek of the future plans"
+date: 2025-05-20
+slug: introducing-publisher-tools
+---
+
+In a digital world where supporting content owners and publishers is becoming increasingly important, we wanted to build something that didn’t just preach the value of [Web Monetization](https://webmonetization.org/) - but made it accessible and easy for anyone to use. That’s how our [publisher tools](https://webmonetization.org/tools/) came to life.
+
+This toolset was born from a simple marketing goal: get the word out about Web Monetization. At its core, the publisher tools are a set of customizable elements that site owners can embed with just a simple script tag, designed to promote Web Monetization as a model for visitors to support their websites.
+
+## Built for Simplicity and Flexibility
+
+
+
+When designing the tools, we looked at popular one-time payment systems and donation models for inspiration, asking:  
+
+
+**How can we offer similar ease of use, but tailored for Web Monetization?**We decided early that our publisher tools would revolve around a handful of elements:
+
+- **Banner**
+- **Widget**
+
+
+- **Button**
+
+
+- **Exclusive Content**
+
+Each element is fully customizable via a visual admin interface where users can configure text, colors, fonts, and more - with live preview support. _No coding skills needed._
+
+![Create a banner](/developers/img/blog/2025-05-20/pt_example_banner.png)
+
+## Designed for a Set-It-and-Forget-It Experience
+
+
+
+Instead of manually updating every element whenever a change is needed (like tweaking a color or call-to-action text), creators can simply update their settings in the admin panel.
+
+Since all customization is stored server-side, any updates instantly reflect across all embedded elements.
+
+> The generated script tag is intentionally kept minimal: it contains only the wallet address and element type. All other settings are automatically pulled based on the wallet address.
+
+This approach lowers the technical barrier and ensures creators can focus on their content - not website maintenance.
+
+## Ensuring Wallet Ownership and Security
+
+
+
+To protect users and maintain integrity, wallet ownership confirmation is integrated.  
+
+
+Currently, this relies on an _interactive grant_, in the future, a more streamlined wallet verification mechanism will replace this process.
+
+Users are asked to confirm they own their wallets before a script tag is generated.
+
+
+Without ownership confirmation, their customizations are not saved on the server. The validation steps help to maintain integrity, protect wallet owners, and ensure only the rightful owner of a wallet can update the configuration.
+
+## Default Configurations
+
+
+
+Every element type comes with a default, allowing anyone to get started instantly.
+
+If a site owner embeds an element without making any customizations, the default style and behavior will be applied automatically.
+
+Additionally, all embedded elements automatically insert the necessary `` tag, so adding the script is all it takes to enable Web Monetization - eliminating yet another technical step for creators.
+
+## Flexible Styling with Versioning
+
+
+
+A key feature of the publisher tools is **versioning**, which gives creators even more control over how the elements appear across different contexts - without needing multiple wallet addresses.
+
+### 💡 Why Versioning?
+
+
+
+Many creators publish content on multiple platforms or maintain websites with different styles. Others may run a single site that supports various themes (e.g., light and dark mode) or sections with distinct branding. With versioning, you can define multiple configurations - each with its own text, colors and fonts - for the same wallet address.
+
+For example, a creator might use:
+
+- A blue banner with a professional tone for their portfolio site
+
+
+- A playful, colorful widget on their personal blog
+
+
+- A dark-mode themed paywall for a night reading experience
+
+All of these can point to the same wallet, keeping the monetization flow unified while allowing the presentation to be fully tailored.
+
+### 🛠️ How It Works
+
+
+
+In the admin interface, creators can:
+
+- Create new versions of an element configuration (e.g., portfolio, blog, dark-mode)
+
+
+- Edit existing versions at any time
+
+On the embed side, the script remains simple. By passing a `tag` value along with the wallet address in the script tag, the correct version is automatically selected and rendered.
+
+```html
+
+
+
+
+
+```
+
+If no tag is provided, the default version is used - ensuring backward compatibility and quick setup for users who don't need multiple styles.
+
+![Banner display](/developers/img/blog/2025-05-20/pt_embedded_banner.png)
+
+
+
+
+## Deep Dive: The Elements
+
+
+
+### 🌎 Available Now: **Banner**
+
+
+
+- **Visibility**: Displayed to visitors who do not have the Web Monetization extension enabled.
+
+
+- **Behavior**: Shown until the visitor either installs/enables the Web Monetization extension or manually closes the banner (dismissal lasts for the session).
+
+
+- **Customization**: Site owners can define the text and the visual details (color, font, etc). The web store link for the Web Monetization extension, which is based on the visitor’s browser, is added automatically.
+
+
+- **Fallback**: If the browser cannot be identified, the link points to the [Web Monetization website](https://webmonetization.org/).
+
+### 🔥 Coming Soon: Widget, Button, and Exclusive Content
+
+
+
+These features are actively in development and will soon be available:
+
+#### Widget
+
+- **Location**: Fixed position in the lower-right corner of the screen.
+
+
+- **Purpose**: Always visible icon that, when clicked, opens a payment panel.
+
+
+- **Functionality**: Enables visitors to make a one-time payment, supporting creators even without the extension installed.
+
+
+- **Technical Note**: Payment proof of concept uses a secure iframe (using interledgerpay.com). Future iterations aim to fully embed Open Payments for seamless payment without page redirection.
+
+
+
+
+![Widget example](/developers/img/blog/2025-05-20/pt_example_widget.png)
+
+
+
+
+#### Button
+
+- **Flexibility**: Can be placed inline within content or components.
+
+
+- **Behavior**: Opens the same payment panel as the widget.
+
+
+- **Extras**: Has the option to add tooltips for additional explanations or calls to action.
+
+![Create a button](/developers/img/blog/2025-05-20/pt_example_button.png)
+
+
+
+
+#### Exclusive Content
+
+- **Concept**: A simple paywall system.
+
+
+- **Behavior**: Reveals only a preview (e.g., the first few paragraphs) and requires payment for full access.
+
+
+- **Implementation**: Entirely client-side for simplicity.
+
+
+- **Return Visitors**: Visitors who have previously paid can verify their payment and gain access without repurchasing during the set time interval.
+
+
+- **Privacy**: Publishers and content owners never see or store a visitor's personal data - privacy is fully preserved. The verification is done by matching the payment against the visitor’s transaction history, as recorded by their wallet or identity provider.
+
+## What’s Next?
+
+
+
+**Publisher tools** is an evolving project. We’re watching how people use it, listening to feedback, and working toward a better integration with Open Payments. Our goal is to make supporting creators as frictionless as reading their content.
+
+With minimal setup, dynamic updates, and a focus on user-friendliness, it offers a straightforward way to embrace Web Monetization - whether you're a seasoned developer or just starting out.
+
+![publisher tools](/developers/img/blog/2025-05-20/pt_tools_collection.png)
+
+## Resources
+
+
+
+GitHub: [interledger/publisher-tools](https://github.com/interledger/publisher-tools/)
+
+[Web Monetization](https://webmonetization.org/)
+
+[Interledger Foundation](https://interledger.org/)
