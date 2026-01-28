@@ -1,0 +1,226 @@
+---
+title: "Introducing Open Payments PHP: A New Bridge for Financial Interoperability"
+description: "Explaining the Open Payments PHP Library features and how it works"
+date: 2025-05-06
+slug: introducing-open-payments-php
+---
+
+## 🎯 Why Open Payments Matters
+
+The [**Open Payments**](https://openpayments.dev/) standard is reshaping how applications initiate, manage, and complete digital transactions — enabling truly interoperable financial systems across different wallets, services, and financial institutions.
+
+But while the specification has seen growing adoption across JavaScript platforms, there was one massive gap: **PHP developers**, who still power a huge portion of the web, had no simple, native way to implement Open Payments in their applications.
+
+Today, we're excited to change that with the release of Open Payments PHP — an open-source library that makes it easy for PHP applications to participate in the future of financial interoperability.
+
+## 💡 What We Built: Open Payments PHP
+
+
+
+[interledger/open-payments-php](https://github.com/interledger/open-payments-php) is a modern, Composer-installable PHP package that provides full client support for the Open Payments API.
+It includes:
+
+✅ Full support for [Grants](https://openpayments.dev/introduction/grants/), [Incoming Payments](https://openpayments.dev/introduction/op-flow/#incoming-payment), [Outgoing Payments](https://openpayments.dev/introduction/op-flow/#outgoing-payment), [Quotes](https://openpayments.dev/introduction/op-flow/#quote), and [Token](https://openpayments.dev/snippets/token-rotate/) management.
+
+✅ Built for PHP 8.3+, using strict typing, PSR-4 autoloading, and Composer dependency management.
+
+✅ Clean, service-oriented architecture:
+
+- `Services/` : Interact with the Open Payments endpoints.
+
+
+- `Models/` : Represent API resources like grants, payments, and quotes.
+
+
+- `Validators/` : Validate API request payloads before sending.
+
+✅ Fully tested with PHPUnit, ready for production use.
+
+Here's what it looks like to request a grant:
+
+```php
+
+
+use OpenPayments\AuthClient;
+
+
+use OpenPayments\Config\Config;
+
+$config = new Config(
+
+
+    $WALLET_ADDRESS, $PRIVATE_KEY, $KEY_ID
+
+
+);
+
+
+$opClient = new AuthClient($config);
+
+$wallet = $opClient->walletAddress()->get([
+
+
+    'url' => $config->getWalletAddressUrl()
+
+
+]);
+
+$grant = $opClient->grant()->request(
+
+
+    [
+
+
+        'url' => $wallet->authServer
+
+
+    ],
+
+
+    [
+
+
+        'access_token' => [
+
+
+            'access' => [
+
+
+                [
+
+
+                    'type' => 'incoming-payment',
+
+
+                    'actions' => ['read', 'complete', 'create', 'list' ]
+
+
+                ]
+
+
+              ]
+
+
+        ],
+
+
+        'client' => $config->getWalletAddressUrl()
+
+
+    ]
+
+
+);
+
+
+```
+
+With just a few lines of code, PHP developers can now create grants, request quotes, initiate outgoing payments, or complete incoming payments — all fully compliant with Open Payments specifications (including generating HTTP signature headers).
+
+Detailed fully functional code snippets covering all endpoints can be found on the [Open Payments PHP Snippets](https://github.com/interledger/open-payments-php-snippets/) repo.
+
+## 🛠️ How It Works: Inside the Library
+
+
+
+At its core, **Open Payments PHP** is designed around simplicity and modularity.
+
+
+The library is structured into clear layers, making it easy for developers to jump in, extend, or contribute:
+
+## 📁 Project Structure
+
+
+
+| Folder        | Purpose                                                             |
+
+
+| ------------- | ------------------------------------------------------------------- |
+
+
+| `Contracts/`  | Interface definitions (routes) for Services                         |
+
+
+| `Services/`   | Interact with Open Payments endpoints like grants, payments, quotes |
+
+
+| `Models/`     | Data models representing Open Payments resources                    |
+
+
+| `Validators/` | Input validation logic before making API calls                      |
+
+
+| `Traits/`     | Helpers like ID parsing and URL extraction                          |
+
+
+| `Utils/`      | Utility functions used for the http signature                       |
+
+Each service corresponds directly to parts of the Open Payments API.
+
+
+For example:
+
+- GrantService handles grant requests and continuations.
+
+
+- QuoteService manages the creation and retrieval of quotes.
+
+
+- IncomingPaymentService handles creation and retrieval of IncomingPayments.
+
+
+- OutgoingPaymentService covers creation and retrieval of OutgoingPayments.
+
+All these services are incorporated into the main AuthClient and can be used directly from the client like in the above examples.
+
+
+Developers interact mainly through these service classes, without worrying about low-level HTTP requests or Open Payments internal mechanics, like the [http signatures](https://openpayments.dev/introduction/http-signatures/) — the library abstracts that complexity away.
+
+## 🌎 Why It Matters for the PHP Community
+
+
+
+PHP remains one of the most widely used languages across the web — powering platforms like WordPress, Laravel, Drupal, and countless custom-built applications.
+
+By bringing first-class Open Payments support to PHP, we unlock:
+
+🔗 Broader ecosystem participation: more web apps, e-commerce platforms, and financial services can integrate Open Payments without switching tech stacks.
+
+🚀 Faster innovation: developers can focus on building user-facing products instead of re-implementing complex financial protocols.
+
+🛡️ Secure by default: thanks to strict type enforcement, request validation, and adherence to the Open Payments specification.
+
+🤝 Stronger community collaboration: easier onboarding for teams that already speak PHP.
+
+This marks an important step toward making Open Payments truly universal across different languages and platforms.
+
+## 🚀 What's Next
+
+
+
+We’re just getting started!
+
+Here’s what’s coming soon for Open Payments PHP:
+
+📚 [Open Payments official documentation](https://openpayments.dev/introduction/overview/) will soon include usage examples (snippets) for the PHP library also.
+
+🔥 Example projects — showcasing integration with popular frameworks like Laravel, Symfony Console apps ([Snippets library](https://github.com/interledger/open-payments-php-snippets/)), and WordPress - ecommerce - plugins.
+
+🤝 Community-driven development — pull requests, issues, and feature discussions are welcome!
+
+We encourage developers to test the library, provide feedback, open issues, or submit pull requests.
+
+
+Together, we can grow the Open Payments ecosystem across the entire PHP world.
+
+## 🔗 Resources
+
+
+
+GitHub: [interledger/open-payments-php](https://github.com/interledger/open-payments-php)
+
+GitHub: [interledger/open-payments-php-snippets](https://github.com/interledger/open-payments-php-snippets)
+
+[Open Payments Specification](https://openpayments.dev/)
+
+[Interledger Foundation](https://interledger.org/)
