@@ -1,0 +1,83 @@
+---
+title: "Rafiki Beta Release"
+description: "The Wild is Calling."
+date: 2024-12-11
+slug: rafiki-beta-release
+---
+
+It is with great pride, and perhaps a touch of relief, that we deliver on a promise made: **[Rafiki Beta is here](https://github.com/interledger/rafiki/releases/tag/v1.0.0-beta)**.
+
+Yes, it took longer than we planned. And yes, there were detours along the way. But as all great journeys teach us, the destination is not merely a point on a map. It is the culmination of every challenge overcome, every detail refined, and every dream made real.
+
+We are perfectionists at heart, and there was always one more feature, one more improvement, one more bug to fix, one more piece to perfect. But the time has come to release Rafiki into the wild.
+
+## Rafiki Beta is here!
+
+
+
+Rafiki is a comprehensive software package that bundles up all Interledger functionality into an easy-to-use solution. It’s free for any licensed account servicing entity to use, enabling them to unlock the power of Interledger straight out of the box.
+
+Let us reflect on what this milestone includes - a powerful suite of capabilities that are set to redefine the world of open payments.
+
+- **ILP connector:** The backbone of interconnectivity, housing the core functionality of the [Interledger Protocol](https://interledger.org/developers/get-started/). Like the internet transmits information in packets, the connector splits payments into small, self-contained payment packets with details such as amount, sender, and routing information. This approach enables seamless, secure and scalable financial transactions, ensuring compatibility across platforms, currencies and technologies while optimizing routing, distributing workloads, reducing bottlenecks, and enhancing reliability and scalability.
+
+
+- **SPSP and Open Payments:** These application-layer protocols simplify and standardize payment flows, ensuring interoperability across diverse systems while reducing the complexity of integration. By facilitating clear communication between senders and receivers, they deliver a safe, reliable and user-friendly experience for online payments
+
+
+- **Admin APIs:** Empowering you with the tools to take control. The Backend Admin API allows you to oversee critical operational aspects of your Rafiki instance, such as network relationships, assets, account configurations and liquidity. The Auth Admin API offers detailed oversight of grants, providing visibility into their status, associated accounts and permissions, while enabling key management actions, including revocation.
+
+
+- **Rafiki Admin UI:** The Rafiki Admin application is a user-friendly interface designed to streamline the management of your Rafiki operations. It features a comprehensive dashboard for overseeing peers, assets, wallet addresses, liquidity, webhooks, and payments, serving as an intuitive front–end to Rafiki’s backend service. Additionally, Rafiki supports an optional integration with open-source identity & user management system [Ory Kratos](https://www.ory.sh/kratos/), allowing you to invite or remove users as needed.
+
+
+  ![Rafiki Admin UI](/developers/img/blog/2024-12-11/rafiki-admin.png)
+
+
+  ![Rafiki Admin UI - Payments](/developers/img/blog/2024-12-11/admin-ui-payments.png)
+
+
+- **Security audit fixes:** Rafiki underwent its first comprehensive [security audit](https://interledger.org/developers/blog/rafikis-first-security-audit/), conducted by an external security firm to identify and address vulnerabilities. Key improvements include implementing HMAC signing for API requests, disabling GraphQL introspection in production, adding protections against denial-of-service (DoS) attacks, and preventing clickjacking in the Admin UI. Proactive dependency scanning was also integrated into the CI pipeline to mitigate library vulnerabilities. This external audit ensures a robust and secure foundation for Rafiki. Security is not a one-time effort; it is an ongoing commitment. As Rafiki evolves, we will continue conducting regular audits and proactively strengthening its defenses to maintain the highest standard of safety and trustworthiness.
+
+
+- **Telemetry:** Gain real-time insights to understand and optimize your deployments. Rafiki’s telemetry captures key metrics, including the number of packets flowing through the system, the number of transactions, the total value sent through the network, as well as the average transaction value and time - all while preserving user privacy. [Check telemetry in action](https://rafikitelemetry.grafana.net/public-dashboards/f70c8a6033b14da5a9f1cb974def602a).
+
+
+  ![Telemetry](/developers/img/blog/2024-12-11/telemetry.png)
+
+
+- **New documentation:** Clear, concise, and crafted with precision, Rafiki’s [new documentation](https://rafiki.dev) is designed to empower integrators, developers and administrators alike. We understand that great tools need great instructions and our updated documentation reflects this philosophy. By making our documentation more accessible, detailed and actionable, we are ensuring that Rafiki is not only powerful but also easy to adopt and extend
+
+## What comes next?
+
+
+
+The journey does not end here; in fact, it begins anew. In the months ahead, we will focus on:
+
+- **Performance Improvements:** Rethinking architecture for even greater efficiency.
+
+
+- **Multi-hop Functionality:** Expanding Rafiki’s reach by enabling payments to traverse multiple nodes in the network. This feature allows for greater flexibility, as payments can flow across intermediary connectors to reach their destination, even when direct paths do not exist. Multi-hop functionality is key to creating a truly interconnected and scalable payment network.
+
+
+- **Multi-tenancy Support:** Enabling a single instance of Rafiki software to service multiple account servicing entities (aka tenants). Each tenant operates independently with isolated configurations, data and resources, ensuring security and privacy while sharing the underlying infrastructure. A single Rafiki deployment could simultaneously support multiple digital wallet providers, each with their own branching, users and payment configurations, all while leveraging the same core system. This makes it easier for organizations to scale operations, reduce costs and support diverse business models within a unified environment.
+
+## Reflecting on the journey
+
+
+
+Let’s take a moment to reflect on the significance of this Beta release. Rafiki Beta is more than just a set of features. It represents what can be achieved when a global community unites around a common vision. It stands as a proof that open payments can be secure, scalable and accessible to all.
+
+The journey here hasn’t been without its challenges. From feature creep to overcoming performance bottlenecks, we have faced numerous hurdles. Yet, each challenge has been an opportunity to learn, improve and create something stronger.
+
+At the recent [Interledger Summit in Cape Town](https://interledger.org/summit), the impact of our efforts was clear. From live demonstrations of the newly rebranded [Test Wallet](https://wallet.interledger-test.dev), to integrations with partners like [People’s Clearinghouse](https://lacamara.mx) and [GateHub](https://gatehub.net), Rafiki’s potential was on full display. It was a moment of pride, a reminder of our purpose, and a glimpse into the promising future we are building together.
+
+## Join us in the future of Open Payments
+
+
+
+Our journey is far from complete. Now, we extend an invitation to you - our community, partners, and collaborators, to join us in the next chapter of this endeavour.
+
+Whether you are building integrations, testing performance, or simply exploring Rafiki’s capabilities, you are an integral part of this story. Together, we can create a world where payments flow as seamlessly as ideas and financial inclusion becomes more than just a goal - it becomes a reality. Together, we can make sending payments as simple as sending an email.
+
+The time has come to move forward together. Rafiki Beta has arrived. The power of Rafiki has been set free, ready to transform the world of payments.
