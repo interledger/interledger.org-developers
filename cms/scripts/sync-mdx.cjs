@@ -671,12 +671,20 @@ async function syncContentType(contentType) {
   }
 
   // Find orphaned entries (in Strapi but not in MDX)
-  // Only delete entries in locales we processed
+  // Only delete ENGLISH entries - locale entries are managed via their English counterpart
+  // This prevents accidentally deleting locale entries that couldn't be matched
   for (const entry of strapiEntries) {
     const entryLocale = entry.locale || 'en';
     const localeForPath = entryLocale.split('-')[0];
+
+    // Only delete English entries - locale entries should not be auto-deleted
+    // They can be manually deleted if needed
+    if (localeForPath !== 'en') {
+      continue;
+    }
+
     const processedSlugsForLocale = processedSlugs.get(localeForPath) || new Set();
-    
+
     if (!processedSlugsForLocale.has(entry.slug)) {
       try {
         if (DRY_RUN) {

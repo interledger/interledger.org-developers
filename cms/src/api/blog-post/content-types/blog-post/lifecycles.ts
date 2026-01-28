@@ -25,7 +25,7 @@ interface MediaFile {
 
 interface BlogPost {
   id: number
-  documentId?: number
+  documentId?: string
   title: string
   description: string
   slug: string
@@ -36,8 +36,7 @@ interface BlogPost {
   ogImageUrl?: string
   publishedAt?: string
   locale?: string
-  localizations?: Array<{ id: number; locale: string; documentId?: number }>
-  localizations?: any
+  localizations?: Array<{ id: number; locale: string; documentId?: string }>
 }
 
 interface Event {
@@ -140,7 +139,7 @@ function generateContentId(post: BlogPost, locale: string): string {
 
 /**
  * Gets the contentId for a locale post by finding its English base entry
- * In Strapi i18n, all localizations share the same documentId
+ * In Strapi v5 i18n, all localizations share the same documentId
  */
 async function getContentIdForLocale(
   strapi: any,
@@ -150,73 +149,66 @@ async function getContentIdForLocale(
   if (!strapi) {
     return null
   }
-  
+
   try {
-    const entityService = strapi.entityService
-    
-    // Strategy 1: Use documentId if available (all localizations share the same documentId)
-    // In Strapi, documentId might be in result.documentId or we need to query with the ID
     const docId = (post as any).documentId
-    
-    if (docId) {
+
+    // Strategy 1: Use Strapi v5 documents API with documentId
+    // All localizations share the same documentId, so query with locale='en'
+    if (docId && strapi.documents) {
       try {
-        const englishEntry = await entityService.findOne('api::blog-post.blog-post', docId, {
+        console.log(`   🔍 Querying English entry with documentId: ${docId}`)
+        const englishEntry = await strapi.documents('api::blog-post.blog-post').findOne({
+          documentId: docId,
           locale: 'en'
         })
-        
+
         if (englishEntry && englishEntry.slug) {
-          return englishEntry.slug // Use English slug as contentId
-        }
-      } catch (e) {
-        // documentId query failed, try other methods
-      }
-    }
-    
-    // Strategy 2: Query by ID with locale='en' (if post.id is available)
-    // In Strapi i18n, the same ID can be queried with different locales
-    if (post.id) {
-      try {
-        const englishEntry = await entityService.findOne('api::blog-post.blog-post', post.id, {
-          locale: 'en'
-        })
-        
-        if (englishEntry && englishEntry.slug) {
+          console.log(`   ✅ Found via documents API: ${englishEntry.slug}`)
           return englishEntry.slug
         }
       } catch (e) {
-        // ID query failed, might not work if IDs are different per locale
+        console.log(`   ⚠️  Documents API query failed: ${e.message}`)
       }
     }
-    
-    // Strategy 3: Query all English entries and find by matching localizations
-    // Find English entry that has this post as a localization
+
+    // Strategy 2: Use entityService with filters (Strapi v5 fallback)
+    if (docId) {
+      try {
+        const results = await strapi.entityService.findMany('api::blog-post.blog-post', {
+          filters: { documentId: docId },
+          locale: 'en',
+          limit: 1
+        })
+
+        if (results && results.length > 0 && results[0].slug) {
+          console.log(`   ✅ Found via entityService filter: ${results[0].slug}`)
+          return results[0].slug
+        }
+      } catch (e) {
+        console.log(`   ⚠️  EntityService filter query failed: ${e.message}`)
+      }
+    }
+
+    // Strategy 3: Query all English entries and match by documentId
     try {
-      const allEnglishEntries = await entityService.findMany('api::blog-post.blog-post', {
+      const allEnglishEntries = await strapi.entityService.findMany('api::blog-post.blog-post', {
         locale: 'en',
-        populate: ['localizations'],
-        limit: 200 // Increased limit to find matches
+        limit: 200
       })
-      
-      // Find English entry that has this post as a localization
+
+      // Find English entry with matching documentId
       for (const englishEntry of allEnglishEntries) {
-        if (englishEntry.localizations && Array.isArray(englishEntry.localizations)) {
-          // Check if any localization matches this post
-          const hasThisLocale = englishEntry.localizations.some((loc: any) => {
-            // Match by ID or documentId
-            return (loc.id === post.id) || 
-                   (loc.documentId === docId) ||
-                   (loc.slug === post.slug && (loc.locale === locale || loc.locale === 'es-ES' || loc.locale === 'es'))
-          })
-          
-          if (hasThisLocale && englishEntry.slug) {
-            return englishEntry.slug
-          }
+        if ((englishEntry as any).documentId === docId && englishEntry.slug) {
+          console.log(`   ✅ Found via iteration: ${englishEntry.slug}`)
+          return englishEntry.slug
         }
       }
     } catch (e) {
-      console.error(`Error querying English entries: ${e.message}`)
+      console.error(`   ❌ Error querying English entries: ${e.message}`)
     }
-    
+
+    console.log(`   ⚠️  Could not find English entry for documentId: ${docId}`)
     return null
   } catch (error) {
     console.error(`Error finding contentId for locale post: ${error.message}`)
@@ -253,14 +245,14 @@ async function writeMDXFile(post: BlogPost, strapi?: any, contentId?: string): P
   const baseOutputPath = process.env.BLOG_MDX_OUTPUT_PATH || '../src/content/blog'
   const locale = post.locale || 'en'
   const localeForPath = normalizeLocaleForPath(locale)
-  
+
   // Determine locale-specific directory
   // Default locale (en) goes to /blog/, other locales go to /{locale}/blog/
   // e.g., ../src/content/blog (en) or ../src/content/es/blog (es)
   const outputPath = localeForPath === 'en'
     ? baseOutputPath
     : path.join(path.dirname(baseOutputPath), localeForPath, 'blog')
-  
+
   // Resolve from dist/src/api/blog-post/content-types/blog-post/ up to cms root then project root
   const resolvedDir = path.resolve(__dirname, '../../../../../../', outputPath)
 
@@ -268,17 +260,48 @@ async function writeMDXFile(post: BlogPost, strapi?: any, contentId?: string): P
     fs.mkdirSync(resolvedDir, { recursive: true })
   }
 
-  // For locale posts, try to get contentId from English base entry
+  const filename = generateFilename(post)
+  const filepath = path.join(resolvedDir, filename)
+
+  // For locale posts, try to get contentId from English base entry first
   let finalContentId = contentId
-  if (!finalContentId && locale !== 'en' && strapi) {
-    const baseContentId = await getContentIdForLocale(strapi, post, locale)
-    if (baseContentId) {
-      finalContentId = baseContentId
+
+  if (locale !== 'en') {
+    // Strategy 1: Try to find English base entry via Strapi
+    if (!finalContentId && strapi) {
+      const baseContentId = await getContentIdForLocale(strapi, post, locale)
+      if (baseContentId) {
+        finalContentId = baseContentId
+        console.log(`   🔗 Found English base entry: ${finalContentId}`)
+      }
+    }
+
+    // Strategy 2: If Strapi lookup failed, check existing MDX file
+    if (!finalContentId && fs.existsSync(filepath)) {
+      try {
+        const existingContent = fs.readFileSync(filepath, 'utf-8')
+        const contentIdMatch = existingContent.match(/contentId:\s*["']([^"']+)["']/)
+        if (contentIdMatch && contentIdMatch[1]) {
+          const existingContentId = contentIdMatch[1].trim()
+          // Only use if it's different from the post's own slug
+          if (existingContentId !== post.slug) {
+            finalContentId = existingContentId
+            console.log(`   📋 Using existing contentId from MDX: ${finalContentId}`)
+          }
+        }
+      } catch (e) {
+        // Ignore read errors
+      }
+    }
+
+    // If we still don't have a valid contentId, log a warning
+    if (!finalContentId || finalContentId === post.slug) {
+      console.warn(`   ⚠️  No English base entry found for ${post.slug}. MDX will use slug as contentId.`)
+      console.warn(`   💡 To link this post to an English entry, manually set contentId in the MDX file.`)
+      finalContentId = undefined // Let generateMDX use the default
     }
   }
 
-  const filename = generateFilename(post)
-  const filepath = path.join(resolvedDir, filename)
   const mdxContent = generateMDX(post, finalContentId)
 
   fs.writeFileSync(filepath, mdxContent, 'utf-8')
@@ -353,43 +376,20 @@ export default {
   async afterCreate(event: Event) {
     const { result } = event
     if (result && result.publishedAt) {
-      // Ensure locale is set on the result
       const locale = getLocale(result, event)
-      const postWithLocale = { ...result, locale }
-      
-      // Get contentId: for English use slug, for locales find base entry
-      let contentId: string | undefined = undefined
-      const strapi = (global as any).strapi
-      
-      if (locale === 'en' || !locale) {
-        contentId = result.slug // English posts use slug as contentId
-      } else {
-        // For locale posts, try to find the English base entry
-        try {
-          if (strapi) {
-            // Log what we have to work with
-            console.log(`   🔍 Looking for English base entry for: ${result.slug} (${locale})`)
-            console.log(`   📋 Post ID: ${result.id}, documentId: ${(result as any).documentId || 'N/A'}`)
-            
-            // Try multiple strategies to find the English entry
-            const baseContentId = await getContentIdForLocale(strapi, result, locale)
-            if (baseContentId) {
-              contentId = baseContentId
-              console.log(`   ✅ Found English base entry: ${baseContentId}`)
-            } else {
-              console.warn(`   ⚠️  Could not find English base entry for locale post: ${result.slug} (${locale})`)
-              console.warn(`   💡 The English post may not exist yet, or they're not linked.`)
-              console.warn(`   💡 You may need to manually set contentId in frontmatter to match the English slug.`)
-            }
-          } else {
-            console.warn(`   ⚠️  Strapi instance not available for locale post: ${result.slug}`)
-          }
-        } catch (error) {
-          console.error(`Error getting contentId for locale post: ${error.message}`)
-          console.error(`Stack: ${error.stack}`)
-        }
+
+      // Skip MDX generation for non-English locales
+      // The sync-mdx.cjs script handles locale MDX files with proper contentId linking
+      if (locale !== 'en') {
+        console.log(`⏭️  Skipping MDX generation for locale post: ${result.slug} (${locale})`)
+        console.log(`   💡 Use sync-mdx.cjs to sync locale posts with correct contentId`)
+        return
       }
-      
+
+      const postWithLocale = { ...result, locale }
+      const contentId = result.slug // English posts use slug as contentId
+      const strapi = (global as any).strapi
+
       await writeMDXFile(postWithLocale, strapi, contentId)
       const filepath = getFilepath(postWithLocale, locale)
       await gitCommitAndPush(filepath, `blog: add "${result.title}" (${locale})`)
@@ -400,31 +400,18 @@ export default {
     const { result } = event
     if (result) {
       const locale = getLocale(result, event)
+
+      // Skip MDX generation for non-English locales
+      // The sync-mdx.cjs script handles locale MDX files with proper contentId linking
+      if (locale !== 'en') {
+        console.log(`⏭️  Skipping MDX generation for locale post: ${result.slug} (${locale})`)
+        return
+      }
+
       const postWithLocale = { ...result, locale }
       const filepath = getFilepath(postWithLocale, locale)
-
-      // Get contentId: for English use slug, for locales find base entry
-      let contentId: string | undefined = undefined
+      const contentId = result.slug // English posts use slug as contentId
       const strapi = (global as any).strapi
-      
-      if (locale === 'en' || !locale) {
-        contentId = result.slug // English posts use slug as contentId
-      } else {
-        // For locale posts, try to find the English base entry
-        try {
-          if (strapi) {
-            const baseContentId = await getContentIdForLocale(strapi, result, locale)
-            if (baseContentId) {
-              contentId = baseContentId
-              console.log(`   🔗 Found English base entry: ${baseContentId}`)
-            } else {
-              console.warn(`   ⚠️  Could not find English base entry for locale post: ${result.slug} (${locale})`)
-            }
-          }
-        } catch (error) {
-          console.error(`Error getting contentId for locale post: ${error.message}`)
-        }
-      }
 
       if (result.publishedAt) {
         await writeMDXFile(postWithLocale, strapi, contentId)
@@ -440,6 +427,14 @@ export default {
     const { result } = event
     if (result) {
       const locale = getLocale(result, event)
+
+      // Skip MDX deletion for non-English locales
+      // The sync-mdx.cjs script handles locale MDX files
+      if (locale !== 'en') {
+        console.log(`⏭️  Skipping MDX deletion for locale post: ${result.slug} (${locale})`)
+        return
+      }
+
       const postWithLocale = { ...result, locale }
       await deleteMDXFile(postWithLocale)
       const filepath = getFilepath(postWithLocale, locale)
