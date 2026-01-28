@@ -1,0 +1,740 @@
+---
+title: "End-to-end testing the Web Monetization browser extension"
+description: "E2E testing browser extensions? It's tricky, but we've got it covered."
+date: 2024-12-03
+slug: e2e-testing-wm-browser-extension
+---
+
+A sharp test suite anticipates problems, catching them before they surprise users. As developers, we often get a bit too familiar with our own code. With our inevitably biased views, we often end up overlooking issues from outlier scenarios, or usability considerations, all the way to the "oops" bugs. End-to-end tests help us view the product more objectively, from a user's perspective. Automating these tests saves time and ensures consistent quality throughout the development process.
+
+However, automated end-to-end testing of a browser extension is a bit… complicated. But don't worry, we're up for this challenge! I'll share with you how we do end-to-end testing of the [Web Monetization browser extension](https://github.com/interledger/web-monetization-extension).
+
+For context, [Web Monetization](https://webmonetization.org) (WM) is a new way to support websites without ads or subscriptions. You, as the sender, specify your [Open Payments wallet address](https://openpayments.dev/introduction/wallet-addresses/) (think of it like an email address to send or receive money on the web), and the [websites specify theirs](https://webmonetization.org/developers/get-started/). As you browse the web, your browser sends small payments to the websites. Sounds cool, right? It's promising, but it lacks native support in browsers today. We created a browser extension to bridge this gap, enabling you to support your favorite creators today.
+
+![Playwright UI while testing the Web Monetization browser extension](/developers/img/blog/2024-12-03/playwright.png)
+
+## How does it work?
+
+
+
+While there are plenty of tools to facilitate end-to-end (E2E) testing for web apps, extension testing can be a different story. Most options lack maturity or comprehensive documentation.
+
+We use [Playwright](https://playwright.dev/) to run E2E tests. It has [some pointers](https://playwright.dev/docs/chrome-extensions) to get us started.
+
+Right now, Playwright only plays nicely with Chromium-based browsers, so we run our tests in Chrome and Edge. Firefox support is nearly there! We'll dive into the Chromium stuff first, then I'll give a quick status update on Firefox. The code snippets are written in TypeScript, so it's helpful to have a basic understanding of its syntax.
+
+## Loading the extension
+
+
+
+Since the WM browser extension works its magic on web pages, we can test its core features by loading it up and watching how websites behave under its influence. For example, websites may unlock exclusive content when they receive payments, or hide obtrusive adverts.
+
+We can launch the browser with our extension loaded using the `--load-extension=${pathToExtension}` CLI argument. We need to launch it in a persistent context with Playwright.
+
+```ts
+
+
+function loadExtension(pathToExtension: string): Promise {
+
+
+  const context = await chromium.launchPersistentContext('', {
+
+
+    headless: true,
+
+
+    args: [
+
+
+      `--headless=true`,
+
+
+      `--disable-extensions-except=${pathToExtension}`,
+
+
+      `--load-extension=${pathToExtension}`
+
+
+    ]
+
+
+  })
+
+
+  return context
+
+
+}
+
+
+```
+
+## Accessing the background service worker
+
+
+
+We require access to the extension's background service worker to interact with the browser extension APIs, including its local storage.
+
+```ts
+
+
+let background = context.serviceWorkers()[0]
+
+
+if (!background) {
+
+
+  background = await context.waitForEvent('serviceworker')
+
+
+}
+
+
+```
+
+To access and modify the extension's local storage, we need to evaluate the Storage API calls within the context of the extension's service worker:
+
+```ts
+
+
+const storageData = await background.evaluate(() => {
+
+
+  return chrome.storage.local.get([key1, key2])
+
+
+})
+
+
+// note the use of `chrome.` namespace - this works in Chromium as well as Firefox!
+
+
+```
+
+For instance, to verify if a user has connected their wallet to the WM extension, we can check the extension's local storage:
+
+```ts
+
+
+const data = await background.evaluate(() => {
+
+
+  return chrome.storage.local.get(['connected'])
+
+
+})
+
+
+expect(data.connected).toBe(true)
+
+
+```
+
+A nice thing with Playwright is we get TypeScript support out of the box, even in `evaluate` contexts:
+
+```ts
+
+
+const { connected } = await background.evaluate(() => {
+
+
+  return chrome.storage.local.get  ['connected']
+
+
+})
+
+
+expect(connected).toBe(true)
+
+
+```
+
+We can use this trick to mess with all sorts of extension APIs - opening and closing tabs, listening in on events, and more. This gives us the power to test our extension's behavior from top to bottom.
+
+## Accessing the popup
+
+
+
+While we can trigger some of the background API requests and test the extension's behavior, there's one missing piece: the user interface, the nifty [default popup](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/action) that the users will actually interact with. Without testing how users interact with it, we're just checking the engine, not taking the whole car for a spin – not exactly end-to-end testing, right?
+
+In case you haven't seen the extension yet, this is what it looks like:
+
+![Web Monetization extension's popup](/developers/img/blog/2024-12-03/extension-popup.png)
+
+Playwright doesn't have a magic button to open and poke around in the popup just yet. We can try using `chrome.action.openPopup()`, but that's a bit tricky. It needs user input in Firefox, and in Chrome, it's picky about which window it shows up in (i.e. only in the currently focused one). Even if we manage to open it, getting to its content is still a puzzle.
+
+The good news: the extension's UI is just a fancy HTML page. There's no bad news in this part. This means we can open it like any other webpage in a new tab! But what's the URL for this popup page? That varies from browser to browser, it's something like: `chrome-extension://{extensionId}/{path/to/popup.html}`. And how do we get the extension ID? Luckily, the background service worker has a URL too! We can extract the ID from its URL using a bit of JavaScript magic: `background.url().split('/')[2]`. Or, if you prefer a more semantic approach, you can use `new URL(background.url()).hostname`. Alternatively, we can get the full popup URL by evaluating `browser.action.getPopup({})` in the background worker context. Sometimes the simplest solutions come to mind only after you've gone knee-deep into a hacking challenge! So always take a break!
+
+```ts
+
+
+const popup = await context.newPage()
+
+
+await popup.goto(popupUrl)
+
+
+// Now we can access the popup as a regular Playwright page
+
+
+```
+
+To make this more compatible with the way the extension opens its popup, we can open it in a literal popup window. This way we can keep the popup visible separately when we run Playwright tests in UI mode (or view captured screenshots or traces), and it looks like a popup this way - not a tab.
+
+```ts
+
+
+async function getPopup(context: BrowserContext, popupUrl: string) {
+
+
+  const page = await context.newPage()
+
+
+  const popupPromise = page.waitForEvent('popup')
+
+
+  await page.evaluate(() => {
+
+
+    return window.open('', '', 'popup=true,width=448,height=600')
+
+
+  })
+
+
+  const popup = await popupPromise
+
+
+  await page.close() // we don't need it anymore
+
+
+  await popup.goto(popupUrl) // window.open doesn't allow internal browser pages
+
+  return popup // now we can access the popup as a regular Playwright page
+
+
+}
+
+
+```
+
+Note that opening the popup by clicking the extension icon is equivalent to loading that popup page. So, we can reload the popup page before each test to simulate that.
+
+## Writing tests
+
+
+
+We can test the above helper functions to work well enough:
+
+```ts
+
+
+import { test, expect } from '@playwright/test'
+
+test('popup has connect form', async ({ browserName }) => {
+
+
+  const context = await loadExtension(browserName)
+
+
+  const background = await getBackground(context)
+
+
+  const popup = await getPopup(context, background)
+
+  const { connected } = await background.evaluate(() => {
+
+
+    /* chrome.storage... */
+
+
+  })
+
+
+  expect(connected).toBe(false)
+
+  await expect(popup.locator('form')).toBeAttached()
+
+
+})
+
+
+```
+
+But why bother setting up the stage for each test, or even once per file with `beforeAll` (and a responsible cleanup in `afterAll`)? Enter fixtures!
+
+## Less repetition with fixtures
+
+
+
+We've been doing a lot of manual work, and repeating the same steps for each test can get tedious. Let's automate some of this with Playwright's fixtures. We can create a "base" fixture to handle the heavy lifting, like loading the extension and giving us access to its background and popup. This way, we can focus on writing the actual tests.
+
+```ts
+
+
+// tests/e2e/fixtures/base.ts
+
+
+import { test as base } from "@playwright/test";
+
+type TestScope = { context: BrowserContext, background: Worker, popup: Page };
+
+export const test =
+
+
+  base.extend 
+
+
+  {
+
+
+    context: async ({ browserName }, use) => {
+
+
+      const context = await loadExtension(browserName); // launch browser with extension loaded
+
+
+      await use(context); // use it
+
+
+      await context.close(); // close browser after use
+
+
+    },
+
+
+    background: async ({ context }, use) => {
+
+
+      const background = await getBackground(context);
+
+
+      await use(background);
+
+
+    },
+
+
+    popup: async ({ context, background }, use) => {
+
+
+      const popupUrl = await getExtensionPopupUrl(background);
+
+
+      const popup = await getPopup(context, popupUrl);
+
+
+      await use(popup);
+
+
+      await popup.close();
+
+
+    },
+
+
+    page: async ({ context }, use) => {
+
+
+      const page = await context.newPage();
+
+
+      await use(page);
+
+
+      await page.close();
+
+
+    },
+
+
+  };
+
+
+export const expect = test.expect;
+
+
+```
+
+We then use this fixture as:
+
+```ts
+
+
+// real tests are of course more complex
+
+
+import { test, expect } from './fixtures/base'
+
+test('popup has connect form', async ({ background, popup }) => {
+
+
+  const { connected } = await background.evaluate(() => {
+
+
+    /* ... */
+
+
+  })
+
+
+  expect(connected).toBe(false)
+
+  await expect(popup.locator('form')).toBeAttached()
+
+
+})
+
+test('can connect to wallet', async ({ background, popup }) => {
+
+
+  await popup.getByRole('button').submit()
+
+  const { connected } = await background.evaluate(() => {
+
+
+    /* ... */
+
+
+  })
+
+
+  expect(connected).toBe(true)
+
+
+})
+
+test('monetizes page', async ({ background, popup, page }) => {
+
+
+  await connectWallet(popup)
+
+
+  await page.goto('https://example.com')
+
+  await expect(popup.getByLabel('status')).toHaveText('monetizing...')
+
+
+  await expect(popup.locator('url')).toHaveText('example.com')
+
+
+})
+
+
+```
+
+Much better! We can make our fixtures even more powerful by customizing them for specific tests. For instance, when we're testing payments, we can set up the wallet connection within the fixture itself. This way, we can focus on the specific payment tests without repeating the connection process each time.
+
+## Organizing and optimizing tests
+
+
+
+Let's be honest, opening and closing a whole browser window for each test is a bit overkill and time-consuming. You wouldn't do that manually either. Time to optimize!
+
+We can optimize by using a single browser instance and popup for all tests in a file. This way, we can improve performance and resource usage. While we lose some parallelism, it's a fair trade-off for better efficiency.
+
+Playwright has a neat trick to scope resources per test worker, aptly named: `{ scope: 'worker' }`. Let's refactor our fixture to use worker scope.
+
+```ts
+
+
+// tests/e2e/fixtures/base.ts
+
+
+import { test as base } from '@playwright/test'
+
+// created once per test
+
+
+type TestScope = { page: Page }
+
+
+// created once per worker
+
+
+type WorkerScope = {
+
+
+  persistentContext: BrowserContext
+
+
+  background: Worker
+
+
+  popup: Page
+
+
+}
+
+export const test = base.extend({
+
+
+  persistentContext: [
+
+
+    // Ideally we wanted this fixture to be named "context", but it's already defined in the default base fixture under the scope "test", so we can't override it.
+
+
+    async ({ browserName }, use, workerInfo) => {
+
+
+      const context = await loadExtension(browserName)
+
+
+      await use(context)
+
+
+      await context.close()
+
+
+    },
+
+
+    { scope: 'worker' } // yep, that's it. The default is { scope: "test" }
+
+
+  ],
+
+
+  background: [
+
+
+    async ({ persistentContext: context }, use) => {
+
+
+      const background = await getBackground(context)
+
+
+      await use(background)
+
+
+    },
+
+
+    { scope: 'worker' }
+
+
+  ],
+
+
+  popup: [
+
+
+    async ({ background, persistentContext: context }, use) => {
+
+
+      const popupUrl = await getExtensionPopupUrl(background)
+
+
+      const popup = await getPopup(context, popupUrl)
+
+
+      await use(popup)
+
+
+      await popup.close()
+
+
+    },
+
+
+    { scope: 'worker' }
+
+
+  ],
+
+  page: async ({ persistentContext: context }, use) => {
+
+
+    const page = await context.newPage()
+
+
+    await use(page)
+
+
+    await page.close()
+
+
+  }
+
+
+})
+
+
+export const expect = test.expect
+
+
+```
+
+Now, we'll have a single browser and popup instance per test file, not per test. This also means we need to be cautious to avoid interfering with each other's state. We don't want one test to mess up the setup for another.
+
+To ensure this, we'll split our tests into smaller, more focused files. This might mean more files, but it has a big advantage: each file can run independently in its worker. With enough CPU and memory (like in most dev machines), we can run all these files in parallel, making our tests fly!
+
+When running tests with a single worker, they're executed (queued in case of multiple workers) in chronological order. To ensure a logical test flow (most basic tests first and gradually move towards more specific scenarios), we can name our test files strategically. To enforce a strict order, we can add numerical prefixes to our file names, like 001-, 002-, etc. if needed.
+
+## Testing priorities: Let's get the big stuff right first
+
+
+
+We test for the essential product features first, then dive into specific behaviors. Test for things that are difficult to repeat manually and go after things that'll make our life harder if they regress. The goal still is to test as much as we can, but priorities!
+
+Here's what gets the spotlight in our testing of the Web Monetization extension:
+
+- Wallet connection: We test the connection process with different wallet providers to make sure new users can easily onboard. The wallet connection process varies a bit depending on the provider, so we've [built some clever tricks](https://github.com/interledger/web-monetization-extension/issues/613) behind the scenes to smooth things out for users. We test for expected and unexpected errors, and how gracefully they're handled. But even magic needs a checkup, so we run these tests daily in our nightly builds.
+
+
+- Making payments to websites you visit: We test both automatic micro-payments and custom one-time payments to websites you visit. The [Web Monetization playground](https://webmonetization.org/play/) and the [Interledger test wallet](https://wallet.interledger-test.dev) are essential parts for these tests. In these tests, we ensure the payment amount and frequency are what the user wants them to be.
+
+These are the top priorities, and we cover more features in other tests.
+
+## Intercepting requests
+
+
+
+While we can observe the extension's behavior on a page, it's often helpful to tap into network requests. This way, we can verify that the right things are happening behind the scenes, especially when multiple actions can lead to similar outcomes. Plus, we can time our tests to wait for specific network requests to complete before checking the page's state.
+
+We can snoop on network requests on a page (like the popup or a regular webpage) using `page.on('request', handler)`. For example, in the extension, we intercept some API responses when adding keys to certain wallets, so we can revoke the right key during the test's cleanup.
+
+For the Web Monetization extension, it's more useful for us to intercept requests in the background service worker. To catch these requests, we can use `context.on('request', handler)`. If we only care about the response, we can listen to `'requestfinished'` instead. Just a heads up that this service worker request interception is still experimental in Playwright, so we need to set the `PW_EXPERIMENTAL_SERVICE_WORKER_NETWORK_EVENTS=1` environment variable to enable it.
+
+```ts
+
+
+context.on('requestfinished', async function intercept(req) {
+
+
+  if (!req.serviceWorker()) return // we only care about service worker requests here
+
+  if (isTheRequestWeAreAfter(req)) {
+
+
+    const json = await req.response().then((res) => res.json())
+
+
+    // ... use response body
+
+    context.off('requestfinished', intercept) // we're responsible citizens
+
+
+  }
+
+
+})
+
+
+```
+
+## More optimization tricks up our sleeve
+
+
+
+### Saving login cookies
+
+
+
+Most of our payment tests require logging in to the [Interledger Test Wallet](https://wallet.interledger-test.dev). It's a drag to log in every single time. That's why we handle login during an initial setup phase and then store these cookies securely in the filesystem. It's like having a "Remember me" feature (for websites that get it right!) for our tests. It saves us a bunch of clicks and makes our tests more efficient.
+
+```ts
+
+
+// tests/e2e/auth.setup.ts
+
+
+setup('authenticate', async ({ page }) => {
+
+
+  setup.skip(existsSync(AUTH_FILE), 'Already authenticated')
+
+  await page.goto(`${TEST_WALLET_ORIGIN}/auth/login`)
+
+
+  await page.getByLabel('E-mail').fill(TEST_WALLET_USERNAME)
+
+
+  await page.getByLabel('Password').fill(TEST_WALLET_PASSWORD)
+
+
+  await page.getByRole('button', { name: 'login' }).click()
+
+  await page.context().storageState({ path: AUTH_FILE })
+
+
+})
+
+//Later, load the cookies into the browser context
+
+// tests/e2e/fixtures/base.ts
+
+
+export const test = base.extend({
+
+
+  persistentContext: [
+
+
+    async ({ browserName }, use, workerInfo) => {
+
+
+      const context = await loadExtension(browserName)
+
+      if (workerInfo.project.name !== 'setup') {
+
+
+        const { cookies } = await readFile(AUTH_FILE).then(JSON.parse)
+
+
+        await context.addCookies(cookies)
+
+
+      }
+
+      await use(context)
+
+
+      await context.close()
+
+
+    },
+
+
+    { scope: 'worker' }
+
+
+  ]
+
+
+  // ...
+
+
+})
+
+
+```
+
+### Saving the wallet's connected state
+
+
+
+When a user connects their wallet with the extension, we receive their permission to send their funds in the form of tokens. With Open Payments, we use [GNAP grants & tokens](https://interledger.org/developers/blog/open-payments-cinderella-story/) to facilitate that. GNAP is a next-generation protocol for delegating access to APIs securely & flexibly; you can consider it a successor of OAuth.
+
+While testing, we're exploring ways to store these grants and tokens after the test wallet is connected. This would eliminate the need to reconnect the wallet before every single test. Imagine having to unlock your phone every time you wanted to open a new app – not ideal, right?
+
+## Firefox?
+
+
+
+This is the only section with bad news in this article.
+
+Firefox doesn't yet have a straightforward API like Chrome's `--load-extension` flag to load extensions with Playwright. However, we can explore using Remote Debugging Protocol (RDP) to call the `installTemporaryAddon` function. This requires [adding a little RDP client](https://github.com/microsoft/playwright/issues/7297#issuecomment-1211763085) to communicate with Firefox.
+
+Even if we manage to load the extension, there's still a roadblock: we can't directly load extension pages into the browser [yet](https://github.com/microsoft/playwright/issues/7297#issuecomment-1655443442). We're still a few steps away from a seamless extension testing experience in Firefox with Playwright.
+
+Let's keep an eye on Playwright's development and hope for future updates that might bridge this gap. [Upvote this issue on GitHub](https://github.com/microsoft/playwright/issues/7297) if this will be helpful for you too.
+
+## Next steps: Expanding test coverage
+
+
+
+We'll level up our testing game by diving deeper into browser-specific features like Edge's split view and adding more tests to cover every corner case. We'll push the extension to its limits, simulating different user interactions and trying to break it, to build a rock-solid extension that provides a great user experience.
+
+Want to dive deeper into our testing strategy? Check out our [GitHub repo for the Web Monetization extension](https://github.com/interledger/web-monetization-extension). We're always open to feedback and contributions, so feel free to submit a pull request!
