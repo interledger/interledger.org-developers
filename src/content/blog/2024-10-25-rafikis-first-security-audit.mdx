@@ -1,0 +1,184 @@
+---
+title: "Rafiki's First Security Audit"
+description: "Takeaways from Rafiki's 2024 security audit."
+date: 2024-10-25
+slug: rafikis-first-security-audit
+---
+
+At the beginning of the year, we were in contact with a security and penetration testing company to do an audit of Rafiki. Even though the software is still in its early stages, it is essential to gather feedback early to build a strong foundation for the software's security. The primary goals of the assessment were to evaluate several Rafiki components: the GraphQL Admin APIs, the frontend Admin UI component, as well as our underlying [ILPv4 protocol](https://interledger.org/developers/get-started/). The assessment was done using Rafiki’s local playground, based on the [Open Source Security Testing Methodology Manual (OSSTMM)](https://www.isecom.org/research.html) and [Open Source Web Application Security Project (OWASP)](https://owasp.org/) methodologies.
+
+The audit presented eight vulnerabilities in total, with different risk levels:
+
+![Results of the assessment](/developers/img/blog/2024-10-25/results.png)
+
+Two items were not applicable to us:
+
+- Lack of Transport Layer Protection: given this is our local playground environment, we run HTTP for ease of use.
+
+
+- Hardcoded Secret Credentials: automatic code review flagged hardcoded credentials, but this was only in our test files where we use mock data.
+
+The remaining six vulnerabilities were addressed as follows:
+
+## Admin APIs
+
+
+
+### HMAC signing
+
+
+
+While the assessment mentioned adding a security mechanism to our GraphQL Admin APIs in both the backend and auth packages as part of the report, this was a known priority even before the audit.
+
+Although these APIs should not be exposed to the wider internet in a Rafiki deployment, we want to provide our [Account Servicing Entities (ASEs)](https://rafiki.dev/overview/overview/#more-about-account-servicing-entities) running the software with as many security safeguards as possible. Given that the typical usage of the Admin APIs is through service-to-service requests, we chose to go with a simple and effective solution similar to what we had already integrated for our webhooks: adding HMAC signature support. This is done by having a shared key between the Rafiki services, and the integrator’s service. When calling the Admin API, the integrator generates a signature of the payload (containing a timestamp and request body) using HMAC with sha256 algorithm and the secret key. Upon receiving the request in the Admin API, backend and auth verifies this signature to validate the request’s authenticity & integrity.
+
+### Disabling GraphQL Introspection Query
+
+
+
+The assessment outlined a few recommendations against common GraphQL attacks, one of which was the disabling of the introspection query in production. Introspection can provide access into the whole structure of a GraphQL schema (types, queries, mutations, deprecated fields) which is useful during development, but can provide a lot of knowledge to bad actors looking to exploit the API. Based on the recommendation, we turned off introspection in production.
+
+### Preventing Denial of Service GraphQL Attacks
+
+
+
+Due to the structure of GraphQL APIs, it is sometimes not possible to avoid circular relationships between the models. As a result, bad actors can create requests containing circular queries, causing nested fields to be resolved recursively:
+
+```gql
+
+
+query {
+
+
+  __schema {
+
+
+    types {
+
+
+      name
+
+
+      fields {
+
+
+        name
+
+
+        type {
+
+
+          name
+
+
+          fields {  <- recursing into the fields object
+
+
+            name
+
+
+            type {
+
+
+              name
+
+
+              ...
+
+
+            }
+
+
+          }
+
+
+        }
+
+
+      }
+
+
+    }
+
+
+  }
+
+
+}
+
+
+```
+
+Without proper handling, this can cause the server to grind to a halt trying to process these kinds of requests. The recommendation from the audit was to limit the depth of valid queries, such that no requests past a certain level of nesting can be resolved.
+
+In addition, there is a threat of field duplication attacks in GraphQL APIs: an attacker tries to overload the API by excessively requesting fields many times over in a single query. Even though standard GraphQL implementations end up correctly calling the underlying resolver (handler) only once per field, the GraphQL parser needs to do a lot of work to actually process the request, potentially leading to a denial of service (DoS).
+
+```gql
+
+
+query GetAsset($id: String!) {
+
+
+  asset(id: $id) {
+
+
+    id
+
+
+    code
+
+
+    scale
+
+
+    liquidity
+
+
+    liquidity
+
+
+    liquidity
+
+
+    ...
+
+
+  }
+
+
+}
+
+
+```
+
+This can be prevented by limiting queries that go above a certain complexity threshold, or by limiting the number of "tokens" (such as fields) allowed in a request.
+
+
+We ended up [using](https://github.com/interledger/rafiki/pull/2537) a library called [`@escape.tech/graphql-armor`](https://escape.tech/graphql-armor/docs/getting-started/) to set different kinds of constraints to protect us from these kinds of attacks.
+
+## Rafiki Admin UI (frontend package)
+
+
+
+As part of the Rafiki software stack, we also publish a frontend package. This is a Remix application that enables managing a Rafiki instance using a web-interface. There are few common vulnerabilities that are common across web applications. One of them is clickjacking: a bad actor embeds a legitimate site in an iframe, and then uses several techniques to trick users into entering information meant for the original site in order to gather (or "highjack") clicks and keystrokes ultimately performing unintended actions on behalf of the user, such as submitting forms, making transactions, or altering account settings. In order to prevent this, the testers recommended adding an `X-Frame-Options` header in the responses from the web application. In the `X-Frame-Options` header, we now return the value of `SAMEORIGIN`, which allows framing only by pages with the same domain as in the response itself, preventing bad actors from framing the Rafiki Admin UI on malicious sites.
+
+## Library vulnerabilities
+
+
+
+Given we use a lot of different published libraries in Rafiki, we are vulnerable to security exploits found in them, and of course, their dependencies. During the assessment, the testers used the code scanning tool Snyk to find several vulnerable dependencies in the Rafiki repository. Even though we have renovate-bot to automatically open PRs to manage any outdated libraries, it wasn’t directly incorporated into our continuous integration (CI) pipeline. After the assessment, we added a few code scanners into our CI workflow: Trivy and Grype. Both of these tools have large databases of known exploits for libraries (similar to Snyk), and with each commit into a PR, Trivy and Gripe scan the build (and potentially, the to-be-published Docker image) for high-risk vulnerabilities and indicates it in the PR. This allows us to be more proactive in fixing these issues, instead of relying on less regular merges of dependency updates with renovate-bot.
+
+## ILP & STREAM
+
+
+
+Rafiki runs an ILP connector (using [STREAM](https://interledger.org/developers/rfcs/stream-protocol/) as the transport protocol) as part of its software. This is how two peered Rafiki instances interact and make payments between one another.
+
+
+One of the questions we wanted to ask the auditors during the assessment was, _"if you intercept an ILP packet, could you get any useful information out of it?"_. Using the local playground, we worked together with the auditors to capture ILP (STREAM) packets between the ILP connectors of two Rafiki instances. In the local playground, these requests are done over HTTP. Even though in a production environment the connector-to-connector communication would be done over HTTPS, it gave us visibility into what the requests & responses look like over an insecure protocol. The auditors observed that the ILP STREAM packets were properly encrypted in transit:
+
+![Inspected ILP Packet](/developers/img/blog/2024-10-25/packet.png)
+
+The STREAM transport protocol relies on exchanging a symmetric secret to encrypt messages out-of-band, i.e., without any cryptographic handshakes. In Rafiki, this is done through the use of Open Payments APIs, meaning that even if a bad actor were to inspect packets from the beginning of a STREAM connection, they wouldn't be able to gain any information to decrypt the messages. With this knowledge, combined with the actual observation of the STREAM packets, the auditors found that the encryption & secure data handling using the STREAM transport protocol was sound. This answered our question above: no, no useful information would be gained if one were to intercept these packets.
+
+These were some of the findings we had as part of Rafiki's first security audit. Going forward, we will be doing annual reviews of this nature within Rafiki, as well as the ecosystem as a whole. It is always helpful to get an experienced, outside perspective about how we can continue improving - particularly when it comes to vital aspects of building software, such as security.
