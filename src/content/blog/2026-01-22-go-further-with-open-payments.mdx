@@ -1,0 +1,456 @@
+---
+title: "Go Further with Open Payments 2026"
+description: "Announcing the Open Payments Go SDK"
+date: 2026-01-22
+slug: go-further-with-open-payments
+---
+
+## Why Open Payments in Go?
+
+The [**Open Payments**](https://openpayments.dev/) standard is reshaping how applications initiate, manage, and complete digital transactions — enabling truly interoperable financial systems across different wallets, services, and financial institutions.
+
+The Interledger Foundation has been steadily expanding SDK support across languages — [Node](https://github.com/interledger/open-payments-node) led the way, followed by [PHP](https://github.com/interledger/open-payments-php) and [Rust](https://github.com/interledger/open-payments-rust). But one language was notably missing: **Go**.
+
+According to the [2025 Stack Overflow Developer Survey](https://survey.stackoverflow.co/2025/technology#worked-with-vs-want-to-work-with-language-worked-want), Go ranks among the top backend languages, sitting alongside TypeScript and Python in developer adoption. Perhaps more tellingly, the survey notes that "Python developers aspire to use Rust and Go as the path to high-performance systems programming" — reflecting Go's growing role in cloud infrastructure, microservices, and performance-critical backends.
+
+Today, we're excited to close that gap with [**Open Payments Go**](https://github.com/interledger/open-payments-go) — an open-source SDK that brings first-class Open Payments support to the Go ecosystem.
+
+## What We Built
+
+
+
+[interledger/open-payments-go](https://github.com/interledger/open-payments-go) is a production-ready Go module that provides complete client support for the Open Payments API.
+
+It includes:
+
+- Complete API coverage — wallet addresses, grants, tokens, quotes, incoming payments, and outgoing payments.
+- Built for Go 1.21+, leveraging Go's strong typing, interfaces, and standard library conventions.
+
+
+- **Types generated directly from OpenAPI specifications** using [oapi-codegen](https://github.com/oapi-codegen/oapi-codegen), ensuring the SDK stays in sync with the Open Payments spec.
+
+
+- Built-in HTTP signature utilities for [GNAP authentication](https://openpayments.dev/identity/http-signatures/), abstracting away the complexity of Ed25519 signing.
+
+
+- Comprehensive integration tests against both local Rafiki environments and the test wallet.
+
+Here's what it looks like to request a grant and create an incoming payment:
+
+```go
+
+
+package main
+
+import (
+
+
+    "context"
+
+
+    "log"
+
+
+    "time"
+
+    openpayments "github.com/interledger/open-payments-go"
+
+
+    as "github.com/interledger/open-payments-go/generated/authserver"
+
+
+    rs "github.com/interledger/open-payments-go/generated/resourceserver"
+
+
+)
+
+func main() {
+
+
+    privateKeyBase64 := os.Getenv("BASE64_PRIVATE_KEY")
+
+
+    keyId := os.Getenv("KEY_ID")
+
+    // Initialize the authenticated client
+
+
+    client, err := openpayments.NewAuthenticatedClient(
+
+
+        "https://wallet.example.com/alice",
+
+
+        privateKeyBase64,
+
+
+        keyId,
+
+
+    )
+
+
+    if err != nil {
+
+
+        log.Fatal(err)
+
+
+    }
+
+    // Get wallet address info
+
+
+    wallet, err := client.WalletAddress.Get(context.Background(), openpayments.WalletAddressGetParams{
+
+
+        URL: "https://wallet.example.com/alice",
+
+
+    })
+
+
+    if err != nil {
+
+
+        log.Fatal(err)
+
+
+    }
+
+    // Build the access request
+
+
+    incomingAccess := as.AccessIncoming{
+
+
+        Type: as.IncomingPayment,
+
+
+        Actions: []as.AccessIncomingActions{
+
+
+            as.AccessIncomingActionsCreate,
+
+
+            as.AccessIncomingActionsRead,
+
+
+            as.AccessIncomingActionsList,
+
+
+            as.AccessIncomingActionsComplete,
+
+
+        },
+
+
+    }
+
+
+    accessItem := as.AccessItem{}
+
+
+    accessItem.FromAccessIncoming(incomingAccess)
+
+    // Request a grant
+
+
+    grant, err := client.Grant.Request(context.Background(), openpayments.GrantRequestParams{
+
+
+        URL: *wallet.AuthServer,
+
+
+        RequestBody: as.GrantRequestWithAccessToken{
+
+
+            AccessToken: struct {
+
+
+                Access as.Access `json:"access"`
+
+
+            }{
+
+
+                Access: []as.AccessItem{accessItem},
+
+
+            },
+
+
+        },
+
+
+    })
+
+
+    if err != nil {
+
+
+        log.Fatal(err)
+
+
+    }
+
+    // Create an incoming payment
+
+
+    expiresAt := time.Now().Add(24 * time.Hour)
+
+
+    payment, err := client.IncomingPayment.Create(context.Background(), openpayments.IncomingPaymentCreateParams{
+
+
+        BaseURL:     *wallet.ResourceServer,
+
+
+        AccessToken: grant.AccessToken.Value,
+
+
+        Payload: rs.CreateIncomingPaymentJSONBody{
+
+
+            WalletAddressSchema: *wallet.Id,
+
+
+            IncomingAmount: &rs.Amount{
+
+
+                Value:      "1000",
+
+
+                AssetCode:  wallet.AssetCode,
+
+
+                AssetScale: wallet.AssetScale,
+
+
+            },
+
+
+            ExpiresAt: &expiresAt,
+
+
+        },
+
+
+    })
+
+
+    if err != nil {
+
+
+        log.Fatal(err)
+
+
+    }
+
+    log.Printf("Created incoming payment: %s", *payment.Id)
+
+
+}
+
+
+```
+
+With Go's strong typing and the SDK's clean API design, developers get compile-time safety and IDE autocompletion for the entire Open Payments workflow.
+
+## Under the Hood
+
+
+
+Here are two things we did to help ensure a good developer experience.
+
+### Type-Safe Generated Types with OpenAPI Overlays
+
+
+
+One challenge we faced was that the upstream OpenAPI specifications didn't always produce ideal Go types when run through code generators. For example, request bodies for grants and outgoing payments used `oneOf` unions that resulted in awkward generated type names like `PostRequestJSONBody`.
+
+To solve this, we leveraged [OpenAPI Overlays](https://learn.openapis.org/overlay/) — a powerful technique for modifying OpenAPI specs without forking them. Our overlay files (`authserver.overlay.yaml`, `resourceserver.overlay.yaml`) add explicit type names and restructure unions for better Go ergonomics:
+
+```yaml
+
+
+# resourceserver.overlay.yaml
+
+
+actions:
+
+
+  - target: $.components.schemas
+
+
+    update:
+
+
+      CreateOutgoingPaymentWithQuote:
+
+
+        type: object
+
+
+        required: [walletAddress, quoteId]
+
+
+        properties:
+
+
+          walletAddress:
+
+
+            $ref: '#/components/schemas/walletAddress'
+
+
+          quoteId:
+
+
+            type: string
+
+
+          metadata:
+
+
+            type: object
+
+
+            additionalProperties: true
+
+      CreateOutgoingPaymentWithAmount:
+
+
+        type: object
+
+
+        required: [walletAddress, incomingPayment, debitAmount]
+
+
+        # ...
+
+
+```
+
+Instead of wrestling with anonymous types, you get clear, self-documenting structs:
+
+```go
+
+
+// Without overlays: confusing generated names
+
+
+var payload PostRequestJSONBody  // What is this?
+
+// With overlays: intent is obvious
+
+
+var payload rs.CreateOutgoingPaymentWithQuote
+
+
+payload.WalletAddressSchema = walletAddress
+
+
+payload.QuoteId = quoteId
+
+
+```
+
+This approach keeps us in sync with upstream specs while producing clean, well-named Go types.
+
+### HTTP Signatures Made Simple
+
+
+
+Open Payments requires [HTTP Message Signatures](https://openpayments.dev/introduction/http-signatures/) for authenticated requests. The SDK handles this complexity internally through the `httpsignatureutils` package:
+
+The SDK automatically signs requests when using `AuthenticatedClient`. Internally, it:
+
+1. Computes `Content-Digest` for request bodies
+
+
+2. Builds the signature base string per [RFC 9421](https://datatracker.ietf.org/doc/html/rfc9421)
+
+
+3. Signs with your Ed25519 private key
+
+
+4. Sets `Signature` and `Signature-Input` headers
+
+## Why It Matters for the Go Community
+
+
+
+Go powers a significant portion of cloud infrastructure, payment systems, and fintech backends. By bringing native Open Payments support to Go, we enable:
+
+- **Cloud-native payment integrations**: Deploy Open Payments clients as microservices, serverless functions, or embedded in existing Go applications.
+
+- **High-performance payment processing**: Go's concurrency model and low overhead make it ideal for high-throughput payment scenarios.
+
+- **Type safety at compile time**: Catch integration errors before runtime with Go's strong typing and the SDK's generated types.
+
+- **Battle-tested**: Comprehensive integration tests run against both local Rafiki environments and the Interledger test wallet, ensuring real-world reliability.
+
+## Getting Started
+
+
+
+Install the SDK:
+
+```bash
+
+
+go get github.com/interledger/open-payments-go
+
+
+```
+
+The SDK requires Go 1.21 or later. For development, you'll also need to initialize the OpenAPI spec submodule:
+
+```bash
+
+
+git submodule update --init
+
+
+```
+
+To regenerate types from the specs (if you're contributing or customizing):
+
+```bash
+
+
+go generate ./generated
+
+
+```
+
+## Get Involved
+
+
+
+Open Payments Go is under active development and ready to use today.
+
+- **Documentation** — The official Open Payments docs include Go examples alongside SDKs in other languages such as JavaScript, TypeScript, PHP, Rust, and Java. Explore the SDK documentation here: https://openpayments.dev/sdk/before-you-begin/
+
+- **Community feedback** — We’d love your input. Open issues, submit pull requests, or join the discussion on GitHub to help shape the SDK’s future.
+
+- **Source & ecosystem** — Open Payments Go is part of the broader Interledger and Open Payments ecosystem:
+
+
+  - GitHub: https://github.com/interledger/open-payments-go
+
+
+  - Open Payments: https://openpayments.dev/
+
+
+  - Interledger Foundation: https://interledger.org/
+
+
+  - Rafiki (Open Payments reference implementation): https://github.com/interledger/rafiki
+
+---
+
+We're excited to bring Open Payments to the Go ecosystem and can't wait to see what the community builds.
+
+Give it a try, and let us know what you think! 🚀
