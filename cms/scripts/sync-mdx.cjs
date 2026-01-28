@@ -246,34 +246,93 @@ async function findBySlugInDefaultLocale(apiId, slug) {
 
 // Create localization for an existing entry
 async function createLocalization(apiId, documentId, locale, data) {
-  return await strapiRequest(`${apiId}/${documentId}/localizations`, {
-    method: 'POST',
-    body: JSON.stringify({ data: { ...data, locale } })
+  // In Strapi v5, localizations are created by using PUT to the existing documentId
+  // with the locale parameter. This adds a new locale version to the same document.
+
+  // First, verify the base entry exists
+  let entry;
+  try {
+    entry = await strapiRequest(`${apiId}/${documentId}?locale=en`);
+  } catch (e) {
+    entry = await strapiRequest(`${apiId}/${documentId}`);
+  }
+
+  if (!entry || !entry.data) {
+    throw new Error(`Base entry not found with documentId: ${documentId}`);
+  }
+
+  console.log(`      📝 Creating localization for documentId=${documentId}, locale=${locale}`);
+
+  // Remove locale from data (should not be in body)
+  const { locale: dataLocale, ...dataWithoutLocale } = data;
+
+  // In Strapi v5, to create a localization for an existing document,
+  // use PUT to the documentId with the target locale in query string
+  const endpoint = `${apiId}/${documentId}?locale=${locale}`;
+  console.log(`      🔗 PUT ${endpoint}`);
+
+  const result = await strapiRequest(endpoint, {
+    method: 'PUT',
+    body: JSON.stringify({
+      data: dataWithoutLocale
+    })
   });
+
+  if (!result || !result.data) {
+    throw new Error(`Failed to create localization. Response: ${JSON.stringify(result)}`);
+  }
+
+  const createdEntry = result.data;
+  const actualLocale = createdEntry.locale;
+  const actualDocId = createdEntry.documentId;
+
+  console.log(`      📋 Result: documentId=${actualDocId}, locale=${actualLocale}`);
+
+  if (actualLocale !== locale) {
+    console.warn(`   ⚠️  Created entry has locale '${actualLocale}' but expected '${locale}'`);
+  }
+
+  if (actualDocId !== documentId) {
+    console.warn(`   ⚠️  DocumentId mismatch: expected '${documentId}', got '${actualDocId}'`);
+  }
+
+  return result;
 }
 
 // Update localization
 async function updateLocalization(apiId, documentId, locale, data) {
   // Find the localization entry
   const localization = await findBySlug(apiId, data.slug, locale);
+
+  // Remove locale from data body (Strapi v5 uses query string for locale)
+  const { locale: dataLocale, ...dataWithoutLocale } = data;
+
   if (localization) {
-    return await updateEntry(apiId, localization.documentId, { ...data, locale });
+    // Update existing localization - use the found entry's documentId with locale in query string
+    console.log(`      📝 Updating existing localization: documentId=${localization.documentId}, locale=${locale}`);
+    const result = await updateEntry(apiId, localization.documentId, dataWithoutLocale, locale);
+    console.log(`      📋 Update result: documentId=${result?.data?.documentId}, locale=${result?.data?.locale}`);
+    return result;
   }
   // If localization doesn't exist, create it
+  console.log(`      📝 No existing localization found, creating new one`);
   return await createLocalization(apiId, documentId, locale, data);
 }
 
 // Create entry
-async function createEntry(apiId, data) {
-  return await strapiRequest(apiId, {
+async function createEntry(apiId, data, locale = null) {
+  const endpoint = locale ? `${apiId}?locale=${locale}` : apiId;
+  return await strapiRequest(endpoint, {
     method: 'POST',
     body: JSON.stringify({ data })
   });
 }
 
 // Update entry
-async function updateEntry(apiId, documentId, data) {
-  return await strapiRequest(`${apiId}/${documentId}`, {
+async function updateEntry(apiId, documentId, data, locale = null) {
+  // In Strapi v5, locale must be in query string, not in body
+  const endpoint = locale ? `${apiId}/${documentId}?locale=${locale}` : `${apiId}/${documentId}`;
+  return await strapiRequest(endpoint, {
     method: 'PUT',
     body: JSON.stringify({ data })
   });
@@ -374,7 +433,8 @@ async function syncContentType(contentType) {
         
         // Find locale files that might be translations of this English post
         // Use contentId or localizes as foreign keys
-        const englishContentId = englishMdx.frontmatter.contentId || englishMdx.frontmatter.postId;
+        // English contentId can be: frontmatter.contentId OR slug (since English posts use slug as contentId)
+        const englishContentId = englishMdx.frontmatter.contentId || englishMdx.frontmatter.postId || englishMdx.slug;
         
         const candidateLocales = localeFiles
           .filter(localeMdx => {
@@ -393,16 +453,23 @@ async function syncContentType(contentType) {
             const localeContentId = localeMdx.frontmatter.contentId || localeMdx.frontmatter.postId;
             
             // Strategy 1: Check if contentId/postId matches (highest priority - acts as foreign key)
-            if (englishContentId && localeContentId && englishContentId === localeContentId) {
-              matchScore = 1000;
-              matchReason = `contentId: ${englishContentId}`;
+            // Match locale contentId to English contentId OR English slug
+            if (localeContentId) {
+              if (englishContentId && localeContentId === englishContentId) {
+                matchScore = 1000;
+                matchReason = `contentId: ${englishContentId}`;
+              } else if (localeContentId === englishMdx.slug) {
+                // Also match if locale contentId equals English slug (common pattern)
+                matchScore = 1000;
+                matchReason = `contentId matches slug: ${englishMdx.slug}`;
+              }
             }
             // Strategy 2: Check if localizes field matches (explicit link to English slug)
             // Check both the stored property and frontmatter
             const localeLocalizes = localeMdx.localizes || localeMdx.frontmatter.localizes;
             if (localeLocalizes === englishMdx.slug) {
-              matchScore = 900;
-              matchReason = `localizes: ${englishMdx.slug}`;
+              matchScore = Math.max(matchScore, 900);
+              matchReason = matchReason || `localizes: ${englishMdx.slug}`;
             }
             
             return { localeMdx, matchScore, matchReason };
@@ -428,6 +495,9 @@ async function syncContentType(contentType) {
         for (const localeMdx of matchingLocales) {
           const localeCode = localeMdx.locale || 'en';
           const localeForPath = localeCode.split('-')[0];
+          // Use full locale code for Strapi API (e.g., 'es-ES' not 'es')
+          // Must match exactly what's configured in Strapi's i18n settings
+          const strapiLocale = localeCode;
           
           // Find the match reason for logging
           const candidate = candidateLocales.find(c => c.localeMdx === localeMdx);
@@ -438,7 +508,7 @@ async function syncContentType(contentType) {
           }
           processedSlugs.get(localeForPath).add(localeMdx.slug);
 
-          console.log(`      📌 Matched via ${matchReason}: ${localeMdx.slug} (${localeCode})`);
+          console.log(`      📌 Matched via ${matchReason}: ${localeMdx.slug} (${localeCode} -> ${strapiLocale})`);
 
           try {
             // Prepare locale data
@@ -462,23 +532,26 @@ async function syncContentType(contentType) {
               };
             }
 
-            // Check if localization already exists
-            const existingLocale = await findBySlug(config.apiId, localeMdx.slug, localeCode);
+            // Check if localization already exists (try both normalized and full locale)
+            let existingLocale = await findBySlug(config.apiId, localeMdx.slug, strapiLocale);
+            if (!existingLocale && strapiLocale !== localeCode) {
+              existingLocale = await findBySlug(config.apiId, localeMdx.slug, localeCode);
+            }
 
             if (existingLocale) {
               if (DRY_RUN) {
-                console.log(`      🌍 [DRY-RUN] Would update localization: ${localeMdx.slug} (${localeCode})`);
+                console.log(`      🌍 [DRY-RUN] Would update localization: ${localeMdx.slug} (${strapiLocale})`);
               } else {
-                await updateLocalization(config.apiId, englishEntry.documentId, localeCode, localeData);
-                console.log(`      🌍 Updated localization: ${localeMdx.slug} (${localeCode})`);
+                await updateLocalization(config.apiId, englishEntry.documentId, strapiLocale, localeData);
+                console.log(`      🌍 Updated localization: ${localeMdx.slug} (${strapiLocale})`);
               }
               results.updated++;
             } else {
               if (DRY_RUN) {
-                console.log(`      🌍 [DRY-RUN] Would create localization: ${localeMdx.slug} (${localeCode})`);
+                console.log(`      🌍 [DRY-RUN] Would create localization: ${localeMdx.slug} (${strapiLocale})`);
               } else {
-                await createLocalization(config.apiId, englishEntry.documentId, localeCode, localeData);
-                console.log(`      🌍 Created localization: ${localeMdx.slug} (${localeCode})`);
+                await createLocalization(config.apiId, englishEntry.documentId, strapiLocale, localeData);
+                console.log(`      🌍 Created localization: ${localeMdx.slug} (${strapiLocale})`);
               }
               results.created++;
             }
@@ -510,6 +583,8 @@ async function syncContentType(contentType) {
     for (const localeMdx of unmatchedLocales) {
       const localeCode = localeMdx.locale || 'en';
       const localeForPath = localeCode.split('-')[0];
+      // Use full locale code for Strapi API (must match Strapi's i18n config)
+      const strapiLocale = localeCode;
       const localeContentId = localeMdx.frontmatter.contentId || localeMdx.frontmatter.postId;
       
       // Try to find English entry in Strapi where slug matches the locale's contentId
@@ -524,7 +599,7 @@ async function syncContentType(contentType) {
       }
       
       if (matchedEnglishEntry) {
-        console.log(`   ✅ Found match in Strapi: ${localeMdx.slug} (${localeCode}) -> ${matchedEnglishEntry.slug} (via contentId)`);
+        console.log(`   ✅ Found match in Strapi: ${localeMdx.slug} (${localeCode} -> ${strapiLocale}) -> ${matchedEnglishEntry.slug} (via contentId)`);
         
         // Process this localization
         if (!processedSlugs.has(localeForPath)) {
@@ -554,23 +629,26 @@ async function syncContentType(contentType) {
             };
           }
 
-          // Check if localization already exists
-          const existingLocale = await findBySlug(config.apiId, localeMdx.slug, localeCode);
+          // Check if localization already exists (try both normalized and full locale)
+          let existingLocale = await findBySlug(config.apiId, localeMdx.slug, strapiLocale);
+          if (!existingLocale && strapiLocale !== localeCode) {
+            existingLocale = await findBySlug(config.apiId, localeMdx.slug, localeCode);
+          }
 
           if (existingLocale) {
             if (DRY_RUN) {
-              console.log(`      🌍 [DRY-RUN] Would update localization: ${localeMdx.slug} (${localeCode})`);
+              console.log(`      🌍 [DRY-RUN] Would update localization: ${localeMdx.slug} (${strapiLocale})`);
             } else {
-              await updateLocalization(config.apiId, matchedEnglishEntry.documentId, localeCode, localeData);
-              console.log(`      🌍 Updated localization: ${localeMdx.slug} (${localeCode})`);
+              await updateLocalization(config.apiId, matchedEnglishEntry.documentId, strapiLocale, localeData);
+              console.log(`      🌍 Updated localization: ${localeMdx.slug} (${strapiLocale})`);
             }
             results.updated++;
           } else {
             if (DRY_RUN) {
-              console.log(`      🌍 [DRY-RUN] Would create localization: ${localeMdx.slug} (${localeCode})`);
+              console.log(`      🌍 [DRY-RUN] Would create localization: ${localeMdx.slug} (${strapiLocale})`);
             } else {
-              await createLocalization(config.apiId, matchedEnglishEntry.documentId, localeCode, localeData);
-              console.log(`      🌍 Created localization: ${localeMdx.slug} (${localeCode})`);
+              await createLocalization(config.apiId, matchedEnglishEntry.documentId, strapiLocale, localeData);
+              console.log(`      🌍 Created localization: ${localeMdx.slug} (${strapiLocale})`);
             }
             results.created++;
           }
