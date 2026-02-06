@@ -3,6 +3,7 @@ title: 'How the Redesigned Publisher Tools Work: A Technical Guide'
 description: 'A technical dive into the architecture behind the redesigned Web Monetization Publisher Tools'
 date: 2025-12-09
 slug: redesigned-publisher-tools-guide
+lang: en
 authors:
   - Darian Avasan
 author_urls: []

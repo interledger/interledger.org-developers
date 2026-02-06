@@ -1,15 +1,21 @@
 ---
+import type { Props } from '@astrojs/starlight/props'
 import Search from '@astrojs/starlight/components/Search.astro'
 import SocialIcons from '@astrojs/starlight/components/SocialIcons.astro'
 import ThemeSelect from '@astrojs/starlight/components/ThemeSelect.astro'
 import DevelopersLogo from './logos/DevelopersLogo.astro'
+import LanguagePicker from './LanguagePicker.astro'
+import { getLangFromUrl, useFoundationTranslatedPath } from '../i18n/utils'
+
+const lang = getLangFromUrl(Astro.url)
+const translateFoundationPath = useFoundationTranslatedPath(lang)
 ---
 
 <div class="header sl-flex">
-  <a href="/developers" class="site-title">
+  <a href={translateFoundationPath('developers')} class="site-title">
     <DevelopersLogo />
   </a>
-  <a href="/" class="home-link overflower">
+  <a href={translateFoundationPath('ilf')} class="home-link overflower">
     <span
       class="overflower-short"
       aria-hidden="true"
@@ -21,8 +27,9 @@ import DevelopersLogo from './logos/DevelopersLogo.astro'
   </a>
   <Search />
   <div class="sl-hidden md:sl-flex secondary-wrap">
-    <SocialIcons />
-    <ThemeSelect />
+    <SocialIcons {...Astro.props} />
+    <div class="theme-select-wrapper"><ThemeSelect {...Astro.props} /></div>
+    <LanguagePicker lang={lang} />
   </div>
 </div>
 
@@ -91,10 +98,13 @@ import DevelopersLogo from './logos/DevelopersLogo.astro'
 
   .secondary-wrap {
     align-items: center;
-    gap: var(--space-s);
   }
 
   :global(site-search > button[data-open-modal]) {
     width: auto;
+  }
+
+  .theme-select-wrapper {
+    padding-inline-start: var(--space-s);
   }
 </style>

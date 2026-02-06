@@ -1,9 +1,9 @@
 ---
 import type { GetStaticPaths, Page } from 'astro'
-import BaseLayout from '../../layouts/BaseLayout.astro'
-import BlogIndex from '../../components/blog/BlogIndex.astro'
+import BaseLayout from '../../../layouts/BaseLayout.astro'
 import { getCollection } from 'astro:content'
-import { useTranslations, getLangFromUrl } from '../../i18n/utils'
+import { useTranslations, getLangFromUrl } from '../../../i18n/utils'
+import BlogIndex from '../../../components/blog/BlogIndex.astro'
 
 type Props = {
   page: Page
@@ -11,25 +11,34 @@ type Props = {
 }
 
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
-  const blogEntries = (await getCollection('blog'))
-    .filter(
-      (entry) => entry.filePath && entry.filePath.match(/\/blog\/[^\/]+\.mdx?$/)
-    )
-    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  const defaultLang = 'en'
+  const blogEntries = await getCollection('blog')
+  const allLangs = Array.from(
+    new Set(blogEntries.map((entry) => entry.data.lang))
+  )
+  const langs = allLangs.filter((lang) => lang !== defaultLang)
+  return langs.flatMap((lang) => {
+    const filteredPosts = blogEntries
+      .filter(
+        (entry) => entry.data.lang !== defaultLang && entry.data.lang === lang
+      )
+      .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
 
-  // Collect all unique tags
-  const allTags = [
-    ...new Set(blogEntries.flatMap((entry) => entry.data.tags))
-  ].sort()
+    // Collect all unique tags
+    const allTags = [
+      ...new Set(filteredPosts.flatMap((entry) => entry.data.tags))
+    ].sort()
 
-  return paginate(blogEntries, {
-    pageSize: 10,
-    props: { allTags }
+    return paginate(filteredPosts, {
+      pageSize: 10,
+      params: { lang },
+      props: { allTags }
+    })
   })
 }
 
-const lang = getLangFromUrl(Astro.url)
 const { page, allTags } = Astro.props
+const lang = getLangFromUrl(Astro.url)
 const t = useTranslations(lang)
 ---
 
@@ -45,7 +54,7 @@ const t = useTranslations(lang)
     breadcrumbs={[
       {
         name: t('nav.developers'),
-        href: '/developers',
+        href: `/developers/${lang}`,
         umamiEvent: 'Devs breadcrumb - Home'
       }
     ]}
