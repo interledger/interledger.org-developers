@@ -40,6 +40,8 @@ We've heard from our community: Java remains a powerhouse for enterprise-grade a
 - **Simplified complexity**: Handles GNAP grant flows, HTTP signature support (Ed25519) and nonce management.
 - **Minimal boilerplate**: No more manual JSON handling or signature calculations for every request.
 
+## Challenges Along the Way
+
 While building the Java SDK for Interledger's Open Payments, we ran into two main challenges.
 
 First, the OpenAPI specification did not work well with Java code generators. The generated Java code was cluttered — with unnecessary wrappers and structures that did not respect typical Java idioms and readability standards. Instead of trying to fix generated code with extra scripts or keeping the output, we chose to write the entire client layer by hand. This gave us a lightweight, focused library with full alignment to Java's conventions.
