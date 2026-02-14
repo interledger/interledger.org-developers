@@ -7,7 +7,9 @@
     "develop": "strapi develop",
     "start": "strapi start",
     "build": "strapi build",
-    "strapi": "strapi"
+    "strapi": "strapi",
+    "sync:mdx": "node scripts/sync-mdx.cjs",
+    "sync:mdx:dry-run": "node scripts/sync-mdx.cjs --dry-run"
   },
   "strapi": {
     "uuid": "d5c8f4e2-9a1b-4c3d-8e7f-6a5b4c3d2e1f"
