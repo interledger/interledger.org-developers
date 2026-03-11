@@ -1,7 +1,7 @@
 ---
 title: 'Getting Started with Open Payments Java SDK'
 description: 'Discover the Open Payments Java SDK and master its usage for seamless integrations.'
-date: 2025-12-18
+date: 2026-03-11
 slug: open-payments-java
 authors:
   - Oana Lolea
@@ -67,7 +67,7 @@ The library is available on Maven Central and adding it to your project is strai
 <dependency>
     <groupId>org.interledger</groupId>
     <artifactId>open-payments</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
 </dependency>
 ```
 
