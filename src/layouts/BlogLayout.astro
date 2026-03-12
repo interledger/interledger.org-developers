@@ -6,9 +6,6 @@ const { frontmatter } = Astro.props
 const dateObj = new Date(frontmatter.date)
 const isoDate = dateObj.toISOString().slice(0, 10)
 const longDate = dateObj.toDateString().substring(4)
-const updatedObj = new Date(frontmatter.updated)
-const updatedIsoDate = updatedObj.toISOString().slice(0, 10)
-const longUpdatedDate = updatedObj.toDateString().substring(4)
 
 const rawHTMLString = `This article was originally published at <a href=${frontmatter.external_url}>${frontmatter.external_url}</a>.`
 ---
@@ -77,14 +74,6 @@ const rawHTMLString = `This article was originally published at <a href=${frontm
       </ol>
       <h1>{frontmatter.title}</h1>
       <time datetime={isoDate} itemprop="datePublished">{longDate}</time>
-      {
-        frontmatter.updated ? (
-          <time datetime={updatedIsoDate} itemprop="dateUpdated">{longUpdatedDate}</time>
-        ) : (
-          ''
-        )
-      }
-      
       <address>
         Written by {
           frontmatter.authors.map((author: string, index: number) => (
