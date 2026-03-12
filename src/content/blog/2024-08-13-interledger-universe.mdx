@@ -15,6 +15,8 @@ tags:
   - Web Monetization
 ---
 
+_Note: This blog post was updated on March 12 2026._
+
 If you have stumbled across terms like _Interledger Protocol, Interledger Stack, Interledger Foundation, Open Payments, Rafiki, Rafiki.money, Dassie, Web Monetization (extension), STREAM, SPSP, packets_, … and you are like and you're like, “Wait, what?!” Say no more! We are here to sort through this cloud of terms and finally shed some light on the foggiest depths of the Interledger Universe. Let’s start with the obvious first term:
 
 ## Interledger
@@ -140,12 +142,11 @@ HTP/1.1 200 OK
 Content-Type: application/spsp4+json
 {
   "destination_account": "example.ilpdemo.red.bob",
-  "shared_secret": "6jR5iNIVRvqeasJeCty6C+YB5X9FhSOUPCL/5nha5Vs=",
-  "Receipts_enabled": true
+  "shared_secret": "6jR5iNIVRvqeasJeCty6C+YB5X9FhSOUPCL/5nha5Vs="
 }
 ```
 
-These include the `destination_account`, which is the ILP address of the recipient, a `shared_secret` for encrypting STREAM packets, and may include a flag called `receipts_enabled`, indicating whether [STREAM receipts](https://interledger.org/developers/rfcs/stream-receipts/) have been requested. SPSP ensures a secure and straightforward payment setup for entities or individuals with direct ILP access, meaning entities or individuals that are able to create, send, and receive ILP packets directly without the help of another entity.
+These include the `destination_account`, which is the ILP address of the recipient, and a `shared_secret` for encrypting STREAM packets. SPSP ensures a secure and straightforward payment setup for entities or individuals with direct ILP access, meaning entities or individuals that are able to create, send, and receive ILP packets directly without the help of another entity.
 
 [Open Payments](https://openpayments.dev/introduction/overview/) is an API standard for account servicing entities, allowing third parties to securely access digital accounts for viewing account information and initiating payments. Open Payments supports complex payment scenarios, such as e-commerce or recurring payments, by providing a robust framework for authorizing and initiating digital payments. It employs the [Grant Negotiation and Authorization Protocol (GNAP)](https://datatracker.ietf.org/doc/html/draft-ietf-gnap-core-protocol-20) for fine-grained access control and secure authorization.
 
