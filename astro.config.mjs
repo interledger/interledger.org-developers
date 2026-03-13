@@ -110,10 +110,6 @@ export default defineConfig({
               link: '/rfcs/bilateral-transfer-protocol'
             },
             {
-              label: 'STREAM Receipts',
-              link: '/rfcs/stream-receipts'
-            },
-            {
               label: 'Hashed-Timelock Agreements',
               link: '/rfcs/hashed-timelock-agreements'
             },
