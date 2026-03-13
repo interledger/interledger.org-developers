@@ -1,3 +1,5 @@
+import { parseRawGitHubPath } from '../utils/parseRawGitHubPath'
+
 export type PublishedRfc = {
   id: string
   title: string
@@ -78,54 +80,13 @@ export const PUBLISHED_RFCS = [
   }
 ] as const satisfies readonly PublishedRfc[]
 
-type RawGitHubRef = {
-  branch: string
-  sourcePath: string
-}
-
-const RAW_GITHUB_HOST = 'raw.githubusercontent.com'
-const EXPECTED_OWNER = 'interledger'
-const EXPECTED_REPO = 'rfcs'
-
-function parseRawGitHubUrl(rawUrl: string): RawGitHubRef {
-  const url = new URL(rawUrl)
-
-  if (url.hostname !== RAW_GITHUB_HOST) {
-    throw new Error(
-      `Expected a raw.githubusercontent.com URL, received: ${rawUrl}`
-    )
-  }
-
-  const segments = url.pathname.split('/').filter(Boolean)
-
-  if (segments.length < 4) {
-    throw new Error(`Unexpected raw GitHub URL format: ${rawUrl}`)
-  }
-
-  const [owner, repo, branch, ...pathSegments] = segments
-
-  if (owner !== EXPECTED_OWNER || repo !== EXPECTED_REPO) {
-    throw new Error(`Unexpected RFC repository URL: ${rawUrl}`)
-  }
-
-  if (!branch) {
-    throw new Error(`Missing branch in RFC source URL: ${rawUrl}`)
-  }
-
-  if (pathSegments.length === 0) {
-    throw new Error(`Missing source path in RFC source URL: ${rawUrl}`)
-  }
-
-  return {
-    branch,
-    sourcePath: pathSegments.join('/')
-  }
-}
-
 export function getPublishedRfcRouteBySourcePath(): Map<string, string> {
   return new Map(
     PUBLISHED_RFCS.map((rfc) => {
-      const { sourcePath } = parseRawGitHubUrl(rfc.sourceRawUrl)
+      const { sourcePath } = parseRawGitHubPath(
+        rfc.sourceRawUrl,
+        'raw GitHub URL'
+      )
       return [sourcePath, withTrailingSlash(rfc.route)]
     })
   )

@@ -1,6 +1,7 @@
 import path from 'node:path'
 import { parse } from 'node-html-parser'
 import { getPublishedRfcRouteBySourcePath } from '../data/rfcs'
+import { parseRawGitHubPath } from './parseRawGitHubPath'
 
 const { posix } = path
 
@@ -10,50 +11,6 @@ const PUBLISHED_RFC_ROUTE_BY_SOURCE_PATH = getPublishedRfcRouteBySourcePath()
 type RewriteRfcLinksOptions = {
   sourceUrl: string
   docsBasePath?: string
-}
-
-type RawGitHubSource = {
-  branch: string
-  sourcePath: string
-}
-
-const RAW_GITHUB_HOST = 'raw.githubusercontent.com'
-const EXPECTED_OWNER = 'interledger'
-const EXPECTED_REPO = 'rfcs'
-
-function parseRawGitHubSourceUrl(sourceUrl: string): RawGitHubSource {
-  const url = new URL(sourceUrl)
-
-  if (url.hostname !== RAW_GITHUB_HOST) {
-    throw new Error(
-      `Expected RFC source URL to use raw.githubusercontent.com, received: ${sourceUrl}`
-    )
-  }
-
-  const segments = url.pathname.split('/').filter(Boolean)
-
-  if (segments.length < 4) {
-    throw new Error(`Unexpected RFC source URL format: ${sourceUrl}`)
-  }
-
-  const [owner, repo, branch, ...pathSegments] = segments
-
-  if (owner !== EXPECTED_OWNER || repo !== EXPECTED_REPO) {
-    throw new Error(`Unexpected RFC repository in source URL: ${sourceUrl}`)
-  }
-
-  if (!branch) {
-    throw new Error(`Missing branch in RFC source URL: ${sourceUrl}`)
-  }
-
-  if (pathSegments.length === 0) {
-    throw new Error(`Missing source path in RFC source URL: ${sourceUrl}`)
-  }
-
-  return {
-    branch,
-    sourcePath: pathSegments.join('/')
-  }
 }
 
 function splitHref(href: string): { path: string; hash: string } {
@@ -151,7 +108,7 @@ export function rewriteRfcLinks(
   { sourceUrl, docsBasePath = '' }: RewriteRfcLinksOptions
 ): string {
   const { sourcePath: currentSourcePath, branch: sourceBranch } =
-    parseRawGitHubSourceUrl(sourceUrl)
+    parseRawGitHubPath(sourceUrl, 'RFC source URL')
 
   const document = parse(html)
   const links = document.querySelectorAll('a[href]')
