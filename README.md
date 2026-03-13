@@ -25,6 +25,8 @@ Inside this project, you'll see the following folders and files:
 
 Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
 
+RFC pages under `src/content/docs/rfcs/` are a small exception. Those route files wrap the upstream markdown from the `interledger/rfcs` repository via `src/components/Rfc.astro`. Internal RFC-to-RFC links are rewritten in `src/utils/rewriteRfcLinks.ts` so the rendered docs point at local Starlight routes instead of upstream `.md` source paths.
+
 Static assets, like favicons or images, can be placed in the `public/` directory. When referencing these assets in your markdown, you do not have to include `public/` in the file path, so an image would have a path like:
 
 ```md
