@@ -46,7 +46,7 @@ function isRelativeLink(linkPath: string): boolean {
 function isRelativeMarkdownLink(linkPath: string): boolean {
   return (
     (isRelativeLink(linkPath) && posix.extname(linkPath) === '.md') ||
-    posix.extname(linkPath) === '.mdx'
+    (isRelativeLink(linkPath) && posix.extname(linkPath) === '.mdx')
   )
 }
 
