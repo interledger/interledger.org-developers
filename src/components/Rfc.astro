@@ -24,9 +24,7 @@ const specBody = markdown.slice(frontMatterPos)
 
 const converter = new showdown.Converter({
   tables: true,
-  ghCompatibleHeaderId: true,
-  openLinksInNewWindow: true,
-  simplifiedAutoLink: true
+  ghCompatibleHeaderId: true
 })
 
 const renderedHtml = converter.makeHtml(specBody)
