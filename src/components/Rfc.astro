@@ -23,6 +23,7 @@ const frontMatterPos = markdown.indexOf('---', 1) + 3
 const specBody = markdown.slice(frontMatterPos)
 
 const converter = new showdown.Converter({
+  tables: true,
   ghCompatibleHeaderId: true,
   openLinksInNewWindow: true,
   simplifiedAutoLink: true
