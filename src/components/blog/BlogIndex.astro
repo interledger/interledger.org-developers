@@ -3,7 +3,9 @@ import { createExcerpt } from '../../utils/create-excerpt'
 import TagFilter from './TagFilter.astro'
 import Pagination from './Pagination.astro'
 import type { CollectionEntry } from 'astro:content'
-
+import { useTranslations } from '../../i18n/utils'
+import { defaultLang } from '../../i18n/ui'
+import type { LanguageKey } from '../../i18n/ui'
 interface BreadcrumbItem {
   name: string
   href: string
@@ -13,6 +15,7 @@ interface BreadcrumbItem {
 interface Props {
   title: string
   posts: CollectionEntry<'blog'>[]
+  lang: LanguageKey
   breadcrumbs?: BreadcrumbItem[]
   allTags?: string[]
   selectedTag?: string
@@ -31,6 +34,7 @@ interface Props {
 const {
   title,
   posts,
+  lang,
   breadcrumbs = [],
   allTags = [],
   selectedTag,
@@ -38,6 +42,8 @@ const {
   showPagination = false,
   paginationProps
 } = Astro.props
+
+const t = useTranslations(lang)
 ---
 
 <main>
@@ -70,8 +76,13 @@ const {
     }
     <header>
       <h1>{title}</h1>
-      <a class="cta__blog" href="/blog">
-        <p>Check out Foundation updates</p>
+      <a
+        class="cta__blog"
+        href={lang == defaultLang
+          ? 'https://interledger.org/blog'
+          : `https://interledger.org/${lang}/blog`}
+      >
+        <p>{t('blog.check-updates')}</p>
         <img
           src="/developers/img/ernie-purple.svg"
           alt="Ernie holding an envelope"
@@ -79,7 +90,11 @@ const {
         />
       </a>
     </header>
-    {showTagFilter && <TagFilter allTags={allTags} selectedTag={selectedTag} />}
+    {
+      showTagFilter && (
+        <TagFilter lang={lang} allTags={allTags} selectedTag={selectedTag} />
+      )
+    }
     <ol class="postlist">
       {
         posts.map((blogPostEntry) => {
@@ -92,26 +107,16 @@ const {
               >
                 {blogPostEntry.data.date.toDateString()}
               </time>
-              {blogPostEntry.data.lang ? (
-                <div class="postlist-es">
-                  <a
-                    href={`/developers/blog/${blogPostEntry.id}`}
-                    class="postlist-link heading--6"
-                  >
-                    {blogPostEntry.data.title}
-                  </a>
-                  <a class="postlist-lang" href="/developers/blog/es">
-                    ES
-                  </a>
-                </div>
-              ) : (
-                <a
-                  href={`/developers/blog/${blogPostEntry.id}`}
-                  class="postlist-link heading--6"
-                >
-                  {blogPostEntry.data.title}
-                </a>
-              )}
+              <a
+                href={
+                  lang == defaultLang
+                    ? `/developers/blog/${blogPostEntry.id}`
+                    : `/developers/${lang}/blog/${blogPostEntry.id}`
+                }
+                class="postlist-link heading--6"
+              >
+                {blogPostEntry.data.title}
+              </a>
               <p>
                 {blogPostEntry.data.description
                   ? blogPostEntry.data.description
@@ -242,12 +247,6 @@ const {
 
   .postlist-link:hover {
     text-decoration-color: currentColor;
-  }
-
-  .postlist-es {
-    display: flex;
-    align-items: start;
-    gap: var(--space-2xs);
   }
 
   .postlist-lang {

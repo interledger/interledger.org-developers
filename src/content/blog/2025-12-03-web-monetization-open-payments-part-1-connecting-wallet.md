@@ -3,6 +3,7 @@ title: 'How Web Monetization uses Open Payments - Part 1: Connecting Wallet'
 description: 'Understanding how the browser extension uses Open Payments to securely connect your wallet for Web Monetization'
 date: 2025-12-03
 slug: web-monetization-open-payments-part-1-connecting-wallet
+lang: en
 authors:
   - Sid Vishnoi
 author_urls:

@@ -1,0 +1,197 @@
+---
+import { defaultLang } from '../i18n/ui'
+import { useTranslatedPath } from '../i18n/utils'
+const { lang, className } = Astro.props
+const path = Astro.url.pathname
+const translatePath = useTranslatedPath(defaultLang, lang)
+---
+
+<div
+  class:list={['language-switcher-language-url', className]}
+  role="navigation"
+>
+  <!-- Dropdown version for 800px-1160px -->
+  <select class="language-select" aria-label="Select language">
+    <option
+      value={lang === 'en' ? path : translatePath(path, 'en')}
+      selected={lang === 'en'}
+    >
+      EN
+    </option>
+    <option
+      value={lang === 'es' ? path : translatePath(path, 'es')}
+      selected={lang === 'es'}
+    >
+      ES
+    </option>
+  </select>
+  <svg
+    aria-hidden="true"
+    class="caret"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+  >
+    <path
+      d="M17 9.17a1 1 0 0 0-1.41 0L12 12.71 8.46 9.17a1 1 0 1 0-1.41 1.42l4.24 4.24a1.002 1.002 0 0 0 1.42 0L17 10.59a1.002 1.002 0 0 0 0-1.42Z"
+    ></path>
+  </svg>
+
+  <!-- List version for other viewport sizes -->
+  <ul class="links">
+    <li
+      class:list={[lang === 'en' && 'is-active']}
+      aria-current={lang === 'en' ? 'page' : undefined}
+    >
+      <a
+        href={lang === 'en' ? path : translatePath(path, 'en')}
+        class:list={['language-link', lang === 'en' && 'is-active']}
+        hreflang="en-gb"
+        aria-current={lang === 'en' ? 'page' : undefined}
+      >
+        EN
+      </a>
+    </li>
+    <li
+      class:list={[lang === 'es' && 'is-active']}
+      aria-current={lang === 'es' ? 'page' : undefined}
+    >
+      <a
+        href={lang === 'es' ? path : translatePath(path, 'es')}
+        class:list={['language-link', lang === 'es' && 'is-active']}
+        hreflang="es"
+        aria-current={lang === 'es' ? 'page' : undefined}
+      >
+        ES
+      </a>
+    </li>
+  </ul>
+</div>
+
+<script>
+  const languageSelect =
+    document.querySelector<HTMLSelectElement>('.language-select')
+  if (languageSelect) {
+    languageSelect.addEventListener('change', (e) => {
+      const target = e.target as HTMLSelectElement
+      if (target?.value) {
+        window.location.href = target.value
+      }
+    })
+  }
+</script>
+
+<style>
+  a {
+    text-decoration-color: transparent;
+    transition: text-decoration-color ease-in-out 200ms;
+  }
+
+  .language-switcher-language-url {
+    flex: none;
+    position: relative;
+  }
+
+  /* Dropdown select styling - hidden by default, shown between 800px-1160px */
+  .language-select {
+    display: none;
+    appearance: none;
+    background-color: transparent;
+    border: 0;
+    color: var(--sl-color-gray-1);
+    font-size: var(--sl-text-sm);
+    padding-block: 0.625rem;
+    padding-inline: var(--space-xs) calc(1.25rem + var(--space-xs) + 0.25rem);
+    cursor: pointer;
+    min-width: 4em;
+    text-overflow: ellipsis;
+  }
+
+  .language-switcher-language-url:hover .language-select {
+    color: var(--sl-color-gray-2);
+  }
+
+  .language-select:focus-visible {
+    outline: 2px solid var(--color-primary-fallback);
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /* Dropdown caret - matching ThemeSelect style */
+  .caret {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    inset-inline-end: var(--space-xs);
+    width: 1.25rem;
+    height: 1.25rem;
+    pointer-events: none;
+    display: none;
+    color: var(--sl-color-gray-1);
+  }
+
+  /* List version styling */
+  .language-switcher-language-url .links {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin-inline-start: var(--space-2xs);
+  }
+
+  .language-switcher-language-url .links li:first-child {
+    flex-shrink: 0;
+  }
+
+  .language-switcher-language-url .links li:first-child::after {
+    display: inline-flex;
+    content: '|';
+  }
+
+  .language-switcher-language-url .links a {
+    margin: var(--space-3xs);
+    padding: var(--space-xs) var(--space-2xs);
+    text-underline-offset: 8px;
+    text-decoration: underline 1.5px transparent;
+    color: var(--color-primary-fallback);
+    color: var(--color-primary);
+  }
+
+  .language-switcher-language-url .links a.is-active {
+    text-decoration-color: currentColor;
+  }
+
+  .language-switcher-language-url .links a:hover {
+    background-color: var(--color-nav-hover);
+    border-radius: var(--border-radius);
+  }
+
+  /* LanguagePicker on FoundationHeader - no dropdown select, just list */
+
+  .foundation-language-switcher .language-select {
+    display: none;
+  }
+
+  .foundation-language-switcher .caret {
+    display: none;
+  }
+
+  .foundation-language-switcher.language-switcher-language-url .links {
+    display: flex;
+  }
+
+  @media screen and (min-width: 800px) and (max-width: 1159px) {
+    .caret {
+      display: block;
+    }
+    .language-switcher-language-url:hover .caret {
+      color: var(--sl-color-gray-2);
+    }
+    .language-select {
+      display: block;
+    }
+    .language-switcher-language-url .links {
+      display: none;
+    }
+  }
+</style>
