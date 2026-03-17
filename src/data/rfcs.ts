@@ -72,6 +72,13 @@ export const PUBLISHED_RFCS = [
       'https://raw.githubusercontent.com/interledger/rfcs/master/0023-bilateral-transfer-protocol/0023-bilateral-transfer-protocol.md'
   },
   {
+    id: 'dynamic-configuration-protocol',
+    title: 'Dynamic Configuration Protocol',
+    route: '/rfcs/dynamic-configuration-protocol',
+    sourceRawUrl:
+      'https://raw.githubusercontent.com/interledger/rfcs/refs/heads/main/0031-dynamic-configuration-protocol/0031-dynamic-configuration-protocol.md'
+  },
+  {
     id: 'hashed-timelock-agreements',
     title: 'Hashed-Timelock Agreements',
     route: '/rfcs/hashed-timelock-agreements',
