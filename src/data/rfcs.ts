@@ -76,7 +76,7 @@ export const PUBLISHED_RFCS = [
     title: 'Dynamic Configuration Protocol',
     route: '/rfcs/dynamic-configuration-protocol',
     sourceRawUrl:
-      'https://raw.githubusercontent.com/interledger/rfcs/refs/heads/main/0031-dynamic-configuration-protocol/0031-dynamic-configuration-protocol.md'
+      'https://raw.githubusercontent.com/interledger/rfcs/master/0031-dynamic-configuration-protocol/0031-dynamic-configuration-protocol.md'
   },
   {
     id: 'hashed-timelock-agreements',
