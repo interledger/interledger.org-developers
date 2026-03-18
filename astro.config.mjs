@@ -110,6 +110,10 @@ export default defineConfig({
               link: '/rfcs/bilateral-transfer-protocol'
             },
             {
+              label: 'Dynamic Configuration Protocol',
+              link: '/rfcs/dynamic-configuration-protocol'
+            },
+            {
               label: 'Hashed-Timelock Agreements',
               link: '/rfcs/hashed-timelock-agreements'
             },
