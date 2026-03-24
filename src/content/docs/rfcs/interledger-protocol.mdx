@@ -4,8 +4,9 @@ prev: false
 ---
 
 import Rfc from '/src/components/Rfc.astro'
+import { getRfcById } from '/src/data/rfcs'
 
-<Rfc source="https://raw.githubusercontent.com/interledger/rfcs/master/0027-interledger-protocol-4/0027-interledger-protocol-4.md">
+<Rfc source={getRfcById('interledger-protocol').sourceRawUrl}>
 
 ## Flow
 

@@ -3,8 +3,9 @@ title: Bilateral Transfer Protocol
 ---
 
 import Rfc from '/src/components/Rfc.astro'
+import { getRfcById } from '/src/data/rfcs'
 
-<Rfc source="https://raw.githubusercontent.com/interledger/rfcs/main/0023-bilateral-transfer-protocol/0023-bilateral-transfer-protocol.md">
+<Rfc source={getRfcById('bilateral-transfer-protocol').sourceRawUrl}>
 
 ## Prerequisites
 

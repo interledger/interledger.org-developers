@@ -3,8 +3,9 @@ title: Dynamic Configuration Protocol
 ---
 
 import Rfc from '/src/components/Rfc.astro'
+import { getRfcById } from '/src/data/rfcs'
 
-<Rfc source="https://raw.githubusercontent.com/interledger/rfcs/master/0031-dynamic-configuration-protocol/0031-dynamic-configuration-protocol.md">
+<Rfc source={getRfcById('dynamic-configuration-protocol').sourceRawUrl}>
 
 ## Prerequisites
 
