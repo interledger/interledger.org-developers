@@ -12,7 +12,9 @@ tags:
   - Integrations
 ---
 
-Every so often, we take a step back from the day-to-day development and dedicate focused time to push forward some ideas that are always put on the sidelines. This time around, we ran a three-day work week in Cluj-Napoca, labeled as Integrations Work Week, but we made space for the Interledger Wallet team as well, so we decided to structure and accomodate five tracks: **POS App for Android**, **Integrations Initial Guidebook**, **Integrating Rafiki into the New Architecture**, **POC for Peering with the Test Wallet**, and **Log and Error Hunt**. It was three days packed with deep dives, live demos, lively debates, and, as always, good conversations, good food, even better coffee and desserts and a wonderful team dinner. Here's how it all went down.
+Every so often, we take a step back from the day-to-day development and dedicate focused time to push forward some ideas that are always put on the sidelines. This time around, we ran a three-day work week in Cluj-Napoca, labeled as Integrations Work Week, but we made space for the Interledger Wallet team as well, so we decided to structure and accommodate five tracks: **POS App for Android**, **Integrations Initial Guidebook**, **Integrating Rafiki into the New Architecture**, **POC for Peering with the Test Wallet**, and **Log and Error Hunt**. It was three days packed with deep dives, live demos, lively debates, and, as always, good conversations, good food, even better coffee and desserts and a wonderful team dinner. Here's how it all went down.
+
+![Final day of the work week presentations.](/developers/img/blog/2026-04-03/work-week-final-demos.jpg)
 
 ---
 
@@ -22,9 +24,9 @@ One of the most technically exciting tracks this week was the work on the Point-
 
 The custom NFC approach has some genuinely appealing advantages: full control over the codebase, no transaction fees, and white-label potential. But the road to production is long, EMV certification alone is a notoriously lengthy process, and iOS implementation comes with its own security and compliance complexity.
 
-That's where **Stripe Terminal SDK** comes in as the second implementation option. Stripe takes on the heavy lifting: security, cross-platform support for both Android and iOS, automatic updates, and even simulated testing without real cards. The tradeoff would be, that it offers less UI flexibility, since Stripe controls most of the interface and integrating Stripe on iOS requires a special entitlement from Apple.
+That's where **Stripe Terminal SDK** comes in as the second implementation option. Stripe takes on the heavy lifting: security, cross-platform support for both Android and iOS, automatic updates, and even simulated testing without real cards. The tradeoff would be that it offers less UI flexibility, since Stripe controls most of the interface and integrating Stripe on iOS requires a special entitlement from Apple.
 
-With Stripe available in over 40 countries, the geographic reach is strong, nevertheless the team will make sure to research other options as well before making a final decision.
+With Stripe available in over 40 countries, the geographic reach is strong, nevertheless, the team will make sure to research other options as well before making a final decision.
 
 ---
 
@@ -34,7 +36,7 @@ Not everything in a platform's success is about the technology, documentation ma
 
 Max presented a blog post originally conceived as an "integration guide for dummies", a friendly, approachable resource that explains what Rafiki is, what it _isn't_, and what the integrator is actually responsible for versus what the API/Service Component handles. It covers the basics of Open Payments, the Interledger Protocol, and walks through a simple step-by-step payment scenario. It's the kind of onboarding resource that can make a real difference for someone hitting the ecosystem for the first time.
 
-We highly recommend checking the blog post out, as it is already live, and hopefully already helping out the community.
+We highly recommend checking out the blog post, as it is already live, and hopefully already helping out the community.
 
 ---
 
