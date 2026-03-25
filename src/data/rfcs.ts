@@ -87,6 +87,11 @@ export const PUBLISHED_RFCS = [
   }
 ] as const satisfies readonly PublishedRfc[]
 
+export const PUBLISHED_RFC_SIDEBAR_ITEMS = PUBLISHED_RFCS.map((rfc) => ({
+  label: rfc.title,
+  link: rfc.route
+}))
+
 export function getPublishedRfcRouteBySourcePath(): Map<string, string> {
   return new Map(
     PUBLISHED_RFCS.map((rfc) => {
