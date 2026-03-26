@@ -1,6 +1,6 @@
 ---
 title: 'Simple Rafiki Integration Guide'
-description: 'A short developer guide for integrating your Account Servicing Entity (ASE) with Rafiki.'
+description: 'A short developer guide for integrating an Account Servicing Entity (ASE) with Rafiki.'
 date: 2026-03-26
 slug: simple-rafiki-integration-guide
 authors:
@@ -17,18 +17,18 @@ tags:
 
 import LargeImg from '/src/components/blog/LargeImg.astro'
 
-In this guide, we provide you, a developer who's starting to integrate Rafiki into your ASE (Account Servicing Entity), a simple walkthrough for how to make your first payment using Rafiki.
-Here, we will introduce simple concepts, and the necessary APIs & webhook events to complete a payment between a sender and receiver in your ASE.
+In this guide, we provide you, a developer who's starting to integrate Rafiki with your ASE (Account Servicing Entity), a simple walkthrough for how to make your first payment using Rafiki.
+Here, we will introduce simple concepts, and the necessary APIs & webhook events to complete a payment between a sender and receiver at the ASE.
 
 While we have detailed [documentation](https://rafiki.dev), we understand that this may be overwhelming for someone new in the ecosystem, so this guide will be a good starting point in the journey of adapting Interledger technologies.
 
 First of all, let's see what an ASE is responsible for, in comparison to what Rafiki takes care of.
 
-## ASE and Rafiki responsibilities
+## Comparing responsibilities
 
 <LargeImg
   src="/developers/img/blog/2026-03-26/responsibilites.png"
-  alt="Overview of responsibilities between ASE and Rafiki"
+  alt="Overview of responsibilities between an ASE and Rafiki"
 />
 
 ## Open Payments and ILP
@@ -70,7 +70,7 @@ Currently, Rafiki is made up of three software components:
 
 #### Admin API
 
-As an ASE, the main entrypoint into the Rafiki system will be through the Admin API. This is a GraphQL API.
+The main entrypoint into the Rafiki system will be through the Admin API. This is a GraphQL API.
 
 ### Integration steps
 
