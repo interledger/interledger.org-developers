@@ -96,11 +96,11 @@ Second, you will need to create a quote for a sender's wallet address using the 
 
 ##### 3. Creating an outgoing payment
 
-Third, you will create an outgoing payment for the sender's wallet address using the [Admin API's `createOutgoingPayment`](https://rafiki.dev/apis/graphql/backend/#mutation-createOutgoingPayment). This will be the operation to actually start the payment. At this point, you as the ASE will need to fund/approve the outgoing payment before it gets sent.
+Third, you will create an outgoing payment for the sender's wallet address using the [Admin API's `createOutgoingPayment`](https://rafiki.dev/apis/graphql/backend/#mutation-createOutgoingPayment). This will be the operation to actually start the payment. At this point, the ASE will need to fund/approve the outgoing payment before it gets sent.
 
 ##### Webhook request handling
 
-When operating Rafiki, you as the ASE will be notified about events that happen in the system, e.g. an incoming payment was created or expired. Some of these events are actionable, for example, the outgoing payment created event. When an outgoing payment is created, you as the ASE will need to:
+When operating Rafiki, the ASE will be notified about events that happen in the system, e.g. an incoming payment was created or expired. Some of these events are actionable, for example, the outgoing payment created event. When an outgoing payment is created, the ASE will need to:
 
 1. Check that the user account (for the linked wallet address) is active
 2. Check that the user account has enough balance to make the payment
