@@ -72,6 +72,13 @@ export const PUBLISHED_RFCS = [
       'https://raw.githubusercontent.com/interledger/rfcs/master/0023-bilateral-transfer-protocol/0023-bilateral-transfer-protocol.md'
   },
   {
+    id: 'dynamic-configuration-protocol',
+    title: 'Dynamic Configuration Protocol',
+    route: '/rfcs/dynamic-configuration-protocol',
+    sourceRawUrl:
+      'https://raw.githubusercontent.com/interledger/rfcs/master/0031-dynamic-configuration-protocol/0031-dynamic-configuration-protocol.md'
+  },
+  {
     id: 'hashed-timelock-agreements',
     title: 'Hashed-Timelock Agreements',
     route: '/rfcs/hashed-timelock-agreements',
@@ -79,6 +86,11 @@ export const PUBLISHED_RFCS = [
       'https://raw.githubusercontent.com/interledger/rfcs/master/0022-hashed-timelock-agreements/0022-hashed-timelock-agreements.md'
   }
 ] as const satisfies readonly PublishedRfc[]
+
+export const PUBLISHED_RFC_SIDEBAR_ITEMS = PUBLISHED_RFCS.map((rfc) => ({
+  label: rfc.title,
+  link: rfc.route
+}))
 
 export function getPublishedRfcRouteBySourcePath(): Map<string, string> {
   return new Map(
