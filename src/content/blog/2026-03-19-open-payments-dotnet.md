@@ -1,6 +1,6 @@
 ---
-title: 'dotnet add package Interledger.OpenPayments'
-description: 'The missing link between your C# backend and the future of interoperable digital finance.'
+title: 'Open Payments meet .NET'
+description: 'Integrate Open Payments into your stack with native DI, full type safety and automatic GNAP signatures.'
 date: 2026-03-19
 slug: open-payments-dotnet-sdk
 authors:
@@ -13,11 +13,11 @@ tags:
   - Updates
 ---
 
-We're excited to announce the release of the [**Open Payments .NET SDK**](https://github.com/interledger/open-payments-dotnet), a fully typed, idiomatic C# client for the [Open Payments](https://openpayments.dev/) API standard. If you're building payment experiences in .NET, this SDK gives you everything you need to integrate interoperable payments into your backend.
+Building payment experiences in C# just got a lot simpler. We’ve officially launched the [Open Payments .NET SDK](https://github.com/interledger/open-payments-dotnet), removing the friction of manual API wiring. It’s a production-ready, type-safe gateway that gives .NET developers everything they need to integrate secure, interoperable finance into their applications.
 
 ## What is Open Payments?
 
-[Open Payments](https://openpayments.dev/) is an open API standard that enables interoperable digital payments across banks, digital wallets, and mobile money providers. It covers eCommerce checkout, peer-to-peer transfers, subscriptions, Web Monetization, and more - all through a unified set of APIs for account discovery, payment management, and [GNAP](https://datatracker.ietf.org/doc/html/draft-ietf-gnap-core-protocol)-based authorization. Until now, .NET developers had to wire all of this up manually. Not anymore.
+[Open Payments](https://openpayments.dev/) is an API standard for banks, mobile money providers, and other account servicing entities. It allows developers to build payment capabilities into their apps without the need for custom integrations or third-party payment processors.
 
 ## Why a .NET SDK?
 
@@ -116,6 +116,31 @@ var payment = await client.CreateOutgoingPaymentAsync(
 Every authenticated request is automatically signed using Ed25519 HTTP Message Signatures ([RFC 9421](https://www.rfc-editor.org/rfc/rfc9421)). The SDK handles this transparently - you never have to manually construct signature headers, compute content digests, or manage signing parameters. Just provide your private key at setup and make your API calls.
 
 The `Interledger.OpenPayments.HttpSignatureUtils` package is also available separately if you need HTTP signature functionality in other contexts.
+
+## Error Handling
+
+The SDK provides structured error handling through typed exceptions. API errors are surfaced as `ApiException<ErrorResponse>`, giving you access to the HTTP status code, the raw response and a deserialized error model:
+
+```csharp
+try
+{
+    var payment = await client.CreateOutgoingPaymentAsync(requestArgs, body);
+}
+catch (ApiException<ErrorResponse> ex)
+{
+    // Typed error with structured details
+    Console.WriteLine($"Error: {ex.Result.Error.Code}");        // e.g. "invalid_request"
+    Console.WriteLine($"Description: {ex.Result.Error.Description}");
+    Console.WriteLine($"HTTP Status: {ex.StatusCode}");          // e.g. 400, 403
+}
+catch (ApiException ex)
+{
+    // Unexpected error — no typed body
+    Console.WriteLine($"Unexpected error ({ex.StatusCode}): {ex.Response}");
+}
+```
+
+Auth server errors include specific GNAP error codes like `invalid_client`, `request_denied`, and `too_fast` (rate limiting), so you can handle each scenario appropriately.
 
 ## Real-World Payment Scenarios
 
