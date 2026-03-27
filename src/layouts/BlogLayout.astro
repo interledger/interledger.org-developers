@@ -76,16 +76,16 @@ const rawHTMLString = `This article was originally published at <a href=${frontm
       <time datetime={isoDate} itemprop="datePublished">{longDate}</time>
       <address>
         Written by {
-          frontmatter.authors.map((author: string, index: number) => (
+          frontmatter.authors.map((author: string, index: number) =>
+            /* prettier-ignore */
             <span>
               {frontmatter.author_urls[index] ? (
                 <a href={frontmatter.author_urls[index]}>{author}</a>
               ) : (
                 author
-              )}
-              {index < frontmatter.authors.length - 1 ? ', ' : ''}
+              )}{index < frontmatter.authors.length - 1 ? ', ' : ''}
             </span>
-          ))
+          )
         }
       </address>
       {
