@@ -13,7 +13,7 @@ tags:
   - Updates
 ---
 
-Building payment experiences in C# just got a lot simpler. We’ve officially launched the [Open Payments .NET SDK](https://github.com/interledger/open-payments-dotnet), removing the friction of manual API wiring. It’s a production-ready, type-safe gateway that gives .NET developers everything they need to integrate secure, interoperable finance into their applications.
+Building payment experiences in C# just got simpler. We’ve officially launched the [Open Payments .NET SDK](https://github.com/interledger/open-payments-dotnet), removing the friction of manual API wiring. It’s a production-ready library that gives .NET developers everything they need to integrate secure, interoperable finance into their applications.
 
 ## What is Open Payments?
 
@@ -21,7 +21,7 @@ Building payment experiences in C# just got a lot simpler. We’ve officially la
 
 ## Why a .NET SDK?
 
-The .NET ecosystem powers a significant share of enterprise backends, fintech platforms, and payment processors worldwide. With this SDK, the same developers who build these systems can now integrate Open Payments natively with the type safety, dependency injection support and async patterns they already know and love.
+The .NET ecosystem powers a significant share of enterprise backends, fintech platforms and payment processors worldwide. With this SDK, the same developers who build these systems can now integrate Open Payments natively with the type safety, dependency injection support and async patterns they already know and love.
 
 The SDK is generated from the [official Open Payments OpenAPI specifications](https://github.com/interledger/open-payments), then augmented with hand-crafted client interfaces, GNAP authentication, and automatic [HTTP Message Signatures](https://www.rfc-editor.org/rfc/rfc9421) (Ed25519). You get a clean, high-level API without sacrificing spec compliance.
 
@@ -110,6 +110,8 @@ var payment = await client.CreateOutgoingPaymentAsync(
 ```
 
 **Grants and Tokens** - full GNAP authorization flow, including interactive grants with user consent, token rotation, and revocation.
+
+Check out [openpayments.dev](https://openpayments.dev/) for complete examples and guides.
 
 ## Security Built In
 
