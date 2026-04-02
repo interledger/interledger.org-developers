@@ -14,7 +14,7 @@ tags:
 
 Every so often, we take a step back from the day-to-day development and dedicate focused time to push forward some ideas that are always put on the sidelines. This time around, we ran a three-day work week in Cluj-Napoca, labeled as Integrations Work Week, but we made space for the Interledger Wallet team as well, so we decided to structure and accommodate five tracks: **POS App for Android**, **Integrations Initial Guidebook**, **Integrating Rafiki into the New Architecture**, **POC for Peering with the Test Wallet**, and **Log and Error Hunt**. It was three days packed with deep dives, live demos, lively debates, and, as always, good conversations, good food, even better coffee and desserts and a wonderful team dinner. Here's how it all went down.
 
-![Final day of the work week presentations.](/developers/img/blog/2026-04-03/work-week-final-demos.jpg)
+![Final day of the work week presentations.](/developers/img/blog/2026-04-03/work-week-final-demos.png)
 
 ---
 
@@ -77,8 +77,6 @@ It was a simple activity, but we shared a few laughs, a few raised eyebrows, and
 The week closed on a special note. As part of the junior onboarding extra track, new team members shared their impressions from the three days. One described the experience as "really interesting and really fun," expressing excitement about the project and gratitude for how welcoming the team has been, saying they already feel like part of a family.
 
 That sense of belonging is something worth celebrating. Great technology is built by great teams, and moments like these are a reminder of what makes the work meaningful. The best products are built by people who genuinely love what they're building.
-
----
 
 ![Team photo in the garden.](/developers/img/blog/2026-04-03/group-photo.jpg)
 
