@@ -1,6 +1,6 @@
 ---
 title: 'How the Web Monetization Extension works - Part 3: Sending money for real'
-description: 'TODO'
+description: 'The final installment covers the "how" of sending funds: the who, when and how much, handling embedded content, and signaling monetization to the website.'
 date: 2026-04-08
 slug: web-monetization-open-payments-part-3-sending-money
 authors:
@@ -12,9 +12,9 @@ tags:
   - Web Monetization
 ---
 
-In [Part 1](https://interledger.org/developers/blog/web-monetization-open-payments-part-1-connecting-wallet/) of the series, we covered how to link your wallet to the extension and secure the access tokens required for future transactions. In [Part 2](https://interledger.org/developers/blog/web-monetization-open-payments-part-2-payment-sessions), we explored the receiving side: identifying a website's receiving wallet addresses via `<link rel="monetization">`, finding minimum amounts our wallet can pay into them, and understanding incoming payment buckets. Now, we'll combine these elements to actually move money.
+In [Part 1](https://interledger.org/developers/blog/web-monetization-open-payments-part-1-connecting-wallet/) of the series, we covered how to link your wallet to the extension and secure the access tokens required for future transactions. In [Part 2](https://interledger.org/developers/blog/web-monetization-open-payments-part-2-payment-sessions), we explored the receiving side: identifying a website's receiving wallet addresses via `<link rel="monetization">` and calculating the amounts our wallet can pay into them. Now, we'll combine these elements to actually move money.
 
-Thanks to the Open Payments API, sending the payment is actually the simplest step now. This article focuses more on the extension's internal payment logic and flow. I'll assume you're already familiar with basic browser extension architecture from the previous articles.
+Thanks to the Open Payments API, sending the payment is now actually the simplest step. This article focuses more on the extension's internal payment logic and flow. I'll assume you're already familiar with basic browser extension architecture from the previous articles.
 
 ## Payment Manager
 
@@ -38,13 +38,13 @@ Once these sessions are "prepared", the extension triggers a continuous payment 
 
 To handle multiple recipients on a single page, the payment manager uses an internal pointer (technically, an infinite iterator). You can think of this as a continuous loop that tracks which wallet is next in line to be paid. Instead of just picking one wallet and sticking with it, the extension "peeks" at the next link in the list, checks if it is ready to receive funds, and then advances the pointer once the payment is triggered.
 
-The order of these links is determined by their appearance in the website's DOM. The iterator ensures that every wallet address on a page - whether it corresponds to the main author or a platform contributor - gets a fair share of the "streaming" payment over time. If the iterator reaches the end of the list, it simply circles back to the first link and starts the process over. If there's only one wallet address, we just loop over that.
+The order of these links is determined by their appearance in the website's DOM. The iterator ensures that every wallet address on a page - whether it corresponds to the main author or a platform contributor - gets a fair share of the "streaming" payment over time. If the iterator reaches the end of the list, it simply circles back to the first link and continues the process over. If there's only one wallet address, we loop over just that.
 
-This cycling logic also acts as a built-in safeguard. If the iterator encounters a wallet address that is broken or incompatible with your own wallet (e.g., sending from a test wallet to production one), it doesn't break the entire payment loop. It simply skips that specific entry and moves to the next available link in the cycle, ensuring the payment flow remains uninterrupted for the remaining valid recipients. If there are no suitable wallet addresses, only then the entire site is called "non payable".
+This cycling logic also acts as a built-in safeguard. If the iterator encounters a wallet address that is broken or incompatible with your own wallet (e.g., sending from a test wallet to a production one), it doesn't break the entire payment loop. It simply skips that specific entry and moves to the next available link in the cycle, ensuring the payment flow remains uninterrupted for the remaining valid recipients. If there are no suitable wallet addresses, then the entire site is called "non-payable".
 
 ### How much to send?
 
-Determining exactly how much money to send depends on the specific requirements of the receiving wallet. As we covered in the previous article, every receiving wallet address has a `minSendAmount`, which is the smallest unit of currency it is willing to accept in a single transaction. For example, when sending from a MXN wallet to USD one, we can't send 0.01MXN as the USD conversion is too small to be receivable by USD wallet. The amount, depending on current exchange rates and fee, comes to be around 0.17MXN. To ensure every payment is successful, the extension never sends arbitrary fractions; it only sends money in exact multiples of this minimum amount.
+Determining exactly how much money to send depends on the specific requirements of the receiving wallet. As we covered in the previous article, every receiving wallet address has a `minSendAmount`, which is the smallest unit of currency it is willing to accept in a single transaction. For example, when sending from a MXN wallet to a USD one, we can't send 0.01MXN because the converted amount is too small (0.00056) to be receivable by a USD wallet. The amount, depending on current exchange rates and fees, comes to around 0.18MXN. To ensure every payment is successful, the extension never sends arbitrary fractions; it only sends money in exact multiples of this minimum amount.
 
 ### When to send?
 
@@ -52,10 +52,10 @@ Think of the `minSendAmount` as the size of a single shipping container. The ext
 
 #### User's rate of pay
 
-The amount sent over time is governed by the your chosen "hourly rate." This rate defines the total amount you are willing to pay if you stay on a single website for one full hour [^1].
+The amount sent over time is governed by your chosen "hourly rate." This rate defines the total amount you are willing to pay if you stay on a single website for one full hour [^1].
 
 For example, if you set your rate to $1.50 per hour, the extension breaks this down into a per-second value of $0.0004167.
-While the math is right, the economics isn't quite. We can't send an amount as small as $0.0004167, as most wallets can only represent amounts up-to 2 decimals (i.e. $0.01 is the smallest possible fiat-compatible representation). In Open Payments is represented as `assetScale = 2`. So, instead of trying to send $0.0004167 every second, we'll send $0.01 every 24 seconds (as $0.01 every 24s == $0.0004167 every 1s). If there's a wallet that supports `assetScale = 3`, we can then send $0.001 as well. For example, at $1.50 per hour rate, $0.001 roughly can be sent every 2.4 seconds - which feels much more stream-like. The reality is more inclined towards $0.01 every 24 seconds right now.
+While the math is correct, the economics isn't quite. We can't send an amount as small as $0.0004167, as most wallets can only represent amounts up to 2 decimals (i.e., $0.01 is the smallest possible fiat-compatible representation). In Open Payments, it is represented as `assetScale = 2`. So, instead of trying to send $0.0004167 every second, we'll send $0.01 every 24 seconds (as $0.01 every 24s == $0.0004167 every 1s). If there's a wallet that supports `assetScale = 3`, we can then send $0.001 as well. For example, at a $1.50 per hour rate, $0.001 roughly can be sent every 2.4 seconds, which feels much more stream-like. The reality is more inclined towards $0.01 every 24 seconds.
 
 Even if you were to set your hourly rate at $3600 per hour, because you're too generous, the extension won't be sending $1.00 every second (or, $0.1 every tenth-of-a-second). To protect both the servers from excessive load and the user from higher data consumption, the extension balances your hourly rate against a practical speed limit by enforcing a minimum gap of two seconds between payments. So, even if you choose a very high rate of pay, the website will never receive monetization events faster than this two-second interval.
 
@@ -72,7 +72,7 @@ this.interval = {
   period: Math.ceil(units * period)
 }
 
-// The math above is roughly equivalent to following, if that helps:
+// The math above is roughly equivalent to the following, if that helps:
 this.interval = { units: 1n, period }
 while (interval.period < MIN_PAYMENT_WAIT) {
   this.interval.units += 1n
@@ -82,19 +82,19 @@ while (interval.period < MIN_PAYMENT_WAIT) {
 
 ### Payment buckets and the time-loop
 
-While this works across regular payments within same currency, things become even more interesting when you're sending across different currencies.
+While this works across regular payments within the same currency, things become even more interesting when you're sending across different currencies.
 
-Let's you've connected a Mexican Pesos (MXN) wallet to the extension, and set up a rate of pay corresponding to MXN0.01 per second. The receiving wallet is USD. The math works by comparing your per-second rate against the receiving wallet's `minSendAmount`. The USD wallet cannot receive until we send MXN0.17. So, we've to wait 17 seconds to accumulate enough to meet this threshold.
+Let's say you connected a Mexican peso (MXN) wallet to the extension, and set up a rate of pay corresponding to MXN0.01 per second. The receiving wallet is USD. The math works by comparing your per-second rate against the receiving wallet's `minSendAmount`. The USD wallet cannot receive until we send MXN0.17. So, we have to wait 17 seconds to accumulate enough to meet this threshold.
 
-Also, if your rate is high enough to exceed the minimum every second, the extension simply bundles that value into a larger multiple and sends it every two seconds, rather than trying to send smaller amounts more frequently.
+If your rate is high enough to exceed the minimum every second, the extension combines that value into a larger multiple and sends every two seconds, rather than trying to send smaller amounts more frequently.
 
-The payment manager is driven by a steady internal timer that ticks at a fixed interval - usually every two seconds (see `interval.period` earlier). This timer as the heartbeat of the extension's payment flow, for the given tab. Every time it beats, the extension calculates how much value the site has "earned" based on your hourly rate since the last tick and drops that value into your payment bucket.
+The payment manager is driven by a steady internal timer that ticks at a fixed interval - usually every two seconds (see `interval.period` earlier). This timer is the heartbeat of the extension's payment flow for the given tab. Every time it beats, the extension calculates how much value the site has "earned" based on your hourly rate since the last tick and drops that value into your payment bucket.
 
 Crucially, the timer ticking doesn't always trigger a transaction. Instead, each time the heart beats, the extension checks if the accumulated balance in the bucket has finally reached the receiving wallet address's `minSendAmount`. If the bucket is still too low, the value simply sits there, continuing to grow with every subsequent tick of the timer.
 
-This separation between the "timer loop" and the "payment trigger" ensures a smooth, predictable flow. It prevents the extension from spamming the network with tiny, invalid transactions while ensuring that as soon as you have enough saved up, the money is bundled and sent immediately to the current wallet address in the queue, and then moves onto the next one.
+This separation between the "timer loop" and the "payment trigger" ensures a smooth, predictable flow. It prevents the extension from spamming the network with tiny, invalid transactions while ensuring that as soon as you have enough saved up, the money is bundled and sent immediately to the current wallet address in the queue, and then moves on to the next one.
 
-We can summarize all we discussed so far, with help of a little code:
+We can summarize all we discussed so far, with the help of a little code:
 
 ```ts
 // Note: this is a simplified version
@@ -105,7 +105,7 @@ setInterval(() => {
 
   const session = peekNextPaymentSessionInQueue()
   if (pendingAmount >= session.minSendAmount) {
-    // How much of pendingAmount we can pay this session?
+    // How much of pendingAmount can we pay this session?
     // e.g. if pendingAmount = 37n (say, due to user's high rate of pay) & minSendAmount = 17n,
     // we can pay 34n from pendingAmount in single timer loop.
     const amount = getPayableAmount(session.minSendAmount, pendingAmount)
@@ -121,7 +121,7 @@ setInterval(() => {
 
 [TODO: show an illustration of how "time loop" works. show bucket filling: example: MXN to USD, MXN, EUR wallets. try to create a live interactive demonstration if enough time. Will explain much better that way.]
 
-#### What if you switched browser tab?
+#### What if you switched the browser tab?
 
 One of the most common questions we receive is how the extension handles inactive tabs or minimized windows. To ensure you only pay for content you are actually consuming, the timer pauses the moment you switch tabs or move to another application. When you return, the timer resumes from its exact leftover duration rather than resetting. This focus-based logic prevents your budget from draining on background pages and ensures that every cent of your "streaming" payment is tied directly to your active attention [^2].
 
@@ -170,7 +170,7 @@ session.sendMonetizationEvent(outgoingPayment)
 
 ## `MonetizationEvent`
 
-Once a payment is successfully processed, the website wants to know about it - whether that's to unlock premium content, hide advertisements, or update a global tip counter in real-time. This communication happens via the `monetization` event.
+Once a payment is successfully processed, the website wants to know about it - whether that's to unlock premium content, hide advertisements, or update a global tip counter in real-time. This communication happens via the monetization event.
 
 ### The "polyfill" content script
 
@@ -184,9 +184,9 @@ if (document.createElement('link').relList.supports('monetization')) {
 
 ### Informing website of payment
 
-Because this script runs in the website's own environment, we have to be extremely careful. We cannot expose extension internals or sensitive user data, as the website could intercept them, or clever users can create fake monetization events to trick the website. To bridge the gap safely, we use a message passing system.
+Because this script runs in the website's own environment, we have to be extremely careful. We cannot expose extension internals or sensitive user data, as the website could intercept them, or clever users can create fake monetization events to trick the website. To bridge the gap safely, we use a message-passing system.
 
-When the extension's background script completes a payment, it sends a message to the content script using a randomly generated event name known only to these two components. This prevents the web page from eavesdropping on the internal communication. The content script then receives this private message and dispatches a public `MonetizationEvent` on the web page.
+When the extension's background script completes a payment, it sends a message to the content script using a randomly generated event name known only to these two components. This prevents the web page from eavesdropping on internal communication. The content script then receives this private message and dispatches a public `MonetizationEvent` on the web page.
 
 Websites can listen for these events globally on the window or on specific link elements, as these events bubble up the DOM tree:
 
@@ -208,7 +208,7 @@ window.addEventListener('monetization', (event) => {
 
 I hope this three-part series has given you a clear map of the full Open Payments and Web Monetization flow. My goal was to provide enough technical depth that you feel confident building your own implementations - whether you're working on a browser extension, a server-side integration, or an entirely different platform outside the browser.
 
-While the concept of "streaming micro-payments" sounds simple on the surface, the underlying architecture reveals just how much detail goes into making it a reality. From managing access tokens and navigating currencies, to orchestrating a fair payment rotation between wallet addresses, even across iframes, there is a significant amount of invisible engineering required to move a single cent safely and reliably.
+While the concept of "streaming micro-payments" sounds simple on the surface, the underlying architecture reveals just how much detail goes into making it a reality. From managing access tokens and navigating currencies to orchestrating a fair payment rotation between wallet addresses, even across iframes, there is a significant amount of invisible engineering required to move a single cent safely and reliably.
 
 The native browser implementations currently on the horizon will mostly follow a similar logic, though different teams will undoubtedly experiment with new approaches to find what works best for supporters and publishers. The architecture we've discussed in these articles is a reflection of the lessons we learned while building the extension, and we are always open to suggestions on how to refine it. By understanding these foundations, you're ready to help shape the future of how value moves across the web.
 
