@@ -32,7 +32,7 @@ With Stripe available in over 40 countries, the geographic reach is strong, neve
 
 ## Integrations Initial Guidebook: Making Rafiki Accessible
 
-Not everything in a platform's success is about the technology, documentation matters just as much. The integration team realized that grantees and community members new to the ecosystem find the existing documentation overwhelming, and sometimes they get lost in the details. Enter the **Integrator's Initial Guide**.
+Not everything in a platform's success is about the technology, documentation matters just as much. The integration team realized that grantees and community members new to the ecosystem find the existing documentation overwhelming, and sometimes they get lost in the details. Enter the [**Integrator's Initial Guide**](https://interledger.org/developers/blog/simple-rafiki-integration-guide/).
 
 Max presented a blog post originally conceived as an "integration guide for dummies", a friendly, approachable resource that explains what Rafiki is, what it _isn't_, and what the integrator is actually responsible for versus what the API/Service Component handles. It covers the basics of Open Payments, the Interledger Protocol, and walks through a simple step-by-step payment scenario. It's the kind of onboarding resource that can make a real difference for someone hitting the ecosystem for the first time.
 
