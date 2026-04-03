@@ -52,7 +52,7 @@ The bigger challenge is handling high volumes. The current durable execution set
 
 ## POC for Peering with the Test Wallet: A Live Demo Moment
 
-Bogdan S. delivered one of the week's most exciting presentations: the foundational work for the Interledger App to become a **Rafiki node**. After upgrading to the latest Rafiki version and integrating Rafiki webhooks, the Interledger App successfully peered with the Test Wallet in the development environment, enabling multihop transfers from the Interledger App all the way to the GitHub sandbox through Test Wallet.
+Bogdan S. delivered one of the week's most exciting presentations: the foundational work for the Interledger App to become a **Rafiki node**. After upgrading to the latest Rafiki version and integrating Rafiki webhooks, the Interledger App successfully peered with the Test Wallet in the development environment, enabling multihop transfers from the Interledger App all the way to the GateHub sandbox through Test Wallet.
 
 Bogdan gave a live demo of a multihop transfer, acting as both sender and receiver, using Open Payments via Interledger Pay. The transaction went through successfully, hitting all the required steps including payment confirmation and security approval.
 
