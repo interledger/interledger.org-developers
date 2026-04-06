@@ -123,4 +123,4 @@ The incoming payment serves as a dedicated "bucket" into which we can stream mic
 
 ## Sending money
 
-This article is already long enough, so let's dive into the fun part — actually executing a payment — in the next article!
+This article is already long enough, so let's dive into the fun part — actually executing a payment — in the [next article](https://interledger.org/developers/blog/web-monetization-open-payments-part-3-sending-money)!
