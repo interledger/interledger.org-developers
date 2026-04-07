@@ -16,11 +16,11 @@ In [Part 1](https://interledger.org/developers/blog/web-monetization-open-paymen
 
 Thanks to the Open Payments API, sending the payment is now actually the simplest step. This article focuses more on the extension's internal payment logic and flow. I'll assume you're already familiar with basic browser extension architecture, [Web Monetization](https://webmonetization.org/), and [Open Payments API](https://openpayments.dev/) from the previous articles.
 
-## Payment Manager
+## Payment manager
 
 As we explored in the last article, the extension's background script creates a "payment session" for every `<link rel="monetization">` element found on the website you're visiting. Each session also figures out a `minSendAmount` - the smallest unit your connected-wallet can send to it. Once this value is confirmed, the extension knows a transaction is technically possible.
 
-A "Payment Manager" acts as the container for these sessions for a given browser tab. It maintains a list of all payment sessions (monetization links) in the exact order they appear on the page. This order is critical because it dictates which wallet address receives priority when the extension decides where to send money. Even if a site only has one wallet address, the payment manager still handles the lifecycle of that single session.
+A "payment manager" acts as the container for these sessions for a given browser tab. It maintains a list of all payment sessions (monetization links) in the exact order they appear on the page. This order is critical because it dictates which wallet address receives priority when the extension decides where to send money. Even if a site only has one wallet address, the payment manager still handles the lifecycle of that single session.
 
 When a website contains `<iframe>` elements, a "frame manager" coordinates those additional sources. We'll dive into the specifics of iframe-based payments later in this article.
 
@@ -85,7 +85,7 @@ while (interval.period < MIN_PAYMENT_WAIT) {
 
 While this works across regular payments within the same currency, things become even more interesting when you're sending across different currencies.
 
-Let's say you connected a Mexican peso (MXN) wallet to the extension, and set up a rate of pay corresponding to MXN0.01 per second. The receiving wallet is USD. The math works by comparing your per-second rate against the receiving wallet's `minSendAmount`. The USD wallet cannot receive until we send MXN0.17. So, we have to wait 17 seconds to accumulate enough to meet this threshold.
+Let's say you connected a Mexican peso (MXN) wallet to the extension, and set up a rate of pay corresponding to MXN0.01 per second. The receiving wallet is USD. The math works by comparing your per-second rate against the receiving wallet's `minSendAmount`. The USD wallet cannot receive until we send MXN0.18. So, we have to wait 18 seconds to accumulate enough to meet this threshold.
 
 If your rate is high enough to exceed the minimum every second, the extension combines that value into a larger multiple and sends every two seconds, rather than trying to send smaller amounts more frequently.
 
