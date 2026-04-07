@@ -1,6 +1,6 @@
 ---
 title: 'How the Web Monetization Extension works - Part 3: Sending money for real'
-description: 'The final installment covers the "how" of sending funds: the who, when and how much, handling embedded content, and signaling monetization to the website.'
+description: 'Explores the "how" of Web Monetization: the who, when, and how much to send, plus embedded content and monetization signaling.'
 date: 2026-04-08
 slug: web-monetization-open-payments-part-3-sending-money
 authors:
