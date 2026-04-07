@@ -207,11 +207,9 @@ window.addEventListener('monetization', (event) => {
 
 ## Epilogue
 
-I hope this three-part series has given you a clear map of the full Open Payments and Web Monetization flow. My goal was to provide enough technical depth that you feel confident building your own implementations - whether you're working on a browser extension, a server-side integration, or an entirely different platform outside the browser.
+I hope this three-part series has given you a clear map of the full Open Payments and Web Monetization flow. My goal was to provide enough technical depth that you feel confident building your own implementations - whether you're working on a [browser extension](https://github.com/interledger/web-monetization-extension), a server-side integration, or an entirely different platform outside the browser.
 
-While the concept of "streaming micro-payments" sounds simple on the surface, the underlying architecture reveals just how much detail goes into making it a reality. From managing access tokens and navigating currencies to orchestrating a fair payment rotation between wallet addresses, even across iframes, there is a significant amount of invisible engineering required to move a single cent safely and reliably.
-
-The native browser implementations currently on the horizon will mostly follow a similar logic, though different teams will undoubtedly experiment with new approaches to find what works best for supporters and publishers. The architecture we've discussed in these articles is a reflection of the lessons we learned while building the extension, and we are always open to suggestions on how to refine it. By understanding these foundations, you're ready to help shape the future of how value moves across the web.
+The native browser implementations currently on the horizon will mostly follow a similar logic, though different teams will undoubtedly experiment with new approaches to find what works best for supporters and publishers. The architecture we've discussed in these articles is a reflection of the lessons we learned while building the extension, and we are always open to suggestions on how to refine it. By understanding these foundations, you're [ready to help](https://github.com/WICG/webmonetization) shape the future of how value moves across the web.
 
 [^1]: It is important to note that your actual spending can fluctuate. Because the extension triggers an initial payment the moment a page loads, visiting many different sites in a short burst might cause you to spend more than your average hourly rate within that specific window. If this activity exhausts your pre-allocated budget, the extension will stop all payments until you either top up your balance or the budget period resets.
 
