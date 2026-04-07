@@ -48,7 +48,7 @@ Determining exactly how much money to send depends on the receiving wallet. As w
 
 ### When to send?
 
-Think of the `minSendAmount` as the size of a single shipping container. The extension won't send a half-empty container because the receiving wallet won't process it. Instead, the extension waits until it has _accumulated_ enough value to fill one or more "containers" before initiating the transfer. By sticking to these strict multiples, the extension guarantees that every cent sent is compatible with the receiver's specific currency and scale settings.
+Think of the `minSendAmount` as the size of a single shipping container. The extension won't send half a container because the receiving wallet won't process it. Instead, the extension waits until it has _accumulated_ enough value to fill one or more "containers" before initiating the transfer. By sticking to these strict multiples, the extension guarantees that every cent sent is compatible with the receiver's specific currency and scale settings.
 
 ### User's rate of pay
 
@@ -56,7 +56,7 @@ The amount sent over time is governed by your chosen "hourly rate." This rate is
 
 For example, if you set your rate to $1.50 per hour, the extension breaks this down into a per-second value of $0.0004167.\
 While the math is correct, the economics isn't quite right. We can't send an amount as small as $0.0004167, as most wallets can only represent amounts up to 2 decimals (i.e., $0.01 is the smallest possible fiat-compatible representation). In Open Payments, it is represented as `assetScale = 2`. So, instead of trying to send $0.0004167 every second, we'll send $0.01 every 24 seconds (as $0.01 every 24s == $0.0004167 every 1s).\
-If there's a wallet that supports `assetScale = 3`, we can then send $0.001 as well. For example, at a $1.50 per hour rate, $0.001 roughly can be sent every 2.4 seconds, which feels much more stream-like. The reality is more inclined towards $0.01 every 24 seconds.
+If there's a wallet that supports `assetScale = 3`, we can then send $0.001 as well. For example, at a $1.50 per hour rate, $0.001 roughly can be sent every 2.4 seconds, which feels much more stream-like. For now, in practice, it’s closer to $0.01 every 24 seconds.
 
 Even if you were to set your hourly rate at $3600 per hour, because you're too generous, the extension won't be sending $1.00 every second (or $0.10 every tenth of a second). To protect both the servers from excessive load and yourself from higher data usage, the extension enforces a minimum gap of two seconds between payments, as a practical speed limit. So, even if you choose a very high rate of pay, the website will never receive monetization events faster than this two-second interval.
 
