@@ -142,7 +142,7 @@ When iframes are involved, the extension follows a specific "round-robin" sequen
 
 This loop continues indefinitely as long as the tab remains in view, ensuring that both the primary publisher and the embedded content creators receive a continuous stream of support.
 
-<iframe src="https://labs.sidvishnoi.com/web-monetization/open-payments-part-3-sending-money/iframe-flow" style="width: 100%; aspect-ratio: 500/843; aspect-ratio: 1200/500; border: none" loading="lazy" scrolling="no"></iframe>
+<iframe src="https://labs.sidvishnoi.com/web-monetization/open-payments-part-3-sending-money/iframes-flow" style="width: 100%; aspect-ratio: 500/843; aspect-ratio: 1200/500; border: none" loading="lazy" scrolling="no"></iframe>
 
 ### Create outgoing payment
 
