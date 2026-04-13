@@ -9,7 +9,7 @@ author_urls:
   - https://github.com/tymmmy
 tags:
   - WorkWeek
-  - Integrations
+  - Integration
 ---
 
 Every so often, we take a step back from the day-to-day development and dedicate focused time to push forward some ideas that are always put on the sidelines. This time around, we ran a three-day work week in Cluj-Napoca, labeled as Integrations Work Week, but we made space for the Interledger Wallet team as well, so we decided to structure and accommodate five tracks: **POS App for Android**, **Integrations Initial Guidebook**, **Integrating Rafiki into the New Architecture**, **POC for Peering with the Test Wallet**, and **Log and Error Hunt**. It was three days packed with deep dives, live demos, lively debates, and, as always, good conversations, good food, even better coffee and desserts and a wonderful team dinner. Here's how it all went down.
