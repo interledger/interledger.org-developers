@@ -1,0 +1,109 @@
+---
+import RoadmapLayout from '../layouts/RoadmapLayout.astro'
+import RoadmapBoard from '../components/RoadmapBoard.astro'
+import type { ApiProject } from '../types/roadmap'
+
+let projects: ApiProject[] = []
+let fetchError = false
+
+try {
+  const url = (import.meta.env.ROADMAP_API_URL ?? '').trim().replace(/\/$/, '')
+  const res = await fetch(`${url}/api/roadmap.json`)
+  if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`)
+  const data = await res.json()
+  projects = data.projects ?? []
+} catch {
+  fetchError = true
+}
+---
+
+<RoadmapLayout
+  title="Developers Roadmap"
+  description="Track upcoming milestones, work in progress, and completed items across the Interledger open-source ecosystem."
+>
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="content-wrapper">
+        <h1 class="hero__heading heading--2">Developers Roadmap</h1>
+        <p class="hero__txt">
+          Track milestones, active work, and shipped items across the
+          Interledger open-source ecosystem.
+        </p>
+      </div>
+    </section>
+
+    <!-- Board -->
+    <section class="board-section">
+      {
+        fetchError ? (
+          <div class="error-state content-wrapper">
+            <p>
+              The roadmap could not be loaded right now. Please check back
+              shortly or visit our{' '}
+              <a
+                href="https://github.com/interledger"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GitHub organisation
+              </a>{' '}
+              for the latest project status.
+            </p>
+          </div>
+        ) : projects.length === 0 ? (
+          <div class="error-state content-wrapper">
+            <p>No roadmap data available yet. Check back soon!</p>
+          </div>
+        ) : (
+          <RoadmapBoard projects={projects} />
+        )
+      }
+    </section>
+  </main>
+</RoadmapLayout>
+
+<style>
+  main {
+    padding-block-end: var(--space-xl);
+  }
+
+  /* Hero */
+  .hero {
+    background-image: linear-gradient(
+      to right,
+      oklch(51.54% 0.088 194.77),
+      oklch(74.53% 0.082 202.65)
+    );
+    padding-block: var(--space-xl);
+    color: var(--color-white);
+  }
+
+  .hero__heading {
+    color: var(--color-white);
+    font-weight: 600;
+    line-height: 1.2;
+    margin-block-end: var(--space-xs);
+  }
+
+  .hero__txt {
+    max-width: 56ch;
+    opacity: 0.92;
+  }
+
+  /* Board section — full-width, no content-wrapper so the board can scroll */
+  .board-section {
+    padding-block-start: var(--space-m);
+  }
+
+  .error-state {
+    padding: var(--space-xl) 0;
+    color: #555;
+    font-size: var(--step-0);
+  }
+
+  .error-state a {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+</style>
