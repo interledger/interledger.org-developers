@@ -1,7 +1,7 @@
 [build]
   command = "npm install -g bun && bun install && bun run build && mkdir -p _netlify/builders && cp -r dist _netlify/builders/developers"
   publish = "_netlify/builders"
-  environment = { NETLIFY = "true" }
+  environment = { NETLIFY = "true", ROADMAP_API_URL = "https://local-linear-api-roadmap.ngrok.dev/" }
 
 [context.production]
   command = "npm install -g bun && bun install && bun run build && mkdir -p _netlify/builders && cp -r dist _netlify/builders/developers"
@@ -11,7 +11,7 @@
 [context.preview]
   command = "npm install -g bun && bun install && bun run build && mkdir -p _netlify/builders && cp -r dist _netlify/builders/developers"
   publish = "_netlify/builders"
-  environment = { NETLIFY = "true" }
+  environment = { NETLIFY = "true", ROADMAP_API_URL = "https://local-linear-api-roadmap.ngrok.dev/" }
 
 [context.deploy-preview]
   command = "npm install -g bun && bun install && bun run build && mkdir -p _netlify/builders && cp -r dist _netlify/builders/developers"
