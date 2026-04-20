@@ -187,15 +187,6 @@ function pctWidth(start: Date, end: Date): number {
 
 // ─── Color utilities ─────────────────────────────────────────────────────────
 
-function hexToRgb(hex: string | null): string {
-  if (!hex) return '0,0,0'
-  const clean = hex.replace('#', '')
-  const r = parseInt(clean.substring(0, 2), 16)
-  const g = parseInt(clean.substring(2, 4), 16)
-  const b = parseInt(clean.substring(4, 6), 16)
-  return `${r},${g},${b}`
-}
-
 const now = new Date()
 const nowYear = now.getUTCFullYear()
 const nowMonth = now.getUTCMonth()
@@ -241,10 +232,20 @@ for (const rootTeam of rootTeams) {
   const teamProjects = collectTeamProjects(rootTeam.id)
   if (teamProjects.length === 0) continue
   const teamColor = rootTeam.color ?? '#888888'
-  gridItems.push({ type: 'team-header', team: rootTeam, row: currentRow, teamColor })
+  gridItems.push({
+    type: 'team-header',
+    team: rootTeam,
+    row: currentRow,
+    teamColor
+  })
   currentRow++
   for (const proj of teamProjects) {
-    gridItems.push({ type: 'project', project: proj, row: currentRow, teamColor })
+    gridItems.push({
+      type: 'project',
+      project: proj,
+      row: currentRow,
+      teamColor
+    })
     currentRow++
   }
 }
@@ -338,7 +339,6 @@ for (const proj of uncategorised) {
 
           const { project: proj, row, teamColor } = item
           const projColor = proj.color ?? '#888'
-          const tintRgb = hexToRgb(teamColor)
           const iconEmoji = resolveIcon(proj.icon)
           const hasDates = !!(proj.startDate && proj.targetDate)
           const barLeft = hasDates
