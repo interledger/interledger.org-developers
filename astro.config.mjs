@@ -4,10 +4,13 @@ import starlightLinksValidator from 'starlight-links-validator'
 import starlightFullViewMode from 'starlight-fullview-mode'
 
 import mdx from '@astrojs/mdx'
+import netlify from '@astrojs/netlify'
 import { PUBLISHED_RFC_SIDEBAR_ITEMS } from './src/data/rfcs.ts'
 
 // https://astro.build/config
 export default defineConfig({
+  output: 'hybrid',
+  adapter: netlify(),
   site: 'https://interledger.org',
   base: '/developers',
   integrations: [
