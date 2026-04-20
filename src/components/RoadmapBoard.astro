@@ -1,11 +1,12 @@
 ---
-import type { ApiProject } from '../types/roadmap'
+import type { ApiProject, BoardTeam } from '../types/roadmap'
 
 interface Props {
   projects?: ApiProject[]
+  teams?: BoardTeam[]
 }
 
-const { projects = [] }: Props = Astro.props
+const { projects = [], teams = [] }: Props = Astro.props
 
 // ─── Icon resolution ─────────────────────────────────────────────────────────
 
@@ -200,8 +201,66 @@ const nowYear = now.getUTCFullYear()
 const nowMonth = now.getUTCMonth()
 const nowLeft = pctLeft(now).toFixed(2)
 
-// Project rows start at grid row 3 (rows 1–2 are the header)
-const PROJECT_ROW_OFFSET = 3
+// ─── Team grouping ───────────────────────────────────────────────────────────
+
+const teamMap = new Map(teams.map((t) => [t.id, t]))
+
+// Root teams: not referenced as a child by any other team
+const allChildIds = new Set(teams.flatMap((t) => t.childrenIds))
+const rootTeams = teams.filter((t) => !allChildIds.has(t.id))
+
+// Index projects by their direct team ID
+const projectsByTeamId = new Map<string, ApiProject[]>()
+for (const proj of projects) {
+  if (!proj.team) continue
+  const tid = proj.team.id
+  if (!projectsByTeamId.has(tid)) projectsByTeamId.set(tid, [])
+  projectsByTeamId.get(tid)!.push(proj)
+}
+
+// Collect all projects for a root team (own + children), sorted by sortOrder
+function collectTeamProjects(teamId: string): ApiProject[] {
+  const team = teamMap.get(teamId)
+  if (!team) return []
+  const own = projectsByTeamId.get(teamId) ?? []
+  const fromChildren = team.childrenIds.flatMap(
+    (cid) => projectsByTeamId.get(cid) ?? []
+  )
+  return [...own, ...fromChildren].sort((a, b) => a.sortOrder - b.sortOrder)
+}
+
+// Build flat grid item list with pre-assigned row numbers
+type GridItem =
+  | { type: 'team-header'; team: BoardTeam; row: number; teamColor: string }
+  | { type: 'project'; project: ApiProject; row: number; teamColor: string }
+
+const gridItems: GridItem[] = []
+let currentRow = 3 // rows 1–2 are quarter/month headers
+
+for (const rootTeam of rootTeams) {
+  const teamProjects = collectTeamProjects(rootTeam.id)
+  if (teamProjects.length === 0) continue
+  const teamColor = rootTeam.color ?? '#888888'
+  gridItems.push({ type: 'team-header', team: rootTeam, row: currentRow, teamColor })
+  currentRow++
+  for (const proj of teamProjects) {
+    gridItems.push({ type: 'project', project: proj, row: currentRow, teamColor })
+    currentRow++
+  }
+}
+
+// Append uncategorised projects (no team, or team not in the hierarchy)
+const assignedIds = new Set(
+  gridItems.flatMap((i) => (i.type === 'project' ? [i.project.id] : []))
+)
+const uncategorised = projects
+  .filter((p) => !assignedIds.has(p.id))
+  .sort((a, b) => a.sortOrder - b.sortOrder)
+for (const proj of uncategorised) {
+  const teamColor = proj.team?.color ?? '#888888'
+  gridItems.push({ type: 'project', project: proj, row: currentRow, teamColor })
+  currentRow++
+}
 ---
 
 <div class="board-outer">
@@ -261,12 +320,25 @@ const PROJECT_ROW_OFFSET = 3
         ))
       }
 
-      <!-- ── rows 3+: One row per project ── -->
+      <!-- ── rows 3+: Team headers and project rows ── -->
       {
-        projects.map((proj, pi) => {
-          const row = pi + PROJECT_ROW_OFFSET
+        gridItems.map((item) => {
+          if (item.type === 'team-header') {
+            const { team, row, teamColor } = item
+            return (
+              <div
+                class="team-header"
+                style={`grid-column: 1 / -1; grid-row: ${row}; background: ${teamColor}cc; --team-color: ${teamColor}`}
+              >
+                <span class="team-color-dot" />
+                {team.name}
+              </div>
+            )
+          }
+
+          const { project: proj, row, teamColor } = item
           const projColor = proj.color ?? '#888'
-          const tintRgb = hexToRgb(proj.color)
+          const tintRgb = hexToRgb(teamColor)
           const iconEmoji = resolveIcon(proj.icon)
           const hasDates = !!(proj.startDate && proj.targetDate)
           const barLeft = hasDates
@@ -280,7 +352,7 @@ const PROJECT_ROW_OFFSET = 3
             : null
           const datedMilestones = proj.milestones.filter((ms) => ms.targetDate)
 
-          // Improvement 1: completed project with no targetDate but a completedAt
+          // Completed project with no targetDate but a completedAt
           const hasCompletedBar = !!(
             proj.startDate &&
             !proj.targetDate &&
@@ -296,7 +368,7 @@ const PROJECT_ROW_OFFSET = 3
               ).toFixed(2)
             : null
 
-          // Improvement 2: milestones that extend past the project's targetDate
+          // Milestones that extend past the project's targetDate
           const lastMilestoneDate =
             datedMilestones.length > 0
               ? new Date(
@@ -326,7 +398,7 @@ const PROJECT_ROW_OFFSET = 3
               {/* Project label — col 1, explicit row */}
               <div
                 class="proj-label"
-                style={`grid-column: 1; grid-row: ${row}; --tint-rgb: ${tintRgb}`}
+                style={`grid-column: 1; grid-row: ${row}; background-color: ${teamColor}cc; --team-color: ${teamColor}`}
               >
                 {proj.url ? (
                   <a
@@ -358,7 +430,7 @@ const PROJECT_ROW_OFFSET = 3
               {/* Project timeline track — cols 2 to last, explicit row */}
               <div
                 class="proj-track"
-                style={`grid-column: 2 / -1; grid-row: ${row}; --tint-rgb: ${tintRgb}`}
+                style={`grid-column: 2 / -1; grid-row: ${row}; background-color: ${teamColor}cc; --team-color: ${teamColor}`}
               >
                 {/* "Today" marker */}
                 <div class="now-line" />
@@ -376,7 +448,7 @@ const PROJECT_ROW_OFFSET = 3
                   />
                 )}
 
-                {/* Improvement 2: milestone overflow extension beyond targetDate */}
+                {/* Milestone overflow extension beyond targetDate */}
                 {hasExtension && (
                   <div
                     class="proj-bar proj-bar--extension"
@@ -389,7 +461,7 @@ const PROJECT_ROW_OFFSET = 3
                   />
                 )}
 
-                {/* Improvement 1: completed bar (no targetDate, resolved via completedAt) */}
+                {/* Completed bar (no targetDate, resolved via completedAt) */}
                 {hasCompletedBar && (
                   <div
                     class="proj-bar proj-bar--completed"
@@ -544,6 +616,29 @@ const PROJECT_ROW_OFFSET = 3
     letter-spacing: 0.05em;
   }
 
+  /* ── Team header row ── */
+  .team-header {
+    border-top: 2px solid var(--team-color);
+    border-bottom: 1px solid var(--team-color);
+    padding: 0.35rem 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--step--2);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #fff;
+  }
+
+  .team-color-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    flex-shrink: 0;
+  }
+
   /* ── Project label cell ── */
   .proj-label {
     position: sticky;
@@ -554,8 +649,7 @@ const PROJECT_ROW_OFFSET = 3
       rgb(var(--tint-rgb, 255 255 255)) 5%,
       white
     );
-    border-right: 1px solid #e5e7eb;
-    border-bottom: 1px solid #f0f0f0;
+    border-right: 1px solid var(--team-color);
     padding: 0 0.75rem;
     display: flex;
     align-items: center;
@@ -598,20 +692,8 @@ const PROJECT_ROW_OFFSET = 3
       rgb(var(--tint-rgb, 255 255 255)) 4%,
       white
     );
-    border-bottom: 1px solid #f0f0f0;
     min-height: 3.25rem;
     overflow: visible;
-    /*
-      Repeating vertical lines align with month column boundaries.
-      One segment per month = 100% / n-months wide.
-    */
-    background-image: repeating-linear-gradient(
-      90deg,
-      transparent 0,
-      transparent calc(100% / var(--n-months) - 1px),
-      #e5e7eb calc(100% / var(--n-months) - 1px),
-      #e5e7eb calc(100% / var(--n-months))
-    );
   }
 
   /* "Today" vertical line */

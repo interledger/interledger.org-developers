@@ -1,9 +1,10 @@
 ---
 import RoadmapLayout from '../layouts/RoadmapLayout.astro'
 import RoadmapBoard from '../components/RoadmapBoard.astro'
-import type { ApiProject } from '../types/roadmap'
+import type { ApiProject, BoardTeam } from '../types/roadmap'
 
 let projects: ApiProject[] = []
+let teams: BoardTeam[] = []
 let fetchError = false
 
 try {
@@ -12,6 +13,7 @@ try {
   if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`)
   const data = await res.json()
   projects = data.projects ?? []
+  teams = data.teams ?? []
 } catch {
   fetchError = true
 }
@@ -56,7 +58,7 @@ try {
             <p>No roadmap data available yet. Check back soon!</p>
           </div>
         ) : (
-          <RoadmapBoard projects={projects} />
+          <RoadmapBoard projects={projects} teams={teams} />
         )
       }
     </section>
