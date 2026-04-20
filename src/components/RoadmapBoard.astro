@@ -331,8 +331,10 @@ for (const proj of uncategorised) {
                 class="team-header"
                 style={`grid-column: 1 / -1; grid-row: ${row}; background: ${teamColor}cc; --team-color: ${teamColor}`}
               >
-                <span class="team-color-dot" />
-                {team.name}
+                <div class="team-header-label">
+                  <span class="team-color-dot" />
+                  {team.name}
+                </div>
               </div>
             )
           }
@@ -620,15 +622,21 @@ for (const proj of uncategorised) {
   .team-header {
     border-top: 2px solid var(--team-color);
     border-bottom: 1px solid var(--team-color);
-    padding: 0.35rem 0.75rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
     font-size: var(--step--2);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: #fff;
+  }
+
+  .team-header-label {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.75rem;
   }
 
   .team-color-dot {
