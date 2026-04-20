@@ -1,22 +1,29 @@
 ---
+export const prerender = false
+
+import { getStore } from '@netlify/blobs'
 import RoadmapLayout from '../layouts/RoadmapLayout.astro'
 import RoadmapBoard from '../components/RoadmapBoard.astro'
-import type { ApiProject, BoardTeam } from '../types/roadmap'
+import type { ApiProject, BoardTeam, RoadmapSnapshot } from '../types/roadmap'
 
 let projects: ApiProject[] = []
 let teams: BoardTeam[] = []
 let fetchError = false
 
 try {
-  const url = (import.meta.env.ROADMAP_API_URL ?? '').trim().replace(/\/$/, '')
-  const res = await fetch(`${url}/api/roadmap.json`)
-  if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`)
-  const data = await res.json()
-  projects = data.projects ?? []
-  teams = data.teams ?? []
+  const store = getStore('roadmap')
+  const snapshot: RoadmapSnapshot | null = await store.get('roadmap-snapshot', { type: 'json' })
+  if (!snapshot) throw new Error('Roadmap snapshot not yet available')
+  projects = (snapshot.projects ?? []) as ApiProject[]
+  teams = snapshot.teams ?? []
 } catch {
   fetchError = true
 }
+
+Astro.response.headers.set(
+  'Netlify-CDN-Cache-Control',
+  'public, max-age=43200, stale-while-revalidate=86400',
+)
 ---
 
 <RoadmapLayout
