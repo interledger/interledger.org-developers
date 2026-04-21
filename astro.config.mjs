@@ -4,6 +4,7 @@ import starlightLinksValidator from 'starlight-links-validator'
 import starlightFullViewMode from 'starlight-fullview-mode'
 
 import mdx from '@astrojs/mdx'
+import { PUBLISHED_RFC_SIDEBAR_ITEMS } from './src/data/rfcs.ts'
 
 // https://astro.build/config
 export default defineConfig({
@@ -76,50 +77,7 @@ export default defineConfig({
         {
           label: 'Specifications',
           items: [
-            {
-              label: 'Interledger Protocol V4 (ILPv4)',
-              link: '/rfcs/interledger-protocol'
-            },
-            {
-              label: 'Interledger Architecture',
-              link: '/rfcs/interledger-architecture'
-            },
-            {
-              label: 'Interledger Addresses',
-              link: '/rfcs/ilp-addresses'
-            },
-            {
-              label: 'STREAM Protocol',
-              link: '/rfcs/stream-protocol'
-            },
-            {
-              label: 'Simple Payment Setup Protocol (SPSP)',
-              link: '/rfcs/simple-payment-setup-protocol'
-            },
-            {
-              label: 'Peering, Clearing and Settling',
-              link: '/rfcs/peering-clearing-settling'
-            },
-            {
-              label: 'Settlement Engines',
-              link: '/rfcs/settlement-engines'
-            },
-            {
-              label: 'ILP Over HTTP',
-              link: '/rfcs/ilp-over-http'
-            },
-            {
-              label: 'Bilateral Transfer Protocol',
-              link: '/rfcs/bilateral-transfer-protocol'
-            },
-            {
-              label: 'STREAM Receipts',
-              link: '/rfcs/stream-receipts'
-            },
-            {
-              label: 'Hashed-Timelock Agreements',
-              link: '/rfcs/hashed-timelock-agreements'
-            },
+            ...PUBLISHED_RFC_SIDEBAR_ITEMS,
             {
               label: 'Payment Pointers',
               link: 'https://paymentpointers.org',
