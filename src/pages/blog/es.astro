@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import BlogIndex from '../../components/blog/BlogIndex.astro'
+
+// Only return posts with `lang: 'es'` in the frontmatter
+const esEntries = await getCollection('blog', ({ data }) => {
+  return data.lang === 'es'
+})
+---
+
+<BaseLayout
+  title="Blog de Ingeniería"
+  description="Hear stories and experiences from the team who is working on making Interledger, the interoperable global payments network, a reality."
+  ogImageUrl={new URL('/developers/img/blog/og-image.png', Astro.site).href}
+>
+  <BlogIndex
+    title="Blog de Ingeniería"
+    posts={esEntries}
+    breadcrumbs={[
+      {
+        name: 'Developers Portal',
+        href: '/developers',
+        umamiEvent: 'Devs breadcrumb - Home'
+      },
+      {
+        name: 'Engineering Blog',
+        href: '/developers/blog',
+        umamiEvent: 'Devs breadcrumb - Blog'
+      }
+    ]}
+  />
+</BaseLayout>

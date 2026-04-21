@@ -18,7 +18,7 @@ If you are most comfortable working with **Angular**, you can contribute to [Tes
 
 If you are most comfortable working with the **Web Extensions API**, you can contribute to the [Web Monetization Extension](https://github.com/interledger/web-monetization-extension)
 
-If you are most comfortable in either **Python**, **Go**, **Rust**, **PHP**, **Ruby** or **.Net**, you can contribute to porting the [Open Payments SDK](https://github.com/interledger/open-payments) to the any of the aforementioned languages.
+If you are most comfortable in either **Python**, **Ruby** or **.Net**, you can contribute to porting the [Open Payments SDK](https://github.com/interledger/open-payments) to the any of the aforementioned languages.
 
 If you have experience working on browser engines, you can contribute to the [Chromium](https://issues.chromium.org/issues/40110471) browser implementation of Web Monetization.
 

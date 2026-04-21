@@ -1,6 +1,6 @@
 ---
-title: "Leveling Up Rafiki Testing: Shifting from Manual to Automated"
-description: "How we automated our manual payment flow tests."
+title: 'Leveling Up Rafiki Testing: Shifting from Manual to Automated'
+description: 'How we automated our manual payment flow tests.'
 date: 2024-09-06
 slug: integration-tests
 lang: en
@@ -9,12 +9,12 @@ authors:
 author_urls:
   - https://www.linkedin.com/in/blair-currey/
 tags:
-  - Rafiki
   - Open Payments
-  - Testing
+  - Rafiki
+  - Interledger Protocol
 ---
 
-import LargeImg from "/src/components/blog/LargeImg.astro";
+import LargeImg from '/src/components/blog/LargeImg.astro'
 
 [Rafiki](https://rafiki.dev/) is open source software that allows an [Account Servicing Entity](https://rafiki.dev/overview/overview#more-about-account-servicing-entities) to enable Interledger functionality on its users’ accounts, so testing is really important to us. Given the critical nature of handling payments, it's essential that our tests not only validate correctness but also build confidence for our integrators.
 
@@ -83,7 +83,6 @@ The environment and tests are launched from a shell script that does the followi
 Using Jest as our testing framework, we structured our test code around a few key components:
 
 1. **Mock Account Servicing Entity (MASE)**
-
    - **Integration Server**: Includes all endpoints needed for integrating Account Servicing Entities with Rafiki. This includes the [rates endpoint](https://rafiki.dev/integration/requirements/exchange-rates) for supplying currency exchange rates and an endpoint for handling Rafiki’s [webhook events](https://rafiki.dev/integration/requirements/webhook-events/) throughout the payment lifecycle, such as depositing liquidity on `outgoing_payment.created`.
    - **Open Payments Client**: Communicates with our Open Payments API to perform the payment flows. This API is a reference implementation of the [Open Payments standard](https://rafiki.dev/overview/concepts/open-payments) that enables third parties to directly access users’ accounts.
    - **Admin (GraphQL) Client**: Communicates with our GraphQL admin API to set up tests and complete some of the flows, such as “Peer-to-Peer” payments.
@@ -120,7 +119,10 @@ Running tests from the host machine against services in Docker posed a problem w
 
 This sequence diagram illustrates how a request from the host machine resolves using the mapped hostnames.
 
-<LargeImg src="/developers/img/blog/2024-09-06/url-problem.png" alt="URL Problem Sequence Diagram" />
+<LargeImg
+  src="/developers/img/blog/2024-09-06/url-problem.png"
+  alt="URL Problem Sequence Diagram"
+/>
 
 ## Conclusion
 

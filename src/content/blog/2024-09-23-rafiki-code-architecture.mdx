@@ -1,6 +1,6 @@
 ---
-title: "Breaking Down Rafiki: What Makes Our Friend Tick"
-description: "A low-level introduction to the software packages that comprise Rafiki."
+title: 'Breaking Down Rafiki: What Makes Our Friend Tick'
+description: 'A low-level introduction to the software packages that comprise Rafiki.'
 date: 2024-09-23
 slug: rafiki-low-level-intro
 lang: en
@@ -10,9 +10,10 @@ author_urls:
   - https://www.linkedin.com/in/nathan-lie-138a73121
 tags:
   - Rafiki
+  - Interledger Protocol
 ---
 
-import LargeImg from "/src/components/blog/LargeImg.astro";
+import LargeImg from '/src/components/blog/LargeImg.astro'
 
 ## Introduction
 
@@ -210,7 +211,10 @@ pnpm localenv:compose up
 
 With this environment live, the Admin GraphQL Endpoints can be demoed using [Bruno](https://www.usebruno.com/). [The Rafiki repository contains a collection](https://github.com/interledger/rafiki/tree/main/bruno/collections/Rafiki) which contains example calls for all of the GraphQL endpoints on both the `backend` and `auth` servers. It also contains calls for every Open Payments action and examples for certain flows in Open Payments.
 
-<LargeImg src="/developers/img/blog/2024-09-23/bruno-screen.png" alt="A screenshot of the Bruno UI" />
+<LargeImg
+  src="/developers/img/blog/2024-09-23/bruno-screen.png"
+  alt="A screenshot of the Bruno UI"
+/>
 
 To help provide an idea of what integrating with Rafiki would be like, the local Docker environment also starts up two [Mock Accout Servicing Entities (Mock ASEs)](https://github.com/interledger/rafiki/tree/main/localenv/mock-account-servicing-entity) to represent integrators of Rafiki.
 These Mock ASEs have [pages that display information for individual accounts](https://github.com/interledger/rafiki/blob/main/localenv/mock-account-servicing-entity/app/routes/accounts.%24accountId.tsx) on their respective Rafiki instances. Crucially, they each also host [pages that collect authorization from account owners](https://github.com/interledger/rafiki/blob/main/localenv/mock-account-servicing-entity/app/routes/consent-screen.tsx) for payments made using grants from the `auth` server.

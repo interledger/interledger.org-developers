@@ -1,9 +1,8 @@
 ---
-import type { Props } from '@astrojs/starlight/props';
-import Search from "@astrojs/starlight/components/Search.astro";
-import SocialIcons from "@astrojs/starlight/components/SocialIcons.astro";
-import ThemeSelect from "@astrojs/starlight/components/ThemeSelect.astro";
-import DevelopersLogo from "./logos/DevelopersLogo.astro";
+import Search from '@astrojs/starlight/components/Search.astro'
+import SocialIcons from '@astrojs/starlight/components/SocialIcons.astro'
+import ThemeSelect from '@astrojs/starlight/components/ThemeSelect.astro'
+import DevelopersLogo from './logos/DevelopersLogo.astro'
 ---
 
 <div class="header sl-flex">
@@ -11,22 +10,19 @@ import DevelopersLogo from "./logos/DevelopersLogo.astro";
     <DevelopersLogo />
   </a>
   <a href="/" class="home-link overflower">
-      <span
-        class="overflower-short"
-        aria-hidden="true"
-        title="Interledger Foundation"
-      >
-        ILF
-      </span>
-      <span class="overflower-long">
-        Interledger Foundation
-      </span>
+    <span
+      class="overflower-short"
+      aria-hidden="true"
+      title="Interledger Foundation"
+    >
+      ILF
+    </span>
+    <span class="overflower-long"> Interledger Foundation </span>
   </a>
-  <Search {...Astro.props} />
+  <Search />
   <div class="sl-hidden md:sl-flex secondary-wrap">
-    
-    <SocialIcons {...Astro.props} />
-    <ThemeSelect {...Astro.props} />
+    <SocialIcons />
+    <ThemeSelect />
   </div>
 </div>
 
@@ -38,7 +34,7 @@ import DevelopersLogo from "./logos/DevelopersLogo.astro";
     box-shadow: 0px 0px 12px -4px var(--color-primary);
   }
 
-  .header { 
+  .header {
     gap: var(--sl-nav-gap);
     align-items: center;
     height: 100%;
@@ -85,7 +81,7 @@ import DevelopersLogo from "./logos/DevelopersLogo.astro";
     text-decoration: none;
   }
 
-  :global([data-theme="dark"]) .home-link {
+  :global([data-theme='dark']) .home-link {
     color: var(--sl-color-text-accent);
   }
 

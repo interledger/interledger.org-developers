@@ -1,5 +1,5 @@
 ---
-title: "Simplifying Interledger: The Graveyard of Possible Protocol Features"
+title: 'Simplifying Interledger: The Graveyard of Possible Protocol Features'
 description: As the development of the Interledger Protocol (ILP) nears completion, I thought we should take a moment to remember some of the many core protocol features we’ve killed off along the way.
 date: 2018-01-29
 slug: simplifying-interledger-the-graveyard-of-possible-protocol-features
@@ -10,8 +10,7 @@ author_urls:
   - https://www.linkedin.com/in/evanmarkschwartz/
 external_url: https://medium.com/interledger-blog/simplifying-interledger-the-graveyard-of-possible-protocol-features-b35bf67439be
 tags:
-  - Interledger
-  - Interoperability
+  - Interledger Protocol
 ---
 
 As the development of the [Interledger Protocol](https://interledger.org/) (ILP) nears completion, I thought we should take a moment to remember some of the many core protocol features we’ve killed off along the way.

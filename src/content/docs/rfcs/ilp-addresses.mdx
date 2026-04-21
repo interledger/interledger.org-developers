@@ -2,9 +2,10 @@
 title: ILP Addresses - v2.0.0
 ---
 
-import Rfc from "/src/components/Rfc.astro";
+import Rfc from '/src/components/Rfc.astro'
+import { getRfcById } from '/src/data/rfcs'
 
-<Rfc source="https://raw.githubusercontent.com/interledger/rfcs/master/0015-ilp-addresses/0015-ilp-addresses.md">
+<Rfc source={getRfcById('ilp-addresses').sourceRawUrl}>
 
 ## Routing
 

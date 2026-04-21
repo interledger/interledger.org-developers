@@ -2,9 +2,10 @@
 title: Interledger Architecture
 ---
 
-import Rfc from "/src/components/Rfc.astro";
+import Rfc from '/src/components/Rfc.astro'
+import { getRfcById } from '/src/data/rfcs'
 
-<Rfc source="https://raw.githubusercontent.com/interledger/rfcs/master/0001-interledger-architecture/0001-interledger-architecture.md">
+<Rfc source={getRfcById('interledger-architecture').sourceRawUrl}>
 
 ## Core Concepts
 
