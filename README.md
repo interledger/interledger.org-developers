@@ -81,18 +81,21 @@ This project has two deployment mechanisms:
 
 Every pull request automatically generates a preview deployment on Netlify at `https://deploy-preview-{PR_NUMBER}--developers-preview.netlify.app/developers/`. This allows reviewers to see changes before they're merged. The Netlify configuration is defined in `netlify.toml`.
 
-### Production Deployments (Google Cloud Storage)
+### Production Deployments (Netlify + GCP proxy)
 
-The real production deployment is served through Google Cloud Storage (GCS) at `https://interledger.org/developers/` as part of the main Interledger website. This is a transparent proxy configuration - the developers portal is hosted separately but appears as part of the main domain.
+The production site is built and hosted on Netlify, but users access it at `https://interledger.org/developers/` via the main Interledger load balancer. A small nginx service on Cloud Run proxies `/developers/*` requests from the GCP load balancer to the Netlify-hosted site, so the browser URL stays on `interledger.org`.
 
-When a PR is merged to the `main` branch, the `.github/workflows/deploy_gcs.yml` GitHub Actions workflow automatically:
+When a PR is merged to `main`, Netlify builds and publishes the new site automatically. GCP's Cloud CDN sits in front of the nginx proxy and caches responses for up to 1 hour.
 
-1. Builds the site using Bun
-2. Deploys the built files to Google Cloud Storage (`gs://interledger-websites-public/developers`)
-3. Rebuilds and deploys the nginx-rewrite Cloud Run service (which handles the `/developers` proxy routing)
-4. Invalidates the CDN cache to ensure new content is served immediately
+#### Invalidating the CDN after a deploy
 
-**Note:** There is a legacy `deploy.yaml` workflow in `.github/workflows/` which is being deprecated. New deployments should use `deploy_gcs.yml`.
+Because GCP Cloud CDN caches `/developers/*`, newly deployed content may take up to an hour to appear on `interledger.org/developers/`. If you need changes to go live immediately, manually trigger the **Invalidate CDN** workflow:
+
+1. Go to the repo's **Actions** tab on GitHub.
+2. Select the **Invalidate CDN** workflow.
+3. Click **Run workflow** on the `main` branch.
+
+This runs `gcloud compute url-maps invalidate-cdn-cache` against `/developers/*` and typically propagates within a minute.
 
 For more information about the main Interledger.org infrastructure and deployment pipeline, see the [`interledger.org-v4`](https://github.com/interledger/interledger.org-v4) repository.
 

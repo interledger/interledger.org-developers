@@ -1,0 +1,25 @@
+name: Invalidate CDN
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  invalidate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GSA_JSON }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Invalidate CDN cache for /developers/*
+        run: |
+          gcloud compute url-maps invalidate-cdn-cache interledger-org \
+            --path "/developers/*" \
+            --async
