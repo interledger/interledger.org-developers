@@ -3,8 +3,9 @@ title: Peering, Clearing and Settling
 ---
 
 import Rfc from '/src/components/Rfc.astro'
+import { getRfcById } from '/src/data/rfcs'
 
-<Rfc source="https://raw.githubusercontent.com/interledger/rfcs/master/0032-peering-clearing-settlement/0032-peering-clearing-settlement.md">
+<Rfc source={getRfcById('peering-clearing-settling').sourceRawUrl}>
 
 ## Accounts and Balances
 
