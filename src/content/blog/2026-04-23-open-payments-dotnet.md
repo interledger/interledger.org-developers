@@ -146,7 +146,7 @@ Auth server errors include specific GNAP error codes like `invalid_client`, `req
 
 ## Real-World Payment Scenarios
 
-The SDK ships with eight annotated guides covering end-to-end payment flows:
+We have updated the eight guides on [openpayments.dev](https://openpayments.dev/) to include detailed dotnet client usage & examples:
 
 1. **One-time e-commerce payment** - retailer checkout with quote and interactive grant
 2. **Fixed-debit remittance** - send fixed amount from your account
@@ -166,7 +166,7 @@ This is just the beginning. We're actively working on improving the SDK and woul
 - **Try it out**: `dotnet add package Interledger.OpenPayments`
 - **Browse the source**: [github.com/interledger/open-payments-dotnet](https://github.com/interledger/open-payments-dotnet)
 - **Read the docs**: [openpayments.dev](https://openpayments.dev/)
-- **Join the conversation**: Our community catchup calls happen every other Wednesday at 13:00 GMT. [Join via Google Meet](https://meet.google.com/htd-eefo-ovn)
+- **Join the conversation**: Our community catchup calls happen every other Thursday at 12:00 UTC. [Join via Google Meet](https://meet.google.com/htd-eefo-ovn)
 - **Contribute**: Check the [contribution guidelines](https://github.com/interledger/open-payments-dotnet/blob/main/.github/contributing.md) and jump in
 
 If you run into issues or have feature requests, [open an issue](https://github.com/interledger/open-payments-dotnet/issues) on GitHub. We're building this for the community and your input matters.
