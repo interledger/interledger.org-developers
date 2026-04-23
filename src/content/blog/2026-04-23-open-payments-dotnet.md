@@ -1,7 +1,7 @@
 ---
 title: 'Open Payments meet .NET'
 description: 'Integrate Open Payments into your stack with native DI, full type safety and automatic GNAP signatures.'
-date: 2026-03-31
+date: 2026-04-23
 slug: open-payments-dotnet-sdk
 authors:
   - Cozmin Ungureanu
