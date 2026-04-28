@@ -69,7 +69,7 @@ Before this experiment, Testnet already had two visible product surfaces:
 - Wallet - which owns wallet-specific experiences, wallet addresses, transactions, and direct Rafiki and GateHub integrations.
 - Boutique - which owns the storefront, catalog, checkout, orders, and boutique-side payment records.
 
-For simplicity the we don't surface a store backend to manage the product catalog and orders. 
+For simplicity the we don't surface a store backend to manage the product catalog and orders.
 
 The baseline architecture looked like this:
 
@@ -141,8 +141,6 @@ Two design decisions make the model more practical.
 
 The first subscription purchase deliberately mirrors the existing one-time checkout where possible, but adds a durable subscription record before the buyer leaves the boutique UI.
 
-
-
 <LargeImg
   src="/developers/img/blog/2026-04-30/subscriptions-activation-flow-diagram.png"
   alt="Subscriptions Activation Flow Diagram"
@@ -154,7 +152,6 @@ This sequence does two things that the baseline system never needed to do.
 - It stores continuation and authorization data so the platform has a stable basis for future renewals.
 
 That is the point where recurring commerce stops being a checkout variation and becomes a lifecycle problem.
-
 
 ## Renewal and past-due recovery
 
@@ -190,7 +187,8 @@ That separation is also visible in the wallet UI, where subscription status, bil
     style={{ width: '100%' }}
   />
   <figcaption>
-    Subscription detail view showing a `PAST_DUE` subscription with re-authorize and retry presented as separate user actions.
+    Subscription detail view showing a `PAST_DUE` subscription with re-authorize
+    and retry presented as separate user actions.
   </figcaption>
 </figure>
 
@@ -231,6 +229,7 @@ Compared with one-time purchases, this is the real architectural jump. The syste
 ### Wallet frontend
 
 This is where the PoC becomes concrete for users: the wallet does not just expose that recurring billing exists, it exposes the exact subscription state and the payment history that explains how that state was reached.
+
 <figure style={{ margin: 'var(--space-m) auto', textAlign: 'center' }}>
   <img
     src="/developers/img/blog/2026-04-30/daily-subscription-with-payments-history.png"
@@ -238,10 +237,10 @@ This is where the PoC becomes concrete for users: the wallet does not just expos
     style={{ width: '100%' }}
   />
   <figcaption>
-    Subscription detail view showing a daily subscription service with daily payments in the payment history section.
+    Subscription detail view showing a daily subscription service with daily
+    payments in the payment history section.
   </figcaption>
 </figure>
-
 
 - Added a top-level subscriptions section.
 - Added subscription detail pages and payment history.
@@ -269,7 +268,6 @@ Subscriptions force the platform to answer harder questions:
 - how do buyer and merchant both inspect the result?
 
 In that sense, subscriptions are a better systems test than one-time payments. A successful one-time flow proves interactive authorization and payment execution. A successful subscription flow proves that the same ecosystem can support long-lived commercial intent, asynchronous renewal, and explicit recovery without collapsing into unclear ownership or unsafe automation.
-
 
 ## Benefits, trade-offs, and open questions on the PoC build on top of Testnet platform.
 
