@@ -1,0 +1,280 @@
+---
+title: 'Subscriptions with Open Payments, a Test Network PoC'
+description: 'Experiment how subscriptions can work using Open Payments, using the Test Wallet and Boutique services'
+date: 2026-05-08
+slug: subscriptions-with-open-payments-poc
+authors:
+  - Adi Boros
+author_urls:
+  - https://github.com/adrianboros
+tags:
+  - Open Payments
+  - Rafiki
+  - Subscriptions
+  - Pay in installments
+---
+
+import LargeImg from '/src/components/blog/LargeImg.astro'
+
+Open Payments is already a strong fit for one-time checkout. The more interesting technical question is what happens when a payment is no longer a single event, but a continuing authorization and billing relationship: a buyer authorizes once, a merchant needs to initiate charges again later, and the surrounding platform has to manage renewals, failed collections, re-authorization, and state visibility without weakening user trust.
+
+That question is the basis for this proof of concept.
+
+This work started as an implementation-driven investigation. If Open Payments can support recurring payments with clear authorization semantics, durable billing state, and safe re-authorization behavior, it becomes substantially more credible as infrastructure for merchant use cases beyond one-time payments.
+
+---
+
+## Why explore subscriptions now?
+
+One-time payments dominates the online retail market, and most payment infrastructure is still optimized around the one time payment purchases. In this flow, the core question is immediate and transactional: can the buyer authorize and complete payment successfully now?
+
+Subscription systems introduce a different class of requirements. The first checkout is only the entry point into a longer-running billing relationship, and the complexity emerges after that initial authorization has been granted. A recurring commerce implementation needs to answer a set of harder protocol and platform questions:
+
+- **Can the merchant obtain authorization that is safe to reuse over time?**
+- **Can billing cadence be represented explicitly and durably?**
+- **Can failed renewals be retried without losing historical continuity?**
+- **Can expired or exhausted authorization be repaired without creating ambiguous or surprising charges?**
+- **Can both buyer and merchant have a detailed payments history long after the original payment session has ended?**
+
+These are not incidental implementation details. They are the difference between a payment demo and a subscription-capable system.
+
+That is why the Open Payments grant model is particularly relevant here. In this PoC, subscription behavior is anchored to the Outgoing Payment Grant interval field. Because that field uses the [**ISO 8601 recurring interval format**](https://en.wikipedia.org/wiki/ISO_8601#Recurring_intervals), recurrence is represented in a form that is both standardized and machine-interpretable. The result is that subscription cadence is not merely stored in merchant metadata or reconstructed from application logic; it is carried by the authorization structure itself. Combined with grant-scoped amount constraints, this creates a clearer foundation for reasoning about recurring payment authority over time: what can be charged, on what cadence, and under what bounded authorization conditions.
+
+That distinction is the real motivation for the Test Network experiment. The goal is to evaluate whether Open Payments provides the primitives needed to model recurring billing in a way that remains easy to read at the protocol level, enforceable at the platform level, and understandable to both merchants and payers.
+
+## Baseline Test Network architecture before subscriptions
+
+Before this experiment, Test Network already had two visible product surfaces:
+
+- Wallet - which owns wallet-specific experiences, wallet addresses, transactions, and direct Rafiki and GateHub integrations.
+- Boutique - which owns the storefront, catalog, checkout, orders, and boutique-side payment records.
+
+For simplicity the we don't surface a store backend to manage the product catalog and orders.
+
+The baseline architecture looked like this:
+
+<LargeImg
+  src="/developers/img/blog/2026-05-08/testnet-architecture-diagram.png"
+  alt="The Test Network Architecture Diagram"
+/>
+
+In that initial shape, the system was already useful, but the commerce side was intentionally simpler.
+
+- Boutique sold one-time products only.
+- Boutique backend created orders and completed payments around a single checkout flow.
+- Wallet handled its own money movement and transaction visibility, but did not compose subscription state from boutique.
+- There was no subscription table, no renewal scheduler, no retry loop, and no wallet-facing subscription UI.
+
+That meant the order and payment lifecycle remained bounded to one buyer interaction.
+
+## One-time payment flow in the baseline system
+
+The one-time boutique purchase flow is:
+
+<LargeImg
+  src="/developers/img/blog/2026-05-08/testnet-one-time-payment-baseline-flow-diagram.png"
+  alt="The Test Network One Time Payment Boutique Baseline Flow Diagram"
+/>
+
+This flow is important because it highlights the boundary of the original design: the business object is the order, and the order exists to complete one checkout attempt. Once the payment succeeds or fails, the flow is effectively over.
+
+That is very different from subscriptions, where the first authorization has to survive past the first payment and support future billing attempts that happen later and often without the buyer being actively in the storefront.
+
+## What the subscription PoC tries to prove
+
+The subscription PoC asks whether Open Payments can support a recurring billing model rather than only a one-time checkout flow, without requiring the surrounding commerce system to replace its existing order and payment ledger.
+
+More concretely, the experiment tries to prove that subscriptions can be built coherently on top of Open Payments and still:
+
+- sell subscription products from the boutique catalog,
+- create and persist durable subscription state,
+- complete the first payment through an interactive Open Payments grant,
+- renew future payments asynchronously,
+- expose buyer and merchant subscription views in wallet,
+- recover cleanly when recurring billing falls into a past-due state.
+
+Test Network is the environment used to run this experiment end to end. The goal is not to declare the production architecture finished. The goal is to test how a subscription engine could be built on top of Open Payments.
+
+## PoC system overview
+
+The experiment introduces a new long-lived business object, a renewal processor, and a stronger runtime connection between Boutique and Wallet.
+
+<LargeImg
+  src="/developers/img/blog/2026-05-08/testnet-open-payments-subscriptions-architecture-diagram.png"
+  alt="The Test Network Open Payments Subscriptions Architecture Diagram"
+/>
+
+The key architecture change is that Boutique becomes the source of truth for subscription lifecycle state, while Wallet composes boutique subscription data with wallet transaction data to present buyer and merchant views.
+
+That is an important design choice. We did not introduce a separate subscription system owned by Wallet. We extended Boutique's commerce domain and allowed Wallet to consume and present it.
+
+## Data model and ownership changes
+
+The PoC adds recurring-commerce concepts without replacing the existing order and payment model.
+
+Two design decisions make the model more practical.
+
+- Subscription amount and currency are copied onto the subscription record, so existing subscribers keep their captured billing terms even if catalog pricing changes later.
+- Orders remain the billing ledger. A subscription is the scheduler and authorization container, not a replacement for order and payment history.
+
+## Subscription activation flow
+
+The first subscription purchase deliberately mirrors the existing one-time checkout where possible, but adds a durable subscription record before the buyer leaves the boutique UI.
+
+<LargeImg
+  src="/developers/img/blog/2026-05-08/subscriptions-activation-flow-diagram.png"
+  alt="Subscriptions Activation Flow Diagram"
+/>
+
+This sequence does two things that the baseline system never needed to do.
+
+- It persists a long-lived billing object (subscription) before the wallet redirect happens.
+- It stores continuation and authorization data so the platform has a stable basis for future renewals.
+
+That is the point where recurring commerce stops being a checkout variation and becomes a lifecycle problem.
+
+## Renewal and past-due recovery
+
+Once a subscription is active, the system needs to bill again later without forcing the buyer through the full interactive flow each time.
+
+The PoC handles that with a subscription processor in Boutique. It checks for due subscriptions, locks one subscription row, creates the next order, and reuses stored authorization to bill again.
+
+Operationally, the branch behaves like this:
+
+- the processor requeues immediately when more work is available,
+- it sleeps for 5 seconds when there is no due subscription,
+- failed renewals are marked `PAST_DUE`,
+- `retryCount` increases on failure,
+- the next automated retry is deferred by 24 hours,
+- failed renewal orders are marked `FAILED` so the billing ledger remains auditable,
+- an HTTP `401` from Open Payments is treated as expired authorization rather than a generic transient failure.
+
+The recovery flow is explicitly split between authorization repair and actual money movement.
+
+<LargeImg
+  src="/developers/img/blog/2026-05-08/subscriptions-retry-flow-diagram.png"
+  alt="Subscriptions Retry Flow Diagram"
+/>
+
+This separation is a strong property of the PoC. Re-authorization refreshes the buyer's grant, but does not automatically charge them as a side effect. The actual retry remains a distinct action. That keeps user intent clearer and reduces the risk of surprising money movement after an authorization repair.
+
+That separation is also visible in the wallet UI, where subscription status, billing context, and recovery actions are shown together instead of being hidden behind backend state alone.
+
+<figure style={{ margin: 'var(--space-m) auto', textAlign: 'center' }}>
+  <img
+    src="/developers/img/blog/2026-05-08/subscription-with-retry-re-authorize-actions.png"
+    alt="Subscription detail view in a PAST_DUE state with separate re-authorize and retry actions"
+    style={{ width: '100%' }}
+  />
+  <figcaption>
+    Subscription detail view showing a `PAST_DUE` subscription with re-authorize
+    and retry presented as separate user actions.
+  </figcaption>
+</figure>
+
+## Subscription state model
+
+The lifecycle now spans multiple user interactions and background jobs instead of a single checkout.
+
+<LargeImg
+  src="/developers/img/blog/2026-05-08/subscriptions-state-model-diagram.png"
+  alt="Subscriptions State Model Flow"
+/>
+
+Compared with one-time purchases, this is the real architectural jump. The system must now reason about durable status, scheduled work, token lifetime, recovery behavior, and explicit user actions over time.
+
+## Component changes across the platform
+
+### Boutique backend
+
+- Added `SubscriptionController`, `SubscriptionService`, and `SubscriptionProcessor`.
+- Added create, finish, list, detail, cancel, retry, start reauthorization, and finish reauthorization subscription endpoints.
+- Started the subscription processor alongside existing background work.
+- Added `WALLET_FRONTEND_URL` so reauthorization can return to Wallet UI.
+- Extended Open Payments integration with `prepareSubscription`, longer-lived grant expiry for subscriptions, structured logging, redaction, and transactional payment insertion during retries.
+
+### Boutique frontend
+
+- Added subscription routes and a confirmation screen for the post-grant callback.
+- Product cards and detail pages now show subscription cadence.
+- Subscription products replace cart-style checkout with wallet-address capture and a subscribe action.
+
+### Wallet backend
+
+- Added a boutique client dependency through `BOUTIQUE_BACKEND_URL`.
+- Added buyer and merchant subscription APIs.
+- Added proxy endpoints for retry and for the reauthorization handshake.
+- Composed boutique subscription state with wallet transaction records for merchant visibility.
+
+### Wallet frontend
+
+This is where the PoC becomes concrete for users: the wallet does not just expose that recurring billing exists, it exposes the exact subscription state and the payment history that explains how that state was reached.
+
+<figure style={{ margin: 'var(--space-m) auto', textAlign: 'center' }}>
+  <img
+    src="/developers/img/blog/2026-05-08/daily-subscription-with-payments-history.png"
+    alt="Subscription detail view with payments history"
+    style={{ width: '100%' }}
+  />
+  <figcaption>
+    Subscription detail view showing a daily subscription service with daily
+    payments in the payment history section.
+  </figcaption>
+</figure>
+
+- Added a top-level subscriptions section.
+- Added subscription detail pages and payment history.
+- Added retry and re-authorize actions for `PAST_DUE` subscriptions.
+- Added a wallet-hosted reauthorization callback page.
+- Added a merchant subscriptions page for recurring revenue visibility.
+
+### Development wiring
+
+- Docker development wiring now passes `BOUTIQUE_BACKEND_URL` to the wallet backend.
+- `rafiki-auth` exposes port `3009` for the new redirect path.
+- Boutique backend adds `WALLET_FRONTEND_URL` specifically for subscription reauthorization callbacks.
+
+## Why this PoC is meaningful for Open Payments
+
+The value of this experiment is not that it adds another product type to the boutique catalog. The value is that it exercises the parts of Open Payments capabilities that are not used by the one-time payment flow that the boutique checkout flow had.
+
+Subscriptions force the platform to answer harder questions:
+
+- how long should authorization live?
+- where should recurring state be owned?
+- what is the right boundary between storefront, wallet, and payment infrastructure?
+- how should expired authorization be repaired?
+- what should happen when billing fails in the background?
+- how do buyer and merchant both inspect the result?
+
+In that sense, subscriptions are a better systems test than one-time payments. A successful one-time flow proves interactive authorization and payment execution. A successful subscription flow proves that the same ecosystem can support long-lived commercial intent, asynchronous renewal, and explicit recovery without collapsing into unclear ownership or unsafe automation.
+
+## Benefits, trade-offs, and open questions on the PoC build on top of Test Network platform.
+
+The experiment branch introduces clear benefits.
+
+- Recurring billing is added without throwing away the existing order and payment model.
+- Boutique remains the source of truth for subscription lifecycle rules.
+- Wallet gains buyer and merchant visibility without duplicating boutique business state.
+- Users get visible recovery options when billing becomes past due.
+
+It also introduces real trade-offs.
+
+- Wallet subscription pages now depend on Boutique being available.
+- Renewal success depends on long-lived grant handling remaining valid.
+- Recovery can require two explicit user steps when authorization has expired: re-authorize first, retry second.
+- Merchant views require cross-service composition that may need pagination or caching later.
+
+And the PoC still leaves follow-up questions and TODOs for anyone who wants to build an Open Payments enabled subscription system later.
+
+- There is no notification path yet when a subscription becomes `PAST_DUE`.
+- Very long-lived authorization improves usability, but raises the operational importance of token handling and revocation.
+- Multi-instance production behavior of the processor still needs stronger validation.
+- Wallet surfaces retry and reauthorization, but cancellation is still more boutique-owned than wallet-native.
+- Full end-to-end coverage for activation, delinquency, reauthorization, and retry is still incomplete.
+
+## Closing
+
+I believe this Open Payments subscription PoC is relevant because it shows the Open Payments support for recurring payments.
+
+This PoC implementation is available in the Test Network repository in the [`subscriptions-poc`](https://github.com/interledger/testnet/tree/subscriptions-poc) branch. It is experimental and intended as a reference for the architecture and flows described here, not as a production-ready subscription framework
