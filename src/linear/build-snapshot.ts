@@ -1,5 +1,9 @@
 import { linear } from './client.js'
-import type { RoadmapSnapshot, RoadmapTeam, RoadmapProject } from '../types/roadmap.js'
+import type {
+  RoadmapSnapshot,
+  RoadmapTeam,
+  RoadmapProject
+} from '../types/roadmap.js'
 
 const DEFAULT_VIEW_ID = '27df73bc-50ec-4fc1-bbb2-d906236a5bbc'
 
@@ -91,9 +95,21 @@ type ViewProjectNode = {
   progress: number
   url: string | null
   sortOrder: number
-  teams: { nodes: Array<{ id: string; name: string; key: string; color: string | null }> }
+  teams: {
+    nodes: Array<{
+      id: string
+      name: string
+      key: string
+      color: string | null
+    }>
+  }
   projectMilestones: {
-    nodes: Array<{ id: string; name: string; targetDate: string | null; sortOrder: number }>
+    nodes: Array<{
+      id: string
+      name: string
+      targetDate: string | null
+      sortOrder: number
+    }>
   }
 }
 
@@ -118,7 +134,11 @@ function isTransientError(err: unknown): boolean {
   return false
 }
 
-async function withRetry<T>(fn: () => Promise<T>, retries = 3, delayMs = 2000): Promise<T> {
+async function withRetry<T>(
+  fn: () => Promise<T>,
+  retries = 3,
+  delayMs = 2000
+): Promise<T> {
   let lastErr: unknown
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
@@ -127,7 +147,9 @@ async function withRetry<T>(fn: () => Promise<T>, retries = 3, delayMs = 2000): 
       if (!isTransientError(err) || attempt === retries) throw err
       lastErr = err
       const wait = delayMs * 2 ** attempt
-      console.warn(`[linear] Transient error (attempt ${attempt + 1}/${retries}), retrying in ${wait}ms...`)
+      console.warn(
+        `[linear] Transient error (attempt ${attempt + 1}/${retries}), retrying in ${wait}ms...`
+      )
       await new Promise((r) => setTimeout(r, wait))
     }
   }
@@ -148,8 +170,8 @@ async function fetchTeams(): Promise<TeamsQueryResult['teams']['nodes']> {
     const result = await withRetry(() =>
       linear.client.request<TeamsQueryResult>(TEAMS_QUERY, {
         first: 50,
-        after: endCursor,
-      }),
+        after: endCursor
+      })
     )
     all.push(...result.teams.nodes)
     hasNextPage = result.teams.pageInfo.hasNextPage
@@ -170,12 +192,14 @@ async function fetchViewProjects(viewId: string): Promise<ViewProjectNode[]> {
     const result = await withRetry(() =>
       linear.client.request<CustomViewQueryResult>(CUSTOM_VIEW_QUERY, {
         id: viewId,
-        after: endCursor,
-      }),
+        after: endCursor
+      })
     )
 
     if (!result.customView) {
-      throw new Error(`Custom view ${viewId} not found in Linear. Check LINEAR_CUSTOM_VIEW_ID.`)
+      throw new Error(
+        `Custom view ${viewId} not found in Linear. Check LINEAR_CUSTOM_VIEW_ID.`
+      )
     }
 
     all.push(...result.customView.projects.nodes)
@@ -196,7 +220,7 @@ export async function buildSnapshot(): Promise<RoadmapSnapshot> {
 
   const [teamNodes, viewProjects] = await Promise.all([
     fetchTeams(),
-    fetchViewProjects(viewId),
+    fetchViewProjects(viewId)
   ])
 
   const projects: RoadmapProject[] = viewProjects
@@ -218,12 +242,21 @@ export async function buildSnapshot(): Promise<RoadmapSnapshot> {
         completedAt: p.completedAt ?? null,
         url: p.url,
         team: firstTeam
-          ? { id: firstTeam.id, name: firstTeam.name, key: firstTeam.key, color: firstTeam.color }
+          ? {
+              id: firstTeam.id,
+              name: firstTeam.name,
+              key: firstTeam.key,
+              color: firstTeam.color
+            }
           : null,
         milestones: p.projectMilestones.nodes
           .slice()
           .sort((a, b) => a.sortOrder - b.sortOrder)
-          .map((m) => ({ id: m.id, name: m.name, targetDate: m.targetDate ?? null })),
+          .map((m) => ({
+            id: m.id,
+            name: m.name,
+            targetDate: m.targetDate ?? null
+          }))
       }
     })
 
@@ -236,13 +269,13 @@ export async function buildSnapshot(): Promise<RoadmapSnapshot> {
       key: t.key,
       color: t.color,
       childrenIds: t.children.map((c) => c.id),
-      projectCount: projects.filter((p) => p.team?.id === t.id).length,
+      projectCount: projects.filter((p) => p.team?.id === t.id).length
     }))
 
   return {
     generatedAt: new Date().toISOString(),
     lastSyncAt: new Date().toISOString(),
     teams,
-    projects,
+    projects
   }
 }

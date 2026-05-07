@@ -12,7 +12,9 @@ let fetchError = false
 
 try {
   const store = getStore('roadmap')
-  const snapshot: RoadmapSnapshot | null = await store.get('roadmap-snapshot', { type: 'json' })
+  const snapshot: RoadmapSnapshot | null = await store.get('roadmap-snapshot', {
+    type: 'json'
+  })
   if (!snapshot) throw new Error('Roadmap snapshot not yet available')
   projects = (snapshot.projects ?? []) as ApiProject[]
   teams = snapshot.teams ?? []
@@ -22,7 +24,7 @@ try {
 
 Astro.response.headers.set(
   'Netlify-CDN-Cache-Control',
-  'public, max-age=43200, stale-while-revalidate=86400',
+  'public, max-age=43200, stale-while-revalidate=86400'
 )
 ---
 

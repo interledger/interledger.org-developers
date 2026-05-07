@@ -5,5 +5,5 @@ if (!process.env.LINEAR_API_KEY) {
 }
 
 export const linear = new LinearClient({
-  apiKey: process.env.LINEAR_API_KEY,
+  apiKey: process.env.LINEAR_API_KEY
 })
