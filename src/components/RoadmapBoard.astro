@@ -329,7 +329,7 @@ for (const proj of uncategorised) {
             return (
               <div
                 class="team-header"
-                style={`grid-column: 1 / -1; grid-row: ${row}; background: ${teamColor}cc; --team-color: ${teamColor}`}
+                style={`grid-column: 1 / -1; grid-row: ${row}; background: ${teamColor}33; --team-color: ${teamColor}`}
               >
                 <div class="team-header-label">
                   <span class="team-color-dot" />
@@ -400,7 +400,7 @@ for (const proj of uncategorised) {
               {/* Project label — col 1, explicit row */}
               <div
                 class="proj-label"
-                style={`grid-column: 1; grid-row: ${row}; background-color: ${teamColor}cc; --team-color: ${teamColor}`}
+                style={`grid-column: 1; grid-row: ${row}; background-color: ${teamColor}33; --team-color: ${teamColor}`}
               >
                 {proj.url ? (
                   <a
@@ -432,7 +432,7 @@ for (const proj of uncategorised) {
               {/* Project timeline track — cols 2 to last, explicit row */}
               <div
                 class="proj-track"
-                style={`grid-column: 2 / -1; grid-row: ${row}; background-color: ${teamColor}cc; --team-color: ${teamColor}`}
+                style={`grid-column: 2 / -1; grid-row: ${row}; background-color: ${teamColor}17; --team-color: ${teamColor}`}
               >
                 {/* "Today" marker */}
                 <div class="now-line" />
@@ -620,13 +620,13 @@ for (const proj of uncategorised) {
 
   /* ── Team header row ── */
   .team-header {
-    border-top: 2px solid var(--team-color);
-    border-bottom: 1px solid var(--team-color);
+    border-top: 1px solid color-mix(in srgb, var(--team-color) 50%, transparent);
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--team-color) 50%, transparent);
     font-size: var(--step--2);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: #fff;
   }
 
   .team-header-label {
