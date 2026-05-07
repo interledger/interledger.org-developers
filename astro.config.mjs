@@ -27,7 +27,10 @@ export default defineConfig({
         starlightLinksValidator({
           exclude: ['/participation-guidelines']
         }),
-        starlightFullViewMode({ leftSidebarEnabled: false })
+        starlightFullViewMode({
+          leftSidebarEnabled: true,
+          rightSidebarEnabled: true
+        })
       ],
       head: [
         {

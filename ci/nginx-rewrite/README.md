@@ -1,34 +1,35 @@
 # Nginx Rewrite Service
 
-Simple nginx-based static file server for the developers portal under the `/developers` path.
+Reverse-proxy running on Cloud Run that forwards `/developers/*` requests from the Interledger load balancer to the Netlify-hosted developers portal, while keeping the user's browser URL on `interledger.org` / `staging.interledger.org`.
 
 ## Background
 
-Previously, this content was served from an AWS S3 bucket through AWS CloudFront CDN. After migrating to GCS, we encountered a significant limitation: the GCS CDN lacks CloudFront's intelligent URL rewriting capabilities, and automatic `index.html` serving doesn't come out of the box. The simplest solution was to host the content through nginx and handle all rewrite rules at the server level.
+Historical progression:
+
+1. **AWS S3 + CloudFront** — original setup.
+2. **GCS + Cloud CDN** — after migrating to GCP. The GCS CDN lacked CloudFront-style URL rewriting and automatic `index.html` serving, so we introduced an nginx layer on Cloud Run to handle rewrite rules and serve baked-in static files.
+3. **Netlify + Cloud Run nginx proxy (current)** — for project-management reasons the site is now built and hosted on Netlify. The same nginx service was repurposed as a thin reverse proxy so users still see `interledger.org/developers/...` in their address bar instead of a `netlify.app` URL.
 
 ## What it does
 
-- Serves static files from the GCS bucket `gs://interledger-org-developers-portal/developers`
-- Content is baked into the container image at build time (multi-stage Docker build)
-- Handles index.html fallback for pretty URLs using `try_files`
-- Redirects paths without trailing slash to the slash version for clean URLs
-- Serves all content under `/developers/` path
+- Receives `/developers/*` traffic from the GCP HTTPS load balancer (`nginx-rewrite-backend`).
+- Proxies those requests to `https://interledger-org-developers.netlify.app`.
+- Rewrites any absolute `Location` headers Netlify sends so redirects stay relative.
+- Uses `absolute_redirect off` so nginx-issued redirects (e.g. `/developers` → `/developers/`) don't leak the internal `:8080` scheme/port.
+- Exposes a `/health` endpoint for Cloud Run health checks.
+
+The container contains **no site content** — everything is proxied live from Netlify.
 
 ## Building and deploying
 
-Deployment happens automatically via GitHub Actions when changes are merged to `main`:
+Deployment happens automatically via GitHub Actions when files under `ci/nginx-rewrite/**` change on `main`. It can also be triggered manually from the Actions tab (`Deploy nginx proxy to Cloud Run` workflow).
 
-1. Site is built with Astro
-2. Files are synced to `gs://interledger-org-developers-portal/developers`
-3. Container is built (fetches content from GCS at build time)
-4. New revision is deployed to Cloud Run
-
-Manual deployment:
+Manual deployment from a workstation:
 
 ```bash
 cd ci/nginx-rewrite
 
-# Build the container (fetches from GCS during build)
+# Build the container
 gcloud builds submit --tag gcr.io/interledger-websites/nginx-rewrite:latest .
 
 # Deploy to Cloud Run
@@ -44,39 +45,38 @@ gcloud run deploy nginx-rewrite \
   --max-instances 10
 ```
 
+## CDN cache invalidation
+
+The GCP load balancer in front of this service has Cloud CDN enabled on `nginx-rewrite-backend` (default TTL 1 hour). After a Netlify deploy, cached HTML may take up to an hour to refresh. To flush it immediately, run the `Invalidate CDN` workflow in the developers repo (or run `gcloud compute url-maps invalidate-cdn-cache interledger-org --path "/developers/*" --async`).
+
 ## How it works
 
-### Multi-stage Docker build
+### Dockerfile
 
-1. **Stage 1 (fetcher)**: Uses `google/cloud-sdk:alpine` to fetch content from GCS
-   - Runs `gsutil rsync` to download `gs://interledger-org-developers-portal/developers/` to `/content/developers/`
-2. **Stage 2 (nginx)**: Uses `nginx:alpine` to serve the content
-   - Copies content from stage 1
-   - Copies custom `nginx.conf`
-   - Runs as non-root user (Cloud Run requirement)
+Single-stage `nginx:alpine` image with a custom `nginx.conf`. Runs as the non-root `nginx` user (Cloud Run requirement).
 
 ### Nginx configuration
 
-Simple configuration in `nginx.conf`:
-
-- **Root**: `/usr/share/nginx/html` (contains the `developers/` folder)
-- **Location `/developers/`**: Uses `try_files $uri $uri/ $uri/index.html =404` for index fallback
-- **Location `= /developers`**: 301 redirect to `/developers/` for consistency
-- **absolute_redirect off**: Ensures redirects use relative paths (important for load balancer)
+- **`location /developers/`**: `proxy_pass` to Netlify with `Host` header override and `proxy_ssl_server_name on` for correct SNI.
+- **`location = /developers`**: 301 redirect to `/developers/`.
+- **`absolute_redirect off`**: makes redirects relative so the public hostname/scheme from the load balancer is preserved.
+- **`proxy_redirect`**: rewrites any absolute Netlify URLs in response `Location` headers back to relative paths.
+- **`/health`**: 200 OK for Cloud Run.
 
 ## Architecture
 
 ```
-GitHub Actions (on push to main)
+User browser
   ↓
-  1. Build Astro site
-  2. Sync to GCS bucket
-  3. Build container (fetches from GCS)
-  4. Deploy to Cloud Run
+GCP Load Balancer (34.111.215.251)
+  ↓  /developers/* → nginx-rewrite-backend (Cloud CDN enabled)
   ↓
-Load Balancer (staging.interledger.org)
+Cloud Run (nginx-rewrite)
+  ↓  proxy_pass
   ↓
-  /developers → nginx-rewrite Cloud Run service
+Netlify (interledger-org-developers.netlify.app)
   ↓
-  Serves baked-in static files
+Static site built by Netlify from interledger.org-developers repo
 ```
+
+The user's address bar stays on `interledger.org` or `staging.interledger.org` throughout.

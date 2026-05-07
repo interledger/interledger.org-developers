@@ -22,11 +22,14 @@ This is the Interledger Developers Portal, a documentation site built with [Astr
 - **Important**: Build output is copied to `_netlify/builders/developers/` to serve at `/developers/` path
 - Redirect rules route `/developers/*` to `/developers/index.html` for client-side routing
 
-### Production (Google Cloud)
-- Deployed to `https://interledger.org/developers/` via Google Cloud Storage
-- Triggered automatically on merge to `main` by `.github/workflows/deploy_gcs.yml`
-- Process: Build → Deploy to GCS → Rebuild nginx-rewrite Cloud Run service → Invalidate CDN
-- **Legacy**: `deploy.yml` exists but is deprecated - use `deploy_gcs.yml`
+### Production (Netlify, fronted by GCP)
+- Built and hosted by Netlify at `https://interledger-org-developers.netlify.app/developers/`
+- Users reach it at `https://interledger.org/developers/` via the GCP load balancer, which proxies `/developers/*` through a Cloud Run nginx service (`nginx-rewrite`) to Netlify
+- The address bar stays on `interledger.org` — it is **not** a redirect
+- GCP Cloud CDN sits in front of the proxy (default TTL 1 hour)
+- **After a content deploy**, if you need changes live immediately, manually run the **Invalidate CDN** workflow in the Actions tab
+- The `Deploy nginx proxy to Cloud Run` workflow (`.github/workflows/deploy_gcs.yml`) only rebuilds the proxy container and triggers on changes under `ci/nginx-rewrite/**`
+- The nginx config itself lives in `ci/nginx-rewrite/` (Dockerfile + nginx.conf)
 
 ## Key Development Notes
 
