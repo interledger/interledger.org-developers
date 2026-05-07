@@ -168,7 +168,10 @@ async function fetchTeams(): Promise<TeamsQueryResult['teams']['nodes']> {
 
   while (hasNextPage) {
     const result = await withRetry(() =>
-      linear.client.request<TeamsQueryResult>(TEAMS_QUERY, {
+      linear.client.request<
+        TeamsQueryResult,
+        { first: number; after: string | null }
+      >(TEAMS_QUERY, {
         first: 50,
         after: endCursor
       })
@@ -190,7 +193,10 @@ async function fetchViewProjects(viewId: string): Promise<ViewProjectNode[]> {
 
   while (hasNextPage) {
     const result = await withRetry(() =>
-      linear.client.request<CustomViewQueryResult>(CUSTOM_VIEW_QUERY, {
+      linear.client.request<
+        CustomViewQueryResult,
+        { id: string; after: string | null }
+      >(CUSTOM_VIEW_QUERY, {
         id: viewId,
         after: endCursor
       })
