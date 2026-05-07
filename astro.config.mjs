@@ -9,7 +9,7 @@ import { PUBLISHED_RFC_SIDEBAR_ITEMS } from './src/data/rfcs.ts'
 
 // https://astro.build/config
 export default defineConfig({
-  output: 'hybrid',
+  output: 'static',
   adapter: netlify(),
   site: 'https://interledger.org',
   base: '/developers',
