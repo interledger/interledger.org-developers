@@ -221,13 +221,14 @@ function collectTeamProjects(teamId: string): ApiProject[] {
   return [...own, ...fromChildren].sort((a, b) => a.sortOrder - b.sortOrder)
 }
 
-// Build flat grid item list with pre-assigned row numbers
+// Build flat grid item list with pre-assigned row numbers.
+// Body rows start at 1 — the header is now a separate element outside .board-scroll.
 type GridItem =
   | { type: 'team-header'; team: BoardTeam; row: number; teamColor: string }
   | { type: 'project'; project: ApiProject; row: number; teamColor: string }
 
 const gridItems: GridItem[] = []
-let currentRow = 3 // rows 1–2 are quarter/month headers
+let currentRow = 1
 
 for (const rootTeam of rootTeams) {
   const teamProjects = collectTeamProjects(rootTeam.id)
@@ -270,247 +271,269 @@ for (const proj of uncategorised) {
     <button class="mobile-toggle-btn" aria-pressed="false">Full timeline</button
     >
   </div>
-  <div class="board-scroll">
-    <!--
-      Grid columns:
-        col 1          = project label (fixed, sticky left)
-        cols 2 … N+1   = one per month
-      Grid rows:
-        row 1          = quarter headers
-        row 2          = month headers
-        rows 3 …       = one per project
-      Every cell has explicit grid-column + grid-row to avoid auto-placement bugs.
-    -->
-    <div
-      class="board"
-      style={`--n-months: ${nMonths}; --n-quarters: ${nQuarters}; --now-pct: ${nowLeft}%`}
-    >
-      <!-- ── col 1, rows 1–2: "Project" label spans both header rows ── -->
-      <div class="hd-label" style="grid-column: 1; grid-row: 1 / 3">
-        Team / Project
-      </div>
 
-      <!-- ── row 1: Quarter header cells (desktop: month-based spans) ── -->
-      {
-        quarterHeaders.map((qh) => (
-          <div
-            class:list={[
-              'hd-quarter',
-              'hd-quarter--desktop',
-              {
-                'hd-quarter--current':
-                  qh.q === Math.floor(nowMonth / 3) + 1 && qh.year === nowYear
-              }
-            ]}
-            style={`grid-column: ${qh.colStart} / span ${qh.span}; grid-row: 1`}
-          >
-            {qh.label}
+  <!--
+    .board-frame clips children to the border-radius without becoming a
+    scroll container (overflow: clip does not create one, unlike overflow: hidden).
+    This lets .board-header-sticky use position: sticky relative to the viewport.
+  -->
+  <div
+    class="board-frame"
+    style={`--n-months: ${nMonths}; --n-quarters: ${nQuarters}`}
+  >
+    <!-- ── Sticky header — lives OUTSIDE .board-scroll so it can pin to the viewport ── -->
+    <div class="board-header-sticky">
+      <!--
+        .board-header-inner scrolls horizontally but hides its scrollbar.
+        JS keeps its scrollLeft in sync with .board-scroll.
+      -->
+      <div class="board-header-inner">
+        <div class="board-header-grid">
+          <!-- col 1, rows 1–2: "Project" label spans both header rows -->
+          <div class="hd-label" style="grid-column: 1; grid-row: 1 / 3">
+            Team / Project
           </div>
-        ))
-      }
 
-      <!-- ── row 1: Quarter header cells (mobile: one column each) ── -->
-      {
-        quarterHeaders.map((qh, i) => (
-          <div
-            class:list={[
-              'hd-quarter',
-              'hd-quarter--mobile',
-              {
-                'hd-quarter--current':
-                  qh.q === Math.floor(nowMonth / 3) + 1 && qh.year === nowYear
-              }
-            ]}
-            style={`grid-column: ${i + 2}; grid-row: 1`}
-          >
-            {qh.label}
-          </div>
-        ))
-      }
-
-      <!-- ── row 2: Month header cells ── -->
-      {
-        months.map((m) => (
-          <div
-            class:list={[
-              'hd-month',
-              {
-                'hd-month--current': m.year === nowYear && m.month === nowMonth
-              },
-              { 'hd-month--qstart': m.isQuarterStart }
-            ]}
-            style={`grid-column: ${m.col}; grid-row: 2`}
-          >
-            {m.label}
-            {m.year === nowYear && m.month === nowMonth && (
-              <span class="now-badge">Now</span>
-            )}
-          </div>
-        ))
-      }
-
-      <!-- ── rows 3+: Team headers and project rows ── -->
-      {
-        gridItems.map((item) => {
-          if (item.type === 'team-header') {
-            const { team, row, teamColor } = item
-            return (
+          <!-- row 1: Quarter header cells (desktop: month-based spans) -->
+          {
+            quarterHeaders.map((qh) => (
               <div
-                class="team-header"
-                style={`grid-column: 1 / -1; grid-row: ${row}; background: ${teamColor}33; --team-color: ${teamColor}`}
+                class:list={[
+                  'hd-quarter',
+                  'hd-quarter--desktop',
+                  {
+                    'hd-quarter--current':
+                      qh.q === Math.floor(nowMonth / 3) + 1 &&
+                      qh.year === nowYear
+                  }
+                ]}
+                style={`grid-column: ${qh.colStart} / span ${qh.span}; grid-row: 1`}
               >
-                <div class="team-header-label">
-                  <span class="team-color-dot" />
-                  {team.name}
-                </div>
+                {qh.label}
               </div>
-            )
+            ))
           }
 
-          const { project: proj, row, teamColor } = item
-          const projColor = proj.color ?? '#888'
-          const iconEmoji = resolveIcon(proj.icon)
-          const hasDates = !!(proj.startDate && proj.targetDate)
-          const barLeft = hasDates
-            ? pctLeft(new Date(proj.startDate!)).toFixed(2)
-            : null
-          const barWidth = hasDates
-            ? pctWidth(
-                new Date(proj.startDate!),
-                new Date(proj.targetDate!)
-              ).toFixed(2)
-            : null
-          const datedMilestones = proj.milestones.filter((ms) => ms.targetDate)
+          <!-- row 1: Quarter header cells (mobile: one column each) -->
+          {
+            quarterHeaders.map((qh, i) => (
+              <div
+                class:list={[
+                  'hd-quarter',
+                  'hd-quarter--mobile',
+                  {
+                    'hd-quarter--current':
+                      qh.q === Math.floor(nowMonth / 3) + 1 &&
+                      qh.year === nowYear
+                  }
+                ]}
+                style={`grid-column: ${i + 2}; grid-row: 1`}
+              >
+                {qh.label}
+              </div>
+            ))
+          }
 
-          // Completed project with no targetDate but a completedAt
-          const hasCompletedBar = !!(
-            proj.startDate &&
-            !proj.targetDate &&
-            proj.completedAt
-          )
-          const completedBarLeft = hasCompletedBar
-            ? pctLeft(new Date(proj.startDate!)).toFixed(2)
-            : null
-          const completedBarWidth = hasCompletedBar
-            ? pctWidth(
-                new Date(proj.startDate!),
-                new Date(proj.completedAt!)
-              ).toFixed(2)
-            : null
+          <!-- row 2: Month header cells -->
+          {
+            months.map((m) => (
+              <div
+                class:list={[
+                  'hd-month',
+                  {
+                    'hd-month--current':
+                      m.year === nowYear && m.month === nowMonth
+                  },
+                  { 'hd-month--qstart': m.isQuarterStart }
+                ]}
+                style={`grid-column: ${m.col}; grid-row: 2`}
+              >
+                {m.label}
+                {m.year === nowYear && m.month === nowMonth && (
+                  <span class="now-badge">Now</span>
+                )}
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
 
-          // Milestones that extend past the project's targetDate
-          const lastMilestoneDate =
-            datedMilestones.length > 0
-              ? new Date(
-                  Math.max(
-                    ...datedMilestones.map((ms) =>
-                      new Date(ms.targetDate!).getTime()
+    <!-- ── Scrollable body — project rows only ── -->
+    <div class="board-scroll">
+      <!--
+        Grid columns:
+          col 1          = project label (fixed, sticky left)
+          cols 2 … N+1   = one per month
+        Grid rows:
+          rows 1 …       = one per project (header rows are in .board-header-sticky above)
+        Every cell has explicit grid-column + grid-row to avoid auto-placement bugs.
+      -->
+      <div class="board" style={`--now-pct: ${nowLeft}%`}>
+        <!-- ── rows 1+: Team headers and project rows ── -->
+        {
+          gridItems.map((item) => {
+            if (item.type === 'team-header') {
+              const { team, row, teamColor } = item
+              return (
+                <div
+                  class="team-header"
+                  style={`grid-column: 1 / -1; grid-row: ${row}; background: ${teamColor}33; --team-color: ${teamColor}`}
+                >
+                  <div class="team-header-label">
+                    <span class="team-color-dot" />
+                    {team.name}
+                  </div>
+                </div>
+              )
+            }
+
+            const { project: proj, row, teamColor } = item
+            const projColor = proj.color ?? '#888'
+            const iconEmoji = resolveIcon(proj.icon)
+            const hasDates = !!(proj.startDate && proj.targetDate)
+            const barLeft = hasDates
+              ? pctLeft(new Date(proj.startDate!)).toFixed(2)
+              : null
+            const barWidth = hasDates
+              ? pctWidth(
+                  new Date(proj.startDate!),
+                  new Date(proj.targetDate!)
+                ).toFixed(2)
+              : null
+            const datedMilestones = proj.milestones.filter((ms) => ms.targetDate)
+
+            // Completed project with no targetDate but a completedAt
+            const hasCompletedBar = !!(
+              proj.startDate &&
+              !proj.targetDate &&
+              proj.completedAt
+            )
+            const completedBarLeft = hasCompletedBar
+              ? pctLeft(new Date(proj.startDate!)).toFixed(2)
+              : null
+            const completedBarWidth = hasCompletedBar
+              ? pctWidth(
+                  new Date(proj.startDate!),
+                  new Date(proj.completedAt!)
+                ).toFixed(2)
+              : null
+
+            // Milestones that extend past the project's targetDate
+            const lastMilestoneDate =
+              datedMilestones.length > 0
+                ? new Date(
+                    Math.max(
+                      ...datedMilestones.map((ms) =>
+                        new Date(ms.targetDate!).getTime()
+                      )
                     )
                   )
-                )
+                : null
+            const hasExtension =
+              hasDates &&
+              lastMilestoneDate !== null &&
+              lastMilestoneDate > new Date(proj.targetDate!)
+            const extensionLeft = hasExtension
+              ? pctLeft(new Date(proj.targetDate!)).toFixed(2)
               : null
-          const hasExtension =
-            hasDates &&
-            lastMilestoneDate !== null &&
-            lastMilestoneDate > new Date(proj.targetDate!)
-          const extensionLeft = hasExtension
-            ? pctLeft(new Date(proj.targetDate!)).toFixed(2)
-            : null
-          const extensionWidth =
-            hasExtension && lastMilestoneDate
-              ? pctWidth(new Date(proj.targetDate!), lastMilestoneDate).toFixed(
-                  2
-                )
-              : null
+            const extensionWidth =
+              hasExtension && lastMilestoneDate
+                ? pctWidth(
+                    new Date(proj.targetDate!),
+                    lastMilestoneDate
+                  ).toFixed(2)
+                : null
 
-          return (
-            <>
-              {/* Project label — col 1, explicit row */}
-              <div
-                class="proj-label"
-                style={`grid-column: 1; grid-row: ${row}; background-color: ${teamColor}33; --team-color: ${teamColor}`}
-              >
-                <span class="proj-name">
-                  {iconEmoji && (
-                    <span class="proj-icon" aria-hidden="true">
-                      {iconEmoji}
-                    </span>
-                  )}
-                  <span class="proj-name-text">{proj.name}</span>
-                </span>
-              </div>
+            return (
+              <>
+                {/* Project label — col 1, explicit row */}
+                <div
+                  class="proj-label"
+                  style={`grid-column: 1; grid-row: ${row}; background-color: ${teamColor}33; --team-color: ${teamColor}`}
+                >
+                  <span class="proj-name">
+                    {iconEmoji && (
+                      <span class="proj-icon" aria-hidden="true">
+                        {iconEmoji}
+                      </span>
+                    )}
+                    <span class="proj-name-text">{proj.name}</span>
+                  </span>
+                </div>
 
-              {/* Project timeline track — cols 2 to last, explicit row */}
-              <div
-                class="proj-track"
-                style={`grid-column: 2 / -1; grid-row: ${row}; background-color: ${teamColor}17; --team-color: ${teamColor}`}
-              >
-                {/* "Today" marker */}
-                <div class="now-line" />
+                {/* Project timeline track — cols 2 to last, explicit row */}
+                <div
+                  class="proj-track"
+                  style={`grid-column: 2 / -1; grid-row: ${row}; background-color: ${teamColor}17; --team-color: ${teamColor}`}
+                >
+                  {/* "Today" marker */}
+                  <div class="now-line" />
 
-                {/* Project duration bar */}
-                {hasDates && (
-                  <div
-                    class="proj-bar"
-                    style={`
-                      left: ${barLeft}%;
-                      width: ${barWidth}%;
-                      background: ${projColor}40;
-                      border: 1.5px solid ${projColor}aa;
-                    `}
-                  />
-                )}
-
-                {/* Milestone overflow extension beyond targetDate */}
-                {hasExtension && (
-                  <div
-                    class="proj-bar proj-bar--extension"
-                    style={`
-                      left: ${extensionLeft}%;
-                      width: ${extensionWidth}%;
-                      border-color: ${projColor}88;
-                    `}
-                    title="Milestones extend past the project target date"
-                  />
-                )}
-
-                {/* Completed bar (no targetDate, resolved via completedAt) */}
-                {hasCompletedBar && (
-                  <div
-                    class="proj-bar proj-bar--completed"
-                    style={`
-                      left: ${completedBarLeft}%;
-                      width: ${completedBarWidth}%;
-                      background: ${projColor}28;
-                      border-color: ${projColor}99;
-                    `}
-                    title="Completed"
-                  />
-                )}
-
-                {/* Inline milestone diamond markers */}
-                {datedMilestones.map((ms) => {
-                  const left = pctLeft(new Date(ms.targetDate!)).toFixed(2)
-                  return (
+                  {/* Project duration bar */}
+                  {hasDates && (
                     <div
-                      class="ms-pin"
-                      style={`left: ${left}%`}
-                      title={ms.name}
-                      tabindex="0"
-                    >
-                      <span
-                        class="ms-diamond"
-                        style={`background: ${projColor}`}
-                      />
-                      <span class="ms-pin-name">{ms.name}</span>
-                    </div>
-                  )
-                })}
-              </div>
-            </>
-          )
-        })
-      }
+                      class="proj-bar"
+                      style={`
+                        left: ${barLeft}%;
+                        width: ${barWidth}%;
+                        background: ${projColor}40;
+                        border: 1.5px solid ${projColor}aa;
+                      `}
+                    />
+                  )}
+
+                  {/* Milestone overflow extension beyond targetDate */}
+                  {hasExtension && (
+                    <div
+                      class="proj-bar proj-bar--extension"
+                      style={`
+                        left: ${extensionLeft}%;
+                        width: ${extensionWidth}%;
+                        border-color: ${projColor}88;
+                      `}
+                      title="Milestones extend past the project target date"
+                    />
+                  )}
+
+                  {/* Completed bar (no targetDate, resolved via completedAt) */}
+                  {hasCompletedBar && (
+                    <div
+                      class="proj-bar proj-bar--completed"
+                      style={`
+                        left: ${completedBarLeft}%;
+                        width: ${completedBarWidth}%;
+                        background: ${projColor}28;
+                        border-color: ${projColor}99;
+                      `}
+                      title="Completed"
+                    />
+                  )}
+
+                  {/* Inline milestone diamond markers */}
+                  {datedMilestones.map((ms) => {
+                    const left = pctLeft(new Date(ms.targetDate!)).toFixed(2)
+                    return (
+                      <div
+                        class="ms-pin"
+                        style={`left: ${left}%`}
+                        title={ms.name}
+                        tabindex="0"
+                      >
+                        <span
+                          class="ms-diamond"
+                          style={`background: ${projColor}`}
+                        />
+                        <span class="ms-pin-name">{ms.name}</span>
+                      </div>
+                    )
+                  })}
+                </div>
+              </>
+            )
+          })
+        }
+      </div>
     </div>
   </div>
 </div>
@@ -523,32 +546,73 @@ for (const proj of uncategorised) {
     padding-block-end: var(--space-l);
   }
 
-  .board-scroll {
-    overflow-x: auto;
+  /*
+    Frame: provides the border, border-radius, and box-shadow for the whole board.
+    overflow: clip clips children to the border-radius WITHOUT creating a scroll
+    container, so .board-header-sticky can use position: sticky relative to the
+    viewport (not relative to this element).
+  */
+  .board-frame {
     border: 1px solid #e5e7eb;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
+    overflow: clip;
   }
 
-  /* ── Main grid ── */
-  .board {
+  /* ── Sticky header ── */
+  .board-header-sticky {
+    position: sticky;
+    top: var(--site-header-height);
+    z-index: 15;
+    background: #f9fafb;
+    border-bottom: 2px solid #e5e7eb;
+  }
+
+  /*
+    .board-header-inner scrolls horizontally to mirror .board-scroll,
+    but its scrollbar is hidden — scrolling is driven by JS sync.
+  */
+  .board-header-inner {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .board-header-inner::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Header grid — same column template as .board */
+  .board-header-grid {
     display: grid;
     grid-template-columns: 300px repeat(var(--n-months), minmax(88px, 1fr));
     min-width: calc(300px + var(--n-months) * 88px);
-    column-gap: 0; /* gaps handled by cell borders / padding */
     font-family: 'Titillium', Arial, sans-serif;
     font-size: var(--step--1);
     color: #1a1a1a;
   }
 
-  /* ── "Project" label — spans both header rows ── */
+  /* ── Scrollable body ── */
+  .board-scroll {
+    overflow-x: auto;
+  }
+
+  /* ── Body grid ── */
+  .board {
+    display: grid;
+    grid-template-columns: 300px repeat(var(--n-months), minmax(88px, 1fr));
+    min-width: calc(300px + var(--n-months) * 88px);
+    column-gap: 0;
+    font-family: 'Titillium', Arial, sans-serif;
+    font-size: var(--step--1);
+    color: #1a1a1a;
+  }
+
+  /* ── "Project" label — sticky left so it stays visible on horizontal scroll ── */
   .hd-label {
     position: sticky;
     left: 0;
-    top: var(--site-header-height);
     z-index: 5;
     background: #f9fafb;
-    border-bottom: 2px solid #e5e7eb;
     border-right: 1px solid #e5e7eb;
     padding: 0 0.75rem;
     display: flex;
@@ -562,13 +626,9 @@ for (const proj of uncategorised) {
 
   /* ── Quarter header cells (row 1) ── */
   .hd-quarter {
-    position: sticky;
-    top: var(--site-header-height);
-    z-index: 3;
     background: #f9fafb;
     border-bottom: 1px solid #d1d5db;
     border-right: 2px solid #d1d5db;
-    /* Pad so the quarter label doesn't hug the edge */
     padding: 0.35rem 0.75rem;
     font-weight: 700;
     font-size: var(--step--2);
@@ -588,13 +648,8 @@ for (const proj of uncategorised) {
 
   /* ── Month header cells (row 2) ── */
   .hd-month {
-    position: sticky;
-    top: calc(var(--site-header-height) + 1.75rem); /* site header + height of the quarter row */
-    z-index: 3;
     background: #f9fafb;
-    border-bottom: 2px solid #e5e7eb;
     border-right: 1px solid #e8e8e8;
-    /* Horizontal padding gives visual breathing room between months */
     padding: 0.25rem 0.5rem;
     font-size: var(--step--2);
     font-weight: 500;
@@ -607,7 +662,6 @@ for (const proj of uncategorised) {
     white-space: nowrap;
   }
 
-  /* Stronger left border at the first month of each quarter */
   .hd-month--qstart {
     border-left: 2px solid #d1d5db;
   }
@@ -733,20 +787,11 @@ for (const proj of uncategorised) {
     border-width: 1.5px;
   }
 
-  /*
-    Improvement 1 — Completed bar (startDate → completedAt, no planned targetDate).
-    Dashed border signals "actual" rather than planned end.
-  */
   .proj-bar--completed {
     border-style: dashed;
     border-radius: 4px;
   }
 
-  /*
-    Improvement 2 — Extension bar (targetDate → last milestone).
-    Rendered immediately after the solid bar; uses a lighter, dashed style
-    so the planned end vs. last-milestone end are visually distinct.
-  */
   .proj-bar--extension {
     background: repeating-linear-gradient(
       45deg,
@@ -803,7 +848,7 @@ for (const proj of uncategorised) {
     line-height: 1.2;
   }
 
-  /* ── Scrollbar ── */
+  /* ── Scrollbar (body only) ── */
   .board-scroll::-webkit-scrollbar {
     height: 6px;
   }
@@ -852,7 +897,8 @@ for (const proj of uncategorised) {
       display: flex;
     }
 
-    /* Quarter-column grid */
+    /* Quarter-column grid for header and body */
+    .board-header-grid,
     .board {
       grid-template-columns: 130px repeat(var(--n-quarters), minmax(72px, 1fr));
       min-width: calc(130px + var(--n-quarters) * 72px);
@@ -866,7 +912,7 @@ for (const proj of uncategorised) {
       display: flex;
     }
 
-    /* Collapse month header row (keep in DOM so grid-row numbers stay correct) */
+    /* Collapse month header row (keep in DOM so grid positions stay correct) */
     .hd-month {
       height: 0;
       min-height: 0;
@@ -928,34 +974,34 @@ for (const proj of uncategorised) {
     }
 
     /* ── "Full timeline" mode: restore month-column view ── */
-    .board-scroll--full .board {
+    .board-outer--full .board-header-grid,
+    .board-outer--full .board {
       grid-template-columns: 300px repeat(var(--n-months), minmax(88px, 1fr));
       min-width: calc(300px + var(--n-months) * 88px);
     }
 
-    .board-scroll--full .hd-quarter--desktop {
+    .board-outer--full .hd-quarter--desktop {
       display: flex;
     }
 
-    .board-scroll--full .hd-quarter--mobile {
+    .board-outer--full .hd-quarter--mobile {
       display: none;
     }
 
-    .board-scroll--full .hd-month {
+    .board-outer--full .hd-month {
       height: auto;
       min-height: unset;
       padding: 0.25rem 0.5rem;
-      border-bottom: 2px solid #e5e7eb;
       border-right: 1px solid #e8e8e8;
       overflow: visible;
       visibility: visible;
     }
 
-    .board-scroll--full .proj-name-text {
+    .board-outer--full .proj-name-text {
       max-width: 240px;
     }
 
-    .board-scroll--full .ms-pin-name {
+    .board-outer--full .ms-pin-name {
       display: block;
     }
   }
@@ -968,20 +1014,27 @@ for (const proj of uncategorised) {
     const board = document.querySelector<HTMLElement>('.board')
     if (!boardScroll || !board) return
 
-    // --now-pct is set as "XX.XX%" on .board
     const rawPct = getComputedStyle(board).getPropertyValue('--now-pct').trim()
-    const nowPct = parseFloat(rawPct) // strips the "%" suffix
+    const nowPct = parseFloat(rawPct)
     if (isNaN(nowPct)) return
 
-    // Label column width varies between desktop (300px) and mobile quarter view (130px).
     const labelWidth =
       parseInt(getComputedStyle(board).gridTemplateColumns.split(' ')[0], 10) ||
       300
     const timelineWidth = board.scrollWidth - labelWidth
     const nowPxFromBoardLeft = labelWidth + (nowPct / 100) * timelineWidth
 
-    // Centre the now line in the visible container.
     boardScroll.scrollLeft = nowPxFromBoardLeft - boardScroll.clientWidth / 2
+  }
+
+  // Keep the sticky header in sync with the body's horizontal scroll.
+  function initScrollSync() {
+    const boardScroll = document.querySelector<HTMLElement>('.board-scroll')
+    const headerInner = document.querySelector<HTMLElement>('.board-header-inner')
+    if (!boardScroll || !headerInner) return
+    boardScroll.addEventListener('scroll', () => {
+      headerInner.scrollLeft = boardScroll.scrollLeft
+    })
   }
 
   // Toggle between quarter view and full month view on mobile.
@@ -989,22 +1042,22 @@ for (const proj of uncategorised) {
     .querySelectorAll<HTMLButtonElement>('.mobile-toggle-btn')
     .forEach((btn) => {
       btn.addEventListener('click', () => {
-        const outer = btn.closest('.board-outer')
+        const outer = btn.closest<HTMLElement>('.board-outer')
         if (!outer) return
-        const scroll = outer.querySelector<HTMLElement>('.board-scroll')
-        if (!scroll) return
-        const isFull = scroll.classList.toggle('board-scroll--full')
+        const isFull = outer.classList.toggle('board-outer--full')
         btn.textContent = isFull ? 'Quarter view' : 'Full timeline'
         btn.setAttribute('aria-pressed', String(isFull))
-        // Re-centre after the grid repaints.
         requestAnimationFrame(centreOnNow)
       })
     })
 
-  // Run after the DOM (and layout) is ready.
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', centreOnNow)
+    document.addEventListener('DOMContentLoaded', () => {
+      initScrollSync()
+      centreOnNow()
+    })
   } else {
+    initScrollSync()
     centreOnNow()
   }
 
@@ -1013,7 +1066,6 @@ for (const proj of uncategorised) {
     pin.addEventListener('click', (e) => {
       e.stopPropagation()
       const isNowActive = !pin.classList.contains('ms-pin--active')
-      // Close any open tooltips first.
       document
         .querySelectorAll('.ms-pin--active')
         .forEach((p) => p.classList.remove('ms-pin--active'))
@@ -1021,7 +1073,6 @@ for (const proj of uncategorised) {
     })
   })
 
-  // Close tooltip when tapping outside.
   document.addEventListener('click', () => {
     document
       .querySelectorAll('.ms-pin--active')
