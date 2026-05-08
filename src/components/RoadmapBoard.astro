@@ -431,13 +431,13 @@ for (const proj of uncategorised) {
                 style={`grid-column: 1; grid-row: ${row}; background-color: ${teamColor}33; --team-color: ${teamColor}`}
               >
                 <span class="proj-name">
-                    {iconEmoji && (
-                      <span class="proj-icon" aria-hidden="true">
-                        {iconEmoji}
-                      </span>
-                    )}
-                    <span class="proj-name-text">{proj.name}</span>
-                  </span>
+                  {iconEmoji && (
+                    <span class="proj-icon" aria-hidden="true">
+                      {iconEmoji}
+                    </span>
+                  )}
+                  <span class="proj-name-text">{proj.name}</span>
+                </span>
               </div>
 
               {/* Project timeline track — cols 2 to last, explicit row */}
