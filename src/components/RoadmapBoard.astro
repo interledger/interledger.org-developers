@@ -380,8 +380,10 @@ for (const proj of uncategorised) {
                   class="team-header"
                   style={`grid-column: 1 / -1; grid-row: ${row}; background: ${teamColor}33; --team-color: ${teamColor}`}
                 >
-                  <div class="team-header-label">
-                    <span class="team-color-dot" />
+                  <div
+                    class="team-header-label"
+                    style={`background: color-mix(in srgb, ${teamColor} 20%, white)`}
+                  >
                     {team.name}
                   </div>
                 </div>
@@ -401,7 +403,9 @@ for (const proj of uncategorised) {
                   new Date(proj.targetDate!)
                 ).toFixed(2)
               : null
-            const datedMilestones = proj.milestones.filter((ms) => ms.targetDate)
+            const datedMilestones = proj.milestones.filter(
+              (ms) => ms.targetDate
+            )
 
             // Completed project with no targetDate but a completedAt
             const hasCompletedBar = !!(
@@ -450,7 +454,7 @@ for (const proj of uncategorised) {
                 {/* Project label — col 1, explicit row */}
                 <div
                   class="proj-label"
-                  style={`grid-column: 1; grid-row: ${row}; background-color: ${teamColor}33; --team-color: ${teamColor}`}
+                  style={`grid-column: 1; grid-row: ${row}; background-color: color-mix(in srgb, ${teamColor} 15%, white); --team-color: ${teamColor}`}
                 >
                   <span class="proj-name">
                     {iconEmoji && (
@@ -698,7 +702,7 @@ for (const proj of uncategorised) {
   .team-header-label {
     position: sticky;
     left: 0;
-    z-index: 2;
+    z-index: 4;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -717,12 +721,8 @@ for (const proj of uncategorised) {
   .proj-label {
     position: sticky;
     left: 0;
-    z-index: 2;
-    background-color: color-mix(
-      in srgb,
-      rgb(var(--tint-rgb, 255 255 255)) 5%,
-      white
-    );
+    z-index: 4;
+    /* background-color set via inline style as opaque color-mix() */
     border-right: 1px solid var(--team-color);
     padding: 0 0.75rem;
     display: flex;
@@ -1030,7 +1030,9 @@ for (const proj of uncategorised) {
   // Keep the sticky header in sync with the body's horizontal scroll.
   function initScrollSync() {
     const boardScroll = document.querySelector<HTMLElement>('.board-scroll')
-    const headerInner = document.querySelector<HTMLElement>('.board-header-inner')
+    const headerInner = document.querySelector<HTMLElement>(
+      '.board-header-inner'
+    )
     if (!boardScroll || !headerInner) return
     boardScroll.addEventListener('scroll', () => {
       headerInner.scrollLeft = boardScroll.scrollLeft
