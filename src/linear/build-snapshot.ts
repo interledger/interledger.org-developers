@@ -147,9 +147,7 @@ async function withRetry<T>(
       if (!isTransientError(err) || attempt === retries) throw err
       lastErr = err
       const wait = delayMs * 2 ** attempt
-      console.warn(
-        `[linear] Transient error (attempt ${attempt + 1}/${retries}), retrying in ${wait}ms...`
-      )
+
       await new Promise((r) => setTimeout(r, wait))
     }
   }

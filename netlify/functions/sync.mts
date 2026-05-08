@@ -2,8 +2,6 @@ import { getStore } from '@netlify/blobs'
 import { buildSnapshot } from '../../src/linear/build-snapshot.js'
 
 export default async function handler() {
-  console.log('[sync] Starting scheduled Linear sync...')
-
   const snapshot = await buildSnapshot()
 
   const store = getStore('roadmap')
@@ -14,7 +12,7 @@ export default async function handler() {
   const apiToken = process.env.NETLIFY_API_TOKEN
 
   if (siteId && apiToken) {
-    const res = await fetch('https://api.netlify.com/api/v1/purge', {
+    await fetch('https://api.netlify.com/api/v1/purge', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${apiToken}`,
@@ -25,10 +23,6 @@ export default async function handler() {
         paths: ['/developers/roadmap']
       })
     })
-  } else {
-    console.warn(
-      '[sync] NETLIFY_SITE_ID or NETLIFY_API_TOKEN not set — skipping CDN cache purge.'
-    )
   }
 }
 
