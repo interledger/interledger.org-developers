@@ -430,22 +430,7 @@ for (const proj of uncategorised) {
                 class="proj-label"
                 style={`grid-column: 1; grid-row: ${row}; background-color: ${teamColor}33; --team-color: ${teamColor}`}
               >
-                {proj.url ? (
-                  <a
-                    class="proj-name"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title={`Open ${proj.name} in Linear`}
-                  >
-                    {iconEmoji && (
-                      <span class="proj-icon" aria-hidden="true">
-                        {iconEmoji}
-                      </span>
-                    )}
-                    <span class="proj-name-text">{proj.name}</span>
-                  </a>
-                ) : (
-                  <span class="proj-name">
+                <span class="proj-name">
                     {iconEmoji && (
                       <span class="proj-icon" aria-hidden="true">
                         {iconEmoji}
@@ -453,7 +438,6 @@ for (const proj of uncategorised) {
                     )}
                     <span class="proj-name-text">{proj.name}</span>
                   </span>
-                )}
               </div>
 
               {/* Project timeline track — cols 2 to last, explicit row */}
@@ -699,12 +683,7 @@ for (const proj of uncategorised) {
     font-size: var(--step--1);
     font-weight: 500;
     color: #1a1a1a;
-    text-decoration: none;
     line-height: 1.3;
-  }
-
-  a.proj-name:hover {
-    color: var(--color-primary);
   }
 
   .proj-icon {
