@@ -21,7 +21,11 @@
   publish = "_netlify/builders"
   environment = { NETLIFY = "true", LINEAR_CUSTOM_VIEW_ID = "27df73bc-50ec-4fc1-bbb2-d906236a5bbc" }
 
-
+# Roadmap: serve the pre-rendered static file for the no-slash URL
+[[redirects]]
+  from = "/developers/roadmap"
+  to = "/developers/roadmap/index.html"
+  status = 200
 
 # Rewrite everything to /developers/index.html for client-side routing
 [[redirects]]
