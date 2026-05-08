@@ -267,7 +267,8 @@ for (const proj of uncategorised) {
 
 <div class="board-outer">
   <div class="mobile-toggle-wrap">
-    <button class="mobile-toggle-btn" aria-pressed="false">Full timeline</button>
+    <button class="mobile-toggle-btn" aria-pressed="false">Full timeline</button
+    >
   </div>
   <div class="board-scroll">
     <!--
@@ -280,10 +281,13 @@ for (const proj of uncategorised) {
         rows 3 …       = one per project
       Every cell has explicit grid-column + grid-row to avoid auto-placement bugs.
     -->
-    <div class="board" style={`--n-months: ${nMonths}; --n-quarters: ${nQuarters}; --now-pct: ${nowLeft}%`}>
+    <div
+      class="board"
+      style={`--n-months: ${nMonths}; --n-quarters: ${nQuarters}; --now-pct: ${nowLeft}%`}
+    >
       <!-- ── col 1, rows 1–2: "Project" label spans both header rows ── -->
       <div class="hd-label" style="grid-column: 1; grid-row: 1 / 3">
-        Project
+        Team / Project
       </div>
 
       <!-- ── row 1: Quarter header cells (desktop: month-based spans) ── -->
@@ -429,7 +433,6 @@ for (const proj of uncategorised) {
                 {proj.url ? (
                   <a
                     class="proj-name"
-                    href={proj.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     title={`Open ${proj.name} in Linear`}
@@ -702,7 +705,6 @@ for (const proj of uncategorised) {
 
   a.proj-name:hover {
     color: var(--color-primary);
-    text-decoration: underline;
   }
 
   .proj-icon {
@@ -993,10 +995,9 @@ for (const proj of uncategorised) {
     if (isNaN(nowPct)) return
 
     // Label column width varies between desktop (300px) and mobile quarter view (130px).
-    const labelWidth = parseInt(
-      getComputedStyle(board).gridTemplateColumns.split(' ')[0],
-      10
-    ) || 300
+    const labelWidth =
+      parseInt(getComputedStyle(board).gridTemplateColumns.split(' ')[0], 10) ||
+      300
     const timelineWidth = board.scrollWidth - labelWidth
     const nowPxFromBoardLeft = labelWidth + (nowPct / 100) * timelineWidth
 
@@ -1005,19 +1006,21 @@ for (const proj of uncategorised) {
   }
 
   // Toggle between quarter view and full month view on mobile.
-  document.querySelectorAll<HTMLButtonElement>('.mobile-toggle-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const outer = btn.closest('.board-outer')
-      if (!outer) return
-      const scroll = outer.querySelector<HTMLElement>('.board-scroll')
-      if (!scroll) return
-      const isFull = scroll.classList.toggle('board-scroll--full')
-      btn.textContent = isFull ? 'Quarter view' : 'Full timeline'
-      btn.setAttribute('aria-pressed', String(isFull))
-      // Re-centre after the grid repaints.
-      requestAnimationFrame(centreOnNow)
+  document
+    .querySelectorAll<HTMLButtonElement>('.mobile-toggle-btn')
+    .forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const outer = btn.closest('.board-outer')
+        if (!outer) return
+        const scroll = outer.querySelector<HTMLElement>('.board-scroll')
+        if (!scroll) return
+        const isFull = scroll.classList.toggle('board-scroll--full')
+        btn.textContent = isFull ? 'Quarter view' : 'Full timeline'
+        btn.setAttribute('aria-pressed', String(isFull))
+        // Re-centre after the grid repaints.
+        requestAnimationFrame(centreOnNow)
+      })
     })
-  })
 
   // Run after the DOM (and layout) is ready.
   if (document.readyState === 'loading') {
@@ -1032,13 +1035,17 @@ for (const proj of uncategorised) {
       e.stopPropagation()
       const isNowActive = !pin.classList.contains('ms-pin--active')
       // Close any open tooltips first.
-      document.querySelectorAll('.ms-pin--active').forEach((p) => p.classList.remove('ms-pin--active'))
+      document
+        .querySelectorAll('.ms-pin--active')
+        .forEach((p) => p.classList.remove('ms-pin--active'))
       if (isNowActive) pin.classList.add('ms-pin--active')
     })
   })
 
   // Close tooltip when tapping outside.
   document.addEventListener('click', () => {
-    document.querySelectorAll('.ms-pin--active').forEach((p) => p.classList.remove('ms-pin--active'))
+    document
+      .querySelectorAll('.ms-pin--active')
+      .forEach((p) => p.classList.remove('ms-pin--active'))
   })
 </script>

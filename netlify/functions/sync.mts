@@ -8,7 +8,6 @@ export default async function handler() {
 
   const store = getStore('roadmap')
   await store.setJSON('roadmap-snapshot', snapshot)
-  console.log(`[sync] Snapshot stored. generatedAt: ${snapshot.generatedAt}`)
 
   // Purge CDN cache so the next user request re-renders fresh HTML
   const siteId = process.env.NETLIFY_SITE_ID
@@ -19,21 +18,20 @@ export default async function handler() {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${apiToken}`,
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         site_id: siteId,
-        paths: ['/developers/roadmap'],
-      }),
+        paths: ['/developers/roadmap']
+      })
     })
-    console.log(`[sync] CDN cache purge → ${res.status}`)
   } else {
-    console.warn('[sync] NETLIFY_SITE_ID or NETLIFY_API_TOKEN not set — skipping CDN cache purge.')
+    console.warn(
+      '[sync] NETLIFY_SITE_ID or NETLIFY_API_TOKEN not set — skipping CDN cache purge.'
+    )
   }
-
-  console.log('[sync] Done.')
 }
 
 export const config = {
-  schedule: '0 */12 * * *',
+  schedule: '0 */12 * * *'
 }

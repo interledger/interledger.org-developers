@@ -2,7 +2,10 @@ import { getStore } from '@netlify/blobs'
 import { buildSnapshot } from '../../src/linear/build-snapshot.js'
 import type { Context } from '@netlify/functions'
 
-export default async function handler(req: Request, _ctx: Context): Promise<Response> {
+export default async function handler(
+  req: Request,
+  _ctx: Context
+): Promise<Response> {
   // Verify API_SECRET bearer token
   const authHeader = req.headers.get('authorization') ?? ''
   const token = authHeader.replace(/^Bearer\s+/i, '')
@@ -11,17 +14,14 @@ export default async function handler(req: Request, _ctx: Context): Promise<Resp
   if (!expected || token !== expected) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), {
       status: 401,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' }
     })
   }
-
-  console.log('[sync-now] Manual sync triggered.')
 
   const snapshot = await buildSnapshot()
 
   const store = getStore('roadmap')
   await store.setJSON('roadmap-snapshot', snapshot)
-  console.log(`[sync-now] Snapshot stored. generatedAt: ${snapshot.generatedAt}`)
 
   // Purge CDN cache
   const siteId = process.env.NETLIFY_SITE_ID
@@ -32,27 +32,28 @@ export default async function handler(req: Request, _ctx: Context): Promise<Resp
       method: 'POST',
       headers: {
         Authorization: `Bearer ${apiToken}`,
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         site_id: siteId,
-        paths: ['/developers/roadmap'],
-      }),
+        paths: ['/developers/roadmap']
+      })
     })
-    console.log(`[sync-now] CDN cache purge → ${res.status}`)
   } else {
-    console.warn('[sync-now] NETLIFY_SITE_ID or NETLIFY_API_TOKEN not set — skipping CDN cache purge.')
+    console.warn(
+      '[sync-now] NETLIFY_SITE_ID or NETLIFY_API_TOKEN not set — skipping CDN cache purge.'
+    )
   }
 
   return new Response(
     JSON.stringify({ ok: true, generatedAt: snapshot.generatedAt }),
     {
       status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    },
+      headers: { 'Content-Type': 'application/json' }
+    }
   )
 }
 
 export const config = {
-  path: '/api/sync',
+  path: '/api/sync'
 }

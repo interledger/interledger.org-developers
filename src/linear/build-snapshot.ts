@@ -161,7 +161,6 @@ async function withRetry<T>(
 // ---------------------------------------------------------------------------
 
 async function fetchTeams(): Promise<TeamsQueryResult['teams']['nodes']> {
-  console.log('[linear] Fetching teams...')
   const all: TeamsQueryResult['teams']['nodes'] = []
   let hasNextPage = true
   let endCursor: string | null = null
@@ -181,12 +180,10 @@ async function fetchTeams(): Promise<TeamsQueryResult['teams']['nodes']> {
     endCursor = result.teams.pageInfo.endCursor
   }
 
-  console.log(`[linear] Fetched ${all.length} teams.`)
   return all
 }
 
 async function fetchViewProjects(viewId: string): Promise<ViewProjectNode[]> {
-  console.log(`[linear] Fetching projects from view ${viewId}...`)
   const all: ViewProjectNode[] = []
   let hasNextPage = true
   let endCursor: string | null = null
@@ -213,7 +210,6 @@ async function fetchViewProjects(viewId: string): Promise<ViewProjectNode[]> {
     endCursor = result.customView.projects.pageInfo.endCursor
   }
 
-  console.log(`[linear] Fetched ${all.length} projects from view.`)
   return all
 }
 
