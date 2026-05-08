@@ -21,6 +21,19 @@
   publish = "_netlify/builders"
   environment = { NETLIFY = "true", LINEAR_CUSTOM_VIEW_ID = "27df73bc-50ec-4fc1-bbb2-d906236a5bbc" }
 
+# Roadmap SSR page — must come before the catch-all below
+[[redirects]]
+  from = "/developers/roadmap"
+  to = "/.netlify/functions/ssr"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/developers/roadmap/"
+  to = "/.netlify/functions/ssr"
+  status = 200
+  force = true
+
 # Rewrite everything to /developers/index.html for client-side routing
 [[redirects]]
   from = "/developers/*"
