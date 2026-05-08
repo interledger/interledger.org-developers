@@ -2,30 +2,24 @@
   targetPort = 1103
 
 [build]
-  command = "npm install -g bun && bun install && bun run build && mkdir -p _netlify/builders && cp -r dist _netlify/builders/developers"
+  command = "npm install -g bun && bun install && bun run build && mkdir -p _netlify/builders && cp -r dist _netlify/builders/developers && cp dist/_redirects _netlify/builders/_redirects 2>/dev/null || true"
   publish = "_netlify/builders"
   environment = { NETLIFY = "true", LINEAR_CUSTOM_VIEW_ID = "27df73bc-50ec-4fc1-bbb2-d906236a5bbc" }
 
 [context.production]
-  command = "npm install -g bun && bun install && bun run build && mkdir -p _netlify/builders && cp -r dist _netlify/builders/developers"
+  command = "npm install -g bun && bun install && bun run build && mkdir -p _netlify/builders && cp -r dist _netlify/builders/developers && cp dist/_redirects _netlify/builders/_redirects 2>/dev/null || true"
   publish = "_netlify/builders"
   environment = { NETLIFY = "true", LINEAR_CUSTOM_VIEW_ID = "27df73bc-50ec-4fc1-bbb2-d906236a5bbc" }
 
 [context.preview]
-  command = "npm install -g bun && bun install && bun run build && mkdir -p _netlify/builders && cp -r dist _netlify/builders/developers"
+  command = "npm install -g bun && bun install && bun run build && mkdir -p _netlify/builders && cp -r dist _netlify/builders/developers && cp dist/_redirects _netlify/builders/_redirects 2>/dev/null || true"
   publish = "_netlify/builders"
   environment = { NETLIFY = "true", LINEAR_CUSTOM_VIEW_ID = "27df73bc-50ec-4fc1-bbb2-d906236a5bbc" }
 
 [context.deploy-preview]
-  command = "npm install -g bun && bun install && bun run build && mkdir -p _netlify/builders && cp -r dist _netlify/builders/developers"
+  command = "npm install -g bun && bun install && bun run build && mkdir -p _netlify/builders && cp -r dist _netlify/builders/developers && cp dist/_redirects _netlify/builders/_redirects 2>/dev/null || true"
   publish = "_netlify/builders"
   environment = { NETLIFY = "true", LINEAR_CUSTOM_VIEW_ID = "27df73bc-50ec-4fc1-bbb2-d906236a5bbc" }
-
-# Roadmap: serve the pre-rendered static file for the no-slash URL
-[[redirects]]
-  from = "/developers/roadmap"
-  to = "/developers/roadmap/index.html"
-  status = 200
 
 # Rewrite everything to /developers/index.html for client-side routing
 [[redirects]]
