@@ -545,7 +545,7 @@ for (const proj of uncategorised) {
   .hd-label {
     position: sticky;
     left: 0;
-    top: 0;
+    top: var(--site-header-height);
     z-index: 5;
     background: #f9fafb;
     border-bottom: 2px solid #e5e7eb;
@@ -563,7 +563,7 @@ for (const proj of uncategorised) {
   /* ── Quarter header cells (row 1) ── */
   .hd-quarter {
     position: sticky;
-    top: 0;
+    top: var(--site-header-height);
     z-index: 3;
     background: #f9fafb;
     border-bottom: 1px solid #d1d5db;
@@ -589,7 +589,7 @@ for (const proj of uncategorised) {
   /* ── Month header cells (row 2) ── */
   .hd-month {
     position: sticky;
-    top: 1.75rem; /* height of the quarter row */
+    top: calc(var(--site-header-height) + 1.75rem); /* site header + height of the quarter row */
     z-index: 3;
     background: #f9fafb;
     border-bottom: 2px solid #e5e7eb;
