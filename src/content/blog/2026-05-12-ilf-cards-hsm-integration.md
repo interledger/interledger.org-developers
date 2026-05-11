@@ -1,7 +1,7 @@
 ---
 title: 'Signed, Sealed, Hardware Enforced: HSMs for Payment Trust'
 description: 'How HSMs protect keys, enforce trust boundaries, and secure card payment flows with Rafiki and Interledger.'
-date: 2026-05-01
+date: 2026-05-12
 slug: ilf-and-hsms
 authors:
   - Jason Bruwer
@@ -104,7 +104,7 @@ Even strong applications can have bugs. Even well-managed servers can be comprom
 
 That difference can be the line between an incident that is contained and one that becomes systemic.
 
-## Why Are HSMs Critical in Payments?
+## Why are HSMs Critical in Payments?
 
 HSMs are relevant in many industries, but payments are one of the clearest examples of where they become indispensable.
 
@@ -144,7 +144,7 @@ Even when a modern architecture is API-driven, cloud-native, or ILP-enabled, it 
 
 A small prototype can often get away with simpler assumptions. Real payment systems cannot. Once you have many merchants, devices, cards, key versions, rotation schedules, signing flows, and operational teams, trust has to scale. HSMs help make that possible because they allow large systems to centralize sensitive cryptographic control without pushing raw secrets into every application or device.
 
-## How Could the ILF Make Use of HSMs?
+## How could the ILF Make use of HSMs?
 
 ![Rafiki and HSM Key Protection Architecture](/developers/img/blog/2026-05-01/hsm-architecture.svg)
 
@@ -228,7 +228,7 @@ Used properly, they help keep responsibilities clear:
 
 That division is healthy. It keeps each layer understandable and reduces the temptation to push too much trust into the wrong place.
 
-### 6. HSMs Are Not the Whole Story
+### 6. HSMs are not the whole story
 
 It is worth stating clearly that HSMs are not magic. They do not automatically make an architecture secure. Poor policies, weak service design, bad access control, and confused trust boundaries can still undermine a system even if an HSM is present.
 
