@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 500" width="960" height="500" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+
+  <!-- Background -->
+  <rect width="960" height="500" fill="#F8FAFC"/>
+
+  <!-- Title -->
+  <text x="480" y="32" text-anchor="middle" font-size="15" font-weight="700" fill="#1E293B" letter-spacing="-0.3">Rafiki + HSM: Key Protection Architecture</text>
+
+  <!-- ===== DEFS ===== -->
+  <defs>
+    <marker id="ab" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#3B82F6"/>
+    </marker>
+    <marker id="aa" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#F59E0B"/>
+    </marker>
+    <marker id="ar" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#EF4444"/>
+    </marker>
+  </defs>
+
+  <!-- ===== ASE PLATFORM BOUNDARY ===== -->
+  <rect x="255" y="58" width="255" height="338" fill="none" stroke="#94A3B8" stroke-width="2" stroke-dasharray="8,4" rx="10"/>
+  <rect x="283" y="51" width="100" height="16" fill="#F8FAFC"/>
+  <text x="333" y="63" text-anchor="middle" font-size="10" fill="#64748B" font-weight="600" letter-spacing="0.5">ASE PLATFORM</text>
+
+  <!-- ===== POS TERMINAL ===== -->
+  <rect x="30" y="95" width="142" height="265" fill="#334155" stroke="#1E293B" stroke-width="1.5" rx="10"/>
+  <rect x="30" y="95" width="142" height="32" fill="#1E293B" rx="10"/>
+  <rect x="30" y="117" width="142" height="10" fill="#1E293B"/>
+  <text x="101" y="116" text-anchor="middle" font-size="11" font-weight="700" fill="#F1F5F9" letter-spacing="0.2">POS TERMINAL</text>
+  <rect x="50" y="140" width="102" height="68" fill="#1E293B" rx="5"/>
+  <text x="101" y="174" text-anchor="middle" font-size="22">💳</text>
+  <text x="101" y="196" text-anchor="middle" font-size="8" fill="#64748B">Card / Wallet</text>
+  <line x1="50" y1="222" x2="152" y2="222" stroke="#475569" stroke-width="1"/>
+  <text x="101" y="240" text-anchor="middle" font-size="8.5" fill="#CBD5E1">• Tap / insert card</text>
+  <text x="101" y="256" text-anchor="middle" font-size="8.5" fill="#CBD5E1">• Holds injected keys</text>
+  <text x="101" y="272" text-anchor="middle" font-size="8.5" fill="#CBD5E1">• Sends CSR on board</text>
+  <text x="101" y="288" text-anchor="middle" font-size="8.5" fill="#CBD5E1">• Receives wrapped TMK</text>
+  <text x="101" y="318" text-anchor="middle" font-size="7.5" fill="#475569">Secure Element / Kernel</text>
+
+  <!-- ===== RAFIKI SERVICE ===== -->
+  <rect x="273" y="77" width="192" height="138" fill="#1D4ED8" stroke="#1E40AF" stroke-width="1.5" rx="8"/>
+  <rect x="273" y="77" width="192" height="30" fill="#1E40AF" rx="8"/>
+  <rect x="273" y="97" width="192" height="10" fill="#1E40AF"/>
+  <text x="369" y="97" text-anchor="middle" font-size="11" font-weight="700" fill="#FFFFFF">RAFIKI SERVICE</text>
+  <text x="369" y="111" text-anchor="middle" font-size="8" fill="#93C5FD">Open Payments · ILP</text>
+  <text x="290" y="131" font-size="8.5" fill="#DBEAFE">• Payment orchestration</text>
+  <text x="290" y="147" font-size="8.5" fill="#DBEAFE">• Open Payments API</text>
+  <text x="290" y="163" font-size="8.5" fill="#DBEAFE">• ILP connector / quotes</text>
+  <text x="290" y="179" font-size="8.5" fill="#DBEAFE">• Peering relationship</text>
+  <text x="290" y="195" font-size="8" fill="#93C5FD">  (key never exposed)</text>
+
+  <!-- ===== KEY MGMT SERVICE ===== -->
+  <rect x="273" y="260" width="192" height="120" fill="#5B21B6" stroke="#4C1D95" stroke-width="1.5" rx="8"/>
+  <rect x="273" y="260" width="192" height="28" fill="#4C1D95" rx="8"/>
+  <rect x="273" y="278" width="192" height="10" fill="#4C1D95"/>
+  <text x="369" y="278" text-anchor="middle" font-size="11" font-weight="700" fill="#FFFFFF">MERCHANT-API SERVICE</text>
+  <text x="369" y="292" text-anchor="middle" font-size="8" fill="#C4B5FD">Device Onboarding · RKI</text>
+  <text x="290" y="312" font-size="8.5" fill="#EDE9FE">• Validate POS identity</text>
+  <text x="290" y="328" font-size="8.5" fill="#EDE9FE">• Request HSM operations</text>
+  <text x="290" y="344" font-size="8.5" fill="#EDE9FE">• Deliver wrapped TMK/IPEK</text>
+  <text x="290" y="360" font-size="8.5" fill="#EDE9FE">• Manage key rotation</text>
+
+  <!-- ===== HSM (Hardened Boundary) ===== -->
+  <rect x="194" y="418" width="582" height="62" fill="#F59E0B" fill-opacity="0.10" rx="12"/>
+  <rect x="197" y="413" width="576" height="68" fill="#0F172A" stroke="#F59E0B" stroke-width="2.5" rx="10"/>
+  <rect x="197" y="413" width="576" height="24" fill="#F59E0B" rx="10"/>
+  <rect x="197" y="427" width="576" height="10" fill="#F59E0B"/>
+  <text x="485" y="429" text-anchor="middle" font-size="11" font-weight="800" fill="#1E293B" letter-spacing="0.5">HSM — HARDWARE SECURITY MODULE</text>
+  <!-- HSM cells -->
+  <rect x="209" y="442" width="126" height="31" fill="#1E293B" stroke="#334155" rx="4"/>
+  <text x="272" y="455" text-anchor="middle" font-size="8" font-weight="700" fill="#FCD34D">🔒 Master Keys</text>
+  <text x="272" y="467" text-anchor="middle" font-size="7" fill="#64748B">Never exported in clear</text>
+
+  <rect x="345" y="442" width="130" height="31" fill="#1E293B" stroke="#334155" rx="4"/>
+  <text x="410" y="455" text-anchor="middle" font-size="8" font-weight="700" fill="#FCD34D">🔒 CA / Signing Keys</text>
+  <text x="410" y="467" text-anchor="middle" font-size="7" fill="#64748B">ILP + device certs</text>
+
+  <rect x="485" y="442" width="122" height="31" fill="#1E293B" stroke="#334155" rx="4"/>
+  <text x="546" y="455" text-anchor="middle" font-size="8" font-weight="700" fill="#A78BFA">Key Derivation</text>
+  <text x="546" y="467" text-anchor="middle" font-size="7" fill="#64748B">DUKPT / IPEK</text>
+
+  <rect x="617" y="442" width="144" height="31" fill="#1E293B" stroke="#334155" rx="4"/>
+  <text x="689" y="455" text-anchor="middle" font-size="8" font-weight="700" fill="#A78BFA">Key Wrapping</text>
+  <text x="689" y="467" text-anchor="middle" font-size="7" fill="#64748B">TR-34 · PKCS#11</text>
+
+  <!-- FIPS label -->
+  <text x="780" y="432" font-size="7.5" fill="#F59E0B" font-weight="600">PCI HSM</text>
+
+  <!-- ===== ILP NETWORK ===== -->
+  <rect x="660" y="77" width="160" height="138" fill="#047857" stroke="#065F46" stroke-width="1.5" rx="8"/>
+  <rect x="660" y="77" width="160" height="30" fill="#065F46" rx="8"/>
+  <rect x="660" y="97" width="160" height="10" fill="#065F46"/>
+  <text x="740" y="97" text-anchor="middle" font-size="11" font-weight="700" fill="#FFFFFF">ILP NETWORK</text>
+  <text x="740" y="111" text-anchor="middle" font-size="8" fill="#6EE7B7">Interledger Protocol</text>
+  <text x="740" y="156" text-anchor="middle" font-size="26">🌐</text>
+  <text x="740" y="182" text-anchor="middle" font-size="8" fill="#D1FAE5">Connector-to-connector</text>
+  <text x="740" y="196" text-anchor="middle" font-size="8" fill="#D1FAE5">signed ILP packets</text>
+
+  <!-- ===== ARROWS ===== -->
+
+  <!-- 1. POS → Rafiki: Payment Request (blue solid) -->
+  <line x1="172" y1="155" x2="271" y2="140" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#ab)"/>
+  <rect x="155" y="142" width="82" height="14" fill="#EFF6FF" rx="3" fill-opacity="0.92"/>
+  <text x="196" y="152" text-anchor="middle" font-size="8" fill="#1D4ED8" font-weight="600">payment req</text>
+
+  <!-- 2. Rafiki → ILP: ILP Payment (blue solid) -->
+  <line x1="465" y1="146" x2="657" y2="146" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#ab)"/>
+  <rect x="560" y="134" width="72" height="14" fill="#EFF6FF" rx="3" fill-opacity="0.92"/>
+  <text x="596" y="144" text-anchor="middle" font-size="8" fill="#1D4ED8" font-weight="600">ILP payment</text>
+
+  <!-- 3. POS → Key Mgmt: CSR / Onboard (amber dashed) -->
+  <line x1="172" y1="272" x2="270" y2="308" stroke="#F59E0B" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#aa)"/>
+  <rect x="155" y="273" width="82" height="14" fill="#FEF3C7" rx="3" fill-opacity="0.92"/>
+  <text x="196" y="283" text-anchor="middle" font-size="8" fill="#92400E" font-weight="600">CSR / onboard</text>
+
+  <!-- 4. Key Mgmt → HSM: key operations (amber solid) -->
+  <line x1="369" y1="380" x2="369" y2="411" stroke="#F59E0B" stroke-width="2.5" marker-end="url(#aa)"/>
+  <rect x="375" y="388" width="98" height="14" fill="#FEF3C7" rx="3" fill-opacity="0.92"/>
+  <text x="424" y="398" text-anchor="middle" font-size="8" fill="#92400E" font-weight="600">sign / derive / wrap</text>
+
+  <!-- ===== LEGEND ===== -->
+  <rect x="30" y="465" width="510" height="28" fill="#FFFFFF" fill-opacity="0.85" stroke="#E2E8F0" stroke-width="1" rx="6"/>
+  <text x="44" y="483" font-size="8" font-weight="700" fill="#475569">LEGEND:</text>
+  <line x1="90" y1="479" x2="110" y2="479" stroke="#3B82F6" stroke-width="2.5" marker-end="url(#ab)"/>
+  <text x="115" y="483" font-size="8" fill="#475569">Payment / ILP flow</text>
+  <line x1="198" y1="479" x2="218" y2="479" stroke="#F59E0B" stroke-width="2.5" marker-end="url(#aa)"/>
+  <text x="223" y="483" font-size="8" fill="#475569">Secure operations (HSM)</text>
+  <rect x="340" y="473" width="12" height="9" fill="none" stroke="#94A3B8" stroke-dasharray="4,2" stroke-width="1.5" rx="1"/>
+  <text x="356" y="483" font-size="8" fill="#475569">ASE trust boundary</text>
+
+</svg>

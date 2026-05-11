@@ -1,6 +1,6 @@
 ---
-title: 'Double down on Security: What is mine is mine'
-description: 'A Journey from POS Onboarding to Transaction Processing.'
+title: 'Signed, Sealed, Hardware Enforced: HSMs for Payment Trust'
+description: 'How HSMs protect keys, enforce trust boundaries, and secure card payment flows with Rafiki and Interledger.'
 date: 2026-05-01
 slug: ilf-and-hsms
 authors:
@@ -16,7 +16,7 @@ tags:
   - HSM
 ---
 
-HSMs sit at the heart of modern payment security - trusted, hardened, and responsible for protecting the cryptographic keys that financial systems rely on. Our next exploration asks a pivotal question: how do HSMs fit into the world of payments, and how can they complement Rafiki and Interledger-based architectures without weakening the trust model that regulated financial infrastructure demands?
+HSMs sit at the heart of modern payment security. Trusted, hardened, and responsible for protecting the cryptographic keys that financial systems rely on. Our next exploration asks a pivotal question: how do HSMs fit into the world of payments, and how can they complement Rafiki and Interledger-based architectures without weakening the trust model that regulated financial infrastructure demands?
 
 Please read the [Rafiki Card Integration BLOG](https://interledger.org/developers/blog/rafiki-card-integration/) for background on Rafiki Card Payments if you haven't already.
 
@@ -27,15 +27,14 @@ Please read the [Rafiki Card Integration BLOG](https://interledger.org/developer
 
 ## Table of Contents
 
-1. [Card Payments Using Rafiki and ILP](#card-payments-using-rafiki-and-ilp)
-2. [Exploring a Path from EMV Cards to Interledger](#exploring-a-path-from-emv-cards-to-interledger)
-3. [Starting Point: Should you build a Kernel](#starting-point-should-you-build-a-kernel)
-4. ['Hello World' for POS (Point of Sale): How Does a POS device become "Known"?](#hello-world-for-pos-point-of-sale-how-does-a-pos-device-become-known)
-5. [The Transaction Moment](#the-transaction-moment)
-6. [Conclusion, Where This Leaves Us](#conclusion-where-this-leaves-us)
-7. [What is next for ILF and Cards?](#what-is-next-for-ilf-and-cards)
-8. [References](#references)
-9. [Glossary of Terms](#glossary-of-terms)
+1. [Why Hardware Security Modules Matter in Payments and How They Relate to Rafiki](#why-hardware-security-modules-matter-in-payments-and-how-they-relate-to-rafiki)
+2. [What Is an HSM?](#what-is-an-hsm)
+3. [Why Do We Need an HSM?](#why-do-we-need-an-hsm)
+4. [Why Are HSMs Critical in Payments?](#why-are-hsms-critical-in-payments)
+5. [How Could the ILF Make Use of HSMs?](#how-could-the-ilf-make-use-of-hsms)
+6. [Conclusion](#conclusion)
+7. [References](#references)
+8. [Glossary of Terms](#glossary-of-terms)
 
 
 
@@ -138,16 +137,17 @@ Even when a modern architecture is API-driven, cloud-native, or ILP-enabled, it 
 A small prototype can often get away with simpler assumptions. Real payment systems cannot. Once you have many merchants, devices, cards, key versions, rotation schedules, signing flows, and operational teams, trust has to scale. HSMs help make that possible because they allow large systems to centralize sensitive cryptographic control without pushing raw secrets into every application or device.
 
 ## How Could the ILF Make Use of HSMs?
-The Interledger Foundation is not trying to turn Rafiki into a traditional card switch or an EMV kernel. 
-That was already an important conclusion in the earlier card-payment exploration: do not rebuild the kernel, and do not fight the established trust model of payments. 
+
+![Rafiki and HSM Key Protection Architecture](/developers/img/blog/2026-05-01/hsm-architecture.svg)
+
+The Interledger Foundation is not trying to turn Rafiki into a traditional card switch or an EMV kernel.
+That was already an important conclusion in the earlier card-payment exploration: do not rebuild the kernel, and do not fight the established trust model of payments.
 Instead, build around it with clear interfaces, focused services, and sound cryptographic boundaries.
 
 That makes HSMs highly relevant, not because Rafiki itself must become an HSM-centric product, but because HSMs can support the secure boundaries around systems that integrate payment-originated trust flows with ILP-based infrastructure.
 
 ### 1. POS onboarding and device trust
-One of the clearest areas is device onboarding.
-
-In the earlier architecture discussion, the POS becomes "known" through a trust ceremony: it generates a key pair, sends a CSR with metadata, and the ASE signs it through its CA while also issuing device-related cryptographic material. 
+One of the clearest areas is device onboarding. In the earlier architecture discussion, the POS becomes "known" through a trust ceremony: it generates a key pair, sends a CSR with metadata, and the ASE signs it through its CA while also issuing device-related cryptographic material. 
 That onboarding process is fundamentally about establishing trusted identity.
 
 An HSM can play a central role here by protecting the CA or signing keys used for device certificates, terminal identities, or platform-issued credentials. 
@@ -192,7 +192,7 @@ But when Rafiki is deployed inside real financial institutions, it often has to 
 
 In those environments, HSMs act as a bridge between modern API platforms and traditional financial security expectations.
 
-That does not mean Rafiki itself becomes "a payment HSM system." It means Rafiki can exist alongside HSM-backed services that protect the trust anchors around it. For example:
+That does not mean Rafiki itself becomes "a payment HSM system". It means Rafiki can exist alongside HSM-backed services that protect the trust anchors around it. For example:
 
 * A bank or wallet provider may use HSM-backed key management for onboarding devices
 * A payment-adjacent flow may use HSM-backed signing or encryption for high-value requests
@@ -205,7 +205,7 @@ One of the most useful lessons from the earlier card-payment exploration was tha
 **HSMs fit that lesson well.**
 
 Used properly, they help keep responsibilities clear:
-* 
+
 * The kernel performs payment cryptography in its own domain
 * The secure device boundary protects local transaction keys
 * The ASE controls identity, onboarding, and lifecycle policies
@@ -237,316 +237,38 @@ Not by replacing what Rafiki already does well, but by strengthening the trust b
 
 Rafiki enables interoperability. HSMs protect trust. In financial systems, those two concerns are not separate - they are complementary.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-`--------------------------------------------------------------------------------`
-
-
-
-## Card Payments Using Rafiki and ILP
-
-At a high level, an ILP card transaction involves:
-
-1. Card (ICC) - EMV-compliant card with an [Open Payments](https://openpayments.dev/) enabled wallet address
-2. POS Device - EMV kernel + ILP extensions
-3. Merchant ASE - Runs Rafiki and manages POS trust (RKI, IPEK lifecycle, compliance)
-4. Customer ASE - Runs Rafiki and manages the cardholder account
-5. Interledger Network - Routes value between ASEs
-
-## Exploring a Path from EMV Cards to Interledger
-
-Card payments are everywhere. They are trusted, heavily regulated, and backed by decades of operational experience. At the same time, they are often locked into closed networks and bespoke integrations.
-
-What we have been exploring is a simple question:
-_What if card payments could naturally flow into Interledger without breaking EMV_, without replacing kernels, and without weakening the security model everyone already relies on?
-This post is a walkthrough of that exploration - not a final specification, but a journey through the design decisions, trade-offs, and the emerging shape of an ILP-enabled card flow built around Rafiki, existing EMV kernels, and a small set of new supporting services.
-
-## Starting Point: Should you build a Kernel?
-
-In the world of card payments, a **kernel** is the core software component within a POS terminal that manages the complex interaction between the payment card (the chip) and the terminal. It handles the EMV protocol logic, data-exchange, and cryptographic processing required to authorize a transaction.
-Essentially, it is the "brain" that knows how to speak "chip card" securely and according to global standards.
-
-With the kernel being the “brain” of the POS, it quickly became clear that our first major design decision would revolve around which kernel approach to build on.
-The earliest and most important decisions came out of conversations with our first POS (Point of Sale) manufacturing partner, who provides both the EMV kernel and a significant portion of the overall payment software stack running on the device.
-Because ILF's first objective is to enable SoftPOS, we needed to choose between two approaches:
-
-- developing a completely new EMV kernel based on the latest EMVCo C8 specifications,
-- or leveraging the existing certified kernel already embedded in the payment stack (C2).
-
-After evaluating the options, it became clear that reusing the existing kernel was the most practical and lowest-risk path to delivering SoftPOS quickly and reliably.
-
-#### The C8 certification path would have meant
-
-- Brand new certification cycles
-- Repeated scheme testing (Visa/Mastercard/etc.)
-- Long iteration loops with labs
-- Reviewing of the hardware and software stack
-
-#### The C2 path means
-
-- Existing correct EMV processing
-- Secure PIN entry / PAN handling out-of-the box
-- Already scheme compliant
-
-Exploring was very clear:
-
-- Use the C2 kernel
-- Stay as close as possible to EMVCo documentation
-- Avoid clever reinterpretations of kernel behavior
-
-C2, while perhaps less feature-rich than newer kernels, is predictable, explicit, and specification-aligned. That predictability turned out to be far more valuable than flexibility.
-
-The immediate consequence of this choice was important: ILF does not need to develop an EMV kernel.
-
-Instead of re-implementing deeply complex, certification-heavy logic, we could focus on:
-
-- APIs
-- Cryptographic boundaries
-- ILP and Open Payments integration
-- Device onboarding
-- Merchant management
-- Remote key injection (RKI) and key rotation
-
-That framing shaped everything that followed.
-
-## 'Hello World' for POS (Point of Sale): How Does a POS device become "Known"?
-
-Before a POS can send payments into Interledger, it needs an identity. Not only a "vague" merchant identity, but a cryptographically verifiable device identity.
-This led us to the first building block: POS onboarding.
-
-### POS Onboarding as a Trust Ceremony
-
-Rather than treating onboarding as a provisioning script, we started thinking of it as a ceremony:
-
-- The POS proves who it is (serial number, model)
-- The ASE decides whether to trust it
-- Cryptographic material is issued with clear ownership
-
-#### Onboarding
-
-The rough onboarding flow regarding keys looks like this:
-
-1. The POS generates a key pair locally and sends a CSR, along with device metadata, to the ASE
-2. The ASE signs the CSR via its CA
-3. The ASE generates the IPEK (Initial PIN Encryption Key) for SRED/PIN (Secure Reading and Exchange of Data / Personal Identification Number)
-4. The ASE updates the terminal information to its database
-5. The ASE returns the signed certificate and IPEKs (TR-34) to the POS
-6. All keys are returned securely to the POS for storage
-
-![ILP Cards, POS Key Onboarding](/developers/img/blog/2025-12-31/onboarding.png)
-
-##### From this point on:
-
-- The POS can authenticate itself
-- The ASE can verify which device is speaking
-- Every future request can be cryptographically tied back to onboarding
-
-This turned out to be a crucial foundation, not just for transactions, but for everything else.
-
-### Then Reality Kicks In: Keys Don't Live Forever
-
-Once we started thinking seriously about certification (for example, MPOC), a practical requirement surfaced very quickly: _Encryption keys must be rotated regularly (at least monthly)!_ This is where things get interesting.
-
-The POS is already running:
-
-- POS Manufacturer bespoke software (Android / Symbian / iOS / Windows Phone)
-- POS kernel
-- POS WhiteBox (secure software-based storage and execution environment for a POS device)
-
-And the POS Manufacturer already has strong opinions (for good reasons) about:
-
-- Where transaction keys live
-- How PIN and PAN encryption happens
-- What software is allowed to see those keys
-
-So rather than fighting that model, we leaned into it. A Crucial Piece Emerges: _Remote Key Injection (RKI) and Key Rotation!_ Instead of pushing key management into the kernel or POS logic, we introduced a new ASE-side service whose sole responsibility is key lifecycle management.
-Not payment processing. Not EMV logic. Just keys.
-
-#### Key Rotation as a First-Class Flow
-
-The key rotation (IPEK) flow looks like this:
-
-1. The POS requests a new set of IPEK keys from the ASE (via the POS API)
-2. The POS is cryptographically verified to ensure the request can be trusted
-3. A new IPEK is generated and stored at the ASE
-4. The new keys are securely returned to the POS (TR-34)
-5. The POS replaces the old keys in its secure storage with the new ones
-
-![ILP Cards, POS Key Rotation](/developers/img/blog/2025-12-31/rotation.png)
-
-##### In this model:
-
-- The POS periodically asks the ASE for a new key
-- The request is authenticated using the POS identity established during onboarding
-- The ASE derives a new IPEK inside an HSM
-- The key is wrapped (TR-34) and sent back
-- POS Manufacturer stores it inside the POS secure WhiteBox
-
-A subtle but important decision here:
-
-- POS TMK (Terminal Master Key) is generated and injected during POS manufacturing
-- Transaction keys live inside the WhiteBox
-- Network / ILP keys live outside the POS SDK, in the device keystore
-
-This clean separation keeps:
-
-- Payment cryptography in the kernels domain
-- ILP signing firmly under ASE control
-
-At this point, the architecture started to feel "right".
-
-## Cards Enter the Picture
-
-With POS EMV kernel, onboarding, and key rotation in place, cards themselves become almost... boring. And that is a good thing!
-
-Card personalization follows standard EMV practice:
-
-- Card keys are generated by the issuer (Customer ASE)
-- A wallet address is bound to the card
-- The private key lives securely on the chip
-
-From an ILP perspective, the card is simply:
-
-- A secure signing device
-- A holder of a wallet address
-- A producer of cryptographic proof during transactions
-
-No special casing. No new assumptions.
-
-## The Transaction Moment
-
-When a card is presented, everything up to this point has been preparation.
-
-Now the familiar EMV flow kicks in:
-
-```
-SELECT AID
-GET PROCESSING OPTIONS
-READ RECORD
-GENERATE AC
-Optional PIN verification (Online)
-```
-
-All sensitive operations happen:
-
-- Inside the kernel
-- Using session keys derived from the current IPEK
-- With data protected by the WhiteBox
-
-NB: Nothing ILP-specific leaks into this phase, by design.
-
-### Crossing the Boundary: From EMV to ILP
-
-Once the kernel has done its job, the POS shifts context. Now it is no longer "doing EMV", it is requesting a payment.
-This is where the ILP terminal key issued during onboarding finally comes into play.
-
-The POS:
-
-1. Assembles transaction data
-2. References the cards wallet address (Customer ASE)
-3. Signs the request with its ILP key (Merchant ASE)
-4. Sends it to the Customer and Merchant ASE
-
-Importantly, we don't have the POS talk to Rafiki directly to authorize the transaction. Instead, we route everything through an ASE POS API:
-
-Why?
-
-- Authentication
-- Policy enforcement
-- Request normalization
-- Future flexibility
-- Certifications
-- Key management
-
-The ASE remains firmly in control. Rafiki does what it already does well. From here on, Rafiki is on familiar ground.
-
-It:
-
-- Creates incoming and outgoing payments (as well as processing the ILP payments)
-- Applies Open Payments semantics
-- Tracks lifecycle state
-- Emits events
-  The POS eventually gets a simple answer: `Approved`, `Declined` or `Failed`.
-
-All the complexity stays on the backend, where it belongs.
-
-### What We Learned Along the Way
-
-A few themes kept repeating during this exploration:
-
-- Do not fight EMV, work with it
-- Do not overload the kernel, extend around it
-- Keys define trust boundaries more than APIs do
-- Small, focused services are easier to reason about than monoliths
-- Interledger fits best when it is complementary, not dominant
-
-## Conclusion, Where This Leaves Us
-
-What is emerging is not a replacement for card payments, but an extension of them.
-
-- Cards remain cards.
-- Kernels remain kernels.
-- ASEs remain accountable entities.
-
-Interledger simply becomes the connective tissue that lets value move beyond traditional rails, securely, incrementally, and without forcing the ecosystem to start over.
-
-## What is next for ILF and Cards?
-
-- Further development of the Card applet for `C2` kernel support
-- Further development of the Rafiki APIs to support the new POS/Card services
-- New Merchant-API service to support ASEs with regards to:
-    - Merchant onboarding
-    - Terminal configuration and onboarding
-    - Merchant management
-    - Remote key injection (RKI)
-
 ## References
 
-- _ADPU:_ https://en.wikipedia.org/wiki/Smart_card_application_protocol_data_unit
-- _EMV C2 Specification:_ https://www.emvco.com/specifications/?search_bar_keywords=c-2
-- _EMV C8 Specification:_ https://www.emvco.com/specifications/?search_bar_keywords=c-8
-- _EMV C8 Specification:_ https://www.emvco.com/specifications/?search_bar_keywords=c-8
+- _Hardware Security Module (Wikipedia):_ https://en.wikipedia.org/wiki/Hardware_security_module
+- _PCI PTS HSM Security Requirements v4.0 (PCI SSC):_ https://listings.pcisecuritystandards.org/documents/PCI_HSM_Security_Requirements_v4.pdf
+- _FIPS 140-3 - Security Requirements for Cryptographic Modules (NIST):_ https://csrc.nist.gov/pubs/fips/140-3/final
+- _ASC X9 TR 34-2019 - Symmetric Key Distribution Using Asymmetric Techniques (ANSI):_ https://webstore.ansi.org/standards/ascx9/ascx9tr342019
+- _PKCS #11 Specification Version 3.1 (OASIS):_ https://www.oasis-open.org/standard/pkcs-11-specification-version-3-1/
 
 ## Glossary of Terms
 
-| Term          | Description                                                                                                                                                                                                   |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `AC`          | Application Cryptogram (generated during EMV processing, e.g., via "GENERATE AC")                                                                                                                             |
-| `ADPU / APDU` | Application Protocol Data Unit (smart card command/response format; commonly spelled APDU)                                                                                                                    |
-| `AID`         | Application Identifier (identifies an EMV application on a card; used in "SELECT AID")                                                                                                                        |
-| `API`         | Application Programming Interface                                                                                                                                                                             |
-| `ASE`         | Account Servicing Entity (e.g., a bank or wallet provider running/operating accounts and services)                                                                                                            |
-| `CA`          | Certificate Authority (signs certificates/CSRs)                                                                                                                                                               |
-| `CI`          | Continuous Integration (automated build/test pipeline)                                                                                                                                                        |
-| `CSR`         | Certificate Signing Request                                                                                                                                                                                   |
-| `C2 / C8`     | EMVCo kernel/specification “level” referenced in the article (e.g., choosing an existing certified kernel vs. a newer certification path). These refer specifically to EMV Contactless Kernel specifications. |
-| `EMV`         | Card payment standard originally from Europay, Mastercard, Visa                                                                                                                                               |
-| `EMVCo`       | The organization that maintains and publishes EMV specifications (EMV Cooperation)                                                                                                                            |
-| `HMAC`        | Hash-based Message Authentication Code                                                                                                                                                                        |
-| `HSM`         | Hardware Security Module (secure key generation/storage/crypto operations)                                                                                                                                    |
-| `ICC`         | Integrated Circuit Card (chip card; in EMV contexts, the card itself)                                                                                                                                         |
-| `ILP`         | Interledger Protocol                                                                                                                                                                                          |
-| `IPEK`        | Initial PIN Encryption Key                                                                                                                                                                                    |
-| `JSON`        | JavaScript Object Notation                                                                                                                                                                                    |
-| `MPOC`        | Mobile Payments on COTS (COTS = Commercial Off-The-Shelf; a payments/security certification context)                                                                                                          |
-| `PAN`         | Primary Account Number (card number)                                                                                                                                                                          |
-| `PIN`         | Personal Identification Number                                                                                                                                                                                |
-| `POS`         | Point of Sale                                                                                                                                                                                                 |
-| `RKI`         | Remote Key Injection                                                                                                                                                                                          |
-| `SDK`         | Software Development Kit                                                                                                                                                                                      |
-| `SoftPOS`     | Software Point of Sale (POS implemented primarily in software)                                                                                                                                                |
-| `SRED`        | Secure Reading and Exchange of Data                                                                                                                                                                           |
-| `TMK`         | Terminal Master Key                                                                                                                                                                                           |
-| `TR-34`       | ANSI TR-34 key exchange / key block standard used for secure key distribution (often referenced in payments key injection)                                                                                    |
-| `URL`         | Uniform Resource Locator                                                                                                                                                                                      |
+| Term           | Description                                                                                                                                 |
+|----------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| `API`          | Application Programming Interface                                                                                                           |
+| `ASE`          | Account Servicing Entity (e.g., a bank or wallet provider running/operating accounts and services)                                          |
+| `CA`           | Certificate Authority (issues and signs certificates/CSRs to establish identity trust)                                                      |
+| `CSR`          | Certificate Signing Request (sent to a CA to obtain a signed certificate)                                                                   |
+| `Dual Control` | A security practice requiring two or more authorized individuals to perform a sensitive operation (e.g., key ceremony, master key loading)  |
+| `EMV`          | Card payment standard originally from Europay, Mastercard, Visa                                                                             |
+| `FIPS 140`     | U.S. federal standard defining cryptographic module security requirements; HSMs are commonly certified at FIPS 140-2 or 140-3 Level 3/4     |
+| `HMAC`         | Hash-based Message Authentication Code (used to verify message integrity and authenticity)                                                  |
+| `HSM`          | A hardened physical or managed-service device that generates, stores, and uses cryptographic keys without exposing them in the clear        |
+| `ILP`          | Interledger Protocol                                                                                                                        |
+| `IPEK`         | Initial PIN Encryption Key (a derived key injected into a terminal to protect PIN entry)                                                    |
+| `Key Ceremony` | A formal, audited procedure for generating, loading, or retiring high-value cryptographic keys inside an HSM                                |
+| `Key Wrapping` | Encrypting one key with another (the “wrapping key”) so it can be transported or stored without being exposed in the clear                  |
+| `MAC`          | Message Authentication Code (a short value used to confirm data integrity and authenticity between parties)                                 |
+| `PCI HSM`      | Payment Card Industry HSM Security Requirements, the standard governing HSMs used in payment environments                                   |
+| `PIN`          | Personal Identification Number                                                                                                              |
+| `PKCS#11`      | A platform-independent API standard (Cryptoki) used to communicate with cryptographic tokens and HSMs                                       |
+| `POS`          | Point of Sale                                                                                                                               |
+| `RKI`          | Remote Key Injection, the process of securely delivering cryptographic keys to a terminal over a network rather than physically             |
+| `SDK`          | Software Development Kit                                                                                                                    |
+| `TMK`          | Terminal Master Key (a key loaded into a POS terminal, often via RKI, used to derive session or transaction keys)                           |
+| `TR-34`        | ANSI TR-34, a key block standard used for secure asymmetric key distribution in payment environments, commonly used in remote key injection |
+| `Trust-Anchor` | A trusted key or certificate that forms the root of a trust chain; other certificates or identities derive their validity from it           |
