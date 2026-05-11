@@ -170,7 +170,7 @@ If a future ILF-enabled deployment wants to onboard terminals, edge devices, or 
 
 ### 2. Key lifecycle management and remote key injection
 
-Another strong fit is key lifecycle management. The earlier draft highlighted an ASE-side service dedicated to key lifecycle management rather than payment processing or EMV logic.
+Another strong fit is key lifecycle management. The earlier draft highlighted an ASE-side service (`Merchant API`) dedicated to key lifecycle management rather than payment processing or EMV logic.
 That service authenticates requests from the POS, derives new keys, wraps them, and sends them back securely for storage in the appropriate secure domain.
 
 That kind of model fits extremely well with HSM-backed operations. An HSM can be used to:
