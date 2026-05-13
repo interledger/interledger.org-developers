@@ -38,11 +38,11 @@ Please read the [Rafiki Card Integration BLOG](https://interledger.org/developer
 ## Why Hardware Security Modules Matter in Payments and How They Relate to Rafiki
 
 In our earlier exploration of card payments and Rafiki, a recurring theme emerged: **trust** is defined as much by key management as by APIs. We looked at POS onboarding, remote key injection, device identity, and separation between payment cryptography and ILP-facing services.
-HSMs sit naturally inside that discussion because they are one of the primary ways financial systems generate, protect, and use sensitive cryptographic material securely.
+HSMs sit naturally within that discussion because they are among the primary ways financial systems generate, protect, and use sensitive cryptographic material securely.
 
 ## What Is an HSM?
 
-An HSM is a specialized cryptographic device, or in some cases a tightly controlled managed service, designed to generate, store, protect, and use cryptographic keys without exposing those keys in clear form to general-purpose application environments.
+An HSM is a specialized cryptographic device, or in some cases a tightly controlled managed service, designed to generate, store, protect, and use cryptographic keys without exposing them in clear form to general-purpose application environments.
 
 At a high level, an HSM acts as a hardened trust anchor. Rather than allowing sensitive keys to live in application memory, configuration files, or developer-managed infrastructure, the HSM keeps those keys within a controlled boundary and performs sensitive operations on behalf of other systems.
 
@@ -64,7 +64,7 @@ So while it is tempting to think of an HSM as "just a box that stores keys", tha
 
 ## Why Do We Need an HSM?
 
-If all we needed was encryption, software libraries would often be enough.
+If all we needed were encryption, software libraries would often be enough.
 Modern cryptographic libraries are powerful, well-tested, and widely available.
 But in financial systems, the question is not only whether encryption is possible.
 The question is whether sensitive keys can be protected, governed, audited, and used in a way that satisfies both operational reality and security expectations.
@@ -78,7 +78,8 @@ Master keys, signing keys, derivation keys, and CA keys are "crown jewel materia
 ### Separating duties and trust boundaries
 
 In real systems, not every service should have equal access to secrets. A payment API may need to request an operation, but it should not be free to extract every key.
-An operations team may need to deploy services, but they should not automatically gain access to master key material. Security teams may need oversight without manually touching every transaction.
+An operations team may need to deploy services, but they should not automatically gain access to master key material.
+Security teams may need oversight without having to review every transaction manually.
 
 HSMs help enforce these boundaries by moving sensitive operations into a dedicated trust domain.
 
@@ -105,7 +106,7 @@ They establish trust between issuers, acquirers, terminals, processors, payment 
 Card payments rely on structured key hierarchies and tightly defined cryptographic processes.
 There are issuer-side keys, terminal-side keys, transport keys, PIN-related keys, transaction keys, derivation keys, and keys used for encryption, MACing, or signing.
 
-These are not casual secrets. They define whether one party can trust the output of another.
+These are not casual secrets. They determine whether one party can trust another's output.
 
 A terminal proving it is authorized, a backend validating a secure request, a system rotating injected keys, or an institution protecting card-related cryptographic material - _all of these depend on keys being handled properly_.
 
