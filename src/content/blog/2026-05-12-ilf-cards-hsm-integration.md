@@ -37,16 +37,8 @@ Please read the [Rafiki Card Integration BLOG](https://interledger.org/developer
 
 ## Why Hardware Security Modules Matter in Payments and How They Relate to Rafiki
 
-Card payments, digital-wallets, and modern financial APIs all depend on one thing that users rarely see: **trust**.
-Not just trust in the institution, or the network, or the device - but trust in the cryptography that protects identities, keys, approvals, and movement of value.
-
-That **trust** does not happen by accident. It is established through carefully managed cryptographic boundaries, clear ownership of keys, and systems that are designed to avoid exposing secrets where they do not belong. In payment environments especially, this becomes a foundational concern.
-This is where Hardware Security Modules, or HSMs, come in.
-
-In our earlier exploration of card payments and Rafiki, a recurring theme emerged: trust is defined as much by key management as by APIs. We looked at POS onboarding, remote key injection, device identity, and separation between payment cryptography and ILP-facing services.
+In our earlier exploration of card payments and Rafiki, a recurring theme emerged: **trust** is defined as much by key management as by APIs. We looked at POS onboarding, remote key injection, device identity, and separation between payment cryptography and ILP-facing services.
 HSMs sit naturally inside that discussion because they are one of the primary ways financial systems generate, protect, and use sensitive cryptographic material securely.
-
-This post explores what HSMs are, why they matter, why they are so important in payments, and how they can be relevant in architectures that use Rafiki and the Interledger Foundation's broader ecosystem.
 
 ## What Is an HSM?
 
@@ -81,10 +73,7 @@ The question is whether sensitive keys can be protected, governed, audited, and 
 
 ### Protecting the most sensitive secrets
 
-Some keys are simply too important to leave lying around in ordinary infrastructure. Master keys, signing keys, derivation keys, CA keys, and keys used to protect customer or transaction data are often considered "crown jewel material".
-If they are exposed, the damage is not limited to one request or one environment. Entire trust chains can be broken.
-
-An HSM reduces that exposure by ensuring such keys are generated and used within a much more controlled environment.
+Master keys, signing keys, derivation keys, and CA keys are "crown jewel material." If they are exposed, entire trust chains can be broken — not just a single request or environment. An HSM reduces that exposure by ensuring such keys are generated and used within a controlled boundary.
 
 ### Separating duties and trust boundaries
 
@@ -119,19 +108,6 @@ There are issuer-side keys, terminal-side keys, transport keys, PIN-related keys
 These are not casual secrets. They define whether one party can trust the output of another.
 
 A terminal proving it is authorized, a backend validating a secure request, a system rotating injected keys, or an institution protecting card-related cryptographic material - _all of these depend on keys being handled properly_.
-
-### Sensitive operations must happen in controlled boundaries
-
-In payment environments, certain operations are expected to take place inside hardened cryptographic boundaries. That can include:
-
-- Generating and protecting master keys
-- Deriving transaction keys
-- Wrapping keys for injection into devices
-- Encrypting or translating PIN-related material
-- Supporting issuer or acquirer cryptographic functions
-- Protecting certificate authority or signing keys used in trust establishment
-
-The point is not that every payment message touches an HSM directly. The point is that the security of the ecosystem depends on HSM-protected trust anchors somewhere in the chain.
 
 ### Compliance and ecosystem expectations
 
