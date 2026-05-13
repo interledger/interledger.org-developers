@@ -168,13 +168,6 @@ That separation is important because it keeps payment cryptography and network-f
 **HSMs can reinforce that boundary.** If an ASE is using Rafiki and also signing sensitive backend requests, authorizations, platform credentials, or high-assurance service-to-service messages,
 those signing keys do not need to live in ordinary software keystores. They can be generated and used through an HSM-backed service.
 
-That provides stronger control over:
-
-- Which services may request signing
-- How key usage is restricted
-- How rotations are managed
-- How audit evidence is produced
-
 ### 4. Supporting trust in regulated financial environments
 
 Rafiki is powerful because it enables interoperable value movement through open standards.
