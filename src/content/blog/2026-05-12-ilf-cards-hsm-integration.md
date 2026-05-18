@@ -16,7 +16,7 @@ tags:
   - HSM
 ---
 
-HSMs sit at the heart of modern payment security. Trusted, hardened, and responsible for protecting the cryptographic keys that financial systems rely on. Our next exploration asks a pivotal question: how do HSMs fit into the world of payments, and how can they complement Rafiki and Interledger-based architectures without weakening the trust model that regulated financial infrastructure demands?
+HSMs sit at the heart of modern payment security. Trusted, hardened, and responsible for protecting the cryptographic keys that financial systems rely on. Our next exploration asks a pivotal question: how do HSMs fit into the world of payments, and how can they complement Rafiki and Interledger-based architectures without weakening the trust model that regulates financial infrastructure demands?
 
 Please read the [Rafiki Card Integration BLOG](https://interledger.org/developers/blog/rafiki-card-integration/) for background on Rafiki Card Payments if you haven't already.
 
@@ -58,13 +58,13 @@ In practical terms, this means an application might ask an HSM to do things like
 The important detail is that the application may use the key, but it should not need to "see" the key in the clear. **That distinction matters enormously**.
 
 If a normal server is compromised, secrets stored in memory or on disk are often at risk. An HSM is specifically designed to reduce that risk by creating a separate, hardened environment for cryptographic operations.
-In regulated environments, it also helps enforce policies around who can perform which operations, how keys are imported or exported, and what kinds of usage are allowed.
+In regulated environments, it also helps enforce policies around who can perform which operations, how keys are imported or exported, and the usages allowed for individual keys.
 
 So while it is tempting to think of an HSM as "just a box that stores keys", that is too narrow. An HSM is better understood as a controlled boundary for trust.
 
 ## Why Do We Need an HSM?
 
-If all we needed were encryption, software libraries would often be enough.
+If all we needed was encryption, software libraries would often be enough.
 Modern cryptographic libraries are powerful, well-tested, and widely available.
 But in financial systems, the question is not only whether encryption is possible.
 The question is whether sensitive keys can be protected, governed, audited, and used in a way that satisfies both operational reality and security expectations.
@@ -86,11 +86,11 @@ HSMs help enforce these boundaries by moving sensitive operations into a dedicat
 ### Supporting auditability and compliance
 
 In financial environments, "secure enough" is rarely a vague engineering judgment. There are standards, audits, certifications, and contractual expectations.
-Institutions need to show not just that encryption exists, but that key handling follows controlled processes. HSMs support this by providing stronger operational controls, usage policies, dual-control workflows in some deployments, and audit trails around key management.
+Institutions need to show not only that encryption is applied, but that the encryption implementation itself is verified and that the key management follows controlled processes. HSMs support this by providing verified implementations, stronger operational controls, strict usage policies, dual-control workflows in some deployments, and audit trails around key management.
 
 ### Reducing blast radius
 
-Even strong applications can have bugs. Even well-managed servers can be compromised. One of the key advantages of an HSM is that it reduces the blast radius when other parts of the environment go wrong. A service might be able to submit a signing request, but not exfiltrate the long-term signing key. A workflow might be able to request a wrapped transaction key, but not obtain the master key used to derive it.
+Even secure applications can have bugs. Even well-managed servers can be compromised. One of the key advantages of an HSM is that it reduces the blast radius when other parts of the environment go wrong. A service might be able to submit a signing request, but not exfiltrate the long-term signing key. A workflow might be able to request a wrapped transaction key, but not obtain the master key used to derive it.
 
 That difference can be the line between an incident that is contained and one that becomes systemic.
 
@@ -106,7 +106,7 @@ They establish trust between issuers, acquirers, terminals, processors, payment 
 Card payments rely on structured key hierarchies and tightly defined cryptographic processes.
 There are issuer-side keys, terminal-side keys, transport keys, PIN-related keys, transaction keys, derivation keys, and keys used for encryption, MACing, or signing.
 
-These are not casual secrets. They determine whether one party can trust another's output.
+These are not casual secrets. They determine whether one party can trust and verify the integrity and authenticity of data received from another party.
 
 A terminal proving it is authorized, a backend validating a secure request, a system rotating injected keys, or an institution protecting card-related cryptographic material - _all of these depend on keys being handled properly_.
 
