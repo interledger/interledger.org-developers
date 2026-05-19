@@ -250,7 +250,6 @@ export async function buildSnapshot(): Promise<RoadmapSnapshot> {
   ])
 
   const projects: RoadmapProject[] = viewProjects
-    .filter((p) => !p.name.includes('(Archived) '))
     .filter((p) => p.state !== 'completed' && p.state !== 'cancelled')
     .filter((p) => !p.labelIds.some((id) => privateLabelIds.has(id)))
     .map((p) => {
