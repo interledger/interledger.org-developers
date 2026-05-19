@@ -7,10 +7,7 @@ export type GridItem =
   | { type: 'team-header'; team: Team; row: number; teamColor: string }
   | { type: 'project'; project: Project; row: number; teamColor: string }
 
-export function buildGridItems(
-  projects: Project[],
-  teams: Team[]
-): GridItem[] {
+export function buildGridItems(projects: Project[], teams: Team[]): GridItem[] {
   const teamMap = new Map(teams.map((t) => [t.id, t]))
   const allChildIds = new Set(teams.flatMap((t) => t.childrenIds))
   const rootTeams = teams.filter((t) => !allChildIds.has(t.id))

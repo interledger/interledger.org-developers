@@ -1,10 +1,6 @@
 import { linear } from './client.js'
 import { LINEAR_CUSTOM_VIEW_ID } from '../config.js'
-import type {
-  Snapshot,
-  Team,
-  Project
-} from '../types/roadmap.js'
+import type { Snapshot, Team, Project } from '../types/roadmap.js'
 
 // ---------------------------------------------------------------------------
 // GraphQL queries
