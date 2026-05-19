@@ -1,5 +1,11 @@
 ---
 import type { ApiProject, BoardTeam } from '../types/roadmap'
+import { resolveIcon } from '../utils/roadmap/icons'
+import { computeDateRange } from '../utils/roadmap/dateRange'
+import { buildMonths, buildQuarterHeaders } from '../utils/roadmap/grid'
+import { createPositioner } from '../utils/roadmap/timeline'
+import { buildGridItems, DEFAULT_PROJECT_COLOR } from '../utils/roadmap/grouping'
+import { computeProjectBarProps } from '../utils/roadmap/projectBar'
 
 interface Props {
   projects?: ApiProject[]
@@ -8,268 +14,23 @@ interface Props {
 
 const { projects = [], teams = [] }: Props = Astro.props
 
-const DEFAULT_TEAM_COLOR = '#888888'
-const DEFAULT_PROJECT_COLOR = '#888'
-
-// ─── Icon resolution ─────────────────────────────────────────────────────────
-
-// Linear named icons → nearest Unicode emoji
-const LINEAR_ICON_EMOJI: Record<string, string> = {
-  AiDocument: '📄',
-  AlarmClock: '⏰',
-  Asterisk: '✳️',
-  Basket: '🧺',
-  Bookmark: '🔖',
-  Bug: '🐛',
-  Calendar: '📅',
-  Chart: '📊',
-  Chrome: '🌐',
-  CodeBlock: '💻',
-  CreditCard: '💳',
-  Dashboard: '📊',
-  Direction: '➡️',
-  Dollar: '💲',
-  DollarBill: '💵',
-  Education: '🎓',
-  Favorite: '⭐',
-  GitHub: '🐙',
-  Golf: '⛳',
-  Hack: '💻',
-  IssueStatusBacklog: '⏳',
-  Leaf: '🍃',
-  Lock: '🔒',
-  Mic: '🎤',
-  MobilePhone: '📱',
-  Modem: '📡',
-  MoneyStack: '💰',
-  NotePad: '📝',
-  Phone: '📞',
-  Project: '📁',
-  Robot: '🤖',
-  Rocket: '🚀',
-  Routing: '🔀',
-  Shrug: '🤷',
-  Stadium: '🏟️',
-  Surfer: '🏄',
-  Users: '👥',
-  Write: '✍️'
-}
-
-// Slack-style shortcode → Unicode emoji (as returned by the Linear API)
-const SLACK_EMOJI: Record<string, string> = {
-  ':flag-ca:': '🇨🇦',
-  ':flag-eu:': '🇪🇺',
-  ':flag-za:': '🇿🇦',
-  ':us:': '🇺🇸'
-}
-
-function resolveIcon(icon: string | null | undefined): string | null {
-  if (!icon) return null
-  if (SLACK_EMOJI[icon]) return SLACK_EMOJI[icon]
-  if (LINEAR_ICON_EMOJI[icon]) return LINEAR_ICON_EMOJI[icon]
-  // Already a proper emoji character — pass it through
-  if (/\p{Emoji_Presentation}/u.test(icon)) return icon
-  return null
-}
-
-// ─── Month helpers ──────────────────────────────────────────────────────────
-
-function monthStart(year: number, month: number): Date {
-  return new Date(Date.UTC(year, month, 1))
-}
-
-function monthEnd(year: number, month: number): Date {
-  return new Date(Date.UTC(year, month + 1, 0, 23, 59, 59, 999))
-}
-
-// ─── Collect all relevant dates ─────────────────────────────────────────────
-
-const allDates: Date[] = []
-for (const proj of projects) {
-  if (proj.startDate) allDates.push(new Date(proj.startDate))
-  if (proj.targetDate) allDates.push(new Date(proj.targetDate))
-  for (const ms of proj.milestones) {
-    if (ms.targetDate) allDates.push(new Date(ms.targetDate))
-  }
-}
-
-const fallbackStartDate = new Date()
-const fallbackEndDate = new Date(fallbackStartDate)
-fallbackEndDate.setUTCFullYear(fallbackEndDate.getUTCFullYear() + 1)
-
-const minDate = allDates.length
-  ? new Date(Math.min(...allDates.map((d) => d.getTime())))
-  : fallbackStartDate
-const maxDate = allDates.length
-  ? new Date(Math.max(...allDates.map((d) => d.getTime())))
-  : fallbackEndDate
-
-// ─── Build months array ─────────────────────────────────────────────────────
-
-interface MonthEntry {
-  label: string
-  year: number
-  month: number // 0-11
-  start: Date
-  end: Date
-  isQuarterStart: boolean
-  // grid column index (1-based), label col = 1, months start at 2
-  col: number
-}
-
-const months: MonthEntry[] = []
-let cm = minDate.getUTCMonth()
-let cmy = minDate.getUTCFullYear()
-const endYear = maxDate.getUTCFullYear()
-const endMonth = maxDate.getUTCMonth()
-
-while (cmy < endYear || (cmy === endYear && cm <= endMonth)) {
-  months.push({
-    label: new Date(Date.UTC(cmy, cm, 1)).toLocaleString('en-US', {
-      month: 'short'
-    }),
-    year: cmy,
-    month: cm,
-    start: monthStart(cmy, cm),
-    end: monthEnd(cmy, cm),
-    isQuarterStart: cm % 3 === 0,
-    col: months.length + 2 // col 1 = label, months start at col 2
-  })
-  cm++
-  if (cm > 11) {
-    cm = 0
-    cmy++
-  }
-}
-
-// ─── Build quarter header spans with explicit column positions ───────────────
-
-interface QuarterHeader {
-  label: string
-  q: number
-  year: number
-  colStart: number // grid column start (1-based)
-  span: number // number of month columns
-}
-
-const quarterHeaders: QuarterHeader[] = []
-let mi = 0
-while (mi < months.length) {
-  const m = months[mi]
-  const q = Math.floor(m.month / 3) + 1
-  let span = 0
-  while (mi + span < months.length) {
-    const nm = months[mi + span]
-    if (Math.floor(nm.month / 3) + 1 !== q || nm.year !== m.year) break
-    span++
-  }
-  quarterHeaders.push({
-    label: `Q${q} ${m.year}`,
-    q,
-    year: m.year,
-    colStart: m.col,
-    span
-  })
-  mi += span
-}
+const { minDate, maxDate } = computeDateRange(projects)
+const months = buildMonths(minDate, maxDate)
+const quarterHeaders = buildQuarterHeaders(months)
 
 const nMonths = months.length
 const nQuarters = quarterHeaders.length
+
 const timelineStart = months[0].start.getTime()
 const timelineEnd = months[months.length - 1].end.getTime()
-const totalMs = timelineEnd - timelineStart
-
-// ─── Timeline positioning ───────────────────────────────────────────────────
-
-function pctLeft(date: Date): number {
-  return Math.max(
-    0,
-    Math.min(100, ((date.getTime() - timelineStart) / totalMs) * 100)
-  )
-}
-
-function pctWidth(start: Date, end: Date): number {
-  return Math.max(((end.getTime() - start.getTime()) / totalMs) * 100, 0.5)
-}
-
-// ─── Color utilities ─────────────────────────────────────────────────────────
+const pos = createPositioner(timelineStart, timelineEnd)
 
 const now = new Date()
 const nowYear = now.getUTCFullYear()
 const nowMonth = now.getUTCMonth()
-const nowLeft = pctLeft(now).toFixed(2)
+const nowLeft = pos.pctLeft(now).toFixed(2)
 
-// ─── Team grouping ───────────────────────────────────────────────────────────
-
-const teamMap = new Map(teams.map((t) => [t.id, t]))
-
-// Root teams: not referenced as a child by any other team
-const allChildIds = new Set(teams.flatMap((t) => t.childrenIds))
-const rootTeams = teams.filter((t) => !allChildIds.has(t.id))
-
-// Index projects by their direct team ID
-const projectsByTeamId = new Map<string, ApiProject[]>()
-for (const proj of projects) {
-  if (!proj.team) continue
-  const tid = proj.team.id
-  if (!projectsByTeamId.has(tid)) projectsByTeamId.set(tid, [])
-  projectsByTeamId.get(tid)!.push(proj)
-}
-
-// Collect all projects for a root team (own + children), sorted by sortOrder
-function collectTeamProjects(teamId: string): ApiProject[] {
-  const team = teamMap.get(teamId)
-  if (!team) return []
-  const own = projectsByTeamId.get(teamId) ?? []
-  const fromChildren = team.childrenIds.flatMap(
-    (cid) => projectsByTeamId.get(cid) ?? []
-  )
-  return [...own, ...fromChildren].sort((a, b) => a.sortOrder - b.sortOrder)
-}
-
-// Build flat grid item list with pre-assigned row numbers.
-// Body rows start at 1 — the header is now a separate element outside .board-scroll.
-type GridItem =
-  | { type: 'team-header'; team: BoardTeam; row: number; teamColor: string }
-  | { type: 'project'; project: ApiProject; row: number; teamColor: string }
-
-const gridItems: GridItem[] = []
-let currentRow = 1
-
-for (const rootTeam of rootTeams) {
-  const teamProjects = collectTeamProjects(rootTeam.id)
-  if (teamProjects.length === 0) continue
-  const teamColor = rootTeam.color ?? DEFAULT_TEAM_COLOR
-  gridItems.push({
-    type: 'team-header',
-    team: rootTeam,
-    row: currentRow,
-    teamColor
-  })
-  currentRow++
-  for (const proj of teamProjects) {
-    gridItems.push({
-      type: 'project',
-      project: proj,
-      row: currentRow,
-      teamColor
-    })
-    currentRow++
-  }
-}
-
-// Append uncategorised projects (no team, or team not in the hierarchy)
-const assignedIds = new Set(
-  gridItems.flatMap((i) => (i.type === 'project' ? [i.project.id] : []))
-)
-const uncategorised = projects
-  .filter((p) => !assignedIds.has(p.id))
-  .sort((a, b) => a.sortOrder - b.sortOrder)
-for (const proj of uncategorised) {
-  const teamColor = proj.team?.color ?? DEFAULT_TEAM_COLOR
-  gridItems.push({ type: 'project', project: proj, row: currentRow, teamColor })
-  currentRow++
-}
+const gridItems = buildGridItems(projects, teams)
 ---
 
 <div class="board-outer">
@@ -399,61 +160,18 @@ for (const proj of uncategorised) {
             const { project: proj, row, teamColor } = item
             const projColor = proj.color ?? DEFAULT_PROJECT_COLOR
             const iconEmoji = resolveIcon(proj.icon)
-            const hasDates = !!(proj.startDate && proj.targetDate)
-            const barLeft = hasDates
-              ? pctLeft(new Date(proj.startDate!)).toFixed(2)
-              : null
-            const barWidth = hasDates
-              ? pctWidth(
-                  new Date(proj.startDate!),
-                  new Date(proj.targetDate!)
-                ).toFixed(2)
-              : null
-            const datedMilestones = proj.milestones.filter(
-              (ms) => ms.targetDate
-            )
-
-            // Completed project with no targetDate but a completedAt
-            const hasCompletedBar = !!(
-              proj.startDate &&
-              !proj.targetDate &&
-              proj.completedAt
-            )
-            const completedBarLeft = hasCompletedBar
-              ? pctLeft(new Date(proj.startDate!)).toFixed(2)
-              : null
-            const completedBarWidth = hasCompletedBar
-              ? pctWidth(
-                  new Date(proj.startDate!),
-                  new Date(proj.completedAt!)
-                ).toFixed(2)
-              : null
-
-            // Milestones that extend past the project's targetDate
-            const lastMilestoneDate =
-              datedMilestones.length > 0
-                ? new Date(
-                    Math.max(
-                      ...datedMilestones.map((ms) =>
-                        new Date(ms.targetDate!).getTime()
-                      )
-                    )
-                  )
-                : null
-            const hasExtension =
-              hasDates &&
-              lastMilestoneDate !== null &&
-              lastMilestoneDate > new Date(proj.targetDate!)
-            const extensionLeft = hasExtension
-              ? pctLeft(new Date(proj.targetDate!)).toFixed(2)
-              : null
-            const extensionWidth =
-              hasExtension && lastMilestoneDate
-                ? pctWidth(
-                    new Date(proj.targetDate!),
-                    lastMilestoneDate
-                  ).toFixed(2)
-                : null
+            const {
+              hasDates,
+              barLeft,
+              barWidth,
+              hasCompletedBar,
+              completedBarLeft,
+              completedBarWidth,
+              hasExtension,
+              extensionLeft,
+              extensionWidth,
+              datedMilestones,
+            } = computeProjectBarProps(proj, pos)
 
             return (
               <>
@@ -522,7 +240,7 @@ for (const proj of uncategorised) {
 
                   {/* Inline milestone diamond markers */}
                   {datedMilestones.map((ms) => {
-                    const left = pctLeft(new Date(ms.targetDate!)).toFixed(2)
+                    const left = pos.pctLeft(new Date(ms.targetDate!)).toFixed(2)
                     return (
                       <div
                         class="ms-pin"
