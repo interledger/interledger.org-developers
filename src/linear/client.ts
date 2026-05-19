@@ -1,9 +1,6 @@
 import { LinearClient } from '@linear/sdk'
-
-if (!process.env.LINEAR_API_KEY) {
-  throw new Error('LINEAR_API_KEY is not set in environment variables')
-}
+import { LINEAR_API_KEY } from '../config.js'
 
 export const linear = new LinearClient({
-  apiKey: process.env.LINEAR_API_KEY
+  apiKey: LINEAR_API_KEY ?? undefined
 })

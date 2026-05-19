@@ -1,6 +1,11 @@
 import { getStore } from '@netlify/blobs'
 import { buildSnapshot } from '../../src/linear/build-snapshot.js'
 import type { Context } from '@netlify/functions'
+import {
+  API_SECRET,
+  NETLIFY_SITE_ID,
+  NETLIFY_API_TOKEN
+} from '../../src/config.js'
 
 export default async function handler(
   req: Request,
@@ -9,9 +14,8 @@ export default async function handler(
   // Verify API_SECRET bearer token
   const authHeader = req.headers.get('authorization') ?? ''
   const token = authHeader.replace(/^Bearer\s+/i, '')
-  const expected = process.env.API_SECRET
 
-  if (!expected || token !== expected) {
+  if (!API_SECRET || token !== API_SECRET) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), {
       status: 401,
       headers: { 'Content-Type': 'application/json' }
@@ -24,18 +28,15 @@ export default async function handler(
   await store.setJSON('roadmap-snapshot', snapshot)
 
   // Purge CDN cache
-  const siteId = process.env.NETLIFY_SITE_ID
-  const apiToken = process.env.NETLIFY_API_TOKEN
-
-  if (siteId && apiToken) {
+  if (NETLIFY_SITE_ID && NETLIFY_API_TOKEN) {
     await fetch('https://api.netlify.com/api/v1/purge', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${apiToken}`,
+        Authorization: `Bearer ${NETLIFY_API_TOKEN}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        site_id: siteId,
+        site_id: NETLIFY_SITE_ID,
         paths: ['/developers/roadmap']
       })
     })

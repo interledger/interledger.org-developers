@@ -1,11 +1,10 @@
 import { linear } from './client.js'
+import { LINEAR_CUSTOM_VIEW_ID } from '../config.js'
 import type {
   RoadmapSnapshot,
   RoadmapTeam,
   RoadmapProject
 } from '../types/roadmap.js'
-
-const DEFAULT_VIEW_ID = '27df73bc-50ec-4fc1-bbb2-d906236a5bbc'
 
 // ---------------------------------------------------------------------------
 // GraphQL queries
@@ -245,7 +244,7 @@ async function fetchViewProjects(viewId: string): Promise<ViewProjectNode[]> {
 // ---------------------------------------------------------------------------
 
 export async function buildSnapshot(): Promise<RoadmapSnapshot> {
-  const viewId = process.env.LINEAR_CUSTOM_VIEW_ID ?? DEFAULT_VIEW_ID
+  const viewId = LINEAR_CUSTOM_VIEW_ID!
 
   const [teamNodes, viewProjects, privateLabelIds] = await Promise.all([
     fetchTeams(),
