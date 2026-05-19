@@ -193,15 +193,14 @@ async function fetchTeams(): Promise<TeamsQueryResult['teams']['nodes']> {
   return all
 }
 
-async function fetchPrivateLabelIds(): Promise<Set<string>> {
-  const PRIVATE_LABELS = new Set(['non-public', 'not-public'])
+async function fetchPublicLabelIds(): Promise<Set<string>> {
   const result = await withRetry(() =>
     linear.client.request<ProjectLabelsQueryResult, Record<string, never>>(
       PROJECT_LABELS_QUERY
     )
   )
   const ids = result.projectLabels.nodes
-    .filter((l) => PRIVATE_LABELS.has(l.name.toLowerCase()))
+    .filter((l) => l.name.toLowerCase() === 'public')
     .map((l) => l.id)
   return new Set(ids)
 }
@@ -243,15 +242,15 @@ async function fetchViewProjects(viewId: string): Promise<ViewProjectNode[]> {
 export async function buildSnapshot(): Promise<RoadmapSnapshot> {
   const viewId = LINEAR_CUSTOM_VIEW_ID!
 
-  const [teamNodes, viewProjects, privateLabelIds] = await Promise.all([
+  const [teamNodes, viewProjects, publicLabelIds] = await Promise.all([
     fetchTeams(),
     fetchViewProjects(viewId),
-    fetchPrivateLabelIds()
+    fetchPublicLabelIds()
   ])
 
   const projects: RoadmapProject[] = viewProjects
     .filter((p) => p.state !== 'completed' && p.state !== 'cancelled')
-    .filter((p) => !p.labelIds.some((id) => privateLabelIds.has(id)))
+    .filter((p) => p.labelIds.some((id) => publicLabelIds.has(id)))
     .map((p) => {
       const firstTeam = p.teams.nodes[0] ?? null
       return {
