@@ -1,4 +1,4 @@
-import type { ApiProject, RoadmapMilestone } from '../../types/roadmap'
+import type { Project, Milestone } from '../../types/roadmap'
 import type { TimelinePositioner } from './timeline'
 
 export interface ProjectBarProps {
@@ -11,11 +11,11 @@ export interface ProjectBarProps {
   hasExtension: boolean
   extensionLeft: string | null
   extensionWidth: string | null
-  datedMilestones: RoadmapMilestone[]
+  datedMilestones: Milestone[]
 }
 
 export function computeProjectBarProps(
-  proj: ApiProject,
+  proj: Project,
   pos: TimelinePositioner
 ): ProjectBarProps {
   const hasDates = !!(proj.startDate && proj.targetDate)

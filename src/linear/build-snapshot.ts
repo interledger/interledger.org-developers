@@ -1,9 +1,9 @@
 import { linear } from './client.js'
 import { LINEAR_CUSTOM_VIEW_ID } from '../config.js'
 import type {
-  RoadmapSnapshot,
-  RoadmapTeam,
-  RoadmapProject
+  Snapshot,
+  Team,
+  Project
 } from '../types/roadmap.js'
 
 // ---------------------------------------------------------------------------
@@ -239,7 +239,7 @@ async function fetchViewProjects(viewId: string): Promise<ViewProjectNode[]> {
 // Main export
 // ---------------------------------------------------------------------------
 
-export async function buildSnapshot(): Promise<RoadmapSnapshot> {
+export async function buildSnapshot(): Promise<Snapshot> {
   const viewId = LINEAR_CUSTOM_VIEW_ID!
 
   const [teamNodes, viewProjects, publicLabelIds] = await Promise.all([
@@ -248,7 +248,7 @@ export async function buildSnapshot(): Promise<RoadmapSnapshot> {
     fetchPublicLabelIds()
   ])
 
-  const projects: RoadmapProject[] = viewProjects
+  const projects: Project[] = viewProjects
     .filter((p) => p.state !== 'completed' && p.state !== 'cancelled')
     .filter((p) => p.labelIds.some((id) => publicLabelIds.has(id)))
     .map((p) => {
@@ -286,7 +286,7 @@ export async function buildSnapshot(): Promise<RoadmapSnapshot> {
       }
     })
 
-  const teams: RoadmapTeam[] = teamNodes
+  const teams: Team[] = teamNodes
     .slice()
     .sort((a, b) => a.name.localeCompare(b.name))
     .map((t) => ({

@@ -1,4 +1,4 @@
-import type { ApiProject } from '../../types/roadmap'
+import type { Project } from '../../types/roadmap'
 
 export function monthStart(year: number, month: number): Date {
   return new Date(Date.UTC(year, month, 1))
@@ -8,7 +8,7 @@ export function monthEnd(year: number, month: number): Date {
   return new Date(Date.UTC(year, month + 1, 0, 23, 59, 59, 999))
 }
 
-export function computeDateRange(projects: ApiProject[]): {
+export function computeDateRange(projects: Project[]): {
   minDate: Date
   maxDate: Date
 } {

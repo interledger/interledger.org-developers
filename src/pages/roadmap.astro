@@ -4,19 +4,19 @@ export const prerender = false
 import { getStore } from '@netlify/blobs'
 import RoadmapLayout from '../layouts/RoadmapLayout.astro'
 import RoadmapBoard from '../components/RoadmapBoard.astro'
-import type { ApiProject, BoardTeam, RoadmapSnapshot } from '../types/roadmap'
+import type { Project, Team, Snapshot } from '../types/roadmap'
 
-let projects: ApiProject[] = []
-let teams: BoardTeam[] = []
+let projects: Project[] = []
+let teams: Team[] = []
 let fetchError = false
 
 try {
   const store = getStore('roadmap')
-  const snapshot: RoadmapSnapshot | null = await store.get('roadmap-snapshot', {
+  const snapshot: Snapshot | null = await store.get('roadmap-snapshot', {
     type: 'json'
   })
   if (!snapshot) throw new Error('Roadmap snapshot not yet available')
-  projects = (snapshot.projects ?? []) as ApiProject[]
+  projects = (snapshot.projects ?? []) as Project[]
   teams = snapshot.teams ?? []
 } catch {
   fetchError = true

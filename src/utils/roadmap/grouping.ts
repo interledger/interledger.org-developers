@@ -1,21 +1,21 @@
-import type { ApiProject, BoardTeam } from '../../types/roadmap'
+import type { Project, Team } from '../../types/roadmap'
 
 export const DEFAULT_TEAM_COLOR = '#888888'
 export const DEFAULT_PROJECT_COLOR = '#888'
 
 export type GridItem =
-  | { type: 'team-header'; team: BoardTeam; row: number; teamColor: string }
-  | { type: 'project'; project: ApiProject; row: number; teamColor: string }
+  | { type: 'team-header'; team: Team; row: number; teamColor: string }
+  | { type: 'project'; project: Project; row: number; teamColor: string }
 
 export function buildGridItems(
-  projects: ApiProject[],
-  teams: BoardTeam[]
+  projects: Project[],
+  teams: Team[]
 ): GridItem[] {
   const teamMap = new Map(teams.map((t) => [t.id, t]))
   const allChildIds = new Set(teams.flatMap((t) => t.childrenIds))
   const rootTeams = teams.filter((t) => !allChildIds.has(t.id))
 
-  const projectsByTeamId = new Map<string, ApiProject[]>()
+  const projectsByTeamId = new Map<string, Project[]>()
   for (const proj of projects) {
     if (!proj.team) continue
     const tid = proj.team.id
@@ -23,7 +23,7 @@ export function buildGridItems(
     projectsByTeamId.get(tid)!.push(proj)
   }
 
-  function collectTeamProjects(teamId: string): ApiProject[] {
+  function collectTeamProjects(teamId: string): Project[] {
     const team = teamMap.get(teamId)
     if (!team) return []
     const own = projectsByTeamId.get(teamId) ?? []

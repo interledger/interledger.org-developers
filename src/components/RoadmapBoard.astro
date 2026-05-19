@@ -1,5 +1,5 @@
 ---
-import type { ApiProject, BoardTeam } from '../types/roadmap'
+import type { Project, Team } from '../types/roadmap'
 import { resolveIcon } from '../utils/roadmap/icons'
 import { computeDateRange } from '../utils/roadmap/dateRange'
 import { buildMonths, buildQuarterHeaders } from '../utils/roadmap/grid'
@@ -11,8 +11,8 @@ import {
 import { computeProjectBarProps } from '../utils/roadmap/projectBar'
 
 interface Props {
-  projects?: ApiProject[]
-  teams?: BoardTeam[]
+  projects?: Project[]
+  teams?: Team[]
 }
 
 const { projects = [], teams = [] }: Props = Astro.props
