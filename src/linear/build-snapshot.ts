@@ -154,19 +154,16 @@ async function withRetry<T>(
   retries = 3,
   delayMs = 2000
 ): Promise<T> {
-  let lastErr: unknown
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
       return await fn()
     } catch (err) {
       if (!isTransientError(err) || attempt === retries) throw err
-      lastErr = err
       const wait = delayMs * 2 ** attempt
-
       await new Promise((r) => setTimeout(r, wait))
     }
   }
-  throw lastErr
+  throw new Error('Retry loop exited unexpectedly')
 }
 
 // ---------------------------------------------------------------------------
