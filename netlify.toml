@@ -1,25 +1,32 @@
 [dev]
   targetPort = 1103
-
+  command = "bun run start"
 [build]
   command = "npm install -g bun && bun install && bun run build && bun scripts/sync-blob.ts && mkdir -p _netlify/builders && cp -r dist _netlify/builders/developers"
   publish = "_netlify/builders"
-  environment = { NETLIFY = "true", LINEAR_CUSTOM_VIEW_ID = "27df73bc-50ec-4fc1-bbb2-d906236a5bbc" }
+  environment = { NETLIFY = "true" }
 
 [context.production]
   command = "npm install -g bun && bun install && bun run build && bun scripts/sync-blob.ts && mkdir -p _netlify/builders && cp -r dist _netlify/builders/developers"
   publish = "_netlify/builders"
-  environment = { NETLIFY = "true", LINEAR_CUSTOM_VIEW_ID = "27df73bc-50ec-4fc1-bbb2-d906236a5bbc" }
+  environment = { NETLIFY = "true"  }
 
 [context.preview]
   command = "npm install -g bun && bun install && bun run build && mkdir -p _netlify/builders && cp -r dist _netlify/builders/developers"
   publish = "_netlify/builders"
-  environment = { NETLIFY = "true", LINEAR_CUSTOM_VIEW_ID = "27df73bc-50ec-4fc1-bbb2-d906236a5bbc" }
+  environment = { NETLIFY = "true" }
 
 [context.deploy-preview]
   command = "npm install -g bun && bun install && bun run build && mkdir -p _netlify/builders && cp -r dist _netlify/builders/developers"
   publish = "_netlify/builders"
-  environment = { NETLIFY = "true", LINEAR_CUSTOM_VIEW_ID = "27df73bc-50ec-4fc1-bbb2-d906236a5bbc" }
+  environment = { NETLIFY = "true" }
+
+# Route /api/sync to the sync-now function (dev only)
+[[context.dev.redirects]]
+  from = "/api/sync"
+  to = "/.netlify/functions/sync-now"
+  status = 200
+  force = true
 
 # Route roadmap to Netlify SSR function (reads from blob store on-demand)
 [[redirects]]

@@ -2,7 +2,7 @@
 // In all other contexts (production builds, Netlify Function runtimes where
 // import.meta.env.PROD may be undefined) this defaults to true so that
 // missing variables still throw rather than silently returning null.
-const isProd = import.meta.env.PROD !== false
+const isProd = import.meta.env?.PROD !== false
 
 function requireEnv(name: string): string | null {
   const value = process.env[name]
