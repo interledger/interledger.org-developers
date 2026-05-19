@@ -8,6 +8,9 @@ interface Props {
 
 const { projects = [], teams = [] }: Props = Astro.props
 
+const DEFAULT_TEAM_COLOR = '#888888'
+const DEFAULT_PROJECT_COLOR = '#888'
+
 // ─── Icon resolution ─────────────────────────────────────────────────────────
 
 // Linear named icons → nearest Unicode emoji
@@ -236,7 +239,7 @@ let currentRow = 1
 for (const rootTeam of rootTeams) {
   const teamProjects = collectTeamProjects(rootTeam.id)
   if (teamProjects.length === 0) continue
-  const teamColor = rootTeam.color ?? '#888888'
+  const teamColor = rootTeam.color ?? DEFAULT_TEAM_COLOR
   gridItems.push({
     type: 'team-header',
     team: rootTeam,
@@ -263,7 +266,7 @@ const uncategorised = projects
   .filter((p) => !assignedIds.has(p.id))
   .sort((a, b) => a.sortOrder - b.sortOrder)
 for (const proj of uncategorised) {
-  const teamColor = proj.team?.color ?? '#888888'
+  const teamColor = proj.team?.color ?? DEFAULT_TEAM_COLOR
   gridItems.push({ type: 'project', project: proj, row: currentRow, teamColor })
   currentRow++
 }
@@ -394,7 +397,7 @@ for (const proj of uncategorised) {
             }
 
             const { project: proj, row, teamColor } = item
-            const projColor = proj.color ?? '#888'
+            const projColor = proj.color ?? DEFAULT_PROJECT_COLOR
             const iconEmoji = resolveIcon(proj.icon)
             const hasDates = !!(proj.startDate && proj.targetDate)
             const barLeft = hasDates
