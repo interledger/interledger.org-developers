@@ -200,7 +200,9 @@ async function fetchTeams(): Promise<TeamsQueryResult['teams']['nodes']> {
 async function fetchPrivateLabelIds(): Promise<Set<string>> {
   const PRIVATE_LABELS = new Set(['non-public', 'not-public'])
   const result = await withRetry(() =>
-    linear.client.request<ProjectLabelsQueryResult>(PROJECT_LABELS_QUERY)
+    linear.client.request<ProjectLabelsQueryResult, Record<string, never>>(
+      PROJECT_LABELS_QUERY
+    )
   )
   const ids = result.projectLabels.nodes
     .filter((l) => PRIVATE_LABELS.has(l.name.toLowerCase()))
