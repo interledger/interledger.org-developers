@@ -1022,15 +1022,25 @@ for (const proj of uncategorised) {
     boardScroll.scrollLeft = nowPxFromBoardLeft - boardScroll.clientWidth / 2
   }
 
-  // Keep the sticky header in sync with the body's horizontal scroll.
+  // Keep the sticky header in sync with the body's horizontal scroll (bidirectional).
   function initScrollSync() {
     const boardScroll = document.querySelector<HTMLElement>('.board-scroll')
     const headerInner = document.querySelector<HTMLElement>(
       '.board-header-inner'
     )
     if (!boardScroll || !headerInner) return
+    let syncing = false
     boardScroll.addEventListener('scroll', () => {
+      if (syncing) return
+      syncing = true
       headerInner.scrollLeft = boardScroll.scrollLeft
+      syncing = false
+    })
+    headerInner.addEventListener('scroll', () => {
+      if (syncing) return
+      syncing = true
+      boardScroll.scrollLeft = headerInner.scrollLeft
+      syncing = false
     })
   }
 
