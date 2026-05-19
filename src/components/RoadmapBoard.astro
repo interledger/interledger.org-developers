@@ -31,9 +31,18 @@ const nowMonth = now.getUTCMonth()
 const nowLeft = pos.pctLeft(now).toFixed(2)
 
 const gridItems = buildGridItems(projects, teams)
+
+function fmtDate(iso: string | null | undefined): string {
+  if (!iso) return ''
+  try {
+    return new Date(iso).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+  } catch {
+    return iso ?? ''
+  }
+}
 ---
 
-<div class="board-outer">
+<div class="board-outer" role="region" aria-label="Project roadmap">
   <div class="mobile-toggle-wrap">
     <button class="mobile-toggle-btn" aria-pressed="false">Full timeline</button
     >
@@ -49,7 +58,9 @@ const gridItems = buildGridItems(projects, teams)
     style={`--n-months: ${nMonths}; --n-quarters: ${nQuarters}`}
   >
     <!-- ── Sticky header — lives OUTSIDE .board-scroll so it can pin to the viewport ── -->
-    <div class="board-header-sticky">
+    <!-- aria-hidden: header is in a separate DOM tree from role="grid" and cannot be
+         associated with it; date/milestone info is conveyed via gridcell aria-labels -->
+    <div class="board-header-sticky" aria-hidden="true">
       <!--
         .board-header-inner scrolls horizontally but hides its scrollbar.
         JS keeps its scrollLeft in sync with .board-scroll.
@@ -136,22 +147,26 @@ const gridItems = buildGridItems(projects, teams)
           rows 1 …       = one per project (header rows are in .board-header-sticky above)
         Every cell has explicit grid-column + grid-row to avoid auto-placement bugs.
       -->
-      <div class="board" style={`--now-pct: ${nowLeft}%`}>
+      <div class="board" style={`--now-pct: ${nowLeft}%`} role="grid" aria-label="Projects" aria-readonly="true">
         <!-- ── rows 1+: Team headers and project rows ── -->
         {
           gridItems.map((item) => {
             if (item.type === 'team-header') {
               const { team, row, teamColor } = item
               return (
-                <div
-                  class="team-header"
-                  style={`grid-column: 1 / -1; grid-row: ${row}; background: ${teamColor}33; --team-color: ${teamColor}`}
-                >
+                <div role="row" style="display: contents">
                   <div
-                    class="team-header-label"
-                    style={`background: color-mix(in srgb, ${teamColor} 20%, white)`}
+                    class="team-header"
+                    role="rowheader"
+                    aria-colspan={nMonths + 1}
+                    style={`grid-column: 1 / -1; grid-row: ${row}; background: ${teamColor}33; --team-color: ${teamColor}`}
                   >
-                    {team.name}
+                    <div
+                      class="team-header-label"
+                      style={`background: color-mix(in srgb, ${teamColor} 20%, white)`}
+                    >
+                      {team.name}
+                    </div>
                   </div>
                 </div>
               )
@@ -174,10 +189,11 @@ const gridItems = buildGridItems(projects, teams)
             } = computeProjectBarProps(proj, pos)
 
             return (
-              <>
+              <div role="row" style="display: contents">
                 {/* Project label — col 1, explicit row */}
                 <div
                   class="proj-label"
+                  role="rowheader"
                   style={`grid-column: 1; grid-row: ${row}; background-color: color-mix(in srgb, ${teamColor} 15%, white); --team-color: ${teamColor}`}
                 >
                   <span class="proj-name">
@@ -193,15 +209,25 @@ const gridItems = buildGridItems(projects, teams)
                 {/* Project timeline track — cols 2 to last, explicit row */}
                 <div
                   class="proj-track"
+                  role="gridcell"
+                  aria-label={[
+                    fmtDate(proj.startDate) && `starts ${fmtDate(proj.startDate)}`,
+                    fmtDate(proj.targetDate) && `target ${fmtDate(proj.targetDate)}`,
+                    datedMilestones.length > 0 &&
+                      `milestones: ${datedMilestones.map((ms) => ms.name).join(', ')}`,
+                  ]
+                    .filter(Boolean)
+                    .join('; ') || 'no dates set'}
                   style={`grid-column: 2 / -1; grid-row: ${row}; background-color: ${teamColor}17; --team-color: ${teamColor}`}
                 >
                   {/* "Today" marker */}
-                  <div class="now-line" />
+                  <div class="now-line" aria-hidden="true" />
 
                   {/* Project duration bar */}
                   {hasDates && (
                     <div
                       class="proj-bar"
+                      aria-hidden="true"
                       style={`
                         left: ${barLeft}%;
                         width: ${barWidth}%;
@@ -215,6 +241,7 @@ const gridItems = buildGridItems(projects, teams)
                   {hasExtension && (
                     <div
                       class="proj-bar proj-bar--extension"
+                      aria-hidden="true"
                       style={`
                         left: ${extensionLeft}%;
                         width: ${extensionWidth}%;
@@ -228,6 +255,7 @@ const gridItems = buildGridItems(projects, teams)
                   {hasCompletedBar && (
                     <div
                       class="proj-bar proj-bar--completed"
+                      aria-hidden="true"
                       style={`
                         left: ${completedBarLeft}%;
                         width: ${completedBarWidth}%;
@@ -244,20 +272,23 @@ const gridItems = buildGridItems(projects, teams)
                     return (
                       <div
                         class="ms-pin"
+                        role="button"
+                        aria-label={ms.name}
                         style={`left: ${left}%`}
                         title={ms.name}
                         tabindex="0"
                       >
                         <span
                           class="ms-diamond"
+                          aria-hidden="true"
                           style={`background: ${projColor}`}
                         />
-                        <span class="ms-pin-name">{ms.name}</span>
+                        <span class="ms-pin-name" aria-hidden="true">{ms.name}</span>
                       </div>
                     )
                   })}
                 </div>
-              </>
+              </div>
             )
           })
         }
