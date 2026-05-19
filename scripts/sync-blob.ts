@@ -3,9 +3,8 @@ import { getStore } from '@netlify/blobs'
 import { NETLIFY_SITE_ID, NETLIFY_API_TOKEN } from '../src/config.js'
 
 if (!NETLIFY_SITE_ID || !NETLIFY_API_TOKEN) {
-  console.log(
-    'Skipping blob sync: missing NETLIFY_SITE_ID or NETLIFY_API_TOKEN'
-  )
+  /* eslint-disable-next-line no-console */
+  console.log('Skipping blob sync: missing env vars')
   process.exit(0)
 }
 
