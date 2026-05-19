@@ -4,7 +4,10 @@ import { resolveIcon } from '../utils/roadmap/icons'
 import { computeDateRange } from '../utils/roadmap/dateRange'
 import { buildMonths, buildQuarterHeaders } from '../utils/roadmap/grid'
 import { createPositioner } from '../utils/roadmap/timeline'
-import { buildGridItems, DEFAULT_PROJECT_COLOR } from '../utils/roadmap/grouping'
+import {
+  buildGridItems,
+  DEFAULT_PROJECT_COLOR
+} from '../utils/roadmap/grouping'
 import { computeProjectBarProps } from '../utils/roadmap/projectBar'
 
 interface Props {
@@ -35,7 +38,10 @@ const gridItems = buildGridItems(projects, teams)
 function fmtDate(iso: string | null | undefined): string {
   if (!iso) return ''
   try {
-    return new Date(iso).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+    return new Date(iso).toLocaleDateString('en-US', {
+      month: 'short',
+      year: 'numeric'
+    })
   } catch {
     return iso ?? ''
   }
@@ -147,7 +153,13 @@ function fmtDate(iso: string | null | undefined): string {
           rows 1 …       = one per project (header rows are in .board-header-sticky above)
         Every cell has explicit grid-column + grid-row to avoid auto-placement bugs.
       -->
-      <div class="board" style={`--now-pct: ${nowLeft}%`} role="grid" aria-label="Projects" aria-readonly="true">
+      <div
+        class="board"
+        style={`--now-pct: ${nowLeft}%`}
+        role="grid"
+        aria-label="Projects"
+        aria-readonly="true"
+      >
         <!-- ── rows 1+: Team headers and project rows ── -->
         {
           gridItems.map((item) => {
@@ -185,7 +197,7 @@ function fmtDate(iso: string | null | undefined): string {
               hasExtension,
               extensionLeft,
               extensionWidth,
-              datedMilestones,
+              datedMilestones
             } = computeProjectBarProps(proj, pos)
 
             return (
@@ -210,14 +222,18 @@ function fmtDate(iso: string | null | undefined): string {
                 <div
                   class="proj-track"
                   role="gridcell"
-                  aria-label={[
-                    fmtDate(proj.startDate) && `starts ${fmtDate(proj.startDate)}`,
-                    fmtDate(proj.targetDate) && `target ${fmtDate(proj.targetDate)}`,
-                    datedMilestones.length > 0 &&
-                      `milestones: ${datedMilestones.map((ms) => ms.name).join(', ')}`,
-                  ]
-                    .filter(Boolean)
-                    .join('; ') || 'no dates set'}
+                  aria-label={
+                    [
+                      fmtDate(proj.startDate) &&
+                        `starts ${fmtDate(proj.startDate)}`,
+                      fmtDate(proj.targetDate) &&
+                        `target ${fmtDate(proj.targetDate)}`,
+                      datedMilestones.length > 0 &&
+                        `milestones: ${datedMilestones.map((ms) => ms.name).join(', ')}`
+                    ]
+                      .filter(Boolean)
+                      .join('; ') || 'no dates set'
+                  }
                   style={`grid-column: 2 / -1; grid-row: ${row}; background-color: ${teamColor}17; --team-color: ${teamColor}`}
                 >
                   {/* "Today" marker */}
@@ -268,7 +284,9 @@ function fmtDate(iso: string | null | undefined): string {
 
                   {/* Inline milestone diamond markers */}
                   {datedMilestones.map((ms) => {
-                    const left = pos.pctLeft(new Date(ms.targetDate!)).toFixed(2)
+                    const left = pos
+                      .pctLeft(new Date(ms.targetDate!))
+                      .toFixed(2)
                     return (
                       <div
                         class="ms-pin"
@@ -283,7 +301,9 @@ function fmtDate(iso: string | null | undefined): string {
                           aria-hidden="true"
                           style={`background: ${projColor}`}
                         />
-                        <span class="ms-pin-name" aria-hidden="true">{ms.name}</span>
+                        <span class="ms-pin-name" aria-hidden="true">
+                          {ms.name}
+                        </span>
                       </div>
                     )
                   })}
