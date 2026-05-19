@@ -9,6 +9,7 @@ import type { Project, Team, Snapshot } from '../types/roadmap'
 let projects: Project[] = []
 let teams: Team[] = []
 let fetchError = false
+let generatedAt: string | null = null
 
 try {
   const store = getStore('roadmap')
@@ -18,6 +19,7 @@ try {
   if (!snapshot) throw new Error('Roadmap snapshot not yet available')
   projects = (snapshot.projects ?? []) as Project[]
   teams = snapshot.teams ?? []
+  generatedAt = snapshot.generatedAt ?? null
 } catch {
   fetchError = true
 }
@@ -71,6 +73,20 @@ Astro.response.headers.set(
         )
       }
     </section>
+
+    <!-- Snapshot debug info -->
+    {
+      generatedAt && (
+        <div class="snapshot-info content-wrapper">
+          <span>
+            Roadmap data refreshed at:{' '}
+            <time datetime={generatedAt}>
+              {new Date(generatedAt).toUTCString()}
+            </time>
+          </span>
+        </div>
+      )
+    }
   </main>
 </RoadmapLayout>
 
@@ -95,6 +111,18 @@ Astro.response.headers.set(
     font-weight: 600;
     line-height: 1.2;
     margin-block-end: var(--space-xs);
+  }
+
+  .snapshot-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    font-size: 0.75rem;
+    color: oklch(60% 0 0);
+  }
+
+  .snapshot-info span {
+    margin-inline-end: var(--space-s);
   }
 
   .hero__txt {

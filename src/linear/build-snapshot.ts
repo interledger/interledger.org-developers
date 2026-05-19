@@ -296,7 +296,6 @@ export async function buildSnapshot(): Promise<Snapshot> {
 
   return {
     generatedAt: new Date().toISOString(),
-    lastSyncAt: new Date().toISOString(),
     teams,
     projects
   }

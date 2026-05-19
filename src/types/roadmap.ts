@@ -33,7 +33,6 @@ export interface Project {
 
 export interface Snapshot {
   generatedAt: string
-  lastSyncAt: string | null
   teams: Team[]
   projects: Project[]
 }
