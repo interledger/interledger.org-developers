@@ -72,7 +72,7 @@ export interface BoardProject {
 
 // Project as returned by the API (has nested team object)
 export interface ApiProject extends BoardProject {
-  team: { id: string; name: string; key: string; color: string } | null
+  team: { id: string; name: string; key: string; color: string | null } | null
 }
 
 // Team as returned by the API

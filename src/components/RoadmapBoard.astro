@@ -90,13 +90,16 @@ for (const proj of projects) {
   }
 }
 
-const fallbackDate = new Date()
+const fallbackStartDate = new Date()
+const fallbackEndDate = new Date(fallbackStartDate)
+fallbackEndDate.setUTCFullYear(fallbackEndDate.getUTCFullYear() + 1)
+
 const minDate = allDates.length
   ? new Date(Math.min(...allDates.map((d) => d.getTime())))
-  : fallbackDate
+  : fallbackStartDate
 const maxDate = allDates.length
   ? new Date(Math.max(...allDates.map((d) => d.getTime())))
-  : fallbackDate
+  : fallbackEndDate
 
 // ─── Build months array ─────────────────────────────────────────────────────
 
