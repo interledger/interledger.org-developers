@@ -20,7 +20,9 @@ try {
   projects = (snapshot.projects ?? []) as Project[]
   teams = snapshot.teams ?? []
   generatedAt = snapshot.generatedAt ?? null
-} catch {
+} catch (err) {
+  /* eslint-disable-next-line no-console */
+  console.error('Failed to load roadmap snapshot', err)
   fetchError = true
 }
 
