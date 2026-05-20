@@ -1,11 +1,8 @@
 import { getStore } from '@netlify/blobs'
 import { buildSnapshot } from '../../src/linear/build-snapshot.js'
 import type { Context } from '@netlify/functions'
-import {
-  API_SECRET,
-  NETLIFY_SITE_ID,
-  NETLIFY_API_TOKEN
-} from '../../src/config.js'
+import { API_SECRET } from '../../src/config.js'
+import { purgeRoadmapCache } from './utils/purge-roadmap-cache.mts'
 
 export default async function handler(
   req: Request,
@@ -27,20 +24,7 @@ export default async function handler(
   const store = getStore('roadmap')
   await store.setJSON('roadmap-snapshot', snapshot)
 
-  // Purge CDN cache
-  if (NETLIFY_SITE_ID && NETLIFY_API_TOKEN) {
-    await fetch('https://api.netlify.com/api/v1/purge', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${NETLIFY_API_TOKEN}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        site_id: NETLIFY_SITE_ID,
-        paths: ['/developers/roadmap']
-      })
-    })
-  }
+  await purgeRoadmapCache()
 
   return new Response(
     JSON.stringify({ ok: true, generatedAt: snapshot.generatedAt }),
