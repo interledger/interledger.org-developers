@@ -1,0 +1,859 @@
+---
+import type { Project, Team } from '../types/roadmap'
+import { resolveIcon } from '../utils/roadmap/icons'
+import { computeDateRange } from '../utils/roadmap/dateRange'
+import { buildMonths, buildQuarterHeaders } from '../utils/roadmap/grid'
+import { createPositioner } from '../utils/roadmap/timeline'
+import {
+  buildGridItems,
+  DEFAULT_PROJECT_COLOR
+} from '../utils/roadmap/grouping'
+import { computeProjectBarProps } from '../utils/roadmap/projectBar'
+
+interface Props {
+  projects?: Project[]
+  teams?: Team[]
+}
+
+const { projects = [], teams = [] }: Props = Astro.props
+
+const { minDate, maxDate } = computeDateRange(projects)
+const months = buildMonths(minDate, maxDate)
+const quarterHeaders = buildQuarterHeaders(months)
+
+const nMonths = months.length
+const nQuarters = quarterHeaders.length
+
+const timelineStart = months[0].start.getTime()
+const timelineEnd = months[months.length - 1].end.getTime()
+const pos = createPositioner(timelineStart, timelineEnd)
+
+const now = new Date()
+const nowYear = now.getUTCFullYear()
+const nowMonth = now.getUTCMonth()
+const nowLeft = pos.pctLeft(now).toFixed(2)
+
+const gridItems = buildGridItems(projects, teams)
+
+function fmtDate(iso: string | null | undefined): string {
+  if (!iso) return ''
+  try {
+    return new Date(iso).toLocaleDateString('en-US', {
+      month: 'short',
+      year: 'numeric'
+    })
+  } catch {
+    return iso ?? ''
+  }
+}
+---
+
+<div class="board-outer" role="region" aria-label="Project roadmap">
+  <div class="mobile-toggle-wrap">
+    <button class="mobile-toggle-btn" aria-pressed="false">Full timeline</button
+    >
+  </div>
+
+  <!--
+    .board-frame clips children to the border-radius without becoming a
+    scroll container (overflow: clip does not create one, unlike overflow: hidden).
+    This lets .board-header-sticky use position: sticky relative to the viewport.
+  -->
+  <div
+    class="board-frame"
+    style={`--n-months: ${nMonths}; --n-quarters: ${nQuarters}`}
+  >
+    <!-- ── Sticky header — lives OUTSIDE .board-scroll so it can pin to the viewport ── -->
+    <!-- aria-hidden: header is in a separate DOM tree from role="grid" and cannot be
+         associated with it; date/milestone info is conveyed via gridcell aria-labels -->
+    <div class="board-header-sticky" aria-hidden="true">
+      <!--
+        .board-header-inner scrolls horizontally but hides its scrollbar.
+        JS keeps its scrollLeft in sync with .board-scroll.
+      -->
+      <div class="board-header-inner">
+        <div class="board-header-grid">
+          <!-- col 1, rows 1–2: "Project" label spans both header rows -->
+          <div class="hd-label" style="grid-column: 1; grid-row: 1 / 3">
+            Team / Project
+          </div>
+
+          <!-- row 1: Quarter header cells (desktop: month-based spans) -->
+          {
+            quarterHeaders.map((qh) => (
+              <div
+                class:list={[
+                  'hd-quarter',
+                  'hd-quarter--desktop',
+                  {
+                    'hd-quarter--current':
+                      qh.q === Math.floor(nowMonth / 3) + 1 &&
+                      qh.year === nowYear
+                  }
+                ]}
+                style={`grid-column: ${qh.colStart} / span ${qh.span}; grid-row: 1`}
+              >
+                {qh.label}
+              </div>
+            ))
+          }
+
+          <!-- row 1: Quarter header cells (mobile: one column each) -->
+          {
+            quarterHeaders.map((qh, i) => (
+              <div
+                class:list={[
+                  'hd-quarter',
+                  'hd-quarter--mobile',
+                  {
+                    'hd-quarter--current':
+                      qh.q === Math.floor(nowMonth / 3) + 1 &&
+                      qh.year === nowYear
+                  }
+                ]}
+                style={`grid-column: ${i + 2}; grid-row: 1`}
+              >
+                {qh.label}
+              </div>
+            ))
+          }
+
+          <!-- row 2: Month header cells -->
+          {
+            months.map((m) => (
+              <div
+                class:list={[
+                  'hd-month',
+                  {
+                    'hd-month--current':
+                      m.year === nowYear && m.month === nowMonth
+                  },
+                  { 'hd-month--qstart': m.isQuarterStart }
+                ]}
+                style={`grid-column: ${m.col}; grid-row: 2`}
+              >
+                {m.label}
+                {m.year === nowYear && m.month === nowMonth && (
+                  <span class="now-badge">Now</span>
+                )}
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Scrollable body — project rows only ── -->
+    <div class="board-scroll">
+      <!--
+        Grid columns:
+          col 1          = project label (fixed, sticky left)
+          cols 2 … N+1   = one per month
+        Grid rows:
+          rows 1 …       = one per project (header rows are in .board-header-sticky above)
+        Every cell has explicit grid-column + grid-row to avoid auto-placement bugs.
+      -->
+      <div
+        class="board"
+        style={`--now-pct: ${nowLeft}%`}
+        role="grid"
+        aria-label="Projects"
+        aria-readonly="true"
+      >
+        <!-- ── rows 1+: Team headers and project rows ── -->
+        {
+          gridItems.map((item) => {
+            if (item.type === 'team-header') {
+              const { team, row, teamColor } = item
+              return (
+                <div role="row" style="display: contents">
+                  <div
+                    class="team-header"
+                    role="rowheader"
+                    aria-colspan={nMonths + 1}
+                    style={`grid-column: 1 / -1; grid-row: ${row}; background: ${teamColor}33; --team-color: ${teamColor}`}
+                  >
+                    <div
+                      class="team-header-label"
+                      style={`background: color-mix(in srgb, ${teamColor} 20%, white)`}
+                    >
+                      {team.name}
+                    </div>
+                  </div>
+                </div>
+              )
+            }
+
+            const { project: proj, row, teamColor } = item
+            const projColor = proj.color ?? DEFAULT_PROJECT_COLOR
+            const iconEmoji = resolveIcon(proj.icon)
+            const {
+              hasDates,
+              barLeft,
+              barWidth,
+              hasCompletedBar,
+              completedBarLeft,
+              completedBarWidth,
+              hasExtension,
+              extensionLeft,
+              extensionWidth,
+              datedMilestones
+            } = computeProjectBarProps(proj, pos)
+
+            return (
+              <div role="row" style="display: contents">
+                {/* Project label — col 1, explicit row */}
+                <div
+                  class="proj-label"
+                  role="rowheader"
+                  style={`grid-column: 1; grid-row: ${row}; background-color: color-mix(in srgb, ${teamColor} 15%, white); --team-color: ${teamColor}`}
+                >
+                  <span class="proj-name">
+                    {iconEmoji && (
+                      <span class="proj-icon" aria-hidden="true">
+                        {iconEmoji}
+                      </span>
+                    )}
+                    <span class="proj-name-text">{proj.name}</span>
+                  </span>
+                </div>
+
+                {/* Project timeline track — cols 2 to last, explicit row */}
+                <div
+                  class="proj-track"
+                  role="gridcell"
+                  aria-label={
+                    [
+                      fmtDate(proj.startDate) &&
+                        `starts ${fmtDate(proj.startDate)}`,
+                      fmtDate(proj.targetDate) &&
+                        `target ${fmtDate(proj.targetDate)}`,
+                      datedMilestones.length > 0 &&
+                        `milestones: ${datedMilestones.map((ms) => ms.name).join(', ')}`
+                    ]
+                      .filter(Boolean)
+                      .join('; ') || 'no dates set'
+                  }
+                  style={`grid-column: 2 / -1; grid-row: ${row}; background-color: ${teamColor}17; --team-color: ${teamColor}`}
+                >
+                  {/* "Today" marker */}
+                  <div class="now-line" aria-hidden="true" />
+
+                  {/* Project duration bar */}
+                  {hasDates && (
+                    <div
+                      class="proj-bar"
+                      aria-hidden="true"
+                      style={`
+                        left: ${barLeft}%;
+                        width: ${barWidth}%;
+                        background: ${projColor}40;
+                        border: 1.5px solid ${projColor}aa;
+                      `}
+                    />
+                  )}
+
+                  {/* Milestone overflow extension beyond targetDate */}
+                  {hasExtension && (
+                    <div
+                      class="proj-bar proj-bar--extension"
+                      aria-hidden="true"
+                      style={`
+                        left: ${extensionLeft}%;
+                        width: ${extensionWidth}%;
+                        border-color: ${projColor}88;
+                      `}
+                      title="Milestones extend past the project target date"
+                    />
+                  )}
+
+                  {/* Completed bar (no targetDate, resolved via completedAt) */}
+                  {hasCompletedBar && (
+                    <div
+                      class="proj-bar proj-bar--completed"
+                      aria-hidden="true"
+                      style={`
+                        left: ${completedBarLeft}%;
+                        width: ${completedBarWidth}%;
+                        background: ${projColor}28;
+                        border-color: ${projColor}99;
+                      `}
+                      title="Completed"
+                    />
+                  )}
+
+                  {/* Inline milestone diamond markers */}
+                  {datedMilestones.map((ms) => {
+                    const left = pos
+                      .pctLeft(new Date(ms.targetDate!))
+                      .toFixed(2)
+                    return (
+                      <div
+                        class="ms-pin"
+                        role="button"
+                        aria-label={ms.name}
+                        style={`left: ${left}%`}
+                        title={ms.name}
+                        tabindex="0"
+                      >
+                        <span
+                          class="ms-diamond"
+                          aria-hidden="true"
+                          style={`background: ${projColor}`}
+                        />
+                        <span class="ms-pin-name" aria-hidden="true">
+                          {ms.name}
+                        </span>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            )
+          })
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ── Outer wrapper ── */
+  .board-outer {
+    max-width: var(--max-content-width);
+    margin-inline: auto;
+  }
+
+  /*
+    Frame: provides the border, border-radius, and box-shadow for the whole board.
+    overflow: clip clips children to the border-radius WITHOUT creating a scroll
+    container, so .board-header-sticky can use position: sticky relative to the
+    viewport (not relative to this element).
+  */
+  .board-frame {
+    border: 1px solid #e5e7eb;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    overflow: clip;
+  }
+
+  /* ── Sticky header ── */
+  .board-header-sticky {
+    position: sticky;
+    top: var(--site-header-height);
+    z-index: 15;
+    background: #f9fafb;
+    border-bottom: 2px solid #e5e7eb;
+  }
+
+  /*
+    .board-header-inner scrolls horizontally to mirror .board-scroll,
+    but its scrollbar is hidden — scrolling is driven by JS sync.
+  */
+  .board-header-inner {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .board-header-inner::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Header grid — same column template as .board */
+  .board-header-grid {
+    display: grid;
+    grid-template-columns: 300px repeat(var(--n-months), minmax(88px, 1fr));
+    min-width: calc(300px + var(--n-months) * 88px);
+    font-family: 'Titillium', Arial, sans-serif;
+    font-size: var(--step--1);
+    color: #1a1a1a;
+  }
+
+  /* ── Scrollable body ── */
+  .board-scroll {
+    overflow-x: auto;
+  }
+
+  /* ── Body grid ── */
+  .board {
+    display: grid;
+    grid-template-columns: 300px repeat(var(--n-months), minmax(88px, 1fr));
+    min-width: calc(300px + var(--n-months) * 88px);
+    column-gap: 0;
+    font-family: 'Titillium', Arial, sans-serif;
+    font-size: var(--step--1);
+    color: #1a1a1a;
+  }
+
+  /* ── "Project" label — sticky left so it stays visible on horizontal scroll ── */
+  .hd-label {
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    background: #f9fafb;
+    border-right: 1px solid #e5e7eb;
+    padding: 0 0.75rem;
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    font-size: var(--step--2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #555;
+  }
+
+  /* ── Quarter header cells (row 1) ── */
+  .hd-quarter {
+    background: #f9fafb;
+    border-bottom: 1px solid #d1d5db;
+    border-right: 2px solid #d1d5db;
+    padding: 0.35rem 0.75rem;
+    font-weight: 700;
+    font-size: var(--step--2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+  }
+
+  .hd-quarter--current {
+    background: color-mix(in srgb, var(--color-primary) 10%, #f9fafb);
+    color: var(--color-primary);
+  }
+
+  /* ── Month header cells (row 2) ── */
+  .hd-month {
+    background: #f9fafb;
+    border-right: 1px solid #e8e8e8;
+    padding: 0.25rem 0.5rem;
+    font-size: var(--step--2);
+    font-weight: 500;
+    color: #777;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    white-space: nowrap;
+  }
+
+  .hd-month--qstart {
+    border-left: 2px solid #d1d5db;
+  }
+
+  .hd-month--current {
+    background: color-mix(in srgb, var(--color-primary) 10%, #f9fafb);
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+
+  .now-badge {
+    display: inline-block;
+    font-size: 0.55rem;
+    font-weight: 700;
+    background: var(--color-primary);
+    color: white;
+    border-radius: 10em;
+    padding: 0.1em 0.4em;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Team header row ── */
+  .team-header {
+    border-top: 1px solid color-mix(in srgb, var(--team-color) 50%, transparent);
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--team-color) 50%, transparent);
+    font-size: var(--step--2);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .team-header-label {
+    position: sticky;
+    left: 0;
+    z-index: 4;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.75rem;
+  }
+
+  /* ── Project label cell ── */
+  .proj-label {
+    position: sticky;
+    left: 0;
+    z-index: 4;
+    /* background-color set via inline style as opaque color-mix() */
+    border-right: 1px solid var(--team-color);
+    padding: 0 0.75rem;
+    display: flex;
+    align-items: center;
+    min-height: 3.25rem;
+  }
+
+  .proj-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    font-size: var(--step--1);
+    font-weight: 500;
+    color: #1a1a1a;
+    line-height: 1.3;
+  }
+
+  .proj-icon {
+    font-size: 1em;
+    flex-shrink: 0;
+  }
+
+  .proj-name-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 240px;
+  }
+
+  /* ── Project timeline track ── */
+  .proj-track {
+    position: relative;
+    background-color: color-mix(
+      in srgb,
+      rgb(var(--tint-rgb, 255 255 255)) 4%,
+      white
+    );
+    min-height: 3.25rem;
+    overflow: visible;
+  }
+
+  /* "Today" vertical line */
+  .now-line {
+    position: absolute;
+    inset-block: 0;
+    left: var(--now-pct);
+    width: 1.5px;
+    background: color-mix(in srgb, var(--color-primary) 45%, transparent);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Project duration bar */
+  .proj-bar {
+    position: absolute;
+    top: 18%;
+    height: 28%;
+    border-radius: 4px;
+    pointer-events: none;
+    z-index: 2;
+    border-style: solid;
+    border-width: 1.5px;
+  }
+
+  .proj-bar--completed {
+    border-style: dashed;
+    border-radius: 4px;
+  }
+
+  .proj-bar--extension {
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 4px,
+      rgba(0, 0, 0, 0.07) 4px,
+      rgba(0, 0, 0, 0.07) 8px
+    );
+    border-style: dashed;
+    border-left: none;
+    border-radius: 0 4px 4px 0;
+  }
+
+  /* ── Milestone pin ── */
+  .ms-pin {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 0.35rem;
+    z-index: 3;
+    cursor: default;
+  }
+
+  .ms-diamond {
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    transform: rotate(45deg);
+    flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    transition: transform 150ms ease;
+  }
+
+  .ms-pin:hover .ms-diamond {
+    transform: rotate(45deg) scale(1.3);
+  }
+
+  .ms-pin-name {
+    font-size: 0.58rem;
+    font-weight: 600;
+    color: #444;
+    text-align: center;
+    max-width: 72px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 0.25rem;
+    line-height: 1.2;
+  }
+
+  /* ── Scrollbar (body only) ── */
+  .board-scroll::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .board-scroll::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10em;
+  }
+
+  .board-scroll::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 10em;
+  }
+
+  /* ── Mobile quarter-view toggle button (hidden on desktop) ── */
+  .mobile-toggle-wrap {
+    display: none;
+    justify-content: flex-end;
+    padding-block-end: 0.5rem;
+  }
+
+  .mobile-toggle-btn {
+    font-size: var(--step--2);
+    padding: 0.25rem 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    background: #f9fafb;
+    color: #555;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .mobile-toggle-btn:hover {
+    background: #e5e7eb;
+  }
+
+  /* Desktop: show month-based headers, hide mobile ones */
+  .hd-quarter--mobile {
+    display: none;
+  }
+
+  /* ── Mobile breakpoint ── */
+  @media (max-width: 767px) {
+    /* Show toggle button */
+    .mobile-toggle-wrap {
+      display: flex;
+    }
+
+    /* Quarter-column grid for header and body */
+    .board-header-grid,
+    .board {
+      grid-template-columns: 130px repeat(var(--n-quarters), minmax(72px, 1fr));
+      min-width: calc(130px + var(--n-quarters) * 72px);
+    }
+
+    /* Swap quarter header variants */
+    .hd-quarter--desktop {
+      display: none;
+    }
+    .hd-quarter--mobile {
+      display: flex;
+    }
+
+    /* Collapse month header row (keep in DOM so grid positions stay correct) */
+    .hd-month {
+      height: 0;
+      min-height: 0;
+      padding: 0;
+      border: none;
+      overflow: hidden;
+      visibility: hidden;
+    }
+
+    /* Narrow label column */
+    .proj-name-text {
+      max-width: 96px;
+    }
+
+    /* Hide milestone labels — keep diamond pins */
+    .ms-pin-name {
+      display: none;
+    }
+
+    /* Tappable pins */
+    .ms-pin {
+      cursor: pointer;
+    }
+
+    /* Tooltip popup on tap */
+    .ms-pin--active {
+      z-index: 10;
+    }
+
+    .ms-pin--active .ms-pin-name {
+      display: block;
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(25, 25, 25, 0.92);
+      color: #fff;
+      padding: 5px 8px;
+      border-radius: 5px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      white-space: normal;
+      max-width: 130px;
+      text-align: center;
+      line-height: 1.3;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+      pointer-events: none;
+    }
+
+    /* Arrow pointing down */
+    .ms-pin--active .ms-pin-name::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: rgba(25, 25, 25, 0.92);
+    }
+
+    /* ── "Full timeline" mode: restore month-column view ── */
+    .board-outer--full .board-header-grid,
+    .board-outer--full .board {
+      grid-template-columns: 300px repeat(var(--n-months), minmax(88px, 1fr));
+      min-width: calc(300px + var(--n-months) * 88px);
+    }
+
+    .board-outer--full .hd-quarter--desktop {
+      display: flex;
+    }
+
+    .board-outer--full .hd-quarter--mobile {
+      display: none;
+    }
+
+    .board-outer--full .hd-month {
+      height: auto;
+      min-height: unset;
+      padding: 0.25rem 0.5rem;
+      border-right: 1px solid #e8e8e8;
+      overflow: visible;
+      visibility: visible;
+    }
+
+    .board-outer--full .proj-name-text {
+      max-width: 240px;
+    }
+
+    .board-outer--full .ms-pin-name {
+      display: block;
+    }
+  }
+</style>
+
+<script>
+  // Scroll the board so the "today" line is centred in the viewport on load.
+  function centreOnNow() {
+    const boardScroll = document.querySelector<HTMLElement>('.board-scroll')
+    const board = document.querySelector<HTMLElement>('.board')
+    if (!boardScroll || !board) return
+
+    const rawPct = getComputedStyle(board).getPropertyValue('--now-pct').trim()
+    const nowPct = parseFloat(rawPct)
+    if (isNaN(nowPct)) return
+
+    const labelWidth =
+      parseInt(getComputedStyle(board).gridTemplateColumns.split(' ')[0], 10) ||
+      300
+    const timelineWidth = board.scrollWidth - labelWidth
+    const nowPxFromBoardLeft = labelWidth + (nowPct / 100) * timelineWidth
+
+    boardScroll.scrollLeft = nowPxFromBoardLeft - boardScroll.clientWidth / 2
+  }
+
+  // Keep the sticky header in sync with the body's horizontal scroll (bidirectional).
+  function initScrollSync() {
+    const boardScroll = document.querySelector<HTMLElement>('.board-scroll')
+    const headerInner = document.querySelector<HTMLElement>(
+      '.board-header-inner'
+    )
+    if (!boardScroll || !headerInner) return
+    let syncing = false
+    boardScroll.addEventListener('scroll', () => {
+      if (syncing) return
+      syncing = true
+      headerInner.scrollLeft = boardScroll.scrollLeft
+      syncing = false
+    })
+    headerInner.addEventListener('scroll', () => {
+      if (syncing) return
+      syncing = true
+      boardScroll.scrollLeft = headerInner.scrollLeft
+      syncing = false
+    })
+  }
+
+  // Toggle between quarter view and full month view on mobile.
+  document
+    .querySelectorAll<HTMLButtonElement>('.mobile-toggle-btn')
+    .forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const outer = btn.closest<HTMLElement>('.board-outer')
+        if (!outer) return
+        const isFull = outer.classList.toggle('board-outer--full')
+        btn.textContent = isFull ? 'Quarter view' : 'Full timeline'
+        btn.setAttribute('aria-pressed', String(isFull))
+        requestAnimationFrame(centreOnNow)
+      })
+    })
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      initScrollSync()
+      centreOnNow()
+    })
+  } else {
+    initScrollSync()
+    centreOnNow()
+  }
+
+  // Tap milestone diamond to reveal its name as a tooltip (mobile).
+  document.querySelectorAll<HTMLElement>('.ms-pin').forEach((pin) => {
+    pin.addEventListener('click', (e) => {
+      e.stopPropagation()
+      const isNowActive = !pin.classList.contains('ms-pin--active')
+      document
+        .querySelectorAll('.ms-pin--active')
+        .forEach((p) => p.classList.remove('ms-pin--active'))
+      if (isNowActive) pin.classList.add('ms-pin--active')
+    })
+  })
+
+  document.addEventListener('click', () => {
+    document
+      .querySelectorAll('.ms-pin--active')
+      .forEach((p) => p.classList.remove('ms-pin--active'))
+  })
+</script>
