@@ -54,7 +54,7 @@ Improving corridor support remains an important step toward making interoperable
 
 ## Putting Cross-Border Flows to the Test
 
-Another major focus area was validating cross-border payment flows using the Bridge API.
+Another major focus area was validating cross-border payment flows using the [Bridge API](https://apidocs.bridge.xyz/).
 
 Adi spent time testing **transfers from US-based accounts into Mexico through SPEI — Mexico’s real-time interbank payment network** — using CLABE account identifiers.
 
@@ -70,9 +70,9 @@ By the end of the sessions, the core transfer flow had been successfully validat
 
 Fiant onboarding was another important topic throughout the week.
 
-Antoniu worked on advancing the **Plaid integration for Fiant ACH transfers**, with the goal of creating a safer and more seamless way for users to connect bank accounts and initiate ACH payments.
+Antoniu worked on advancing the [**Plaid integration for Fiant ACH transfers**](https://plaid.com/), with the goal of creating a safer and more seamless way for users to connect bank accounts and initiate ACH payments.
 
-The work included integrating Plaid Link flows, securely handling sensitive banking information, mapping linked accounts into ACH transfer flows, and improving the experience for users.
+The work included integrating [Plaid Link flows](https://plaid.com/docs/link/), securely handling sensitive banking information, mapping linked accounts into ACH transfer flows, and improving the experience for users.
 
 This integration lays important groundwork for a smoother onboarding experience across the wallet ecosystem.
 
@@ -116,7 +116,7 @@ A major goal throughout these discussions was reducing onboarding friction while
 
 ## Designing Request Money & Split Bill Experiences
 
-Arpi, Dragos and Serghei spent part of the week designing and validating Request Money and Split Bill experiences powered by Open Payments.
+Arpi, Dragos and Serghei spent part of the week designing and validating Request Money and Split Bill experiences powered by [Open Payments](https://openpayments.dev/).
 
 The discussions explored how collaborative payment experiences could work across wallets and external payment providers while still remaining intuitive for users.
 
@@ -132,7 +132,7 @@ Darian and Vlad focused on how Web Monetization authorization flows could work m
 
 As Web Monetization expands beyond desktop environments, enabling secure communication between browser extensions and wallet applications becomes increasingly important.
 
-One of the key conclusions from the sessions was that **browser extensions will likely need to support secure inter-app communication** so authorization context can be safely passed to the wallet application without creating a clunky mobile experience. The wallet app can then complete the Open Payments grant flow and securely return authorization details back to the extension.
+One of the key conclusions from the sessions was that **browser extensions will likely need to support secure inter-app communication** so authorization context can be safely passed to the wallet application without creating a clunky mobile experience. The wallet app can then complete the [Open Payments](https://openpayments.dev/) grant flow and securely return authorization details back to the extension.
 
 This work helps establish a stronger foundation for mobile Web Monetization experiences moving forward.
 
@@ -144,7 +144,7 @@ This work helps establish a stronger foundation for mobile Web Monetization expe
 
 Wallet Work Week created dedicated time for collaboration across product, engineering, operations, compliance, and ecosystem initiatives.
 
-Beyond the technical discussions and implementation planning, the work week helped **strengthen alignment around a shared vision** of interoperable, open, and user-friendly payment experiences powered by Interledger and Open Payments.
+Beyond the technical discussions and implementation planning, the work week helped **strengthen alignment around a shared vision** of interoperable, open, and user-friendly payment experiences powered by Interledger and [Open Payments](https://openpayments.dev/).
 
 A lot of the ideas explored during the week are already making their way into upcoming releases and integrations, with several workflows, prototypes, and architecture discussions moving directly into implementation.
 
