@@ -563,6 +563,7 @@ function fmtDate(iso: string | null | undefined): string {
   }
 
   /* ── Milestone tooltip (all screen sizes) ── */
+  .ms-pin:hover,
   .ms-pin--active {
     z-index: 10;
   }
@@ -594,6 +595,7 @@ function fmtDate(iso: string | null | undefined): string {
     opacity: 0.85;
   }
 
+  .ms-pin:hover .ms-pin-tooltip,
   .ms-pin--active .ms-pin-tooltip {
     display: flex;
   }
