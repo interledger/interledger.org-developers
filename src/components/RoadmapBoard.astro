@@ -59,12 +59,13 @@ function fmtDate(iso: string | null | undefined): string {
     .board-scroll uses overflow-y: clip for the same reason — so that
     position: sticky on thead cells references the viewport, not this element.
   -->
-  <div
-    class="board-frame"
-    style={`--n-months: ${nMonths}`}
-  >
-    <div class="board-scroll">
-      <table class="board" style={`--now-pct: ${nowLeft}%`} aria-label="Projects">
+  <div class="board-frame" style={`--n-months: ${nMonths}`}>
+    <div class="board-scroll" tabindex="0" aria-label="Project timeline">
+      <table
+        class="board"
+        style={`--now-pct: ${nowLeft}%`}
+        aria-label="Projects"
+      >
         <colgroup>
           <col class="col-label" />
           {months.map(() => <col class="col-month" />)}
@@ -226,9 +227,12 @@ function fmtDate(iso: string | null | undefined): string {
                       return (
                         <button
                           class="ms-pin"
-                          aria-label={ms.name}
+                          aria-label={
+                            ms.targetDate
+                              ? `${ms.name}, due ${fmtDate(ms.targetDate)}`
+                              : ms.name
+                          }
                           style={`left: ${left}%`}
-                          title={ms.name}
                         >
                           <span
                             class="ms-diamond"
@@ -237,6 +241,14 @@ function fmtDate(iso: string | null | undefined): string {
                           />
                           <span class="ms-pin-name" aria-hidden="true">
                             {ms.name}
+                          </span>
+                          <span class="ms-pin-tooltip" aria-hidden="true">
+                            {ms.name}
+                            {ms.targetDate && (
+                              <span class="ms-pin-tooltip-date">
+                                Due {fmtDate(ms.targetDate)}
+                              </span>
+                            )}
                           </span>
                         </button>
                       )
@@ -526,7 +538,9 @@ function fmtDate(iso: string | null | undefined): string {
   }
 
   .ms-pin:focus-visible .ms-diamond {
-    box-shadow: 0 0 0 2px white, 0 0 0 4px var(--color-primary);
+    box-shadow:
+      0 0 0 2px white,
+      0 0 0 4px var(--color-primary);
   }
 
   .ms-pin-name {
@@ -540,6 +554,58 @@ function fmtDate(iso: string | null | undefined): string {
     white-space: nowrap;
     margin-top: 0.25rem;
     line-height: 1.2;
+  }
+
+  /* ── Scrollable region focus ── */
+  .board-scroll:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+  }
+
+  /* ── Milestone tooltip (all screen sizes) ── */
+  .ms-pin--active {
+    z-index: 10;
+  }
+
+  .ms-pin-tooltip {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(25, 25, 25, 0.92);
+    color: #fff;
+    padding: 5px 8px;
+    border-radius: 5px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    white-space: normal;
+    max-width: 130px;
+    text-align: center;
+    line-height: 1.3;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    pointer-events: none;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .ms-pin-tooltip-date {
+    font-weight: 400;
+    opacity: 0.85;
+  }
+
+  .ms-pin--active .ms-pin-tooltip {
+    display: flex;
+  }
+
+  .ms-pin--active .ms-pin-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(25, 25, 25, 0.92);
   }
 
   /* ── Scrollbar ── */
@@ -577,6 +643,11 @@ function fmtDate(iso: string | null | undefined): string {
 
   .mobile-toggle-btn:hover {
     background: #e5e7eb;
+  }
+
+  .mobile-toggle-btn:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
   }
 
   /* ── Mobile breakpoint ── */
@@ -619,42 +690,6 @@ function fmtDate(iso: string | null | undefined): string {
 
     .ms-pin {
       cursor: pointer;
-    }
-
-    /* Tooltip popup on tap / keyboard activate */
-    .ms-pin--active {
-      z-index: 10;
-    }
-
-    .ms-pin--active .ms-pin-name {
-      display: block;
-      position: absolute;
-      bottom: calc(100% + 8px);
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(25, 25, 25, 0.92);
-      color: #fff;
-      padding: 5px 8px;
-      border-radius: 5px;
-      font-size: 0.65rem;
-      font-weight: 600;
-      white-space: normal;
-      max-width: 130px;
-      text-align: center;
-      line-height: 1.3;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-      pointer-events: none;
-    }
-
-    /* Arrow pointing down */
-    .ms-pin--active .ms-pin-name::after {
-      content: '';
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      border: 5px solid transparent;
-      border-top-color: rgba(25, 25, 25, 0.92);
     }
 
     /* ── "Full timeline" mode: restore month-column view ── */
