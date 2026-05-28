@@ -298,12 +298,13 @@ function fmtDate(iso: string | null | undefined): string {
   }
 
   /*
-    overflow-y: clip does not create a scroll container (unlike overflow-y: hidden),
-    so position: sticky on <thead> references the viewport rather than this element.
+    Both axes scroll here. This makes .board-scroll the scroll container for the
+    sticky <thead> — which is the only reliable cross-browser way to have a sticky
+    table header inside a horizontally-scrolling table.
   */
   .board-scroll {
-    overflow-x: auto;
-    overflow-y: clip;
+    overflow: auto;
+    max-height: calc(100dvh - var(--site-header-height) - 4rem);
   }
 
   /* ── Table ── */
@@ -340,14 +341,14 @@ function fmtDate(iso: string | null | undefined): string {
   */
   thead tr:first-child th {
     position: sticky;
-    top: var(--site-header-height);
+    top: 0;
     z-index: 13;
     height: 2rem;
   }
 
   thead tr:last-child th {
     position: sticky;
-    top: calc(var(--site-header-height) + 2rem);
+    top: 2rem;
     z-index: 12;
     border-bottom: 2px solid #e5e7eb;
   }
@@ -355,6 +356,7 @@ function fmtDate(iso: string | null | undefined): string {
   /* ── "Project" label — sticky left so it stays visible on horizontal scroll ── */
   .hd-label {
     position: sticky;
+    top: 0;
     left: 0;
     z-index: 14;
     background: #f9fafb;
