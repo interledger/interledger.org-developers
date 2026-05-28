@@ -197,12 +197,7 @@ function fmtDate(iso: string | null | undefined): string {
                       scope="rowgroup"
                       style={`background: ${teamColor}33; --team-color: ${teamColor}`}
                     >
-                      <div
-                        class="team-header-label"
-                        style={`background: color-mix(in srgb, ${teamColor} 20%, white)`}
-                      >
-                        {team.name}
-                      </div>
+                      <div class="team-header-label">{team.name}</div>
                     </th>
                     {/* Team header track — fills the timeline columns */}
                     <td
