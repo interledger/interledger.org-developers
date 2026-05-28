@@ -313,15 +313,22 @@ function fmtDate(iso: string | null | undefined): string {
   }
 
   /*
-    The scroll container for the table. overflow: auto triggers both scrollbars
-    when content exceeds the container. flex: 1 + min-height: 0 fills exactly
-    the remaining height calculated by the flex chain from the page layout,
-    so no magic numbers are needed. Sticky <thead> cells reference this element.
+    The scroll container. overflow: auto triggers both scrollbars when content
+    exceeds the container — sticky <thead> cells reference this element.
+
+    max-height is calculated by subtracting every element above the board from
+    the viewport height using the actual design tokens:
+      - site header
+      - hero section: padding-block (2 × space-xl) + heading (step-5 × 1.2 line-height)
+                      + heading margin (space-xs) + paragraph (~2 lines of step-0)
+      - board-section top padding (space-m)
   */
   .board-scroll {
     overflow: auto;
-    flex: 1;
-    min-height: 0;
+    max-height: calc(
+      100dvh - var(--site-header-height) - 2 * var(--space-xl) - 1.2 *
+        var(--step-5) - var(--space-xs) - 3 * var(--step-0) - var(--space-m)
+    );
   }
 
   /* ── Table ── */
