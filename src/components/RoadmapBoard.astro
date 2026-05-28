@@ -166,6 +166,7 @@ function fmtDate(iso: string | null | undefined): string {
 
               return (
                 <tr>
+                  {/* Project label */}
                   <th
                     class="proj-label"
                     scope="row"
@@ -180,6 +181,7 @@ function fmtDate(iso: string | null | undefined): string {
                       <span class="proj-name-text">{proj.name}</span>
                     </span>
                   </th>
+                  {/* Project timeline track */}
                   <td
                     class="proj-track"
                     colspan={nMonths}
@@ -197,8 +199,10 @@ function fmtDate(iso: string | null | undefined): string {
                     }
                     style={`background-color: ${teamColor}17; --team-color: ${teamColor}`}
                   >
+                    {/* "Today" marker */}
                     <div class="now-line" aria-hidden="true" />
 
+                    {/* Project duration bar */}
                     {hasDates && (
                       <div
                         class="proj-bar"
@@ -207,6 +211,7 @@ function fmtDate(iso: string | null | undefined): string {
                       />
                     )}
 
+                    {/* Milestone overflow extension beyond targetDate */}
                     {hasExtension && (
                       <div
                         class="proj-bar proj-bar--extension"
@@ -216,6 +221,7 @@ function fmtDate(iso: string | null | undefined): string {
                       />
                     )}
 
+                    {/* Completed bar (no targetDate, resolved via completedAt) */}
                     {hasCompletedBar && (
                       <div
                         class="proj-bar proj-bar--completed"
@@ -225,6 +231,7 @@ function fmtDate(iso: string | null | undefined): string {
                       />
                     )}
 
+                    {/* Inline milestone diamond markers */}
                     {datedMilestones.map((ms) => {
                       const left = pos
                         .pctLeft(new Date(ms.targetDate!))
@@ -340,20 +347,22 @@ function fmtDate(iso: string | null | undefined): string {
   .hd-label {
     position: sticky;
     left: 0;
-    z-index: 15;
+    z-index: 5;
+    background: #f9fafb;
     border-right: 1px solid #e5e7eb;
     padding: 0 0.75rem;
+    display: flex;
+    align-items: center;
     font-weight: 700;
     font-size: var(--step--2);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: #555;
-    text-align: left;
-    vertical-align: middle;
   }
 
   /* ── Quarter header cells (row 1) ── */
   .hd-quarter {
+    background: #f9fafb;
     border-bottom: 1px solid #d1d5db;
     border-right: 2px solid #d1d5db;
     padding: 0.35rem 0.75rem;
@@ -362,10 +371,10 @@ function fmtDate(iso: string | null | undefined): string {
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: #555;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     white-space: nowrap;
-    overflow: hidden;
-    vertical-align: middle;
   }
 
   .hd-quarter--current {
@@ -375,14 +384,18 @@ function fmtDate(iso: string | null | undefined): string {
 
   /* ── Month header cells (row 2) ── */
   .hd-month {
+    background: #f9fafb;
     border-right: 1px solid #e8e8e8;
     padding: 0.25rem 0.5rem;
     font-size: var(--step--2);
     font-weight: 500;
     color: #777;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
     white-space: nowrap;
-    vertical-align: middle;
   }
 
   .hd-month--qstart {
@@ -396,7 +409,7 @@ function fmtDate(iso: string | null | undefined): string {
   }
 
   .now-badge {
-    display: block;
+    display: inline-block;
     font-size: 0.55rem;
     font-weight: 700;
     background: var(--color-primary);
@@ -405,7 +418,6 @@ function fmtDate(iso: string | null | undefined): string {
     padding: 0.1em 0.4em;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    margin: 2px auto 0;
   }
 
   /* ── Team header row ── */
@@ -441,10 +453,12 @@ function fmtDate(iso: string | null | undefined): string {
     position: sticky;
     left: 0;
     z-index: 4;
+    /* background-color set via inline style as opaque color-mix() */
     border-right: 1px solid var(--team-color);
     padding: 0 0.75rem;
-    vertical-align: middle;
-    height: 3.25rem;
+    display: flex;
+    align-items: center;
+    min-height: 3.25rem;
   }
 
   .proj-name {
@@ -474,7 +488,6 @@ function fmtDate(iso: string | null | undefined): string {
     position: relative;
     height: 3.25rem;
     overflow: visible;
-    vertical-align: top;
   }
 
   /* "Today" vertical line */
@@ -619,6 +632,7 @@ function fmtDate(iso: string | null | undefined): string {
     display: flex;
   }
 
+  .ms-pin:hover .ms-pin-tooltip::after,
   .ms-pin--active .ms-pin-tooltip::after {
     content: '';
     position: absolute;
@@ -784,19 +798,15 @@ function fmtDate(iso: string | null | undefined): string {
     centreOnNow()
   }
 
-  // Tap or keyboard-activate milestone diamond to reveal its name as a tooltip (mobile).
-  function togglePin(pin: HTMLElement) {
-    const isNowActive = !pin.classList.contains('ms-pin--active')
-    document
-      .querySelectorAll('.ms-pin--active')
-      .forEach((p) => p.classList.remove('ms-pin--active'))
-    if (isNowActive) pin.classList.add('ms-pin--active')
-  }
-
+  // Tap milestone diamond to reveal its name as a tooltip (mobile).
   document.querySelectorAll<HTMLElement>('.ms-pin').forEach((pin) => {
     pin.addEventListener('click', (e) => {
       e.stopPropagation()
-      togglePin(pin)
+      const isNowActive = !pin.classList.contains('ms-pin--active')
+      document
+        .querySelectorAll('.ms-pin--active')
+        .forEach((p) => p.classList.remove('ms-pin--active'))
+      if (isNowActive) pin.classList.add('ms-pin--active')
     })
   })
 
