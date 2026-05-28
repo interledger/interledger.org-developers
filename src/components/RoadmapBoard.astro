@@ -322,7 +322,6 @@ function fmtDate(iso: string | null | undefined): string {
                           class="ms-pin"
                           aria-label={ms.name}
                           style={`left: ${left}%`}
-                          title={ms.name}
                         >
                           <span
                             class="ms-diamond"
@@ -637,11 +636,24 @@ function fmtDate(iso: string | null | undefined): string {
     transition: transform 150ms ease;
   }
 
-  .ms-pin:hover .ms-diamond {
+  .ms-pin:hover .ms-diamond,
+  .ms-pin:focus-visible .ms-diamond {
     transform: rotate(45deg) scale(1.3);
   }
 
-  .ms-pin:hover {
+  .ms-pin:focus-visible {
+    outline: none;
+  }
+
+  .ms-pin:focus-visible .ms-diamond {
+    box-shadow:
+      0 0 0 2px white,
+      0 0 0 4px var(--color-primary);
+  }
+
+  .ms-pin:hover,
+  .ms-pin:focus-visible,
+  .ms-pin--active {
     z-index: 10;
   }
 
@@ -649,7 +661,10 @@ function fmtDate(iso: string | null | undefined): string {
     display: none;
   }
 
-  .ms-pin:hover .ms-pin-name {
+  /* Tooltip visible on hover, keyboard focus, or click activation */
+  .ms-pin:hover .ms-pin-name,
+  .ms-pin:focus-visible .ms-pin-name,
+  .ms-pin--active .ms-pin-name {
     display: block;
     position: absolute;
     bottom: calc(100% + 8px);
@@ -669,7 +684,9 @@ function fmtDate(iso: string | null | undefined): string {
     pointer-events: none;
   }
 
-  .ms-pin:hover .ms-pin-name::after {
+  .ms-pin:hover .ms-pin-name::after,
+  .ms-pin:focus-visible .ms-pin-name::after,
+  .ms-pin--active .ms-pin-name::after {
     content: '';
     position: absolute;
     top: 100%;
@@ -775,42 +792,6 @@ function fmtDate(iso: string | null | undefined): string {
     /* Tappable pins */
     .ms-pin {
       cursor: pointer;
-    }
-
-    /* Tooltip popup on tap */
-    .ms-pin--active {
-      z-index: 10;
-    }
-
-    .ms-pin--active .ms-pin-name {
-      display: block;
-      position: absolute;
-      bottom: calc(100% + 8px);
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(25, 25, 25, 0.92);
-      color: #fff;
-      padding: 5px 8px;
-      border-radius: 5px;
-      font-size: 0.65rem;
-      font-weight: 600;
-      white-space: normal;
-      max-width: 130px;
-      text-align: center;
-      line-height: 1.3;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-      pointer-events: none;
-    }
-
-    /* Arrow pointing down */
-    .ms-pin--active .ms-pin-name::after {
-      content: '';
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      border: 5px solid transparent;
-      border-top-color: rgba(25, 25, 25, 0.92);
     }
 
     /* ── "Full timeline" mode: restore month-column view ── */
