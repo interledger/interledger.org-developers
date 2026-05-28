@@ -32,6 +32,11 @@ const now = new Date()
 const nowYear = now.getUTCFullYear()
 const nowMonth = now.getUTCMonth()
 const nowLeft = pos.pctLeft(now).toFixed(2)
+const refreshedAt = now.toLocaleDateString('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric'
+})
 
 const gridItems = buildGridItems(projects, teams)
 
@@ -154,9 +159,8 @@ function fmtDate(iso: string | null | undefined): string {
         style={`--now-pct: ${nowLeft}%`}
         aria-label="Projects"
       >
-        <caption class="visually-hidden">
-          Project roadmap timeline showing each project's duration bar from
-          start to target date, grouped by team.
+        <caption class="board-caption">
+          Roadmap data refreshed: {refreshedAt}
         </caption>
         <colgroup>
           <col class="col-label" />
@@ -190,7 +194,7 @@ function fmtDate(iso: string | null | undefined): string {
               if (item.type === 'team-header') {
                 const { team, teamColor } = item
                 return (
-                  <tr>
+                  <tr aria-label={`Team: ${team.name}`}>
                     {/* Team header label — sticky left */}
                     <th
                       class="team-header"
@@ -824,6 +828,15 @@ function fmtDate(iso: string | null | undefined): string {
     .board-outer--full .proj-name-text {
       max-width: 240px;
     }
+  }
+
+  .board-caption {
+    caption-side: bottom;
+    text-align: right;
+    font-size: var(--step--2);
+    color: #999;
+    padding: 0.4rem 0.75rem;
+    font-style: italic;
   }
 
   .visually-hidden,
