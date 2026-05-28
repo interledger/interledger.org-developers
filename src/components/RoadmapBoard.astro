@@ -338,8 +338,6 @@ function fmtDate(iso: string | null | undefined): string {
     position: sticky;
     top: var(--site-header-height);
     z-index: 15;
-    background: #f9fafb;
-    border-bottom: 2px solid #e5e7eb;
   }
 
   thead th {
@@ -358,13 +356,12 @@ function fmtDate(iso: string | null | undefined): string {
     background: #f9fafb;
     border-right: 1px solid #e5e7eb;
     padding: 0 0.75rem;
-    display: flex;
-    align-items: center;
     font-weight: 700;
     font-size: var(--step--2);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: #555;
+    vertical-align: middle;
   }
 
   /* ── Quarter header cells (row 1) ── */
@@ -378,9 +375,8 @@ function fmtDate(iso: string | null | undefined): string {
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: #555;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    text-align: center;
+    vertical-align: middle;
     white-space: nowrap;
   }
 
@@ -398,10 +394,7 @@ function fmtDate(iso: string | null | undefined): string {
     font-weight: 500;
     color: #777;
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
+    vertical-align: middle;
     white-space: nowrap;
   }
 
@@ -416,7 +409,7 @@ function fmtDate(iso: string | null | undefined): string {
   }
 
   .now-badge {
-    display: inline-block;
+    display: block;
     font-size: 0.55rem;
     font-weight: 700;
     background: var(--color-primary);
@@ -463,9 +456,8 @@ function fmtDate(iso: string | null | undefined): string {
     /* background-color set via inline style as opaque color-mix() */
     border-right: 1px solid var(--team-color);
     padding: 0 0.75rem;
-    display: flex;
-    align-items: center;
-    min-height: 3.25rem;
+    vertical-align: middle;
+    height: 3.25rem;
   }
 
   .proj-name {
