@@ -128,17 +128,22 @@ function fmtDate(iso: string | null | undefined): string {
                   <tr>
                     <th
                       class="team-header"
-                      colspan={nMonths + 1}
                       scope="rowgroup"
                       style={`background: ${teamColor}33; --team-color: ${teamColor}`}
                     >
-                      <div
-                        class="team-header-label"
+                      <span
+                        class="team-header-name"
                         style={`background: color-mix(in srgb, ${teamColor} 20%, white)`}
                       >
                         {team.name}
-                      </div>
+                      </span>
                     </th>
+                    <td
+                      class="team-header-track"
+                      colspan={nMonths}
+                      aria-hidden="true"
+                      style={`background: ${teamColor}33; --team-color: ${teamColor}`}
+                    />
                   </tr>
                 )
               }
@@ -313,11 +318,18 @@ function fmtDate(iso: string | null | undefined): string {
   }
 
   /* ── Sticky thead ── */
-  thead th {
+  /*
+    Sticky is on <thead> itself, not individual <th> cells, so both header rows
+    (quarters + months) move as a single unit and don't overlap each other.
+  */
+  thead {
     position: sticky;
     top: var(--site-header-height);
-    background: #f9fafb;
     z-index: 10;
+  }
+
+  thead th {
+    background: #f9fafb;
   }
 
   thead tr:last-child th {
@@ -326,6 +338,7 @@ function fmtDate(iso: string | null | undefined): string {
 
   /* ── "Team / Project" corner cell — sticky on both axes ── */
   .hd-label {
+    position: sticky;
     left: 0;
     z-index: 15;
     border-right: 1px solid #e5e7eb;
@@ -397,6 +410,9 @@ function fmtDate(iso: string | null | undefined): string {
 
   /* ── Team header row ── */
   .team-header {
+    position: sticky;
+    left: 0;
+    z-index: 4;
     border-top: 1px solid color-mix(in srgb, var(--team-color) 50%, transparent);
     border-bottom: 1px solid
       color-mix(in srgb, var(--team-color) 50%, transparent);
@@ -407,14 +423,17 @@ function fmtDate(iso: string | null | undefined): string {
     padding: 0;
   }
 
-  .team-header-label {
-    position: sticky;
-    left: 0;
-    z-index: 4;
+  .team-header-name {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     padding: 0.35rem 0.75rem;
+  }
+
+  .team-header-track {
+    border-top: 1px solid color-mix(in srgb, var(--team-color) 50%, transparent);
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--team-color) 50%, transparent);
   }
 
   /* ── Project label cell ── */
