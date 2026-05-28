@@ -22,6 +22,7 @@ const months = buildMonths(minDate, maxDate)
 const quarterHeaders = buildQuarterHeaders(months)
 
 const nMonths = months.length
+const nQuarters = quarterHeaders.length
 
 const timelineStart = months[0].start.getTime()
 const timelineEnd = months[months.length - 1].end.getTime()
@@ -54,79 +55,113 @@ function fmtDate(iso: string | null | undefined): string {
   </div>
 
   <!--
-    .board-frame clips children to the border-radius (overflow: clip) without
-    becoming a scroll container, so the border-radius applies cleanly.
-    .board-scroll is the actual scroll container for both axes; its flex: 1
-    height is calculated by the flex chain from the page layout.
+    .board-frame clips children to the border-radius without becoming a
+    scroll container (overflow: clip does not create one, unlike overflow: hidden).
+    This lets .board-header-sticky use position: sticky relative to the viewport.
   -->
-  <div class="board-frame" style={`--n-months: ${nMonths}`}>
-    <div
-      class="board-scroll"
-      role="region"
-      tabindex="0"
-      aria-label="Project timeline"
-    >
+  <div
+    class="board-frame"
+    style={`--n-months: ${nMonths}; --n-quarters: ${nQuarters}`}
+  >
+    <!--
+      Sticky header table — lives OUTSIDE .board-scroll so it can pin to the
+      viewport. aria-hidden because column context is conveyed via aria-label
+      on each body row's track cell. JS keeps scrollLeft in sync with .board-scroll.
+    -->
+    <div class="board-header-sticky" aria-hidden="true">
+      <div class="board-header-inner">
+        <table class="board-header-table">
+          <colgroup>
+            <col class="col-label" />
+            {months.map(() => <col class="col-month" />)}
+          </colgroup>
+          <thead>
+            <!-- col 1, rows 1–2: "Project" label spans both header rows -->
+            <tr>
+              <th class="hd-label" rowspan="2">Team / Project</th>
+
+              <!-- row 1: Quarter header cells (desktop: month-based spans) -->
+              {
+                quarterHeaders.map((qh) => (
+                  <th
+                    class:list={[
+                      'hd-quarter',
+                      'hd-quarter--desktop',
+                      {
+                        'hd-quarter--current':
+                          qh.q === Math.floor(nowMonth / 3) + 1 &&
+                          qh.year === nowYear
+                      }
+                    ]}
+                    colspan={qh.span}
+                  >
+                    {qh.label}
+                  </th>
+                ))
+              }
+
+              <!-- row 1: Quarter header cells (mobile: one column each) -->
+              {
+                quarterHeaders.map((qh) => (
+                  <th
+                    class:list={[
+                      'hd-quarter',
+                      'hd-quarter--mobile',
+                      {
+                        'hd-quarter--current':
+                          qh.q === Math.floor(nowMonth / 3) + 1 &&
+                          qh.year === nowYear
+                      }
+                    ]}
+                  >
+                    {qh.label}
+                  </th>
+                ))
+              }
+            </tr>
+
+            <!-- row 2: Month header cells -->
+            <tr>
+              {
+                months.map((m) => (
+                  <th
+                    class:list={[
+                      'hd-month',
+                      {
+                        'hd-month--current':
+                          m.year === nowYear && m.month === nowMonth
+                      },
+                      { 'hd-month--qstart': m.isQuarterStart }
+                    ]}
+                  >
+                    {m.label}
+                    {m.year === nowYear && m.month === nowMonth && (
+                      <span class="now-badge">Now</span>
+                    )}
+                  </th>
+                ))
+              }
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── Scrollable body — project rows only ── -->
+    <div class="board-scroll">
       <table
         class="board"
         style={`--now-pct: ${nowLeft}%`}
         aria-label="Projects"
       >
+        <caption class="visually-hidden">
+          Project roadmap timeline showing each project's duration bar from
+          start to target date, grouped by team.
+        </caption>
         <colgroup>
           <col class="col-label" />
           {months.map(() => <col class="col-month" />)}
         </colgroup>
-
-        <thead>
-          <!-- col 1, rows 1–2: "Project" label spans both header rows -->
-          <tr>
-            <th class="hd-label" rowspan="2" scope="col">Team / Project</th>
-
-            <!-- row 1: Quarter header cells -->
-            {
-              quarterHeaders.map((qh) => (
-                <th
-                  class:list={[
-                    'hd-quarter',
-                    {
-                      'hd-quarter--current':
-                        qh.q === Math.floor(nowMonth / 3) + 1 &&
-                        qh.year === nowYear
-                    }
-                  ]}
-                  colspan={qh.span}
-                  scope="colgroup"
-                >
-                  {qh.label}
-                </th>
-              ))
-            }
-          </tr>
-
-          <!-- row 2: Month header cells -->
-          <tr>
-            {
-              months.map((m) => (
-                <th
-                  class:list={[
-                    'hd-month',
-                    {
-                      'hd-month--current':
-                        m.year === nowYear && m.month === nowMonth
-                    },
-                    { 'hd-month--qstart': m.isQuarterStart }
-                  ]}
-                  scope="col"
-                >
-                  {m.label}
-                  {m.year === nowYear && m.month === nowMonth && (
-                    <span class="now-badge">Now</span>
-                  )}
-                </th>
-              ))
-            }
-          </tr>
-        </thead>
-
         <tbody>
           {
             gridItems.map((item) => {
@@ -134,22 +169,23 @@ function fmtDate(iso: string | null | undefined): string {
                 const { team, teamColor } = item
                 return (
                   <tr>
+                    {/* Team header label — sticky left */}
                     <th
                       class="team-header"
                       scope="rowgroup"
                       style={`background: ${teamColor}33; --team-color: ${teamColor}`}
                     >
-                      <span
+                      <div
                         class="team-header-label"
                         style={`background: color-mix(in srgb, ${teamColor} 20%, white)`}
                       >
                         {team.name}
-                      </span>
+                      </div>
                     </th>
+                    {/* Team header track — fills the timeline columns */}
                     <td
                       class="team-header-track"
                       colspan={nMonths}
-                      aria-hidden="true"
                       style={`background: ${teamColor}33; --team-color: ${teamColor}`}
                     />
                   </tr>
@@ -174,7 +210,7 @@ function fmtDate(iso: string | null | undefined): string {
 
               return (
                 <tr>
-                  {/* Project label — col 1, explicit row */}
+                  {/* Project label — col 1, sticky left */}
                   <th
                     class="proj-label"
                     scope="row"
@@ -190,7 +226,7 @@ function fmtDate(iso: string | null | undefined): string {
                     </span>
                   </th>
 
-                  {/* Project timeline track — cols 2 to last, explicit row */}
+                  {/* Project timeline track */}
                   <td
                     class="proj-track"
                     colspan={nMonths}
@@ -293,45 +329,60 @@ function fmtDate(iso: string | null | undefined): string {
   .board-outer {
     max-width: var(--max-content-width);
     margin-inline: auto;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    width: 100%;
   }
 
-  /* Frame: clips children to the border-radius and passes height down. */
+  /*
+    Frame: provides the border, border-radius, and box-shadow for the whole board.
+    overflow: clip clips children to the border-radius WITHOUT creating a scroll
+    container, so .board-header-sticky can use position: sticky relative to the
+    viewport (not relative to this element).
+  */
   .board-frame {
     border: 1px solid #e5e7eb;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     overflow: clip;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
+  }
+
+  /* ── Sticky header ── */
+  .board-header-sticky {
+    position: sticky;
+    top: var(--site-header-height);
+    z-index: 15;
+    background: #f9fafb;
+    border-bottom: 2px solid #e5e7eb;
   }
 
   /*
-    The scroll container. overflow: auto triggers both scrollbars when content
-    exceeds the container — sticky <thead> cells reference this element.
-
-    max-height is calculated by subtracting every element above the board from
-    the viewport height using the actual design tokens:
-      - site header
-      - hero section: padding-block (2 × space-xl) + heading (step-5 × 1.2 line-height)
-                      + heading margin (space-xs) + paragraph (~2 lines of step-0)
-      - board-section top padding (space-m)
+    .board-header-inner scrolls horizontally to mirror .board-scroll,
+    but its scrollbar is hidden — scrolling is driven by JS sync.
   */
-  .board-scroll {
-    overflow: auto;
-    max-height: calc(
-      100dvh - var(--site-header-height) - 2 * var(--space-xl) - 1.2 *
-        var(--step-5) - var(--space-xs) - 3 * var(--step-0) - var(--space-m)
-    );
+  .board-header-inner {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .board-header-inner::-webkit-scrollbar {
+    display: none;
   }
 
-  /* ── Table ── */
+  /* Header table — same column template as .board */
+  .board-header-table {
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+    width: max(calc(300px + var(--n-months) * 88px), 100%);
+    font-family: 'Titillium', Arial, sans-serif;
+    font-size: var(--step--1);
+    color: #1a1a1a;
+  }
+
+  /* ── Scrollable body ── */
+  .board-scroll {
+    overflow-x: auto;
+  }
+
+  /* ── Body table ── */
   .board {
     table-layout: fixed;
     border-collapse: separate;
@@ -342,6 +393,7 @@ function fmtDate(iso: string | null | undefined): string {
     color: #1a1a1a;
   }
 
+  /* Column widths — shared by both the header and body tables */
   .col-label {
     width: 300px;
   }
@@ -350,31 +402,11 @@ function fmtDate(iso: string | null | undefined): string {
     width: 88px;
   }
 
-  /* Quarter row sticks at the top of the scroll container. */
-  thead tr:first-child th {
-    position: sticky;
-    top: 0;
-    z-index: 2;
-    height: 2rem;
-    background: #f9fafb;
-  }
-
-  /* Month row sticks immediately below the quarter row. */
-  thead tr:last-child th {
-    position: sticky;
-    top: 2rem;
-    z-index: 2;
-    background: #f9fafb;
-    border-bottom: 2px solid #e5e7eb;
-  }
-
   /* ── "Project" label — sticky left so it stays visible on horizontal scroll ── */
-  /* Corner cell — sticky on both axes, must outrank all other sticky cells. */
   .hd-label {
     position: sticky;
-    top: 0;
     left: 0;
-    z-index: 3;
+    z-index: 5;
     background: #f9fafb;
     border-right: 1px solid #e5e7eb;
     padding: 0 0.75rem;
@@ -432,7 +464,6 @@ function fmtDate(iso: string | null | undefined): string {
 
   .now-badge {
     display: block;
-    margin: 2px auto 0;
     font-size: 0.55rem;
     font-weight: 700;
     background: var(--color-primary);
@@ -441,13 +472,14 @@ function fmtDate(iso: string | null | undefined): string {
     padding: 0.1em 0.4em;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    margin: 2px auto 0;
   }
 
   /* ── Team header row ── */
   .team-header {
     position: sticky;
     left: 0;
-    z-index: 1;
+    z-index: 4;
     border-top: 1px solid color-mix(in srgb, var(--team-color) 50%, transparent);
     border-bottom: 1px solid
       color-mix(in srgb, var(--team-color) 50%, transparent);
@@ -475,7 +507,7 @@ function fmtDate(iso: string | null | undefined): string {
   .proj-label {
     position: sticky;
     left: 0;
-    z-index: 1;
+    z-index: 4;
     /* background-color set via inline style as opaque color-mix() */
     border-right: 1px solid var(--team-color);
     padding: 0 0.75rem;
@@ -508,8 +540,9 @@ function fmtDate(iso: string | null | undefined): string {
   /* ── Project timeline track ── */
   .proj-track {
     position: relative;
-    min-height: 3.25rem;
+    height: 3.25rem;
     overflow: visible;
+    vertical-align: top;
   }
 
   /* "Today" vertical line */
@@ -586,17 +619,42 @@ function fmtDate(iso: string | null | undefined): string {
     transform: rotate(45deg) scale(1.3);
   }
 
+  .ms-pin:hover {
+    z-index: 10;
+  }
+
   .ms-pin-name {
-    font-size: 0.58rem;
+    display: none;
+  }
+
+  .ms-pin:hover .ms-pin-name {
+    display: block;
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(25, 25, 25, 0.92);
+    color: #fff;
+    padding: 5px 8px;
+    border-radius: 5px;
+    font-size: 0.65rem;
     font-weight: 600;
-    color: #444;
+    white-space: normal;
+    max-width: 130px;
     text-align: center;
-    max-width: 72px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    margin-top: 0.25rem;
-    line-height: 1.2;
+    line-height: 1.3;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    pointer-events: none;
+  }
+
+  .ms-pin:hover .ms-pin-name::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(25, 25, 25, 0.92);
   }
 
   /* ── Scrollbar (body only) ── */
@@ -636,6 +694,11 @@ function fmtDate(iso: string | null | undefined): string {
     background: #e5e7eb;
   }
 
+  /* Desktop: show month-based headers, hide mobile ones */
+  .hd-quarter--mobile {
+    display: none;
+  }
+
   /* ── Mobile breakpoint ── */
   @media (max-width: 767px) {
     /* Show toggle button */
@@ -643,9 +706,10 @@ function fmtDate(iso: string | null | undefined): string {
       display: flex;
     }
 
-    /* Compact column widths — quarter headers still span their months correctly */
+    /* Quarter-column widths for header and body */
+    .board-header-table,
     .board {
-      width: max(calc(130px + var(--n-months) * 24px), 100%);
+      width: max(calc(130px + var(--n-quarters) * 72px), 100%);
     }
 
     .col-label {
@@ -653,10 +717,20 @@ function fmtDate(iso: string | null | undefined): string {
     }
 
     .col-month {
-      width: 24px;
+      width: 0;
+      display: none;
     }
 
-    /* Collapse month header row (keep in DOM so column structure stays correct) */
+    /* Swap quarter header variants */
+    .hd-quarter--desktop {
+      display: none;
+    }
+    .hd-quarter--mobile {
+      display: table-cell;
+      width: 72px;
+    }
+
+    /* Collapse month header row */
     .hd-month {
       height: 0;
       min-height: 0;
@@ -718,6 +792,7 @@ function fmtDate(iso: string | null | undefined): string {
     }
 
     /* ── "Full timeline" mode: restore month-column view ── */
+    .board-outer--full .board-header-table,
     .board-outer--full .board {
       width: max(calc(300px + var(--n-months) * 88px), 100%);
     }
@@ -728,6 +803,15 @@ function fmtDate(iso: string | null | undefined): string {
 
     .board-outer--full .col-month {
       width: 88px;
+      display: table-column;
+    }
+
+    .board-outer--full .hd-quarter--desktop {
+      display: table-cell;
+    }
+
+    .board-outer--full .hd-quarter--mobile {
+      display: none;
     }
 
     .board-outer--full .hd-month {
@@ -747,6 +831,15 @@ function fmtDate(iso: string | null | undefined): string {
       display: block;
     }
   }
+
+  .visually-hidden {
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
 </style>
 
 <script>
@@ -760,7 +853,7 @@ function fmtDate(iso: string | null | undefined): string {
     const nowPct = parseFloat(rawPct)
     if (isNaN(nowPct)) return
 
-    const labelCell = board.querySelector<HTMLElement>('.hd-label')
+    const labelCell = document.querySelector<HTMLElement>('.hd-label')
     const labelWidth = labelCell?.offsetWidth ?? 300
     const timelineWidth = board.scrollWidth - labelWidth
     const nowPxFromBoardLeft = labelWidth + (nowPct / 100) * timelineWidth
@@ -768,7 +861,29 @@ function fmtDate(iso: string | null | undefined): string {
     boardScroll.scrollLeft = nowPxFromBoardLeft - boardScroll.clientWidth / 2
   }
 
-  // Toggle between compact quarter view and full month view on mobile.
+  // Keep the sticky header in sync with the body's horizontal scroll (bidirectional).
+  function initScrollSync() {
+    const boardScroll = document.querySelector<HTMLElement>('.board-scroll')
+    const headerInner = document.querySelector<HTMLElement>(
+      '.board-header-inner'
+    )
+    if (!boardScroll || !headerInner) return
+    let syncing = false
+    boardScroll.addEventListener('scroll', () => {
+      if (syncing) return
+      syncing = true
+      headerInner.scrollLeft = boardScroll.scrollLeft
+      syncing = false
+    })
+    headerInner.addEventListener('scroll', () => {
+      if (syncing) return
+      syncing = true
+      boardScroll.scrollLeft = headerInner.scrollLeft
+      syncing = false
+    })
+  }
+
+  // Toggle between quarter view and full month view on mobile.
   document
     .querySelectorAll<HTMLButtonElement>('.mobile-toggle-btn')
     .forEach((btn) => {
@@ -783,8 +898,12 @@ function fmtDate(iso: string | null | undefined): string {
     })
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', centreOnNow)
+    document.addEventListener('DOMContentLoaded', () => {
+      initScrollSync()
+      centreOnNow()
+    })
   } else {
+    initScrollSync()
     centreOnNow()
   }
 
