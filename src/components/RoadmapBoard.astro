@@ -54,13 +54,18 @@ function fmtDate(iso: string | null | undefined): string {
   </div>
 
   <!--
-    .board-frame clips children to the border-radius without becoming a
-    scroll container (overflow: clip does not create one, unlike overflow: hidden).
-    .board-scroll uses overflow-y: clip for the same reason — so that
-    <thead> can use position: sticky relative to the viewport.
+    .board-frame clips children to the border-radius (overflow: clip) without
+    becoming a scroll container, so the border-radius applies cleanly.
+    .board-scroll is the actual scroll container for both axes; its flex: 1
+    height is calculated by the flex chain from the page layout.
   -->
   <div class="board-frame" style={`--n-months: ${nMonths}`}>
-    <div class="board-scroll">
+    <div
+      class="board-scroll"
+      role="region"
+      tabindex="0"
+      aria-label="Project timeline"
+    >
       <table
         class="board"
         style={`--now-pct: ${nowLeft}%`}
@@ -134,7 +139,12 @@ function fmtDate(iso: string | null | undefined): string {
                       scope="rowgroup"
                       style={`background: ${teamColor}33; --team-color: ${teamColor}`}
                     >
-                      <span class="team-header-label">{team.name}</span>
+                      <span
+                        class="team-header-label"
+                        style={`background: color-mix(in srgb, ${teamColor} 20%, white)`}
+                      >
+                        {team.name}
+                      </span>
                     </th>
                     <td
                       class="team-header-track"
@@ -283,28 +293,35 @@ function fmtDate(iso: string | null | undefined): string {
   .board-outer {
     max-width: var(--max-content-width);
     margin-inline: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    width: 100%;
   }
 
-  /*
-    Frame: provides the border, border-radius, and box-shadow for the whole board.
-    overflow: clip clips children to the border-radius WITHOUT creating a scroll
-    container, so <thead> can use position: sticky relative to the viewport.
-  */
+  /* Frame: clips children to the border-radius and passes height down. */
   .board-frame {
     border: 1px solid #e5e7eb;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     overflow: clip;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
   }
 
   /*
-    Both axes scroll here. This makes .board-scroll the scroll container for the
-    sticky <thead> — which is the only reliable cross-browser way to have a sticky
-    table header inside a horizontally-scrolling table.
+    The scroll container for the table. overflow: auto triggers both scrollbars
+    when content exceeds the container. flex: 1 + min-height: 0 fills exactly
+    the remaining height calculated by the flex chain from the page layout,
+    so no magic numbers are needed. Sticky <thead> cells reference this element.
   */
   .board-scroll {
     overflow: auto;
-    max-height: calc(100dvh - var(--site-header-height) - 4rem);
+    flex: 1;
+    min-height: 0;
   }
 
   /* ── Table ── */
@@ -326,39 +343,31 @@ function fmtDate(iso: string | null | undefined): string {
     width: 88px;
   }
 
-  /*
-    Sticky is on <thead> itself so both header rows (quarters + months) move as
-    a single unit and don't overlap each other.
-  */
-  thead th {
-    background: #f9fafb;
-  }
-
-  /*
-    Sticky on individual cells, not <thead> itself — thead-level sticky pushes
-    the element down by the top value in some browsers, creating a visible gap.
-    Quarter row cells stick at the site header; month row cells stick just below.
-  */
+  /* Quarter row sticks at the top of the scroll container. */
   thead tr:first-child th {
     position: sticky;
     top: 0;
-    z-index: 13;
+    z-index: 2;
     height: 2rem;
+    background: #f9fafb;
   }
 
+  /* Month row sticks immediately below the quarter row. */
   thead tr:last-child th {
     position: sticky;
     top: 2rem;
-    z-index: 12;
+    z-index: 2;
+    background: #f9fafb;
     border-bottom: 2px solid #e5e7eb;
   }
 
   /* ── "Project" label — sticky left so it stays visible on horizontal scroll ── */
+  /* Corner cell — sticky on both axes, must outrank all other sticky cells. */
   .hd-label {
     position: sticky;
     top: 0;
     left: 0;
-    z-index: 14;
+    z-index: 3;
     background: #f9fafb;
     border-right: 1px solid #e5e7eb;
     padding: 0 0.75rem;
@@ -416,6 +425,7 @@ function fmtDate(iso: string | null | undefined): string {
 
   .now-badge {
     display: block;
+    margin: 2px auto 0;
     font-size: 0.55rem;
     font-weight: 700;
     background: var(--color-primary);
@@ -430,7 +440,7 @@ function fmtDate(iso: string | null | undefined): string {
   .team-header {
     position: sticky;
     left: 0;
-    z-index: 4;
+    z-index: 1;
     border-top: 1px solid color-mix(in srgb, var(--team-color) 50%, transparent);
     border-bottom: 1px solid
       color-mix(in srgb, var(--team-color) 50%, transparent);
@@ -458,7 +468,7 @@ function fmtDate(iso: string | null | undefined): string {
   .proj-label {
     position: sticky;
     left: 0;
-    z-index: 4;
+    z-index: 1;
     /* background-color set via inline style as opaque color-mix() */
     border-right: 1px solid var(--team-color);
     padding: 0 0.75rem;
@@ -569,42 +579,17 @@ function fmtDate(iso: string | null | undefined): string {
     transform: rotate(45deg) scale(1.3);
   }
 
-  .ms-pin:hover {
-    z-index: 10;
-  }
-
   .ms-pin-name {
-    display: none;
-  }
-
-  .ms-pin:hover .ms-pin-name {
-    display: block;
-    position: absolute;
-    bottom: calc(100% + 8px);
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(25, 25, 25, 0.92);
-    color: #fff;
-    padding: 5px 8px;
-    border-radius: 5px;
-    font-size: 0.65rem;
+    font-size: 0.58rem;
     font-weight: 600;
-    white-space: normal;
-    max-width: 130px;
+    color: #444;
     text-align: center;
-    line-height: 1.3;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-    pointer-events: none;
-  }
-
-  .ms-pin:hover .ms-pin-name::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 5px solid transparent;
-    border-top-color: rgba(25, 25, 25, 0.92);
+    max-width: 72px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 0.25rem;
+    line-height: 1.2;
   }
 
   /* ── Scrollbar (body only) ── */
