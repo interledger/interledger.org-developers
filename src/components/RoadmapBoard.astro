@@ -162,6 +162,28 @@ function fmtDate(iso: string | null | undefined): string {
           <col class="col-label" />
           {months.map(() => <col class="col-month" />)}
         </colgroup>
+
+        <!--
+          Semantic column headers for screen readers. Visually hidden — sighted
+          users see the sticky aria-hidden header above. This thead gives AT
+          proper column associations when navigating the table cells.
+        -->
+        <thead class="sr-only">
+          <tr>
+            <th scope="col" rowspan="2">Team / Project</th>
+            {
+              quarterHeaders.map((qh) => (
+                <th scope="colgroup" colspan={qh.span}>
+                  {qh.label}
+                </th>
+              ))
+            }
+          </tr>
+          <tr>
+            {months.map((m) => <th scope="col">{m.label}</th>)}
+          </tr>
+        </thead>
+
         <tbody>
           {
             gridItems.map((item) => {
@@ -832,7 +854,8 @@ function fmtDate(iso: string | null | undefined): string {
     }
   }
 
-  .visually-hidden {
+  .visually-hidden,
+  .sr-only {
     clip-path: inset(50%);
     height: 1px;
     overflow: hidden;
