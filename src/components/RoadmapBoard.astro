@@ -293,6 +293,9 @@ function fmtDate(iso: string | null | undefined): string {
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     overflow: clip;
+    --col-label-w: 300px;
+    --col-month-w: 88px;
+    --row-h: 3.25rem;
   }
 
   /*
@@ -310,18 +313,21 @@ function fmtDate(iso: string | null | undefined): string {
     table-layout: fixed;
     border-collapse: separate;
     border-spacing: 0;
-    width: max(calc(300px + var(--n-months) * 88px), 100%);
+    width: max(
+      calc(var(--col-label-w) + var(--n-months) * var(--col-month-w)),
+      100%
+    );
     font-family: 'Titillium', Arial, sans-serif;
     font-size: var(--step--1);
     color: #1a1a1a;
   }
 
   .col-label {
-    width: 300px;
+    width: var(--col-label-w);
   }
 
   .col-month {
-    width: 88px;
+    width: var(--col-month-w);
   }
 
   /* ── Sticky thead ── */
@@ -458,7 +464,7 @@ function fmtDate(iso: string | null | undefined): string {
     padding: 0 0.75rem;
     display: flex;
     align-items: center;
-    min-height: 3.25rem;
+    min-height: var(--row-h);
   }
 
   .proj-name {
@@ -486,7 +492,7 @@ function fmtDate(iso: string | null | undefined): string {
   /* ── Project timeline track ── */
   .proj-track {
     position: relative;
-    height: 3.25rem;
+    height: var(--row-h);
     overflow: visible;
   }
 
@@ -691,17 +697,10 @@ function fmtDate(iso: string | null | undefined): string {
       display: flex;
     }
 
-    /* Compact month columns — quarter headers still span their months correctly */
-    .board {
-      width: max(calc(130px + var(--n-months) * 24px), 100%);
-    }
-
-    .col-label {
-      width: 130px;
-    }
-
-    .col-month {
-      width: 24px;
+    /* Compact column widths — quarter headers still span their months correctly */
+    .board-frame {
+      --col-label-w: 130px;
+      --col-month-w: 24px;
     }
 
     /* Hide month label text (keep cells for column structure) */
@@ -728,16 +727,9 @@ function fmtDate(iso: string | null | undefined): string {
     }
 
     /* ── "Full timeline" mode: restore month-column view ── */
-    .board-outer--full .board {
-      width: max(calc(300px + var(--n-months) * 88px), 100%);
-    }
-
-    .board-outer--full .col-label {
-      width: 300px;
-    }
-
-    .board-outer--full .col-month {
-      width: 88px;
+    .board-outer--full .board-frame {
+      --col-label-w: 300px;
+      --col-month-w: 88px;
     }
 
     .board-outer--full .hd-month {
@@ -771,7 +763,7 @@ function fmtDate(iso: string | null | undefined): string {
     if (isNaN(nowPct)) return
 
     const labelCell = board.querySelector<HTMLElement>('.hd-label')
-    const labelWidth = labelCell?.offsetWidth ?? 300
+    const labelWidth = labelCell?.offsetWidth ?? 300 // fallback matches --col-label-w
     const timelineWidth = board.scrollWidth - labelWidth
     const nowPxFromBoardLeft = labelWidth + (nowPct / 100) * timelineWidth
 
