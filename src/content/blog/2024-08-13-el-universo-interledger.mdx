@@ -82,7 +82,7 @@ Con el fin de trasladar este riesgo de falla en la transferencia desde los usuar
 
 El proceso de transferencia de paquetes ILP comienza cuando el conector emisor (A) construye un paquete ILP Prepare, que incluye la dirección ILP del destinatario, una condición de ejecución, el monto y el tiempo de expiración. El conector emisor también puede incorporar datos adicionales, cuyo formato depende del protocolo de nivel superior que se utilice. Este paquete se envía al conector (B) a través de un canal autenticado, establecido mediante un protocolo de la capa de enlace. A continuación, el conector (B) verifica el saldo de liquidez del conector (A) y, si resulta suficiente, debita el monto correspondiente de la cuenta de liquidez. Posteriormente, el conector consulta sus tablas de enrutamiento para determinar el siguiente salto, ajusta el monto y el tiempo de expiración del paquete en función de su tasa de cambio y lo reenvía.
 
-Los conectores siguientes repiten estos pasos hasta que el paquete llega al conector receptor (D). Una vez recibido, el destinatario valida el paquete conforme a los requisitos del protocolo de nivel superior y puede aceptarlo, devolviendo un paquete ILP Fulfill con la [preimagen](<https://en.wikipedia.org/wiki/Image_(mathematics)#Inverse_image>)  de la condición, o rechazarlo mediante un paquete ILP Reject. Si el paquete se acepta, cada conector de la cadena verifica el cumplimiento y acredita al siguiente conector hasta alcanzar nuevamente al emisor original.
+Los conectores siguientes repiten estos pasos hasta que el paquete llega al conector receptor (D). Una vez recibido, el destinatario valida el paquete conforme a los requisitos del protocolo de nivel superior y puede aceptarlo, devolviendo un paquete ILP Fulfill con la [preimagen](<https://en.wikipedia.org/wiki/Image_(mathematics)#Inverse_image>) de la condición, o rechazarlo mediante un paquete ILP Reject. Si el paquete se acepta, cada conector de la cadena verifica el cumplimiento y acredita al siguiente conector hasta alcanzar nuevamente al emisor original.
 
 El conector emisor verifica entonces el cumplimiento respecto de la condición original, registra la transacción y puede repetir el proceso hasta completar el monto total que desea transferir. Este ciclo garantiza transacciones seguras, eficientes y multimoneda a través de una red de conectores, preservando la integridad y la sincronización de cada transferencia de paquetes.
 
@@ -136,7 +136,7 @@ Cabe señalar que un paquete STREAM se incluye dentro del campo de datos de un p
 
 La capa de aplicación constituye el nivel final de la pila Interledger y define las funcionalidades orientadas a desarrolladores, lo que permite la creación de diversas aplicaciones. En esta capa, se admiten dos protocolos: SPSP (Protocolo de Configuración de Pagos Simples) y Open Payments.
 
-El protocolo [SPSP](https://interledger.org/developers/rfcs/simple-payment-setup-protocol/)  simplifica el proceso de configuración de pagos. Cuando se realiza una solicitud GET a una URL asociada a un Payment Pointer mediante los encabezados correspondientes de SPSP, el protocolo establece la información que debe devolverse.
+El protocolo [SPSP](https://interledger.org/developers/rfcs/simple-payment-setup-protocol/) simplifica el proceso de configuración de pagos. Cuando se realiza una solicitud GET a una URL asociada a un Payment Pointer mediante los encabezados correspondientes de SPSP, el protocolo establece la información que debe devolverse.
 
 ```http wrap
 HTP/1.1 200 OK
@@ -169,7 +169,7 @@ La respuesta es sencilla: se trata de una [implementación de referencia](https:
 
 ![Componentes de la pila Interledger incluidos en Rafiki](/developers/img/blog/2024-08-13/es/rafiki-es.jpg)
 
-[Rafiki](https://rafiki.dev/)  es software de código abierto, disponible de forma gratuita para cualquier entidad con licencia. Su objetivo consiste en reducir el esfuerzo que deben realizar las entidades para incorporar Interledger en las cuentas de sus usuarios y operar como conectores dentro de la red ILP. En lugar de utilizar BTP, Rafiki emplea ILP sobre HTTP, ya que se supone que el tamaño de los paquetes en este tipo de transacciones será algo mayor, posiblemente del orden de un centavo. Por lo tanto, los pagos se dividen en un menor número de paquetes, lo que hace innecesario establecer una conexión persistente mediante sockets.
+[Rafiki](https://rafiki.dev/) es software de código abierto, disponible de forma gratuita para cualquier entidad con licencia. Su objetivo consiste en reducir el esfuerzo que deben realizar las entidades para incorporar Interledger en las cuentas de sus usuarios y operar como conectores dentro de la red ILP. En lugar de utilizar BTP, Rafiki emplea ILP sobre HTTP, ya que se supone que el tamaño de los paquetes en este tipo de transacciones será algo mayor, posiblemente del orden de un centavo. Por lo tanto, los pagos se dividen en un menor número de paquetes, lo que hace innecesario establecer una conexión persistente mediante sockets.
 
 ### Rafiki.money, entorno de pruebas y red de pruebas
 
