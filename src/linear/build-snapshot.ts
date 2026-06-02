@@ -119,6 +119,28 @@ type CustomViewQueryResult = {
   } | null
 }
 
+// Fetched separately to avoid blowing Linear's query-complexity limit when
+// issues are nested inside a paginated projects list.
+const PROJECT_ISSUE_TEAMS_QUERY = `
+  query FetchProjectIssueTeams($id: String!, $after: String) {
+    project(id: $id) {
+      issues(first: 100, after: $after) {
+        nodes { team { id } }
+        pageInfo { hasNextPage endCursor }
+      }
+    }
+  }
+`
+
+type ProjectIssueTeamsQueryResult = {
+  project: {
+    issues: {
+      nodes: Array<{ team: { id: string } | null }>
+      pageInfo: { hasNextPage: boolean; endCursor: string | null }
+    }
+  } | null
+}
+
 const PROJECT_LABELS_QUERY = `
   query FetchProjectLabels {
     projectLabels {
@@ -201,6 +223,33 @@ async function fetchPublicLabelIds(): Promise<Set<string>> {
   return new Set(ids)
 }
 
+async function fetchProjectIssueTeamCounts(
+  projectId: string
+): Promise<Map<string, number>> {
+  const counts = new Map<string, number>()
+  let hasNextPage = true
+  let endCursor: string | null = null
+
+  while (hasNextPage) {
+    const result = await withRetry(() =>
+      linear.client.request<
+        ProjectIssueTeamsQueryResult,
+        { id: string; after: string | null }
+      >(PROJECT_ISSUE_TEAMS_QUERY, { id: projectId, after: endCursor })
+    )
+    const issues = result.project?.issues
+    if (!issues) break
+    for (const node of issues.nodes) {
+      if (!node.team?.id) continue
+      counts.set(node.team.id, (counts.get(node.team.id) ?? 0) + 1)
+    }
+    hasNextPage = issues.pageInfo.hasNextPage
+    endCursor = issues.pageInfo.endCursor
+  }
+
+  return counts
+}
+
 async function fetchViewProjects(viewId: string): Promise<ViewProjectNode[]> {
   const all: ViewProjectNode[] = []
   let hasNextPage = true
@@ -244,11 +293,40 @@ export async function buildSnapshot(): Promise<Snapshot> {
     fetchPublicLabelIds()
   ])
 
+  // Fetch issue-team counts only for multi-team projects to stay under
+  // Linear's query complexity limit.
+  const multiTeamProjects = viewProjects.filter((p) => p.teams.nodes.length > 1)
+  const issueCountEntries = await Promise.all(
+    multiTeamProjects.map(async (p) => {
+      const counts = await fetchProjectIssueTeamCounts(p.id)
+      return [p.id, counts] as const
+    })
+  )
+  const issueCountsByProjectId = new Map(issueCountEntries)
+
+  function dominantTeam(
+    p: ViewProjectNode
+  ): ViewProjectNode['teams']['nodes'][number] | null {
+    if (p.teams.nodes.length === 0) return null
+    if (p.teams.nodes.length === 1) return p.teams.nodes[0]
+    const counts = issueCountsByProjectId.get(p.id) ?? new Map<string, number>()
+    let best = p.teams.nodes[0]
+    let bestCount = counts.get(best.id) ?? 0
+    for (const t of p.teams.nodes.slice(1)) {
+      const c = counts.get(t.id) ?? 0
+      if (c > bestCount) {
+        best = t
+        bestCount = c
+      }
+    }
+    return best
+  }
+
   const projects: Project[] = viewProjects
     .filter((p) => p.state !== 'completed' && p.state !== 'cancelled')
     .filter((p) => p.labelIds.some((id) => publicLabelIds.has(id)))
     .map((p) => {
-      const firstTeam = p.teams.nodes[0] ?? null
+      const primaryTeam = dominantTeam(p)
       return {
         id: p.id,
         name: p.name,
@@ -263,12 +341,12 @@ export async function buildSnapshot(): Promise<Snapshot> {
         targetDate: p.targetDate ?? null,
         completedAt: p.completedAt ?? null,
         url: p.url,
-        team: firstTeam
+        team: primaryTeam
           ? {
-              id: firstTeam.id,
-              name: firstTeam.name,
-              key: firstTeam.key,
-              color: firstTeam.color
+              id: primaryTeam.id,
+              name: primaryTeam.name,
+              key: primaryTeam.key,
+              color: primaryTeam.color
             }
           : null,
         milestones: p.projectMilestones.nodes
