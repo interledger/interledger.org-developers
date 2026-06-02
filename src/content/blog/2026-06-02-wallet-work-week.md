@@ -16,7 +16,7 @@ tags:
 
 _A week of collaboration, architecture discussions, payment experiments, and product planning around the future of the Interledger Wallet._
 
-Wallet Work Week brought together engineers, product leads, and operations groups for a few packed days of planning, architecture debates, payment experiments, implementation sessions, and the occasional _“wait… how could this fail in production?”_ moment as we continue preparing for the official launch of the Interledger Wallet.
+Wallet Work Week brought together engineers, product leads, and operations groups for a few packed days of planning, architecture debates, payment experiments, implementation sessions, and the occasional _“wait… how could this fail in production?”_ moment as we continue preparing for the official launch of the [Interledger Wallet](https://interledger.app/).
 
 It wasn’t all architecture diagrams and payment flows though. The week also included a few icebreaker sessions, including a surprisingly competitive “guess the desk” challenge, as well as a “guess it from emojis” game built around Interledger-related words, movies, and random references. We took it a step further with office finger food at the BreakPoint office and shared traditional food at a local restaurant.
 
