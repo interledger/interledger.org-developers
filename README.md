@@ -99,6 +99,19 @@ This runs `gcloud compute url-maps invalidate-cdn-cache` against `/developers/*`
 
 For more information about the main Interledger.org infrastructure and deployment pipeline, see the [`interledger.org-v4`](https://github.com/interledger/interledger.org-v4) repository.
 
+## Netlify Serverless Functions
+
+This project uses Netlify serverless functions to power the live roadmap page:
+
+| Function                         | Purpose                                                                                              |
+| :------------------------------- | :--------------------------------------------------------------------------------------------------- |
+| `netlify/functions/sync.mts`     | Scheduled sync — fetches roadmap data from Linear every 12 hours and caches it in Netlify Blobs      |
+| `netlify/functions/sync-now.mts` | Manual sync — exposes `POST /api/sync` (deployed) or `POST /.netlify/functions/sync-now` (local dev) |
+
+The roadmap page is server-side rendered and reads from the blob cache on each request. The CDN caches the rendered HTML for 12 hours; the sync functions purge that cache after each update.
+
+For full details on the architecture, environment variables, local development setup, and how Deploy Previews interact with the shared blob store, see [`docs/roadmap-linear-sync.md`](docs/roadmap-linear-sync.md).
+
 Thank You for Contributing! We appreciate your effort to write a blog post and share your expertise with the community!
 
 ## Writing a blog post
