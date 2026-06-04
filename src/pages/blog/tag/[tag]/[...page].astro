@@ -67,6 +67,7 @@ const { page, allTags, selectedTag } = Astro.props
     paginationProps={{
       length: page.lastPage,
       currentPage: page.currentPage,
+      baseUrl: `/developers/blog/tag/${getTagSlug(selectedTag)}`,
       firstUrl: page.url.first,
       prevUrl: page.url.prev,
       nextUrl: page.url.next,
