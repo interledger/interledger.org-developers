@@ -2,7 +2,7 @@ import { timingSafeEqual } from 'crypto'
 import { getStore } from '@netlify/blobs'
 import { buildSnapshot } from '../../src/linear/build-snapshot.js'
 import type { Context } from '@netlify/functions'
-import { API_SECRET } from '../../src/config.js'
+import { API_SECRET, isNetlifyDev } from '../../src/config.js'
 import { purgeRoadmapCache } from './utils/purge-roadmap-cache.mts'
 
 const FIVE_MINUTES_MS = 5 * 60 * 1000
@@ -71,6 +71,8 @@ export default async function handler(
   )
 }
 
-export const config = {
-  path: '/api/sync'
-}
+// In local dev (netlify dev), the [[context.dev.redirects]] rule in netlify.toml
+// already maps /api/sync → /.netlify/functions/sync-now. Registering a custom
+// path here as well causes a conflict with that redirect, so we only set the
+// path in non-dev environments where the function must self-register at /api/sync.
+export const config = isNetlifyDev ? {} : { path: '/api/sync' }

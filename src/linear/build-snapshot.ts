@@ -372,6 +372,11 @@ export async function buildSnapshot(): Promise<Snapshot> {
       projectCount: projects.filter((p) => p.team?.id === t.id).length
     }))
 
+  /* eslint-disable-next-line no-console */
+  console.log(
+    `Fetched ${teams.length} teams and ${projects.length} projects from Linear at ${new Date().toISOString()}`
+  )
+
   return {
     generatedAt: new Date().toISOString(),
     teams,
