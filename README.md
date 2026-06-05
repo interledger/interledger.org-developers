@@ -37,28 +37,47 @@ For more information about the way our documentation projects are set up, please
 
 ## Local Development
 
-We are using [Bun](https://bun.sh/) in this repository, but you could theoretically use the package manager of your choice. To install Bun, run
+This project requires the [Netlify CLI](https://docs.netlify.com/cli/get-started/) for local development. Running `bun run start` alone will produce a redirect loop — the Netlify CLI proxy is needed to handle routing correctly.
+
+### Prerequisites
+
+Install [Bun](https://bun.sh/) and the Netlify CLI:
 
 ```sh
 curl -fsSL https://bun.sh/install | bash
+npm install -g netlify-cli
 ```
 
-### 🧞 Commands
+Then link the repo to the Netlify site (one-time):
 
-All commands are run from the root of the project, from a terminal:
+```sh
+netlify login
+netlify link
+```
+
+### Running locally
+
+```sh
+bun install
+netlify dev    # http://localhost:8888
+```
+
+> **Troubleshooting:** If `netlify dev` fails with a Neon extension network error, run `netlify dev --offline` instead — this skips the extension install and everything else works normally. See [`docs/roadmap-linear-sync.md`](docs/roadmap-linear-sync.md) for details.
+
+> **Note:** The roadmap page also requires a one-time blob population step after first run. See [`docs/roadmap-linear-sync.md`](docs/roadmap-linear-sync.md) for details.
+
+### 🧞 Other commands
 
 | Command                   | Action                                           |
 | :------------------------ | :----------------------------------------------- |
 | `bun install`             | Installs dependencies                            |
-| `bun run start`           | Starts local dev server at `localhost:1103`      |
+| `netlify dev`             | Starts local dev server at `localhost:8888`      |
 | `bun run build`           | Build your production site to `./dist/`          |
 | `bun run preview`         | Preview your build locally, before deploying     |
 | `bun run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `bun run astro -- --help` | Get help using the Astro CLI                     |
 | `bun run format`          | Format code and fix linting issues               |
 | `bun run lint`            | Check code formatting and linting                |
-
-You can substitute the `bun` commands with whatever package manager of your choice uses.
 
 ### 🔍 Code Formatting
 

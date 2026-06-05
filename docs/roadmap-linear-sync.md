@@ -30,14 +30,14 @@ The roadmap page is **server-side rendered** (`export const prerender = false`) 
 
 ## Environment variables
 
-| Variable                | Required | Notes                                                                                                                                           |
-| ----------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `LINEAR_API_KEY`        | Yes      | Linear API token (`lin_api_...`)                                                                                                                |
-| `API_SECRET`            | Yes      | Bearer token for `POST /api/sync`                                                                                                               |
-| `NETLIFY_API_TOKEN`     | Yes      | Netlify personal access token, used to purge CDN cache after sync. Get from: Netlify UI → User Settings → Applications → Personal access tokens |
-| `LINEAR_CUSTOM_VIEW_ID` | No       | Overrides the default view ID hardcoded in `build-snapshot.ts`. Set in `netlify.toml` (non-secret)                                              |
-| `NETLIFY_SITE_ID`       | Auto     | Injected by Netlify in all build/function contexts. Inject manually for local dev (see below)                                                   |
-| `NETLIFY_TOKEN`         | Auto     | Injected by `netlify dev` — required for Netlify Blobs to work outside a function                                                               |
+| Variable                | Required | Notes                                                                                                                                                          |
+| ----------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `LINEAR_API_KEY`        | Yes      | Linear API token (`lin_api_...`). Get from: Linear → Settings → API → Personal API keys. Read-only scope is sufficient.                                        |
+| `API_SECRET`            | Yes      | Bearer token for `POST /api/sync`. Generate any strong secret 32`                                                                                              |
+| `NETLIFY_API_TOKEN`     | No       | Only needed for CDN cache purging after sync. Get from: Netlify UI → User Settings → Applications → Personal access tokens. Safe to leave blank for local dev. |
+| `LINEAR_CUSTOM_VIEW_ID` | No       | Overrides the default view ID hardcoded in `build-snapshot.ts`. Set in `netlify.toml` (non-secret)                                                             |
+| `NETLIFY_SITE_ID`       | Auto     | Injected by Netlify in all build/function contexts. Inject manually for local dev (see below)                                                                  |
+| `NETLIFY_TOKEN`         | Auto     | Injected by `netlify dev` — required for Netlify Blobs to work outside a function                                                                              |
 
 Copy `.env.example` to `.env` and fill in the values. `.env` is gitignored.
 
@@ -53,7 +53,8 @@ netlify login
 netlify link        # Link this repo to the Netlify site
 ```
 
-After `netlify link`, the CLI writes `NETLIFY_SITE_ID` to `.netlify/state.json` and auto-injects `NETLIFY_SITE_ID` + `NETLIFY_TOKEN` at runtime. Both are needed for Netlify Blobs to connect to the cloud store.
+After `netlify link`, the CLI writes `NETLIFY_SITE_ID` to `.netlify/state.json` and auto-injects `NETLIFY_SITE_ID` + `NETLIFY_TOKEN` at runtime. Both are needed for Netlify Blobs to con
+nect to the cloud store.
 
 ### Daily workflow
 
@@ -63,44 +64,66 @@ netlify dev         # http://localhost:8888
 
 **Do not use `bun dev` or `astro dev`** for the roadmap page. Without the Netlify CLI, the function runtime context is missing and `getStore()` will throw — the roadmap page will show an error state.
 
+#### Troubleshooting: `netlify dev` fails with a Neon extension error
+
+If `netlify dev` exits immediately with a network timeout while installing the "neon" extension, the Neon integration is enabled on the Netlify site but can't install its plugin in your environment. The work around:
+
+```bash
+netlify dev --offline
+```
+
+`--offline` skips remote plugin installation. Netlify Blobs will still work.
+
 ### First-time blob population
 
-The blob store starts empty. Before the roadmap page can render, you need to run a sync.
+This step is only needed if you want to view the `/developers/roadmap` page locally. For all other development work, you can skip it.
 
-Locally, the `netlify dev` proxy does **not** forward `/.netlify/functions/*` URLs through the redirect rules, so you must call the function URL directly — bypassing the `/api/sync` shortcut that only works in deployed environments:
+The blob store starts empty locally. Before the roadmap page can render, you need to run a sync. Do this **after** `netlify dev` is running.
+
+Locally, the `netlify dev` proxy does **not** forward `/.netlify/functions/*` URLs through the redirect rules, so you must call the function URL directly — bypassing the `/api/sync` sho
+rtcut that only works in deployed environments:
 
 ```bash
 curl -X POST http://localhost:8888/.netlify/functions/sync-now \
   -H "Authorization: Bearer <your API_SECRET>"
 ```
 
-> **Why the different URL locally?**  
-> In deployed environments (production and Deploy Previews), `netlify.toml` has no redirect rule for `/api/sync` in non-dev contexts, so the function registers itself at `/api/sync` via `export const config = { path: '/api/sync' }`.  
-> In local `netlify dev`, existing redirect rules take precedence, so `netlify.toml` adds a dev-only redirect:
->
-> ```toml
-> # Route /api/sync to the sync-now function (dev only)
-> [[context.dev.redirects]]
->   from = "/api/sync"
->   to = "/.netlify/functions/sync-now"
->   status = 200
->   force = true
-> ```
->
-> Both `/api/sync` and `/.netlify/functions/sync-now` therefore work locally, but only `/.netlify/functions/sync-now` is guaranteed to work in all environments.
+**Why the different URL locally?**  
+In deployed environments (production and Deploy Previews), `netlify.toml` has no redirect rule for `/api/sync` in non-dev contexts, so the function registers itself at `/api/sync` via
+`export const config = { path: '/api/sync' }`.  
+In local `netlify dev`, existing redirect rules take precedence, so `netlify.toml` adds a dev-only redirect:
 
-This fetches live data from Linear and writes the snapshot to Netlify Blobs. Because `netlify dev` connects to the linked site's blob store, this writes to the **production blob** — the same data production serves.
+```toml
+# Route /api/sync to the sync-now function (dev only)
+[[context.dev.redirects]]
+  from = "/api/sync"
+  to = "/.netlify/functions/sync-now"
+  status = 200
+  force = true
+```
 
-After that, visit `http://localhost:8888/developers/roadmap`.
+Both `/api/sync` and `/.netlify/functions/sync-now` therefore work locally, but only `/.netlify/functions/sync-now` is guaranteed to work in all environments.
+
+This fetches live data from Linear and writes the snapshot to Netlify Blobs. Because `netlify dev` connects to the linked site's blob store, this writes to the **production blob** — the
+same data production serves.
+
+After syncing, visit the roadmap at:
+
+```
+http://localhost:1103/developers/roadmap
+```
+
+**Why port 1103 and not 8888?**  
+`netlify.toml` has a redirect that routes `/developers/roadmap` to `/.netlify/functions/ssr` — a function that only exists in production builds. In dev, Astro handles SSR pages directly. Accessing port 1103 (the raw Astro dev server) bypasses the Netlify proxy and hits Astro directly, which works correctly.
 
 ### What runs locally
 
-| Feature            | Local (`netlify dev`)                                                                |
-| ------------------ | ------------------------------------------------------------------------------------ |
-| Roadmap page (SSR) | ✓ Works — reads from Netlify Blobs                                                   |
-| `POST /api/sync`   | ✓ Works — fetches Linear, updates blob                                               |
-| Scheduled sync     | ✗ Does not auto-run locally — trigger manually via `/api/sync`                       |
-| CDN cache purge    | ✓ Fires if `NETLIFY_API_TOKEN` + `NETLIFY_SITE_ID` are set (purges production cache) |
+| Feature            | Local (`netlify dev`)                                                                      |
+| ------------------ | ------------------------------------------------------------------------------------------ |
+| Roadmap page (SSR) | ✓ Works — visit `http://localhost:1103/developers/roadmap` (not port 8888, see note above) |
+| `POST /api/sync`   | ✓ Works — fetches Linear, updates blob                                                     |
+| Scheduled sync     | ✗ Does not auto-run locally — trigger manually via `/api/sync`                             |
+| CDN cache purge    | ✓ Fires if `NETLIFY_API_TOKEN` + `NETLIFY_SITE_ID` are set (purges production cache)       |
 
 ---
 
