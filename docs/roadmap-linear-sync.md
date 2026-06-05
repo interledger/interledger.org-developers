@@ -53,8 +53,7 @@ netlify login
 netlify link        # Link this repo to the Netlify site
 ```
 
-After `netlify link`, the CLI writes `NETLIFY_SITE_ID` to `.netlify/state.json` and auto-injects `NETLIFY_SITE_ID` + `NETLIFY_TOKEN` at runtime. Both are needed for Netlify Blobs to con
-nect to the cloud store.
+After `netlify link`, the CLI writes `NETLIFY_SITE_ID` to `.netlify/state.json` and auto-injects `NETLIFY_SITE_ID` + `NETLIFY_TOKEN` at runtime. Both are needed for Netlify Blobs to connect to the cloud store.
 
 ### Daily workflow
 
@@ -80,8 +79,7 @@ This step is only needed if you want to view the `/developers/roadmap` page loca
 
 The blob store starts empty locally. Before the roadmap page can render, you need to run a sync. Do this **after** `netlify dev` is running.
 
-Locally, the `netlify dev` proxy does **not** forward `/.netlify/functions/*` URLs through the redirect rules, so you must call the function URL directly — bypassing the `/api/sync` sho
-rtcut that only works in deployed environments:
+Locally, the `netlify dev` proxy does **not** forward `/.netlify/functions/*` URLs through the redirect rules, so you must call the function URL directly — bypassing the `/api/sync` shortcut that only works in deployed environments:
 
 ```bash
 curl -X POST http://localhost:8888/.netlify/functions/sync-now \
