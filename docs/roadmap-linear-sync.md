@@ -87,8 +87,7 @@ curl -X POST http://localhost:8888/.netlify/functions/sync-now \
 ```
 
 **Why the different URL locally?**  
-In deployed environments (production and Deploy Previews), `netlify.toml` has no redirect rule for `/api/sync` in non-dev contexts, so the function registers itself at `/api/sync` via
-`export const config = { path: '/api/sync' }`.  
+In deployed environments (production and Deploy Previews), `netlify.toml` has no redirect rule for `/api/sync` in non-dev contexts, so the function registers itself at `/api/sync` via `export const config = { path: '/api/sync' }`.  
 In local `netlify dev`, existing redirect rules take precedence, so `netlify.toml` adds a dev-only redirect:
 
 ```toml
@@ -102,8 +101,7 @@ In local `netlify dev`, existing redirect rules take precedence, so `netlify.tom
 
 Both `/api/sync` and `/.netlify/functions/sync-now` therefore work locally, but only `/.netlify/functions/sync-now` is guaranteed to work in all environments.
 
-This fetches live data from Linear and writes the snapshot to Netlify Blobs. Because `netlify dev` connects to the linked site's blob store, this writes to the **production blob** — the
-same data production serves.
+This fetches live data from Linear and writes the snapshot to Netlify Blobs. Because `netlify dev` connects to the linked site's blob store, this writes to the **production blob** — the same data production serves.
 
 After syncing, visit the roadmap at:
 
