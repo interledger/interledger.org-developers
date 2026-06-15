@@ -23,8 +23,12 @@ pnpm-debug.log*
 # lock files
 bun.lock
 bun.lockb
+deno.lock
 pnpm-lock.yaml
 package-lock.json
 
 # webstorm
 .idea/
+
+# Local Netlify folder
+.netlify

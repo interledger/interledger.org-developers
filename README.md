@@ -37,28 +37,47 @@ For more information about the way our documentation projects are set up, please
 
 ## Local Development
 
-We are using [Bun](https://bun.sh/) in this repository, but you could theoretically use the package manager of your choice. To install Bun, run
+This project requires the [Netlify CLI](https://docs.netlify.com/cli/get-started/) for local development. Running `bun run start` alone will produce a redirect loop — the Netlify CLI proxy is needed to handle routing correctly.
+
+### Prerequisites
+
+Install [Bun](https://bun.sh/) and the Netlify CLI:
 
 ```sh
 curl -fsSL https://bun.sh/install | bash
+npm install -g netlify-cli
 ```
 
-### 🧞 Commands
+Then link the repo to the Netlify site (one-time):
 
-All commands are run from the root of the project, from a terminal:
+```sh
+netlify login
+netlify link
+```
+
+### Running locally
+
+```sh
+bun install
+netlify dev    # http://localhost:8888
+```
+
+> **Troubleshooting:** If `netlify dev` fails with a Neon extension network error, run `netlify dev --offline` instead — this skips the extension install and everything else works normally. See [`docs/roadmap-linear-sync.md`](docs/roadmap-linear-sync.md) for details.
+
+> **Note:** The roadmap page also requires a one-time blob population step after first run. See [`docs/roadmap-linear-sync.md`](docs/roadmap-linear-sync.md) for details.
+
+### 🧞 Other commands
 
 | Command                   | Action                                           |
 | :------------------------ | :----------------------------------------------- |
 | `bun install`             | Installs dependencies                            |
-| `bun run start`           | Starts local dev server at `localhost:1103`      |
+| `netlify dev`             | Starts local dev server at `localhost:8888`      |
 | `bun run build`           | Build your production site to `./dist/`          |
 | `bun run preview`         | Preview your build locally, before deploying     |
 | `bun run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `bun run astro -- --help` | Get help using the Astro CLI                     |
 | `bun run format`          | Format code and fix linting issues               |
 | `bun run lint`            | Check code formatting and linting                |
-
-You can substitute the `bun` commands with whatever package manager of your choice uses.
 
 ### 🔍 Code Formatting
 
@@ -98,6 +117,19 @@ Because GCP Cloud CDN caches `/developers/*`, newly deployed content may take up
 This runs `gcloud compute url-maps invalidate-cdn-cache` against `/developers/*` and typically propagates within a minute.
 
 For more information about the main Interledger.org infrastructure and deployment pipeline, see the [`interledger.org-v4`](https://github.com/interledger/interledger.org-v4) repository.
+
+## Netlify Serverless Functions
+
+This project uses Netlify serverless functions to power the live roadmap page:
+
+| Function                         | Purpose                                                                                              |
+| :------------------------------- | :--------------------------------------------------------------------------------------------------- |
+| `netlify/functions/sync.mts`     | Scheduled sync — fetches roadmap data from Linear every 12 hours and caches it in Netlify Blobs      |
+| `netlify/functions/sync-now.mts` | Manual sync — exposes `POST /api/sync` (deployed) or `POST /.netlify/functions/sync-now` (local dev) |
+
+The roadmap page is server-side rendered and reads from the blob cache on each request. The CDN caches the rendered HTML for 12 hours; the sync functions purge that cache after each update.
+
+For full details on the architecture, environment variables, local development setup, and how Deploy Previews interact with the shared blob store, see [`docs/roadmap-linear-sync.md`](docs/roadmap-linear-sync.md).
 
 Thank You for Contributing! We appreciate your effort to write a blog post and share your expertise with the community!
 

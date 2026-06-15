@@ -12,9 +12,13 @@
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.6",
+    "@astrojs/netlify": "^7.0.7",
     "@astrojs/node": "^10.1.2",
     "@astrojs/starlight": "^0.39.2",
     "@interledger/docs-design-system": "^0.13.0",
+    "@linear/sdk": "^82.0.0",
+    "@netlify/blobs": "^10.7.4",
+    "@netlify/functions": "^5.2.0",
     "@types/showdown": "^2.0.6",
     "astro": "~6.3.8",
     "html-to-text": "^10.0.0",
