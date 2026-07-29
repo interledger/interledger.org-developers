@@ -1,0 +1,132 @@
+---
+title: 'Rafiki & Cards Work Week 2026: The Berlin Edition'
+description: 'Recap of our annual Rafiki & Cards work week.'
+date: 2026-07-29
+slug: rafiki-cards-work-week-2026
+authors:
+  - Tadej Golobic
+author_urls:
+  - https://www.linkedin.com/in/tadej-golobic
+tags:
+  - Rafiki
+  - Cards
+  - Offline Payments
+  - Work Week
+  - Updates
+---
+
+import LargeImg from '/src/components/blog/LargeImg.astro'
+
+[As promised in the last work week recap, we are next :)](https://interledger.org/developers/blog/integrations-work-week/)
+
+Sunday, 12th of July. A day most of us had been looking forward to. After three editions in the heart of Transylvania, the Rafiki and newly added Cards work week moved to central Europe - Germany, just outside of Berlin, where both teams gathered for a full week of solving problems. Let's rephrase that: We gathered to build awesome solutions.
+
+For a team that spends most of the year on different sides of the world and in different time zones, these work weeks are special. For five days, "team" isn't that Google Meet grid of faces in front of us. It is people, in the same room, with whiteboards, a lake outside the window, spiders everywhere, and way too much coffee.
+
+But this one was also very special to us, because this one came with a milestone: the **fifth Rafiki Work Week**. And of all the places, this story started in Berlin.
+
+## Five work weeks in …
+
+> _"5 years ago, we had our first Rafiki work week in Berlin. Back then, we spent 2(!) weeks together in a tiny conference room, switching from yarn to pnpm and trying to get Rafiki to run locally for the first time. It was very ad-hoc, nothing was planned beforehand apart from us just being together. Now, we always organize ourselves in work streams which are presented ahead of time such that participants can start thinking and scoping their work. Consequently, we get so much more done in less time together. But what has never changed is the great energy and us leaving the work week with even more ideas and work ahead of us."_
+> — Sabine
+
+From two weeks of going back and forth with package managers in a small conference room, to five days and seven predefined tracks, and a first payment on a brand-new architecture. Same energy, very different output.
+
+## Setup
+
+Home base for the whole week was the Residenz Seehotel that is right on the lake. If you read our previous work week posts, the format will sound familiar to you: welcome and introduction on Monday morning and then five days of focused work in small teams. Everything is glued together by our daily stand-ups (yes, we do stand up during stand-ups) and finish up with our Show & Tell on Friday after lunch. This time we had seven tracks: three on the Rafiki side and four on the Cards side.
+
+## Rafiki tracks
+
+### E2E ILP Payment
+
+The team had a very ambitious and concrete goal. Create the first end to end ILP payment in the new architecture between two Rafiki instances. Apart from all of that, add telemetry as well.
+
+And it happened! By the end of the week, the team had an entire payment flow working between the two instances. A first payment is always one of those milestones that looks simple enough, however, it actually represents months of groundwork finally clicking together. Waiting and experiencing it go through for the first time never gets old.
+
+### Admin API SDKs
+
+This track was all about auto-generation of a new Admin API SDK from our OpenAPI specification. With that, integrators would get a typed, ready to use client. Apart from that, the team was also set up to bootstrap an initial set of e2e tests using that same SDK. Initially, they started with Kiota, but after 2 days, they ditched it due to some basic functionality that Kiota does not support as it should (and yes, [PRs are open there for a looooong time](https://github.com/microsoft/kiota/issues/3911)). The team then decided that they would switch to [openapi-generator](https://openapi-generator.tech/docs/generators/typescript-fetch/) to complete their track.
+
+### Rafiki Deployment
+
+This team set out to accomplish two goals: first, get the Interledger Wallet's Rafiki deployment production ready and increase its performance, and second, deliver a first working Rafiki deployment on a new architecture that can accept payments.
+
+The team focused heavily on the performance part of Rafiki, especially on the outgoing payment batching strategy. They found out that batching itself does not really improve overall application performance because it just moves the bottleneck to ingestion. A big part of their week was also having detailed discussions about how we want to deploy Rafiki in the future. At the end of the week, the team developed the initial version of Kubernetes Operator for the new version of Rafiki.
+
+## Card Tracks
+
+### Merchant API
+
+Merchant API is a new service that we are developing. It acts as a control plane for merchants participating in the Interledger Cards ecosystem. It provides centralized onboarding and management of merchants, locations and POS terminals. Apart from that, this service is the service to which POS devices will be talking. You present a card on the POS device, and then the POS device will call Merchant API for payment authorization.
+
+For the developers of this service, this week was filled with both brainstorming and writing the code. The team implemented all three fan-out parallel calls that they decided that needed to be done now and started working on the HSM Adapter, including starting to wire it into the Test Wallet.
+
+### Issuer API
+
+This track was meant to properly lay the foundation of the API. The team mapped the HSM commands to what our stack actually needs and specified the first set of API calls for card management and personalization, together with the database scheme. The team also worked through several user facing flows: how things like setting a PIN and viewing a PIN should actually work, from client to the issuer. Not the flashiest demo, but this is exactly the kind of decision that is way easier to make with everyone in the same room.
+
+### Applet
+
+Our card applet already supported contactless, so we decided that the mission for this track is to add support for contact as well. Contact refers to dipping the card into the POS instead of just tapping, which is contactless. And the centerpiece of this is GEN_AC2. GEN_AC2 is the command that is being sent from POS to the card where the POS asks the card for the final decision about payment authorization, after the issuer has weighed in. What started as a two-month journey turned into the whole GEN_AC2 implementation being done during the week. Now we need to polish the code and merge it into the main branch. Apparently, sometimes a quiet room by the lake, coffees and pretzels is all a project needs.
+
+### Documentation
+
+You know what looked sad before the Work Week? The Documentation page for the cards project. And we do not ship "sad". We worked extensively on the documentation portion of the cards project as well. The API reference has been added and is being continuously updated. The site already includes a basic glossary and an overview of some basic services. There is more to come: an integration section, protobuf specifications, ... the foundation is there. Now we need to build on top of it.
+
+For the Cards side as a whole, this week was about more than the individual tracks:
+
+> _"For the cards project specifically, this work week was a godsend. In the past couple of months, the team members explored a lot of different topics, and a lot of ideas and discussions were 'floating.' Having everyone together allowed us to bring it all together and reach a common understanding of the many moving parts._
+>
+> _We also discussed at large some of the hardest problems we've had to solve so far, and I think the solutions we came up with are a strong starting point. I'm also glad we already created diagrams and kept our knowledge base up to date with the new flows for transactions and transaction authorization, so that all these discussions are now canon for the upcoming work. I'm eager to see us implement what we discussed - and I'm always looking forward to the next get-together at a work week!"_
+> — Beni
+
+<LargeImg
+  src="/developers/img/blog/2026-07-29/rcww-working.webp"
+  alt="Rafiki & Cards groups working."
+/>
+
+## Not just work
+
+Tuesday evening was BBQ and bonfire time (the official directions for finding the bonfire: _"look for the fire"_ - just flawless). On Wednesday afternoon, we put the keyboard to rest, and we went to a team building by the lake. We split into three teams, and each team had a mission to build a raft. And you know what they say about engineers. We test everything. So we tested it. **IN PRODUCTION** (do not try this at home). Luckily, all three teams built rafts that floated. And we even had a little race across the lake and back.
+
+This is one of the perks of holding a work week at a lakeside hotel, and one of those afternoons that does more for a distributed team than any amount of Slack or video calls. <br /><br />
+
+<LargeImg
+  src="/developers/img/blog/2026-07-29/rcww-bonfire.webp"
+  alt="Rafiki & Cards bonfire"
+/>
+
+<LargeImg
+  src="/developers/img/blog/2026-07-29/rcww-building-rafts.webp"
+  alt="Rafiki & Cards building rafts"
+/>
+
+<LargeImg
+  src="/developers/img/blog/2026-07-29/rcww-rafts.webp"
+  alt="Rafiki & Cards testing rafts"
+/>
+
+## Extra Time
+
+Even if we were tired from building rafts and racing against each other on Wednesday afternoon, that did not stop us from watching another competition in the evening: FIFA World Cup semifinal where England played versus Argentina. The room was immediately split. Some of us were cheering for Argentina (we also had a participant at the Work Week from Argentina), some of us for England and some were cheering for Haaland who wasn't even playing in this match - fun side of such competitions I suppose. When England scored, half of the room erupted in cheers and started teasing the other side of the room. But when Argentina turned it around in the dying minutes, sealing it in stoppage time, the roles were reversed. And honestly, it did not matter (yes, I was for England). We got to watch an amazing match together, and for a change, we all were shouting at the same screen instead of typing in the same Slack channel. This is all about what these work weeks are for.
+
+## Show & Tell
+
+At last, Friday afternoon came, and all seven tracks presented what they built. Can you guess what goes wrong every time with our presentations? Projector. Every time there is some issue with not being able to cast a screen. Luckily for us, that is always hardware and not a software problem. One of our Engineering Managers always says "thoughts and prayers" whenever somebody wants to use a projector.
+
+Show & Tell is not just to showcase what we built, but also to be part of other people's projects that they worked on and celebrate those milestones, no matter how big or small they are, together. As mentioned previously, seeing our amazing Rafiki team doing a first payment on brand new architecture that is completed in milliseconds, or to see documentation for a project that is slowly starting to come alive, is quite amazing.
+
+But alas, every good thing must come to an end. And so did our Rafiki and Cards Work Week. After Show & Tell, we still bonded together at the lake, later at dinner, exchanged a few jokes, and then said our goodbyes.
+
+After every work week, it is not just these merged branches and the working demos that stay with us. It is all the conversations that we had during dinner, during breaks, at breakfast, on the pedalos, the debates by the bonfire. It also reminds us that behind every commit or PR review, there is a person that you genuinely enjoy spending a week at a lake with. Or as one of us put it:
+
+> _"The week was full, filled with work, amazing people who I am proud to work alongside, good discussions about work and outside work, watching the World Cup together, and having a really fun team building together. This is what a good work week is all about."_
+> — Timea
+
+On a more personal note, I cannot express with words how happy I am to work with such lovely, smart, and passionate people. **This is the way!**
+
+<LargeImg
+  src="/developers/img/blog/2026-07-29/rcww-group-photo.webp"
+  alt="Rafiki & Cards group photo"
+/>
