@@ -13,7 +13,7 @@ Interledger Protocol (ILP) is an open protocol suite for sending packets of valu
     <img src="/developers/img/routing.svg" alt="">
     <div>
       <p><strong>Multi-Hop Routing</strong></p>
-      <p>Send payments to other ASEs on the network, even if they are multiple hops away.</p>
+      <p>Send payments to other financial service providers on the network, even if they're multiple hops away.</p>
     </div>
   </div>
   <div class="overview-item">
