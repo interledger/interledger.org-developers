@@ -3,5 +3,6 @@
 node_modules
 public
 dist
+.netlify
 **/*.min.css 
 **/*.min.js

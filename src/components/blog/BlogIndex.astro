@@ -21,6 +21,7 @@ interface Props {
   paginationProps?: {
     length: number
     currentPage: number
+    baseUrl: string
     firstUrl: string | undefined
     prevUrl: string | undefined
     nextUrl: string | undefined
@@ -127,6 +128,7 @@ const {
         <Pagination
           length={paginationProps.length}
           currentPage={paginationProps.currentPage}
+          baseUrl={paginationProps.baseUrl}
           firstUrl={paginationProps.firstUrl}
           prevUrl={paginationProps.prevUrl}
           nextUrl={paginationProps.nextUrl}

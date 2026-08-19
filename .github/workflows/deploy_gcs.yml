@@ -1,18 +1,14 @@
-name: Deploy to GCS
+name: Deploy nginx proxy to Cloud Run
 
 on:
-  # Trigger the workflow every time you push to the `main` branch
-  # Using a different branch name? Replace `main` with your branch's name
   push:
     branches: [main]
-  # Allows you to run this workflow manually from the Actions tab on GitHub.
+    paths:
+      - 'ci/nginx-rewrite/**'
   workflow_dispatch:
 
-# Allow this job to clone the repo and create a page deployment
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 jobs:
   deploy:
@@ -20,9 +16,6 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
@@ -31,15 +24,6 @@ jobs:
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
-
-      - uses: oven-sh/setup-bun@v1
-      - name: Install dependencies
-        run: bun install
-      - name: Test build website
-        run: bun run build
-
-      - name: Deploy to GCS
-        run: gsutil -m rsync -r -d ./dist/ gs://${{ secrets.GCS_BUCKET }}/developers
 
       - name: Build nginx container
         run: |
@@ -59,9 +43,3 @@ jobs:
             --min-instances 0 \
             --max-instances 10 \
             --quiet
-
-      - name: Invalidate CDN cache
-        run: |
-          gcloud compute url-maps invalidate-cdn-cache interledger-org \
-            --path "/developers/*" \
-            --async

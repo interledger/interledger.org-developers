@@ -49,6 +49,7 @@ const { page, allTags } = Astro.props
     paginationProps={{
       length: page.lastPage,
       currentPage: page.currentPage,
+      baseUrl: '/developers/blog',
       firstUrl: page.url.first,
       prevUrl: page.url.prev,
       nextUrl: page.url.next,
