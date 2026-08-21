@@ -22,7 +22,7 @@ Though Rafiki's main purpose is to abstract this, the fresh intrigue around Inte
 
 ### Setting the Terms
 
-Before it starts sending all those ILP packets, a higher-level protocol is needed to set the terms of the payment as Interledger doesn't have any mechanism to negotiate payment terms. Rafiki uses the [Open Payments Standard](https://openpayments.dev/introduction/overview/) to achieve this.
+Before it starts sending all those ILP packets, a higher-level protocol is needed to set the terms of the payment as Interledger doesn't have any mechanism to negotiate payment terms. Rafiki uses the [Open Payments Standard](https://openpayments.dev/overview/getting-started/) to achieve this.
 
 A prospective debitor will use this standard to set payment terms by first creating an _incoming payment_ on the Rafiki instance hosting the receiving wallet address, during which the receiving Rafiki instance will associate an ILP address with the incoming payment and generate a shared secret for it.
 Then it may acquire a _quote_ from the Rafiki instance hosting the sending wallet address, which becomes associated with the incoming payment.
