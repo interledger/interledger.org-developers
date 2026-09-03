@@ -15,7 +15,7 @@
     "@astrojs/mdx": "^8.0.0",
     "@astrojs/netlify": "^8.2.5",
     "@astrojs/starlight": "^0.42.0",
-    "@interledger/docs-design-system": "^0.13.0",
+    "@interledger/docs-design-system": "^0.14.0",
     "@linear/sdk": "^92.0.0",
     "@netlify/blobs": "^11.0.2",
     "@netlify/functions": "^6.0.0",
