@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config'
 import starlight from '@astrojs/starlight'
+import { unified } from '@astrojs/markdown-remark'
 import starlightLinksValidator from 'starlight-links-validator'
 import starlightFullViewMode from 'starlight-fullview-mode'
 
@@ -13,6 +14,9 @@ export default defineConfig({
   adapter: netlify(),
   site: 'https://interledger.org',
   base: '/developers',
+  markdown: {
+    processor: unified()
+  },
   integrations: [
     starlight({
       title: 'Interledger',

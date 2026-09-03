@@ -12,7 +12,7 @@ tags:
   - Interledger Protocol
 ---
 
-*By* [_Evan Schwartz_](https://www.linkedin.com/in/evanmarkschwartz/) *and* [_Vanessa Pestritto_](https://www.linkedin.com/in/vanessaalexandra/)
+_By_ [_Evan Schwartz_](https://www.linkedin.com/in/evanmarkschwartz/) _and_ [_Vanessa Pestritto_](https://www.linkedin.com/in/vanessaalexandra/)
 
 Interledger was born out of a project to build a [blockchain-agnostic smart contracts](https://medium.com/coil/codius-smart-contracts-made-from-containers-b3b16c3e3890) platform. A key challenge was neutrality: how could a decentralized app buy resources like storage and computing, without being tied to a specific blockchain? Across the internet, apps and services face a similar issue of how to directly monetize without relying on a single cryptocurrency, a proprietary network like Visa or PayPal, or a monolithic platform like Apple. Interledger was designed to answer the question:
 
@@ -62,7 +62,7 @@ Interledger uses a [“forward-and-backward” packet flow](https://interledger
 
 ![Diagram showing the “forward-and-backward” packet flow](/developers/img/blog/2018-10-03/packet-flow.webp)
 
-- Prepare packets travel from the sender to the receiver (the “forward” part) and represent a commitment to pay, *if and only if* the connector presents proof that the receiver was paid.
+- Prepare packets travel from the sender to the receiver (the “forward” part) and represent a commitment to pay, _if and only if_ the connector presents proof that the receiver was paid.
 - Fulfill packets include proof that the receiver was paid and are relayed by connectors back to the sender (the “backward” part). Only the receiver could generate the correct proof, which is a simple preimage of a hash. The sender knows with certainty when the money has arrived, no matter what path the packet has taken through the network of connectors. If a packet is misrouted or dropped, the sender will never get the Fulfill and the money will never leave their account.
 - Reject packets are returned by the receiver if they do not want the Prepare packet or the packet does not pass one of the receiver’s checks. Connectors may also return Reject packets if the Prepare expires before the Fulfill is returned. Note that the sender can retry rejected packets, because they haven’t sent the money yet, and [higher-level protocols](https://medium.com/interledger-blog/streaming-money-and-data-over-ilp-fabd76fc991e) built on top of Interledger handle retries automatically.
 

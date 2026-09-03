@@ -27,8 +27,8 @@ _(Curious which features are left? Look for upcoming posts on Interledger V4!)_
 
 ## 1\. The King: One Ledger to Rule Them All
 
-Died: *November, 2014*. Age: *Timeless.*  
-Cause of Death: *The world will never agree on a single ledger.*
+Died: _November, 2014_. Age: _Timeless._  
+Cause of Death: _The world will never agree on a single ledger._
 
 Every payment network wants to be king. From traditional networks like Visa and SWIFT to blockchains like Bitcoin, Ripple, Stellar, and Cosmos, many have tried to enable payments “interoperability” by convincing others to connect through their network. But as long as each provider wants to own the network, we’ll end up with the fragmented payment landscape we see today.
 
@@ -36,8 +36,8 @@ The Interledger project began with the realization that the world will never agr
 
 ## 2\. The Notary: Fully Atomic Payments
 
-Died: [_June, 2016_](https://github.com/interledger/rfcs/issues/28). Age: *2 years*.  
-Cause of Death: *Trust isn’t universal.*
+Died: [_June, 2016_](https://github.com/interledger/rfcs/issues/28). Age: _2 years_.  
+Cause of Death: _Trust isn’t universal._
 
 If we could not agree to use a single ledger, maybe we could replicate the benefits of having all transactions within one system, but across multiple ledgers. The idea of “Atomic Mode,” as described in the [Interledger whitepaper](https://interledger.org/interledger.pdf), was to use a group of “notaries” or validators to ensure that transfers on multiple systems would be atomic, meaning they would be executed or rolled back together. Senders and intermediary connectors would first put funds on hold in the first part of a two-phase commit. Notaries would then decide whether the payment succeeded or failed, similar to blockchain validators or miners, but chosen on a per-transaction basis.
 
@@ -45,8 +45,8 @@ Atomic mode provides some important benefits, but it only works if all parties i
 
 ## 3\. The Cashier: Ledger-Generated Receipts
 
-Died: *December 2014*. Age: *6 months*.  
-Cause of Death: *Ledgers aren’t meant to understand one another.*
+Died: _December 2014_. Age: _6 months_.  
+Cause of Death: _Ledgers aren’t meant to understand one another._
 
 Without notaries, how would ledgers know when to execute or roll back their transfers? We wanted the connectors to get paid only once the receiver was paid. One idea was to make the transfers dependent on a receipt from the last ledger proving that the receiver was paid. However, this would mean that all ledgers would need to understand that receipt from the receiver’s ledger.
 
@@ -54,17 +54,17 @@ This idea died quickly. Building one ledger to understand another, as with [Sid
 
 ## 4\. The Director: Source Routing
 
-Died: [_May, 2016_](https://github.com/interledgerjs/ilp-connector/pull/150). Age: *1 year*  
-Cause of Death: *Decisions should be made where the knowledge is.*
+Died: [_May, 2016_](https://github.com/interledgerjs/ilp-connector/pull/150). Age: _1 year_  
+Cause of Death: _Decisions should be made where the knowledge is._
 
 A central question for an internetworking protocol like Interledger is how the paths for multi-hop payments are determined. Early versions of Interledger used source routing, in which senders would know the entire topology of the network and choose the payment path themselves. Connectors would broadcast routes and exchange rates and every participant would store a map of the network. Source routing may work for a limited number of nodes or for a single currency, but it does not scale for millions of nodes with fluctuating exchange rates.
 
-Inspired by the Internet’s decision to separate [addressing from routing](https://www.rfc-editor.org/ien/ien19.txt), we came up with an [Interledger address](https://interledger.org/developers/rfcs/ilp-addresses/) format similar to IP addresses. Senders would specify *where* they wanted their money to go, but connectors would determine *how* to route payments. Connectors would use their local knowledge of routes and rates, rather than needing everyone to keep an up-to-date map of all connectors. (Note: one of the powerful benefits of the Internet’s separation of addressing and routing was that it enabled the routing protocol to be [upgraded numerous times](https://medium.com/@datapath_io/the-history-of-border-gateway-protocol-a212b7ee6208) without most users noticing, because the IP address stayed the same.)
+Inspired by the Internet’s decision to separate [addressing from routing](https://www.rfc-editor.org/ien/ien19.txt), we came up with an [Interledger address](https://interledger.org/developers/rfcs/ilp-addresses/) format similar to IP addresses. Senders would specify _where_ they wanted their money to go, but connectors would determine _how_ to route payments. Connectors would use their local knowledge of routes and rates, rather than needing everyone to keep an up-to-date map of all connectors. (Note: one of the powerful benefits of the Internet’s separation of addressing and routing was that it enabled the routing protocol to be [upgraded numerous times](https://medium.com/@datapath_io/the-history-of-border-gateway-protocol-a212b7ee6208) without most users noticing, because the IP address stayed the same.)
 
 ## 5\. The Magician: Abstract Packet
 
 Died: [_January, 2017_](https://github.com/interledger/rfcs/issues/146). Reborn and Died Again: [_December, 2017_](https://github.com/interledger/rfcs/pull/347).  
-Cause of Death: *Having options isn’t always better.*
+Cause of Death: _Having options isn’t always better._
 
 One of the most often debated aspects of Interledger has been the ILP packet format — not just the fields in the packet but the encoding as well. Should the packet be sent as text, JSON, Protocol Buffers, or a custom binary format? Having an abstract packet definition that could be encoded in different formats and translated by connectors seemed attractive, because it meant we would not need to agree on one encoding.
 
@@ -72,8 +72,8 @@ Leaving the encoding up to implementations would mean that every ledger protocol
 
 ## 6\. The Cryptographer: Crypto Conditions
 
-Died\*: [_February, 2017_](https://github.com/interledger/rfcs/issues/153). Age: *2 years*.  
-Cause of Death: *The features supported will be the least common denominator.\* Crypto Conditions continue to be* [_developed at the IETF_](https://github.com/rfcs/crypto-conditions) *and used outside of ILP*
+Died\*: [_February, 2017_](https://github.com/interledger/rfcs/issues/153). Age: _2 years_.  
+Cause of Death: _The features supported will be the least common denominator.\* Crypto Conditions continue to be_ [_developed at the IETF_](https://github.com/rfcs/crypto-conditions) _and used outside of ILP_
 
 One of the most thoroughly designed features that was ultimately left out of ILP was the [Crypto Condition](https://github.com/rfcs/crypto-conditions): a standard for encoding different signature algorithms and ways to combine them. A central primitive in the original Interledger design were the conditions used to hold and execute payments. We spent months developing a standard for this more flexible type of multisig, [submitted it to the IETF](https://tools.ietf.org/html/draft-thomas-crypto-conditions-03), and then realized we did not need it.
 
@@ -81,17 +81,17 @@ The problem with having many condition types is that all intermediaries in a cer
 
 ## 7\. The Optimist: Condition-Less Transfers
 
-Died: [_June, 2017_](https://lists.w3.org/Archives/Public/public-interledger/2017Jun/0033.html). Age: *2 years*.  
-Cause of Death: *Anything that can be done at the edge of the network, should be.*
+Died: [_June, 2017_](https://lists.w3.org/Archives/Public/public-interledger/2017Jun/0033.html). Age: _2 years_.  
+Cause of Death: _Anything that can be done at the edge of the network, should be._
 
 While most payments would likely use conditions for security, we always thought there could be some micropayment use cases where the sender would not care about securing their payments with a condition. Originally, conditions were considered optional and the reference ILP connector would forward “optimistic” payments in addition to those with conditions.
 
-The idea of optimistic payments as a fully separate mode of ILP died when we realized this could be implemented [on top of ILP payments with conditions](https://lists.w3.org/Archives/Public/public-interledger/2017Jun/0033.html). Instead of requiring *all* connectors to have special functionality for forwarding condition-less payments, it could be made optional by using a well-known hash as the condition (such as the hash of 32 zero-bytes). Connectors that recognize optimistic payments could skip the hold step, while those that do not would get a valid fulfillment just like any other payment. The old [end-to-end principle](http://web.mit.edu/Saltzer/www/publications/endtoend/endtoend.pdf) won again, and the core ILP became one step simpler.
+The idea of optimistic payments as a fully separate mode of ILP died when we realized this could be implemented [on top of ILP payments with conditions](https://lists.w3.org/Archives/Public/public-interledger/2017Jun/0033.html). Instead of requiring _all_ connectors to have special functionality for forwarding condition-less payments, it could be made optional by using a well-known hash as the condition (such as the hash of 32 zero-bytes). Connectors that recognize optimistic payments could skip the hold step, while those that do not would get a valid fulfillment just like any other payment. The old [end-to-end principle](http://web.mit.edu/Saltzer/www/publications/endtoend/endtoend.pdf) won again, and the core ILP became one step simpler.
 
 ## 8\. The Geologist: Accommodating Slow Ledgers
 
-Died: [_June, 2017_](https://www.coindesk.com/interoperability-boost-ripple-sends-blockchain-transaction-across-7-different-ledgers/). Age: *2 years*.  
-Cause of Death: *Only the speediest survive.*
+Died: [_June, 2017_](https://www.coindesk.com/interoperability-boost-ripple-sends-blockchain-transaction-across-7-different-ledgers/). Age: _2 years_.  
+Cause of Death: _Only the speediest survive._
 
 In June 2017, we excitedly sent a [single payment across seven different types of ledger integrations](https://www.coindesk.com/interoperability-boost-ripple-sends-blockchain-transaction-across-7-different-ledgers/), including payment channels, trustlines, and on-ledger escrow. We wrote up a spec for [Hashed Time-Lock Agreements (HTLAs)](https://interledger.org/developers/rfcs/hashed-timelock-agreements/) that described the array of options for integrating with ledgers. Having such a wide variety of integrations made Interledger more open and flexible. However, the “Seven Ledger Demo” showed that some integrations are superior to others. We spent minutes waiting for an on-ledger Ethereum transfer to execute, whereas the transfers via payment channels over Bitcoin and XRP went through instantaneously.
 
@@ -99,8 +99,8 @@ After the demo, we turned our attention to sending Interledger payments with rea
 
 ## 9\. The Negotiator: Interledger Quoting Protocol
 
-Died: [_September, 2017_](https://github.com/interledger/rfcs/pull/309). Age: *14 months*.  
-Cause of Death: *The end-to-end principle struck again.*
+Died: [_September, 2017_](https://github.com/interledger/rfcs/pull/309). Age: _14 months_.  
+Cause of Death: _The end-to-end principle struck again._
 
 Since the shift to non-source routing, there had been two protocols that all senders and connectors needed to support: Interledger payments and the Interledger Quoting Protocol (ILQP). ILQP allowed you to ask connectors up front how much a given payment would cost to send. You could specify a fixed source, or destination amount, or ask for a Liquidity Curve (see feature 11). It was non-binding, but we thought that surely you needed a way to determine the cost before sending a payment.
 
@@ -108,8 +108,8 @@ Similar to Optimistic Mode, ILQP was brought down by the realization that it cou
 
 ## 10\. The Postman: Destination Amount Delivery
 
-Died: [_October, 2017_](https://github.com/interledger/rfcs/issues/312). Age: *14 months*.  
-Cause of Death: *One behavior is better than two.*
+Died: [_October, 2017_](https://github.com/interledger/rfcs/issues/312). Age: _14 months_.  
+Cause of Death: _One behavior is better than two._
 
 Another feature that was introduced with the switch to non-source routing was the destination amount in the ILP packet. We thought that senders would want to indicate to the connectors exactly how much money should be delivered to the receiver. We debated what number format to use for the amounts, considered [various floating point encodings](https://github.com/interledger/rfcs/commit/9716fb7aa68a8770aee96413916e12edd69787fe#diff-42c9b615e907424c7cae3feb333d8b6fR36), and ultimately settled on unsigned 64-bit integers. Connectors would parse the ILP address to determine whether they should [“forward” the packet or “deliver” it](https://github.com/interledger/rfcs/issues/77) locally. This was considered so crucial that the destination amount was one of just three fields in the ILPv1 packet.
 
@@ -117,8 +117,8 @@ Once we started implementing [“end-to-end quoting”](https://github.com/inte
 
 ## 11\. The Surfer: Liquidity Curves and Large Packets
 
-Died: [_September, 2017_](https://github.com/interledger/rfcs/pull/309). Age: *9 months*.  
-Cause of Death: *Small is beautiful.*
+Died: [_September, 2017_](https://github.com/interledger/rfcs/pull/309). Age: _9 months_.  
+Cause of Death: _Small is beautiful._
 
 Should Interledger be built for small packet amounts, large amounts, or both? Since the goal was to support nearly all use cases, and thus all possible amounts, we needed a way to express how the exchange rate would depend on the payment size. We designed the [Liquidity Curve](https://github.com/interledger/rfcs/blob/51e2ec229085ddef1606b2848953901c61d5ae2f/asn1/InterledgerTypes.asn#L44-L68), which used a series of points to represent the input and output amounts. Liquidity Curves were used in both the routing and quoting protocols to represent the potentially complex exchange rates.
 
@@ -126,12 +126,12 @@ For some time, there were discussions about killing Liquidity Curves because the
 
 ## 12\. The Escrow Agent: Conditional Ledger Transfers
 
-Died: [_December, 2017_](https://github.com/interledger/rfcs/issues/359). Age: *2 years, 6 months*.  
-Cause of Death: *When it seems simple, there’s one thing left to take out.*
+Died: [_December, 2017_](https://github.com/interledger/rfcs/issues/359). Age: _2 years, 6 months_.  
+Cause of Death: _When it seems simple, there’s one thing left to take out._
 
 The most recent and surprising feature to pass away was the conditional transfer or “on-ledger escrow”, which had been with us since the white paper was written. Interledger payments were comprised of transfers on multiple ledgers and the ledgers would act as a kind of escrow agent. Certain varieties of [Hashed Time-Lock Agreements (HTLAs)](https://interledger.org/developers/rfcs/hashed-timelock-agreements/#htlas-without-ledger-supoprt) allowed for this behavior to be modeled by connectors for cases where ledgers did not natively support holds.
 
-However, the shift to smaller, faster payments ultimately led to the [realization](https://github.com/interledger/rfcs/issues/359) that it would be *connectors*, rather than *ledgers,* that would implement the conditions. Connectors would forward Interledger packets, creating payment obligations, and users would settle with unconditional ledger transfers *out of the flow of the ILP payment.* The only requirement for ledgers to be used with ILP would be the ability to make simple transfers. The faster and cheaper a ledger is — or if it supports [simple payment channels](https://interledger.org/developers/rfcs/hashed-timelock-agreements/#simple-payment-channels) — the faster a connector and its users (or peers) can settle. But, the system works even with the slowest ledgers. The condition was moved from the ledger transfer into the ILP packet and ILPv4 was born.
+However, the shift to smaller, faster payments ultimately led to the [realization](https://github.com/interledger/rfcs/issues/359) that it would be _connectors_, rather than _ledgers,_ that would implement the conditions. Connectors would forward Interledger packets, creating payment obligations, and users would settle with unconditional ledger transfers _out of the flow of the ILP payment._ The only requirement for ledgers to be used with ILP would be the ability to make simple transfers. The faster and cheaper a ledger is — or if it supports [simple payment channels](https://interledger.org/developers/rfcs/hashed-timelock-agreements/#simple-payment-channels) — the faster a connector and its users (or peers) can settle. But, the system works even with the slowest ledgers. The condition was moved from the ledger transfer into the ILP packet and ILPv4 was born.
 
 Wondering what’s left in Interledger V4 if all of this has been taken out? Keep an eye out for upcoming posts that will explain it in detail!
 
