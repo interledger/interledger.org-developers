@@ -1,5 +1,13 @@
 # Interledger developer portal
 
+> **This repository is archived and is no longer actively maintained.**
+
+The Interledger Developer Portal has been migrated into the Interledger Foundation V5 website repository. All ongoing development, maintenance, and updates now take place in the V5 repository.
+
+This repository is retained for historical reference only. Please do not open new issues or pull requests here.
+
+For the latest Developer Portal source code, documentation, and contribution guidelines, please refer to the V5 repository: **[Interledger Foundation V5](https://github.com/interledger/interledger.org-v5)**
+
 Source code for the /developer-tools portion of [Interledger.org](https://interledger.org/). This site is separate from the headless Drupal-powered main site and is built with [Starlight](https://starlight.astro.build/), a documentation framework powered by [Astro](https://astro.build/).
 
 ## 🚀 Project Structure
